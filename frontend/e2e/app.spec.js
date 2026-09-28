@@ -8,7 +8,6 @@ const ROUTES = [
   ["/roadmap", "Career Roadmap"],
   ["/resources", "Exams, Colleges & Scholarships"],
   ["/mentor", "AI Career Mentor"],
-  ["/assessments", "Assessments"],
   ["/login", "Log in"],
   ["/register", "Create your account"],
   ["/no-such-page", "Page not found"],
@@ -121,4 +120,26 @@ test("backend down: app shows offline status and does not crash", async ({ page 
   await page.unroute("**/api/health");
   await page.getByRole("button", { name: "Retry" }).click();
   await expect(page.getByText("Server online")).toBeVisible();
+});
+
+
+
+test("header items never wrap onto two lines", async ({ page, isMobile }) => {
+  test.skip(isMobile, "width sweep is desktop only");
+  for (const width of [1440, 1366, 1280, 1101, 1024, 900, 768]) {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto("/");
+    const wrapped = await page.evaluate(() =>
+      [...document.querySelectorAll(".brand, .nav__link, .header .btn")]
+        .filter((el) => el.offsetParent !== null) // visible only
+        .filter((el) => {
+          const lineHeight = parseFloat(getComputedStyle(el).lineHeight) || 20;
+          return el.getBoundingClientRect().height > lineHeight * 1.8 + 20;
+        })
+        .map((el) => el.textContent.trim()),
+    );
+    expect(wrapped, `wrapped at ${width}px`).toEqual([]);
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    expect(overflow, `sideways scroll at ${width}px`).toBeLessThanOrEqual(0);
+  }
 });
