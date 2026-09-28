@@ -11,8 +11,8 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 3 | Accounts and user profile | Register, log in (secure passwords + tokens), multi-step profile form for any stage | ✅ |
 | 4 | Career and education data | Starter tech-domain datasets filled, CSV validator, seed script loading them into the database, browse APIs | ✅ |
 | 5 | Assessments | Interest (RIASEC), aptitude and personality tests with scoring saved to profile | ✅ |
-| 6 | Next Step Engine | "Where am I → what can I do next?" paths with eligibility, time, exams, pros/cons | ⬜ next |
-| 7 | Recommendation Engine | Weighted, explainable career scores with a "Why" section | ⬜ |
+| 6 | Next Step Engine | "Where am I → what can I do next?" paths with eligibility, time, exams, pros/cons | ✅ |
+| 7 | Recommendation Engine | Weighted, explainable career scores with a "Why" section | ⬜ next |
 | 8 | Skill Gap Analysis | Your skills vs target career skills, prioritized gaps | ⬜ |
 | 9 | Transition Engine and Dream Career Checker | "I am X, can I become Y?" analysis | ⬜ |
 | 10 | Roadmap Generator and Career Explorer | Stage-wise roadmap that skips what you know; interactive career tree | ⬜ |
@@ -107,3 +107,18 @@ Known limits: exam eligibility is summarised and marked 'not verified' (users ar
 Result: 160 backend tests, 73 frontend unit tests, 70 browser tests passing; lint 0 warnings; 0 npm vulnerabilities.
 
 Known limits: results are self-reflection, not validated psychometric scores; aptitude bank is small (40 items) so scores are rough; answers in progress are saved in the browser of the device used.
+
+---
+
+## Phase 6 – Next Step Engine – ✅ done
+
+- 6.1 Engine foundation: cached catalog snapshot; profile → catalog stage mapping (degree/branch/stream/role, with a note when it is only a closest match); profile skills and project technologies → catalog skills
+- 6.2 Next Step Engine: every recorded option from a stage (study further, careers, exams, switches) with eligibility, duration, exams with official links, pros/cons, verified flag and one concrete next action
+- 6.3 Explainable ranking from goals, interests, skills and the interest test ("Fits you because …")
+- 6.4 API GET /api/next-steps?stage= (works for visitors, personalised when logged in)
+- 6.5 Next Steps page: stage picker, filter tabs, skill coverage bars, "back to my stage"
+- 6.6 Tests: 36 backend (27 stage-mapping cases), 4 unit, 4 browser
+
+Result: 196 backend tests, 76 frontend unit tests, 73 browser tests passing; lint 0 warnings.
+
+Known limits: only stages in the datasets are covered (e.g. civil engineering maps to the closest core-engineering stage and says so); all eligibility entries are still "not yet verified".
