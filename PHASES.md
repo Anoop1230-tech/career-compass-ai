@@ -12,8 +12,8 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 4 | Career and education data | Starter tech-domain datasets filled, CSV validator, seed script loading them into the database, browse APIs | ✅ |
 | 5 | Assessments | Interest (RIASEC), aptitude and personality tests with scoring saved to profile | ✅ |
 | 6 | Next Step Engine | "Where am I → what can I do next?" paths with eligibility, time, exams, pros/cons | ✅ |
-| 7 | Recommendation Engine | Weighted, explainable career scores with a "Why" section | ⬜ next |
-| 8 | Skill Gap Analysis | Your skills vs target career skills, prioritized gaps | ⬜ |
+| 7 | Recommendation Engine | Weighted, explainable career scores with a "Why" section | ✅ |
+| 8 | Skill Gap Analysis | Your skills vs target career skills, prioritized gaps | ⬜ next |
 | 9 | Transition Engine and Dream Career Checker | "I am X, can I become Y?" analysis | ⬜ |
 | 10 | Roadmap Generator and Career Explorer | Stage-wise roadmap that skips what you know; interactive career tree | ⬜ |
 | 11 | Exams, colleges and scholarships | Filterable lists with official source links and "last verified" dates | ⬜ |
@@ -122,3 +122,19 @@ Known limits: results are self-reflection, not validated psychometric scores; ap
 Result: 196 backend tests, 76 frontend unit tests, 73 browser tests passing; lint 0 warnings.
 
 Known limits: only stages in the datasets are covered (e.g. civil engineering maps to the closest core-engineering stage and says so); all eligibility entries are still "not yet verified".
+
+---
+
+## Phase 7 – Recommendation Engine – ✅ done
+
+- 7.1 Six signals, each 0–100 with a fixed weight: interest test 22, skills 22, education path 18, aptitude 14, work style 10, interests/goals 14
+- 7.2 Missing signals are left out and the rest re-weighted; a confidence % shows how much evidence was used, with links to what would improve it
+- 7.3 Education reachability: follows study steps (e.g. Class 12 PCM → B.Tech → career) and known switch paths
+- 7.4 Every score is explained: "why it fits", "keep in mind", per-signal breakdown, core skills to learn
+- 7.5 API GET /api/recommendations?domain=&limit= and GET /api/recommendations/{career_id}
+- 7.6 "For You" page with area filter and score details; header fixed so 7 menu items always fit (email moves to the mobile menu)
+- 7.7 Tests: 11 backend (incl. sanity checks that data, commerce, public-service and design profiles get sensible top careers), 4 unit, 2 browser
+
+Result: 207 backend tests, 80 frontend unit tests, 76 browser tests passing; lint 0 warnings.
+
+Known limits: weights are expert-set, not learned (Phase 13 tests ML against them); only the 34 careers in the dataset are scored.
