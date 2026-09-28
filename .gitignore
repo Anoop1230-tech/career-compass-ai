@@ -4,9 +4,15 @@ __pycache__/
 *.pyc
 .pytest_cache/
 
-# Environment / secrets
+# Environment / secrets (never commit these)
 .env
+.env.*
 !.env.example
+*.pem
+*.key
+*.p12
+credentials*.json
+*.log
 
 # Databases & trained models
 *.db
