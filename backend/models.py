@@ -1,7 +1,7 @@
 """Database tables (SQLAlchemy 2.0 ORM models)."""
 from datetime import datetime, timezone
 
-from sqlalchemy import JSON, DateTime, ForeignKey, Integer, String, Text
+from sqlalchemy import JSON, Boolean, DateTime, ForeignKey, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database import Base
@@ -87,3 +87,18 @@ class AssessmentResult(Base):
     kind: Mapped[str] = mapped_column(String(20), index=True)
     result: Mapped[dict] = mapped_column(JSON)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+
+class RoadmapProgress(Base):
+    """A user's roadmap for one career: skills marked as learned, and whether
+    it is their current target (only one active target per user)."""
+
+    __tablename__ = "roadmap_progress"
+    __table_args__ = (UniqueConstraint("user_id", "career_id", name="uq_roadmap_user_career"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    career_id: Mapped[str] = mapped_column(String(40))
+    completed_skill_ids: Mapped[list] = mapped_column(JSON, default=list)
+    is_target: Mapped[bool] = mapped_column(Boolean, default=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
