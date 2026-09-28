@@ -30,7 +30,7 @@ def collect_urls(tables) -> dict[str, list[str]]:
     return found
 
 
-def check(url: str, client: httpx.Client) -> tuple[str, str]:
+def check(url: str, client: httpx.Client, retries: int = 1) -> tuple[str, str]:
     try:
         # HEAD is lighter, but many sites reject it, so fall back to GET
         response = client.head(url)
@@ -40,6 +40,9 @@ def check(url: str, client: httpx.Client) -> tuple[str, str]:
             return url, "ok"
         return url, f"HTTP {response.status_code}"
     except httpx.TimeoutException:
+        # Government sites are sometimes slow for a moment; try once more
+        if retries > 0:
+            return check(url, client, retries - 1)
         return url, "timeout"
     except httpx.ConnectError as exc:
         if "CERTIFICATE_VERIFY_FAILED" in str(exc):

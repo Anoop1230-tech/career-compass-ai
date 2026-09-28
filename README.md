@@ -56,6 +56,19 @@ npm run build
 
 The browser only talks to `http://localhost:5173`. Requests to `/api/...` are forwarded by the Vite dev server to FastAPI on `http://127.0.0.1:8000`, so there are no CORS or localhost/127.0.0.1 problems.
 
+## Career and education data
+
+The reference data lives in `datasets/*.csv` (field definitions in `docs/DATA_REQUIREMENTS.md`). From the `backend` folder:
+
+```powershell
+.\venv\Scripts\python.exe -m catalog.validator     # check every CSV (file, row and problem for each error)
+.\venv\Scripts\python.exe -m catalog.link_check    # check every official URL opens (needs internet)
+.\venv\Scripts\python.exe -m catalog.seed          # load into the database (also runs on server start)
+.\venv\Scripts\python.exe -m catalog.seed --force  # reload even if unchanged
+```
+
+Loading is safe: invalid data changes nothing, the load is all-or-nothing, and user accounts and profiles are never touched. Edit a CSV and restart the server to see the change.
+
 ## Accounts and security
 
 - Passwords are hashed with Argon2; the plain password is never stored.
