@@ -214,6 +214,55 @@ def check_logic(tables: dict[str, list[dict[str, str]]], report: Report) -> None
         if row.get("verified") == "false" and not row.get("official_url"):
             report.error("entrance_exams.csv", line, "unverified exam must have an official_url")
 
+    check_question_banks(tables, report)
+
+
+def check_question_banks(tables: dict[str, list[dict[str, str]]], report: Report) -> None:
+    """Each score must rest on enough questions, and answers must be unambiguous."""
+    from catalog.schema import (
+        APTITUDE_CATEGORIES,
+        MIN_PER_APTITUDE_CATEGORY,
+        MIN_PER_RIASEC_TYPE,
+        PERSONALITY_TRAITS,
+        RIASEC_TYPES,
+    )
+
+    for name in ("interest_questions.csv", "personality_questions.csv", "aptitude_questions.csv"):
+        seen: dict[str, int] = {}
+        for line, row in enumerate(tables.get(name, []), start=2):
+            text_key = " ".join(row.get("question_text", "").casefold().split())
+            if text_key and text_key in seen:
+                report.error(name, line, f"same question text as row {seen[text_key]}")
+            seen.setdefault(text_key, line)
+
+    interest = tables.get("interest_questions.csv", [])
+    for code in sorted(RIASEC_TYPES):
+        count = sum(r.get("riasec_type") == code for r in interest)
+        if count < MIN_PER_RIASEC_TYPE:
+            report.error("interest_questions.csv", None,
+                         f"type '{code}' has {count} questions (need at least {MIN_PER_RIASEC_TYPE})")
+
+    personality = tables.get("personality_questions.csv", [])
+    for trait in sorted(PERSONALITY_TRAITS):
+        keys = {r.get("keyed") for r in personality if r.get("trait") == trait}
+        if not keys:
+            report.error("personality_questions.csv", None, f"trait '{trait}' has no questions")
+        elif keys != {"+", "-"}:
+            # Without reversed items, someone who agrees with everything scores high on everything
+            report.error("personality_questions.csv", None,
+                         f"trait '{trait}' needs at least one '+' and one '-' keyed question")
+
+    aptitude = tables.get("aptitude_questions.csv", [])
+    for category in sorted(APTITUDE_CATEGORIES):
+        count = sum(r.get("category") == category for r in aptitude)
+        if count < MIN_PER_APTITUDE_CATEGORY:
+            report.error("aptitude_questions.csv", None,
+                         f"category '{category}' has {count} questions (need at least {MIN_PER_APTITUDE_CATEGORY})")
+    for line, row in enumerate(aptitude, start=2):
+        options = [row.get(f"option_{x}", "").casefold() for x in "abcd"]
+        if all(options) and len(set(options)) < 4:
+            report.error("aptitude_questions.csv", line, "two options have the same text")
+
 
 def validate(data_dir: Path = DATASETS_DIR) -> tuple[Report, dict[str, list[dict[str, str]]]]:
     report = Report()

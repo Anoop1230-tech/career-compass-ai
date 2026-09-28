@@ -105,3 +105,31 @@ def test_excel_byte_order_mark_is_accepted(data_copy):
     path = data_copy / "skills.csv"
     path.write_bytes(b"\xef\xbb\xbf" + path.read_bytes())
     assert errors_for(data_copy) == ""
+
+
+
+@pytest.mark.parametrize(
+    "file,old,new,expected",
+    [
+        ("interest_questions.csv", "IQ_R01,Build or repair things with tools,R",
+         "IQ_R01,Build or repair things with tools,X", "invalid value 'X'"),
+        ("interest_questions.csv", "IQ_R02,Assemble electronic parts or circuits",
+         "IQ_R02,Build or repair things with tools", "same question text"),
+        ("personality_questions.csv", "PQ_L02,I prefer that someone else makes the decisions in a group.,leadership,-",
+         "PQ_L02,I prefer that someone else makes the decisions in a group.,leadership,+",
+         "trait 'leadership' needs at least one '+' and one '-'"),
+        ("personality_questions.csv", "extraversion,+,1-5", "extraversion,+,1-7", "invalid value '1-7'"),
+        ("aptitude_questions.csv", ",₹1000,₹1040,₹1200,b,", ",₹1000,₹1040,₹1200,e,", "invalid value 'e'"),
+        ("aptitude_questions.csv", "₹960,₹1000,₹1040", "₹960,₹960,₹1040", "two options have the same text"),
+    ],
+)
+def test_question_bank_mistakes(data_copy, file, old, new, expected):
+    replace_in(data_copy / file, old, new)
+    assert expected in errors_for(data_copy)
+
+
+def test_too_few_questions_for_a_scale(data_copy):
+    path = data_copy / "interest_questions.csv"
+    lines = [l for l in path.read_text(encoding="utf-8").splitlines() if not l.startswith("IQ_C0")]
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    assert "type 'C' has 0 questions" in errors_for(data_copy)

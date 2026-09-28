@@ -10,6 +10,15 @@ DATASETS_DIR = Path(__file__).resolve().parents[2] / "datasets"
 
 LEVELS = {"school", "diploma", "ug", "pg", "doctoral", "professional"}
 PROFICIENCY = {"beginner", "intermediate", "advanced"}
+RIASEC_TYPES = {"R", "I", "A", "S", "E", "C"}
+BIG_FIVE = {"extraversion", "agreeableness", "conscientiousness", "emotional_stability", "openness"}
+WORK_STYLE_TRAITS = {"leadership", "risk_tolerance", "team_orientation", "creativity", "research_orientation"}
+PERSONALITY_TRAITS = BIG_FIVE | WORK_STYLE_TRAITS
+APTITUDE_CATEGORIES = {"numerical", "logical", "verbal", "spatial", "problem_solving"}
+
+# Minimum questions per scale, so every score is based on enough answers
+MIN_PER_RIASEC_TYPE = 4
+MIN_PER_APTITUDE_CATEGORY = 5
 
 
 @dataclass(frozen=True)
@@ -146,6 +155,38 @@ SPECS: dict[str, FileSpec] = {
             int_ranges={"estimated_months_min": (0, 120), "estimated_months_max": (0, 120)},
             urls=("source_url",),
         ),
+        FileSpec(
+            "interest_questions.csv",
+            ("question_id", "question_text", "riasec_type", "response_scale", "source", "license"),
+            id_column="question_id",
+            id_prefix="IQ_",
+            required=("question_id", "question_text", "riasec_type", "response_scale", "source", "license"),
+            enums={"riasec_type": RIASEC_TYPES, "response_scale": {"1-5"}},
+        ),
+        FileSpec(
+            "personality_questions.csv",
+            ("question_id", "question_text", "trait", "keyed", "response_scale", "source", "license"),
+            id_column="question_id",
+            id_prefix="PQ_",
+            required=("question_id", "question_text", "trait", "keyed", "response_scale", "source", "license"),
+            enums={"trait": PERSONALITY_TRAITS, "keyed": {"+", "-"}, "response_scale": {"1-5"}},
+        ),
+        FileSpec(
+            "aptitude_questions.csv",
+            (
+                "question_id", "category", "difficulty", "question_text", "option_a", "option_b", "option_c",
+                "option_d", "correct_option", "explanation", "source", "license",
+            ),
+            id_column="question_id",
+            id_prefix="AQ_",
+            required=("question_id", "category", "difficulty", "question_text", "option_a", "option_b",
+                      "option_c", "option_d", "correct_option", "source", "license"),
+            enums={
+                "category": APTITUDE_CATEGORIES,
+                "difficulty": {"easy", "medium", "hard"},
+                "correct_option": {"a", "b", "c", "d"},
+            },
+        ),
     ]
 }
 
@@ -157,9 +198,6 @@ PLANNED_FILES: dict[str, str] = {
     "universities.csv": "university_id",
     "colleges.csv": "college_id",
     "scholarships.csv": "scholarship_id",
-    "interest_questions.csv": "question_id",
-    "personality_questions.csv": "question_id",
-    "aptitude_questions.csv": "question_id",
 }
 
 # Which ID column each file exposes for foreign keys
