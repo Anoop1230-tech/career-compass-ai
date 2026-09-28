@@ -95,4 +95,16 @@ export const getSkillGap = async (careerId, signal) =>
 export const checkTransition = async (params, signal) =>
   (await api.get("/transitions/check", { params, signal })).data;
 
+export const getRoadmap = async (careerId, signal) =>
+  (await api.get(`/roadmap/${encodeURIComponent(careerId)}`, { signal })).data;
+export const getMyRoadmap = async (signal) => (await api.get("/roadmap", { signal })).data;
+export const setRoadmapTarget = async (careerId) =>
+  (await api.put(`/roadmap/${encodeURIComponent(careerId)}/target`)).data;
+export const markRoadmapSkill = async (careerId, skillId, done) =>
+  (await api.put(`/roadmap/${encodeURIComponent(careerId)}/skills/${encodeURIComponent(skillId)}`, { done })).data;
+export const getExploreRoot = async (stage, signal) =>
+  (await api.get("/explore", { params: stage ? { stage } : {}, signal })).data;
+export const expandExplore = async (kind, id) =>
+  (await api.get(`/explore/${kind}/${encodeURIComponent(id)}`)).data;
+
 export default api;

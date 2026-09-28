@@ -3,9 +3,9 @@ import { expect, test } from "@playwright/test";
 const ROUTES = [
   ["/", /where are you now/i],
   ["/next-steps", "Next steps"],
-  ["/explore", "Career Explorer"],
+  ["/explore", "Career explorer"],
   ["/careers", "Careers"],
-  ["/roadmap", "Career Roadmap"],
+  ["/roadmap", "Career roadmap"],
   ["/resources", "Exams, Colleges & Scholarships"],
   ["/mentor", "AI Career Mentor"],
   ["/login", "Log in"],

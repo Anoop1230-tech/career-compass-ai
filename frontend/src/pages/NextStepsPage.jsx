@@ -176,7 +176,10 @@ export default function NextStepsPage() {
             <h1>Next steps</h1>
             <p className="muted">Realistic options from where you are now, with eligibility, time, exams and one action to take.</p>
           </div>
-          <Link to="/dream-check" className="btn btn--secondary">Can I become…?</Link>
+          <div className="btn-row">
+            <Link to="/explore" className="btn btn--secondary">Explore as a tree</Link>
+            <Link to="/dream-check" className="btn btn--secondary">Can I become…?</Link>
+          </div>
         </div>
 
         <div className="toolbar">

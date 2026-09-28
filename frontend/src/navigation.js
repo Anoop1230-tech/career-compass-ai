@@ -2,24 +2,6 @@
 // placeholder pages all read from this list.
 export const PAGES = [
   {
-    path: "/explore",
-    label: "Explore",
-    inNav: false,
-    phase: 10,
-    title: "Career Explorer",
-    description:
-      "Browse careers as a tree: from your education to specializations, higher studies, government careers and entrepreneurship.",
-  },
-  {
-    path: "/roadmap",
-    label: "Roadmap",
-    inNav: true,
-    phase: 10,
-    title: "Career Roadmap",
-    description:
-      "A stage-by-stage learning plan for your target career that skips what you already know.",
-  },
-  {
     path: "/resources",
     label: "Exams & Colleges",
     inNav: true,
@@ -44,5 +26,6 @@ export const NAV_ITEMS = [
   { path: "/careers", label: "Careers" },
   { path: "/next-steps", label: "Next Steps" },
   { path: "/assessments", label: "Assessments" },
+  { path: "/roadmap", label: "Roadmap" },
   ...PAGES.filter((page) => page.inNav),
 ];

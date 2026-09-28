@@ -127,3 +127,33 @@ test("dream career checker uses the profile and explains the verdict", async ({ 
   await expect(page.getByRole("heading", { level: 2, name: "Not directly from here" })).toBeVisible();
   await expect(page.getByText(/No recorded study route from Class 12/)).toBeVisible();
 });
+
+test("roadmap: set a target, tick a skill, and it is remembered", async ({ page }) => {
+  await loginWithProfile(page);
+  await page.goto("/roadmap");
+  await page.getByLabel("Target career").selectOption("CAR_DATA_SCIENTIST");
+  await expect(page.getByRole("heading", { level: 1, name: "Roadmap: Data Scientist" })).toBeVisible();
+  await expect(page.getByText(/Skipped because you already have them: .*Python/)).toBeVisible();
+  await page.getByRole("button", { name: "Set as my target" }).click();
+  await expect(page.getByText("Your target career")).toBeVisible();
+  const box = page.getByRole("checkbox").first();
+  await box.check();
+  await expect(page.getByText(/^1 \/ \d+$/)).toBeVisible();
+
+  // /roadmap now opens the saved target with the saved progress
+  await page.goto("/roadmap");
+  await expect(page.getByRole("heading", { level: 1, name: "Roadmap: Data Scientist" })).toBeVisible();
+  await expect(page.getByRole("checkbox").first()).toBeChecked();
+});
+
+test("explorer expands from class 10 to careers", async ({ page }) => {
+  await page.goto("/explore");
+  await expect(page.getByRole("heading", { level: 2, name: "Class 10" })).toBeVisible();
+  await page.getByRole("button", { name: "Expand Class 12 – Science (PCM)" }).click();
+  const pcm = page.getByRole("list", { name: "Options after Class 12 – Science (PCM)" });
+  await pcm.getByRole("button", { name: "Expand B.Tech – Computer Science" }).click();
+  const btech = page.getByRole("list", { name: "Options after B.Tech – Computer Science" });
+  await expect(btech.getByRole("link", { name: "Software Engineer" })).toBeVisible();
+  await btech.getByRole("button", { name: "Expand Software Engineer" }).click();
+  await expect(page.getByRole("list", { name: "Options after Software Engineer" }).getByText("Backend Developer")).toBeVisible();
+});
