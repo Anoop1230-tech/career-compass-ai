@@ -13,8 +13,8 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 5 | Assessments | Interest (RIASEC), aptitude and personality tests with scoring saved to profile | ✅ |
 | 6 | Next Step Engine | "Where am I → what can I do next?" paths with eligibility, time, exams, pros/cons | ✅ |
 | 7 | Recommendation Engine | Weighted, explainable career scores with a "Why" section | ✅ |
-| 8 | Skill Gap Analysis | Your skills vs target career skills, prioritized gaps | ⬜ next |
-| 9 | Transition Engine and Dream Career Checker | "I am X, can I become Y?" analysis | ⬜ |
+| 8 | Skill Gap Analysis | Your skills vs target career skills, prioritized gaps | ✅ |
+| 9 | Transition Engine and Dream Career Checker | "I am X, can I become Y?" analysis | ⬜ next |
 | 10 | Roadmap Generator and Career Explorer | Stage-wise roadmap that skips what you know; interactive career tree | ⬜ |
 | 11 | Exams, colleges and scholarships | Filterable lists with official source links and "last verified" dates | ⬜ |
 | 12 | AI Career Mentor | Chat assistant that uses your profile and roadmap as context | ⬜ |
@@ -138,3 +138,18 @@ Known limits: only stages in the datasets are covered (e.g. civil engineering ma
 Result: 207 backend tests, 80 frontend unit tests, 76 browser tests passing; lint 0 warnings.
 
 Known limits: weights are expert-set, not learned (Phase 13 tests ML against them); only the 34 careers in the dataset are scored.
+
+---
+
+## Phase 8 – Skill Gap Analysis – ✅ done
+
+- 8.1 Engine: every skill of the target career marked have / improve / learn, using the level you gave in your profile (project technologies count as beginner)
+- 8.2 Priority = importance × 1.5 for core skills × levels still missing; core skills always first, foundations first on ties
+- 8.3 Readiness %, core skills ready (x / y), rough learning time (3 / 5 / 8 weeks per level at ~8 h a week, clearly labelled as rough)
+- 8.4 API GET /api/skill-gap/{career_id}
+- 8.5 Skill gap page (career picker, top-match suggestions, tables that stack into cards on phones); "Check my skill gap" and "Get a roadmap" buttons on every career page
+- 8.6 Tests: 6 backend, 3 unit, 1 browser
+
+Result: 213 backend tests, 83 frontend unit tests, 78 browser tests passing; lint 0 warnings.
+
+Known limits: skill levels are self-rated; time estimates are generic, not per skill.
