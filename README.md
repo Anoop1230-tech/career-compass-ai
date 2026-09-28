@@ -94,5 +94,12 @@ Loading is safe: invalid data changes nothing, the load is all-or-nothing, and u
 | GET | /api/catalog/careers/{id} | no | Career detail: skills, entry paths, next roles, switches |
 | GET | /api/catalog/exams?q=&level=&stage= | no | Entrance exams with official links |
 | GET | /api/catalog/exams/{id} | no | One exam |
+| GET | /api/assessments | yes | The three tests with status (not started, in progress, completed) |
+| POST | /api/assessments/{kind}/start?restart= | yes | Start or resume a test (aptitude answers are never sent) |
+| POST | /api/assessments/{kind}/submit | yes | Submit answers and save the scores |
+| GET | /api/assessments/results | yes | Latest result of every test taken |
+| GET | /api/assessments/{kind}/result | yes | Latest result of one test (aptitude includes answer review) |
+
+`kind` is `interest`, `personality` or `aptitude`. Assessment results are for self-reflection and career guidance, not clinical or professional psychological assessments.
 
 Full interactive docs: http://localhost:8000/docs

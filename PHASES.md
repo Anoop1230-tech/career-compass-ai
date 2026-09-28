@@ -10,8 +10,8 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 2 | App shell and frontend–backend connection | Real website layout, navigation, design system, reliable API connection, one-command start, test setup (unit + browser) | ✅ |
 | 3 | Accounts and user profile | Register, log in (secure passwords + tokens), multi-step profile form for any stage | ✅ |
 | 4 | Career and education data | Starter tech-domain datasets filled, CSV validator, seed script loading them into the database, browse APIs | ✅ |
-| 5 | Assessments | Interest (RIASEC), aptitude and personality tests with scoring saved to profile | ⬜ next |
-| 6 | Next Step Engine | "Where am I → what can I do next?" paths with eligibility, time, exams, pros/cons | ⬜ |
+| 5 | Assessments | Interest (RIASEC), aptitude and personality tests with scoring saved to profile | ✅ |
+| 6 | Next Step Engine | "Where am I → what can I do next?" paths with eligibility, time, exams, pros/cons | ⬜ next |
 | 7 | Recommendation Engine | Weighted, explainable career scores with a "Why" section | ⬜ |
 | 8 | Skill Gap Analysis | Your skills vs target career skills, prioritized gaps | ⬜ |
 | 9 | Transition Engine and Dream Career Checker | "I am X, can I become Y?" analysis | ⬜ |
@@ -89,3 +89,21 @@ Known limits (planned for later phases): no password reset or email verification
 Result: 22 stages, 156 skills, 34 careers, 296 career-skill links, 16 exams, 65 education paths, 34 career progressions, 18 career switches. 113 backend tests, 58 frontend unit tests, 60 browser tests passing; 40/41 official links OK (IBPS: certificate-chain warning only); lint 0 warnings; 0 npm vulnerabilities.
 
 Known limits: exam eligibility is summarised and marked 'not verified' (users are sent to the official site); salary data is intentionally left empty; time estimates for career switches are general guidance; data covers mainly the technology domain plus a few commerce, government and education careers.
+
+---
+
+## Phase 5 – Assessments – ✅ done
+
+- 5.1 Interest questions: 36 self-written RIASEC items (6 per type)
+- 5.2 Personality questions: 20 IPIP Big-Five items (public domain) + 10 self-written work-style items, half reverse-keyed
+- 5.3 Aptitude questions: 40 self-written items (8 per category), every answer checked by script
+- 5.4 Question banks: validator rules, database tables, loaded with the other datasets
+- 5.5 Scoring: 0-100 scores with low/moderate/high bands, Holland code, careless-answer warnings
+- 5.6 API: start/resume, submit, results; aptitude answers never sent before submit, options shuffled per attempt
+- 5.7 Website: assessments page, one-question-at-a-time test page with progress and resume, results page with review
+- 5.8 Tests: unit and browser tests (found and fixed a bug where refreshing lost aptitude answers)
+- 5.9 Final checks, docs, header layout fix
+
+Result: 160 backend tests, 73 frontend unit tests, 70 browser tests passing; lint 0 warnings; 0 npm vulnerabilities.
+
+Known limits: results are self-reflection, not validated psychometric scores; aptitude bank is small (40 items) so scores are rough; answers in progress are saved in the browser of the device used.
