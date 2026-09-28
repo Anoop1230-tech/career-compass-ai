@@ -9,8 +9,8 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 1 | Project setup | FastAPI + React + SQLite running, health check, Git | ✅ |
 | 2 | App shell and frontend–backend connection | Real website layout, navigation, design system, reliable API connection, one-command start, test setup (unit + browser) | ✅ |
 | 3 | Accounts and user profile | Register, log in (secure passwords + tokens), multi-step profile form for any stage | ✅ |
-| 4 | Career and education data | Starter tech-domain datasets filled, CSV validator, seed script loading them into the database, browse APIs | ⬜ next |
-| 5 | Assessments | Interest (RIASEC), aptitude and personality tests with scoring saved to profile | ⬜ |
+| 4 | Career and education data | Starter tech-domain datasets filled, CSV validator, seed script loading them into the database, browse APIs | ✅ |
+| 5 | Assessments | Interest (RIASEC), aptitude and personality tests with scoring saved to profile | ⬜ next |
 | 6 | Next Step Engine | "Where am I → what can I do next?" paths with eligibility, time, exams, pros/cons | ⬜ |
 | 7 | Recommendation Engine | Weighted, explainable career scores with a "Why" section | ⬜ |
 | 8 | Skill Gap Analysis | Your skills vs target career skills, prioritized gaps | ⬜ |
@@ -74,7 +74,7 @@ Known limits (planned for later phases): no password reset or email verification
 
 ---
 
-## Phase 4 – Career and education data – 🔨 in progress
+## Phase 4 – Career and education data – ✅ done
 
 - 4.1 Fill education_stages.csv + skills.csv
 - 4.2 Fill careers.csv + skill_career_mapping.csv
@@ -85,3 +85,7 @@ Known limits (planned for later phases): no password reset or email verification
 - 4.7 Frontend: careers directory + career detail pages
 - 4.8 Tests: validator, seed, APIs, frontend unit, browser
 - 4.9 Verify links, full test run, docs, commit, report
+
+Result: 22 stages, 156 skills, 34 careers, 296 career-skill links, 16 exams, 65 education paths, 34 career progressions, 18 career switches. 113 backend tests, 58 frontend unit tests, 60 browser tests passing; 40/41 official links OK (IBPS: certificate-chain warning only); lint 0 warnings; 0 npm vulnerabilities.
+
+Known limits: exam eligibility is summarised and marked 'not verified' (users are sent to the official site); salary data is intentionally left empty; time estimates for career switches are general guidance; data covers mainly the technology domain plus a few commerce, government and education careers.
