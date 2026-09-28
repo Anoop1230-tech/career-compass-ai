@@ -63,4 +63,16 @@ export const deleteProfile = async () => {
   await api.delete("/profile");
 };
 
+// ---- catalog (public reference data)
+export const getCareers = async ({ q, domain, stage, limit = 50, offset = 0 } = {}, signal) =>
+  (
+    await api.get("/catalog/careers", {
+      params: { q: q || undefined, domain: domain || undefined, stage: stage || undefined, limit, offset },
+      signal,
+    })
+  ).data;
+export const getCareer = async (careerId) =>
+  (await api.get(`/catalog/careers/${encodeURIComponent(careerId)}`)).data;
+export const getStages = async () => (await api.get("/catalog/stages")).data;
+
 export default api;

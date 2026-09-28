@@ -32,8 +32,8 @@ describe("App shell", () => {
     const user = userEvent.setup();
     renderAt("/");
     const nav = await screen.findByRole("navigation", { name: "Main" });
-    await user.click(within(nav).getByRole("link", { name: "Explore" }));
-    expect(await screen.findByRole("heading", { level: 1, name: "Career Explorer" })).toBeInTheDocument();
+    await user.click(within(nav).getByRole("link", { name: "Mentor" }));
+    expect(await screen.findByRole("heading", { level: 1, name: "AI Career Mentor" })).toBeInTheDocument();
   });
 
   it("shows a 404 page for unknown routes", async () => {

@@ -16,6 +16,11 @@ if (!process.env.TEST_WORKER_INDEX) rmSync(E2E_DB, { force: true });
 export default defineConfig({
   testDir: "./e2e",
   timeout: 30_000,
+  // Argon2 password hashing is deliberately CPU-heavy; too many parallel
+  // browsers on one laptop starve the single test server and cause random
+  // timeouts. 4 workers keeps runs fast and stable.
+  workers: 4,
+  expect: { timeout: 10_000 },
   fullyParallel: true,
   retries: 0,
   reporter: [["list"]],

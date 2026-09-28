@@ -13,7 +13,7 @@ const STAGES = [
 
 const FEATURES = [
   { title: "Next steps", text: "Realistic paths from your current stage, with eligibility, time and exams.", to: "/next-steps" },
-  { title: "Career explorer", text: "See every direction your education can lead to, as a clear tree.", to: "/explore" },
+  { title: "Career directory", text: "Search careers and see the skills, exams and paths for each one.", to: "/careers" },
   { title: "Skill gap and roadmap", text: "Compare your skills with a target career and get a stage-wise plan.", to: "/roadmap" },
   { title: "Exams, colleges, scholarships", text: "Filtered lists linked to official sources.", to: "/resources" },
   { title: "Assessments", text: "Interest, aptitude and personality tests that sharpen your results.", to: "/assessments" },
@@ -35,7 +35,7 @@ export default function HomePage() {
             <Link to="/next-steps" className="btn btn--primary">
               Find my next step
             </Link>
-            <Link to="/explore" className="btn btn--secondary">
+            <Link to="/careers" className="btn btn--secondary">
               Explore careers
             </Link>
           </div>

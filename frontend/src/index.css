@@ -600,3 +600,64 @@ img, svg { display: block; max-width: 100%; }
   .user-menu { flex-direction: column; align-items: stretch; }
   .user-menu__email { max-width: none; padding: var(--space-2) var(--space-3); }
 }
+
+/* ---------- Careers ---------- */
+.small { font-size: var(--text-sm); }
+
+.filters {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 2fr 1fr 1fr auto;
+  align-items: end;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+@media (max-width: 860px) {
+  .filters { grid-template-columns: 1fr; }
+}
+.filters__clear { align-self: end; }
+
+.career-card { display: flex; flex-direction: column; gap: var(--space-2); height: 100%; }
+.career-card .badge { align-self: flex-start; }
+.career-card__title { font-size: var(--text-lg); margin: 0; }
+.career-card p { flex: 1; margin: 0; font-size: 0.95rem; }
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.breadcrumb { font-size: var(--text-sm); color: var(--color-muted); margin-bottom: var(--space-4); }
+.breadcrumb a { color: var(--color-muted); }
+
+.detail-head { margin-bottom: var(--space-6); max-width: 800px; }
+.detail-head h1 { margin-top: var(--space-3); }
+
+.detail-grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+}
+.detail-section h2 { font-size: var(--text-lg); margin-bottom: var(--space-4); }
+.detail-sub { font-size: var(--text-sm); color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.04em; margin: var(--space-4) 0 var(--space-2); }
+.detail-sub:first-of-type { margin-top: 0; }
+.detail-block { margin-top: var(--space-6); }
+.detail-block h2 { font-size: var(--text-xl); }
+
+.skill-list { list-style: none; margin: 0; padding: 0; }
+.skill-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.skill-list li:last-child { border-bottom: 0; }
+
+.path-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); }
+.path-list li { padding-left: var(--space-3); border-left: 3px solid var(--color-border-strong); }

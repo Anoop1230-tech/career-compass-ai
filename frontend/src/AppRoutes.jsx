@@ -13,6 +13,8 @@ const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const AuthPage = lazy(() => import("./pages/AuthPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const ProfileEditPage = lazy(() => import("./pages/ProfileEditPage"));
+const CareersPage = lazy(() => import("./pages/CareersPage"));
+const CareerDetailPage = lazy(() => import("./pages/CareerDetailPage"));
 
 export default function AppRoutes() {
   return (
@@ -23,6 +25,8 @@ export default function AppRoutes() {
         <Route path="/register" element={<AuthPage mode="register" key="register" />} />
         <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
         <Route path="/profile/edit" element={<ProtectedRoute><ProfileEditPage /></ProtectedRoute>} />
+        <Route path="/careers" element={<CareersPage />} />
+        <Route path="/careers/:careerId" element={<CareerDetailPage />} />
         {PAGES.map((page) => (
           <Route
             key={page.path}

@@ -13,7 +13,7 @@ export const PAGES = [
   {
     path: "/explore",
     label: "Explore",
-    inNav: true,
+    inNav: false,
     phase: 10,
     title: "Career Explorer",
     description:
@@ -57,4 +57,7 @@ export const PAGES = [
   },
 ];
 
-export const NAV_ITEMS = PAGES.filter((page) => page.inNav);
+export const NAV_ITEMS = [
+  { path: "/careers", label: "Careers" },
+  ...PAGES.filter((page) => page.inNav),
+];

@@ -4,6 +4,7 @@ const ROUTES = [
   ["/", /where are you now/i],
   ["/next-steps", "Next Step Engine"],
   ["/explore", "Career Explorer"],
+  ["/careers", "Careers"],
   ["/roadmap", "Career Roadmap"],
   ["/resources", "Exams, Colleges & Scholarships"],
   ["/mentor", "AI Career Mentor"],
