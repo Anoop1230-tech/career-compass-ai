@@ -1,1 +1,31 @@
 question_id,question_text,trait,keyed,response_scale,source,license
+PQ_E01,I am the life of the party.,extraversion,+,1-5,IPIP 50-item Big-Five factor markers (ipip.ori.org),Public domain
+PQ_E02,I don't talk a lot.,extraversion,-,1-5,IPIP 50-item Big-Five factor markers (ipip.ori.org),Public domain
+PQ_E03,I feel comfortable around people.,extraversion,+,1-5,IPIP 50-item Big-Five factor markers (ipip.ori.org),Public domain
+PQ_E04,I keep in the background.,extraversion,-,1-5,IPIP 50-item Big-Five factor markers (ipip.ori.org),Public domain
+PQ_A01,I sympathize with others' feelings.,agreeableness,+,1-5,IPIP 50-item Big-Five factor markers (ipip.ori.org),Public domain
+PQ_A02,I am not interested in other people's problems.,agreeableness,-,1-5,IPIP 50-item Big-Five factor markers (ipip.ori.org),Public domain
+PQ_A03,I have a soft heart.,agreeableness,+,1-5,IPIP 50-item Big-Five factor markers (ipip.ori.org),Public domain
+PQ_A04,I insult people.,agreeableness,-,1-5,IPIP 50-item Big-Five factor markers (ipip.ori.org),Public domain
+PQ_C01,I am always prepared.,conscientiousness,+,1-5,IPIP 50-item Big-Five factor markers (ipip.ori.org),Public domain
+PQ_C02,I leave my belongings around.,conscientiousness,-,1-5,IPIP 50-item Big-Five factor markers (ipip.ori.org),Public domain
+PQ_C03,I pay attention to details.,conscientiousness,+,1-5,IPIP 50-item Big-Five factor markers (ipip.ori.org),Public domain
+PQ_C04,I make a mess of things.,conscientiousness,-,1-5,IPIP 50-item Big-Five factor markers (ipip.ori.org),Public domain
+PQ_S01,I am relaxed most of the time.,emotional_stability,+,1-5,IPIP 50-item Big-Five factor markers (ipip.ori.org),Public domain
+PQ_S02,I get stressed out easily.,emotional_stability,-,1-5,IPIP 50-item Big-Five factor markers (ipip.ori.org),Public domain
+PQ_S03,I seldom feel blue.,emotional_stability,+,1-5,IPIP 50-item Big-Five factor markers (ipip.ori.org),Public domain
+PQ_S04,I worry about things.,emotional_stability,-,1-5,IPIP 50-item Big-Five factor markers (ipip.ori.org),Public domain
+PQ_O01,I have a vivid imagination.,openness,+,1-5,IPIP 50-item Big-Five factor markers (ipip.ori.org),Public domain
+PQ_O02,I have difficulty understanding abstract ideas.,openness,-,1-5,IPIP 50-item Big-Five factor markers (ipip.ori.org),Public domain
+PQ_O03,I have a rich vocabulary.,openness,+,1-5,IPIP 50-item Big-Five factor markers (ipip.ori.org),Public domain
+PQ_O04,I am not interested in abstract ideas.,openness,-,1-5,IPIP 50-item Big-Five factor markers (ipip.ori.org),Public domain
+PQ_L01,I like taking charge when a group needs direction.,leadership,+,1-5,Self-written work-style item,Project original
+PQ_L02,I prefer that someone else makes the decisions in a group.,leadership,-,1-5,Self-written work-style item,Project original
+PQ_R01,I am willing to take a risk for a bigger reward.,risk_tolerance,+,1-5,Self-written work-style item,Project original
+PQ_R02,I prefer a stable path even if it pays less.,risk_tolerance,-,1-5,Self-written work-style item,Project original
+PQ_T01,I do my best work together with other people.,team_orientation,+,1-5,Self-written work-style item,Project original
+PQ_T02,I would rather work alone than in a team.,team_orientation,-,1-5,Self-written work-style item,Project original
+PQ_K01,I enjoy finding new ways of doing things.,creativity,+,1-5,Self-written work-style item,Project original
+PQ_K02,I prefer to follow methods that are already proven.,creativity,-,1-5,Self-written work-style item,Project original
+PQ_D01,I enjoy studying one topic in great depth for a long time.,research_orientation,+,1-5,Self-written work-style item,Project original
+PQ_D02,I lose interest when a problem takes weeks to solve.,research_orientation,-,1-5,Self-written work-style item,Project original

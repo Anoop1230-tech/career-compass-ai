@@ -1,1 +1,37 @@
 question_id,question_text,riasec_type,response_scale,source,license
+IQ_R01,Build or repair things with tools,R,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_R02,Assemble electronic parts or circuits,R,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_R03,Set up computers networks or other equipment,R,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_R04,Work outdoors or on a field site,R,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_R05,Operate machines or vehicles,R,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_R06,Make a physical model or prototype of an idea,R,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_I01,Solve difficult maths or logic problems,I,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_I02,Find out why something works the way it does,I,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_I03,Analyse data to find patterns,I,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_I04,Do experiments in a lab,I,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_I05,Read research articles about a topic you like,I,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_I06,Debug a program until you find the exact cause,I,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_A01,Design a poster logo or website layout,A,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_A02,Write stories articles or scripts,A,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_A03,Take photos or make videos,A,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_A04,Play music sing or perform,A,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_A05,Come up with original ideas no one has tried,A,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_A06,Make an app or game look and feel great,A,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_S01,Teach or explain something to others,S,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_S02,Help people solve their personal problems,S,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_S03,Volunteer for a social cause,S,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_S04,Mentor a junior student,S,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_S05,Take care of people who are unwell,S,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_S06,Answer customers' questions patiently,S,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_E01,Lead a team towards a goal,E,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_E02,Convince people to support your idea,E,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_E03,Start your own business or project,E,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_E04,Sell a product or service,E,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_E05,Negotiate a deal or agreement,E,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_E06,Organise a college event or fest,E,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_C01,Keep records accurate and up to date,C,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_C02,Work with spreadsheets and numbers,C,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_C03,Follow clear steps and procedures,C,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_C04,Check documents for errors,C,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_C05,Plan budgets or schedules,C,1-5,Self-written (RIASEC model by John Holland),Project original
+IQ_C06,Organise files data or information neatly,C,1-5,Self-written (RIASEC model by John Holland),Project original
