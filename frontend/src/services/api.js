@@ -92,5 +92,7 @@ export const getCareerFit = async (careerId, signal) =>
   (await api.get(`/recommendations/${encodeURIComponent(careerId)}`, { signal })).data;
 export const getSkillGap = async (careerId, signal) =>
   (await api.get(`/skill-gap/${encodeURIComponent(careerId)}`, { signal })).data;
+export const checkTransition = async (params, signal) =>
+  (await api.get("/transitions/check", { params, signal })).data;
 
 export default api;

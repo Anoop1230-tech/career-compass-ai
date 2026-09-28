@@ -111,3 +111,19 @@ test("skill gap from a career page", async ({ page }) => {
   await page.getByLabel("Target career").selectOption("CAR_ACCOUNTANT");
   await expect(page.getByText("Readiness for Accountant")).toBeVisible();
 });
+
+test("dream career checker uses the profile and explains the verdict", async ({ page }) => {
+  await loginWithProfile(page);
+  await page.goto("/next-steps");
+  await page.getByRole("link", { name: "Can I become…?" }).click();
+  await page.getByLabel("Can I become").selectOption("CAR_DATA_SCIENTIST");
+  await page.getByRole("button", { name: "Check" }).click();
+  await expect(page.getByRole("heading", { level: 2, name: "Yes – this is a direct route" })).toBeVisible();
+  await expect(page.getByText("(from your profile)")).toBeVisible();
+  await expect(page.getByRole("img", { name: /Skill readiness for Data Scientist/ })).toBeVisible();
+
+  // A dream that needs a different base
+  await page.goto("/dream-check?to=CAR_SOFTWARE_ENGINEER&from_stage=EDU_12_PCB");
+  await expect(page.getByRole("heading", { level: 2, name: "Not directly from here" })).toBeVisible();
+  await expect(page.getByText(/No recorded study route from Class 12/)).toBeVisible();
+});

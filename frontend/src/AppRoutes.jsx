@@ -21,6 +21,7 @@ const AssessmentResultPage = lazy(() => import("./pages/AssessmentResultPage"));
 const NextStepsPage = lazy(() => import("./pages/NextStepsPage"));
 const RecommendationsPage = lazy(() => import("./pages/RecommendationsPage"));
 const SkillGapPage = lazy(() => import("./pages/SkillGapPage"));
+const DreamCheckPage = lazy(() => import("./pages/DreamCheckPage"));
 
 export default function AppRoutes() {
   return (
@@ -37,6 +38,7 @@ export default function AppRoutes() {
         <Route path="/assessments/:kind" element={<ProtectedRoute><AssessmentTestPage /></ProtectedRoute>} />
         <Route path="/assessments/:kind/result" element={<ProtectedRoute><AssessmentResultPage /></ProtectedRoute>} />
         <Route path="/next-steps" element={<NextStepsPage />} />
+        <Route path="/dream-check" element={<DreamCheckPage />} />
         <Route path="/skill-gap" element={<ProtectedRoute><SkillGapPage /></ProtectedRoute>} />
         <Route path="/for-you" element={<ProtectedRoute><RecommendationsPage /></ProtectedRoute>} />
         {PAGES.map((page) => (

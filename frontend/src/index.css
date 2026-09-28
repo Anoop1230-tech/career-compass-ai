@@ -827,3 +827,25 @@ img, svg { display: block; max-width: 100%; }
   .table--stack td[data-label] { display: flex; justify-content: space-between; gap: var(--space-3); }
   .table--stack td[data-label]::before { content: attr(data-label); color: var(--color-muted); }
 }
+
+/* ---------- Dream career checker ---------- */
+.dream-form { grid-template-columns: 1fr 1fr auto; }
+@media (max-width: 860px) { .dream-form { grid-template-columns: 1fr; } }
+.dream-form fieldset { border: 0; padding: 0; min-width: 0; }
+.dream-result { margin-top: var(--space-5); display: grid; gap: var(--space-4); }
+.verdict { border-left: 4px solid var(--color-accent); }
+.verdict h2 { margin: var(--space-1) 0 var(--space-2); font-size: var(--text-xl); }
+.verdict p { margin: 0 0 var(--space-1); }
+.verdict--ok { border-left-color: var(--color-success); }
+.verdict--warn { border-left-color: var(--color-warning); }
+.verdict--danger { border-left-color: var(--color-danger); }
+.timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); }
+.timeline li { position: relative; padding-left: var(--space-5); border-left: 2px solid var(--color-border-strong); }
+.timeline li::before {
+  content: ""; position: absolute; left: -7px; top: 4px; width: 12px; height: 12px;
+  border-radius: 50%; background: var(--color-bg); border: 2px solid var(--color-accent);
+}
+.timeline p { margin: var(--space-1) 0 0; }
+
+.radio-inline { display: inline-flex; align-items: center; gap: var(--space-2); cursor: pointer; }
+.radio-inline input { width: 18px; height: 18px; accent-color: var(--color-accent); margin: 0; }
