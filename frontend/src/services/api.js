@@ -83,4 +83,8 @@ export const submitAssessment = async (kind, attemptId, answers) =>
   (await api.post(`/assessments/${kind}/submit`, { attempt_id: attemptId, answers })).data;
 export const getAssessmentResult = async (kind) => (await api.get(`/assessments/${kind}/result`)).data;
 
+// ---- guidance engines (work for visitors; personalised when logged in)
+export const getNextSteps = async (stage, signal) =>
+  (await api.get("/next-steps", { params: stage ? { stage } : {}, signal })).data;
+
 export default api;

@@ -18,6 +18,7 @@ const CareerDetailPage = lazy(() => import("./pages/CareerDetailPage"));
 const AssessmentsPage = lazy(() => import("./pages/AssessmentsPage"));
 const AssessmentTestPage = lazy(() => import("./pages/AssessmentTestPage"));
 const AssessmentResultPage = lazy(() => import("./pages/AssessmentResultPage"));
+const NextStepsPage = lazy(() => import("./pages/NextStepsPage"));
 
 export default function AppRoutes() {
   return (
@@ -33,6 +34,7 @@ export default function AppRoutes() {
         <Route path="/assessments" element={<ProtectedRoute><AssessmentsPage /></ProtectedRoute>} />
         <Route path="/assessments/:kind" element={<ProtectedRoute><AssessmentTestPage /></ProtectedRoute>} />
         <Route path="/assessments/:kind/result" element={<ProtectedRoute><AssessmentResultPage /></ProtectedRoute>} />
+        <Route path="/next-steps" element={<NextStepsPage />} />
         {PAGES.map((page) => (
           <Route
             key={page.path}

@@ -2,15 +2,6 @@
 // placeholder pages all read from this list.
 export const PAGES = [
   {
-    path: "/next-steps",
-    label: "Next Steps",
-    inNav: true,
-    phase: 6,
-    title: "Next Step Engine",
-    description:
-      "Tell us where you are now and where you want to go. We'll map realistic paths with eligibility, time, exams and the next action to take.",
-  },
-  {
     path: "/explore",
     label: "Explore",
     inNav: false,
@@ -50,6 +41,7 @@ export const PAGES = [
 
 export const NAV_ITEMS = [
   { path: "/careers", label: "Careers" },
+  { path: "/next-steps", label: "Next Steps" },
   { path: "/assessments", label: "Assessments" },
   ...PAGES.filter((page) => page.inNav),
 ];

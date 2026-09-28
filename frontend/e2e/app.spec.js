@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 const ROUTES = [
   ["/", /where are you now/i],
-  ["/next-steps", "Next Step Engine"],
+  ["/next-steps", "Next steps"],
   ["/explore", "Career Explorer"],
   ["/careers", "Careers"],
   ["/roadmap", "Career Roadmap"],
@@ -71,7 +71,7 @@ test("navigation works on desktop and mobile", async ({ page, isMobile }) => {
 test("home call-to-action opens next steps", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("link", { name: "Find my next step" }).click();
-  await expect(page.getByRole("heading", { level: 1, name: "Next Step Engine" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Next steps" })).toBeVisible();
 });
 
 test("no horizontal scrolling on any page", async ({ page }) => {
