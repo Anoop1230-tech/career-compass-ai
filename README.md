@@ -75,5 +75,11 @@ The browser only talks to `http://localhost:5173`. Requests to `/api/...` are fo
 | GET | /api/auth/me | yes | Current user |
 | GET | /api/profile/options | no | Choice lists for the profile form |
 | GET / PUT / DELETE | /api/profile | yes | Read, save, delete your profile |
+| GET | /api/catalog/stages?level= | no | Education and career stages |
+| GET | /api/catalog/skills?q=&category=&limit= | no | Search skills (names and aliases) |
+| GET | /api/catalog/careers?q=&domain=&stage=&limit=&offset= | no | Search and filter careers |
+| GET | /api/catalog/careers/{id} | no | Career detail: skills, entry paths, next roles, switches |
+| GET | /api/catalog/exams?q=&level=&stage= | no | Entrance exams with official links |
+| GET | /api/catalog/exams/{id} | no | One exam |
 
 Full interactive docs: http://localhost:8000/docs
