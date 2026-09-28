@@ -74,11 +74,17 @@ NOT_LOGGED_IN = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="
 
 def get_current_user(request: Request, db: Session = Depends(get_db)) -> User:
     """FastAPI dependency: returns the logged-in user or responds 401."""
+    user = get_optional_user(request, db)
+    if user is None:
+        raise NOT_LOGGED_IN
+    return user
+
+
+def get_optional_user(request: Request, db: Session = Depends(get_db)) -> User | None:
+    """Like get_current_user, but returns None for visitors instead of 401
+    (for pages that work without login and get better when logged in)."""
     token = request.cookies.get(settings.AUTH_COOKIE_NAME)
     user_id = decode_access_token(token) if token else None
     if user_id is None:
-        raise NOT_LOGGED_IN
-    user = db.get(User, user_id)
-    if user is None:  # account was deleted after the token was issued
-        raise NOT_LOGGED_IN
-    return user
+        return None
+    return db.get(User, user_id)  # None if the account was deleted after the token was issued
