@@ -46,18 +46,10 @@ export const PAGES = [
     description:
       "Ask career questions and get answers that use your profile and roadmap as context.",
   },
-  {
-    path: "/assessments",
-    label: "Assessments",
-    inNav: false,
-    phase: 5,
-    title: "Assessments",
-    description:
-      "Short interest, aptitude and personality tests that make your recommendations more accurate.",
-  },
 ];
 
 export const NAV_ITEMS = [
   { path: "/careers", label: "Careers" },
+  { path: "/assessments", label: "Assessments" },
   ...PAGES.filter((page) => page.inNav),
 ];

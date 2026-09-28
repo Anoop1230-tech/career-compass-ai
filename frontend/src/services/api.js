@@ -75,4 +75,12 @@ export const getCareer = async (careerId) =>
   (await api.get(`/catalog/careers/${encodeURIComponent(careerId)}`)).data;
 export const getStages = async () => (await api.get("/catalog/stages")).data;
 
+// ---- assessments (login required)
+export const getAssessments = async () => (await api.get("/assessments")).data;
+export const startAssessment = async (kind, restart = false) =>
+  (await api.post(`/assessments/${kind}/start`, null, { params: restart ? { restart: true } : {} })).data;
+export const submitAssessment = async (kind, attemptId, answers) =>
+  (await api.post(`/assessments/${kind}/submit`, { attempt_id: attemptId, answers })).data;
+export const getAssessmentResult = async (kind) => (await api.get(`/assessments/${kind}/result`)).data;
+
 export default api;
