@@ -15,8 +15,8 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 7 | Recommendation Engine | Weighted, explainable career scores with a "Why" section | ✅ |
 | 8 | Skill Gap Analysis | Your skills vs target career skills, prioritized gaps | ✅ |
 | 9 | Transition Engine and Dream Career Checker | "I am X, can I become Y?" analysis | ✅ |
-| 10 | Roadmap Generator and Career Explorer | Stage-wise roadmap that skips what you know; interactive career tree | ⬜ next |
-| 11 | Exams, colleges and scholarships | Filterable lists with official source links and "last verified" dates | ⬜ |
+| 10 | Roadmap Generator and Career Explorer | Stage-wise roadmap that skips what you know; interactive career tree | ✅ |
+| 11 | Exams, colleges and scholarships | Filterable lists with official source links and "last verified" dates | ⬜ next |
 | 12 | AI Career Mentor | Chat assistant that uses your profile and roadmap as context | ⬜ |
 | 13 | ML evaluation | Compare ML models against the rule-based engine; keep ML only if it is genuinely better | ⬜ |
 | 14 | Hardening and final testing | Full test run, accessibility and performance checks, error handling review | ⬜ |
@@ -169,3 +169,18 @@ Known limits: skill levels are self-rated; time estimates are generic, not per s
 Result: 227 backend tests, 86 frontend unit tests, 80 browser tests passing; lint 0 warnings.
 
 Known limits: routes only use the connections recorded in the datasets; "hard" means "no recorded route", not "impossible".
+
+---
+
+## Phase 10 – Roadmap Generator and Career Explorer – ✅ done
+
+- 10.1 Roadmap engine: study route (if a degree is still needed) → foundations → core skills → specialise → prove it (projects) → get in (exams, applications); skills you already have are skipped and listed
+- 10.2 Progress: tick skills as learned (saved per user and career, private), time left updates; one "target career" per user that /roadmap opens automatically
+- 10.3 API GET /api/roadmap, GET /api/roadmap/{career_id}, PUT /api/roadmap/{career_id}/target, PUT /api/roadmap/{career_id}/skills/{skill_id}
+- 10.4 Career explorer: tree that expands on demand from any stage (study → careers → promotions and switches), keyboard accessible; API GET /api/explore, GET /api/explore/{kind}/{id}
+- 10.5 Roadmap and Explorer pages (Explorer linked from Next Steps); instant tick feedback with rollback on error
+- 10.6 Tests: 10 backend, 4 unit, 2 browser (found and fixed duplicate tree entries and a slow checkbox)
+
+Result: 237 backend tests, 88 frontend unit tests, 84 browser tests passing; lint 0 warnings.
+
+Known limits: roadmap items are skills from the datasets (no course links yet – courses.csv is still empty); ticking a skill does not change the profile skill level.
