@@ -1,1 +1,157 @@
 skill_id,skill_name,category,sub_category,aliases,description
+SKL_PYTHON,Python,programming,General purpose,py|python3,General-purpose language widely used in data and backend work
+SKL_JAVA,Java,programming,General purpose,,Object-oriented language common in enterprise backends and Android
+SKL_C,C,programming,Systems,c language,Low-level systems and embedded programming
+SKL_CPP,C++,programming,Systems,cpp,Performance-critical software and competitive programming
+SKL_JAVASCRIPT,JavaScript,programming,Web,js|ecmascript,Language of the web browser and Node.js
+SKL_TYPESCRIPT,TypeScript,programming,Web,ts,JavaScript with static types
+SKL_GO,Go,programming,Backend,golang,Language for cloud services and infrastructure tools
+SKL_KOTLIN,Kotlin,programming,Mobile,,Modern language for Android development
+SKL_SWIFT,Swift,programming,Mobile,,Language for iOS and macOS apps
+SKL_SQL,SQL,programming,Data,structured query language,Querying and managing relational databases
+SKL_R,R,programming,Data,r language,Language for statistics and data analysis
+SKL_BASH,Bash scripting,programming,Systems,shell scripting|shell,Automating tasks on Linux
+SKL_DART,Dart,programming,Mobile,,Language used by Flutter
+SKL_CSHARP,C#,programming,General purpose,c sharp|.net,Language for .NET applications and Unity games
+SKL_HTML,HTML,technical,Web,html5,Structure of web pages
+SKL_CSS,CSS,technical,Web,css3,Styling and layout of web pages
+SKL_REACT,React,technical,Web,reactjs|react.js,JavaScript library for building user interfaces
+SKL_ANGULAR,Angular,technical,Web,angularjs,Frontend framework by Google
+SKL_NEXTJS,Next.js,technical,Web,nextjs,React framework with server rendering
+SKL_NODEJS,Node.js,technical,Backend,node|nodejs,JavaScript runtime for servers
+SKL_EXPRESS,Express,technical,Backend,expressjs,Minimal Node.js web framework
+SKL_DJANGO,Django,technical,Backend,,Full-featured Python web framework
+SKL_FASTAPI,FastAPI,technical,Backend,,Modern Python API framework
+SKL_SPRING_BOOT,Spring Boot,technical,Backend,spring,Java framework for backend services
+SKL_REST_API,REST API design,technical,Backend,rest|restful apis|api design,Designing HTTP APIs
+SKL_GRAPHQL,GraphQL,technical,Backend,,Query language for APIs
+SKL_DSA,Data structures,technical,CS fundamentals,ds,Arrays lists trees graphs and hash tables
+SKL_ALGORITHMS,Algorithms,technical,CS fundamentals,algo|dsa,Sorting searching dynamic programming and complexity analysis
+SKL_OS,Operating systems,technical,CS fundamentals,os,Processes memory scheduling and file systems
+SKL_NETWORKS,Computer networks,technical,CS fundamentals,cn|networking,TCP/IP HTTP DNS and routing
+SKL_DBMS,Database management systems,technical,CS fundamentals,dbms,Relational model normalization transactions and indexing
+SKL_OOP,Object-oriented programming,technical,CS fundamentals,oops|oop,Classes objects inheritance and polymorphism
+SKL_SYSTEM_DESIGN,System design,technical,Architecture,hld|lld,Designing scalable reliable software systems
+SKL_DESIGN_PATTERNS,Design patterns,technical,Architecture,,Reusable solutions to common design problems
+SKL_COMPUTER_ARCH,Computer architecture,technical,CS fundamentals,coa,Processors memory hierarchy and instruction sets
+SKL_COMPILERS,Compiler design,technical,CS fundamentals,compilers,Parsing code generation and optimization
+SKL_GIT,Git,technical,Tools,github|version control,Version control for code
+SKL_LINUX,Linux,technical,Systems,unix,Using and administering Linux systems
+SKL_DOCKER,Docker,technical,DevOps,containers,Packaging applications in containers
+SKL_KUBERNETES,Kubernetes,technical,DevOps,k8s,Running containers at scale
+SKL_CICD,CI/CD,technical,DevOps,continuous integration|github actions|jenkins,Automated build test and deployment pipelines
+SKL_AWS,Amazon Web Services,technical,Cloud,aws,Cloud platform by Amazon
+SKL_AZURE,Microsoft Azure,technical,Cloud,azure,Cloud platform by Microsoft
+SKL_GCP,Google Cloud,technical,Cloud,gcp,Cloud platform by Google
+SKL_TERRAFORM,Terraform,technical,DevOps,infrastructure as code|iac,Defining infrastructure in code
+SKL_OBSERVABILITY,Monitoring and observability,technical,DevOps,monitoring|prometheus|grafana,Logs metrics tracing and alerting
+SKL_POSTGRESQL,PostgreSQL,technical,Databases,postgres,Open-source relational database
+SKL_MYSQL,MySQL,technical,Databases,,Popular relational database
+SKL_MONGODB,MongoDB,technical,Databases,mongo,Document database
+SKL_REDIS,Redis,technical,Databases,,In-memory data store and cache
+SKL_DB_DESIGN,Database design,technical,Databases,data modeling|schema design,Designing tables keys and relationships
+SKL_NUMPY,NumPy,technical,Data,,Numerical arrays in Python
+SKL_PANDAS,Pandas,technical,Data,,Tabular data analysis in Python
+SKL_MATPLOTLIB,Matplotlib,technical,Data,seaborn|plotting,Charts and plots in Python
+SKL_EXCEL,Excel,technical,Data,ms excel|spreadsheets,Spreadsheets formulas and pivot tables
+SKL_POWER_BI,Power BI,technical,Data,powerbi,Microsoft business intelligence dashboards
+SKL_TABLEAU,Tableau,technical,Data,,Data visualization and dashboards
+SKL_DATA_CLEANING,Data cleaning,technical,Data,data wrangling|data preprocessing,Fixing missing wrong and inconsistent data
+SKL_DATA_VIZ,Data visualization,technical,Data,dataviz,Presenting data clearly with charts
+SKL_ETL,ETL pipelines,technical,Data engineering,elt|data pipelines,Extracting transforming and loading data
+SKL_SPARK,Apache Spark,technical,Data engineering,pyspark|spark,Distributed data processing
+SKL_KAFKA,Apache Kafka,technical,Data engineering,kafka,Event streaming platform
+SKL_AIRFLOW,Apache Airflow,technical,Data engineering,airflow,Scheduling data workflows
+SKL_DATA_WAREHOUSE,Data warehousing,technical,Data engineering,snowflake|bigquery|redshift,Storing data for analytics
+SKL_ML,Machine learning,technical,AI/ML,ml,Training models that learn from data
+SKL_DL,Deep learning,technical,AI/ML,dl|neural networks,Neural network models
+SKL_SKLEARN,scikit-learn,technical,AI/ML,sklearn,Classic machine learning library for Python
+SKL_TENSORFLOW,TensorFlow,technical,AI/ML,tf|keras,Deep learning framework by Google
+SKL_PYTORCH,PyTorch,technical,AI/ML,torch,Deep learning framework popular in research
+SKL_NLP,Natural language processing,technical,AI/ML,nlp,Working with text and language
+SKL_CV,Computer vision,technical,AI/ML,cv|image processing,Working with images and video
+SKL_LLM,Large language models,technical,AI/ML,llm|llms|gpt,Using and adapting large language models
+SKL_GENAI,Generative AI applications,technical,AI/ML,genai|rag,Building apps with generative models and retrieval
+SKL_PROMPT_ENG,Prompt engineering,technical,AI/ML,prompting,Designing effective instructions for AI models
+SKL_MLOPS,MLOps,technical,AI/ML,ml deployment,Deploying monitoring and maintaining ML models
+SKL_FEATURE_ENG,Feature engineering,technical,AI/ML,,Creating useful model inputs from raw data
+SKL_MODEL_EVAL,Model evaluation,technical,AI/ML,,Metrics validation and avoiding overfitting
+SKL_RL,Reinforcement learning,technical,AI/ML,rl,Learning through rewards and interaction
+SKL_STATISTICS,Statistics,math,Statistics,stats,Descriptive and inferential statistics
+SKL_PROBABILITY,Probability,math,Statistics,,Random variables and distributions
+SKL_HYPOTHESIS_TESTING,Hypothesis testing,math,Statistics,a/b testing,Deciding whether results are significant
+SKL_REGRESSION,Regression analysis,math,Statistics,,Modeling relationships between variables
+SKL_LINEAR_ALGEBRA,Linear algebra,math,Mathematics,,Vectors matrices and transformations
+SKL_CALCULUS,Calculus,math,Mathematics,,Derivatives integrals and gradients
+SKL_DISCRETE_MATH,Discrete mathematics,math,Mathematics,,Logic sets combinatorics and graph theory
+SKL_OPTIMIZATION,Optimization,math,Mathematics,,Finding the best solution under constraints
+SKL_NETWORK_SECURITY,Network security,technical,Security,,Protecting networks and traffic
+SKL_ETHICAL_HACKING,Ethical hacking,technical,Security,,Finding weaknesses with permission
+SKL_PENTEST,Penetration testing,technical,Security,pentesting|vapt,Structured security testing of systems
+SKL_WEB_SECURITY,Web application security,technical,Security,owasp,Securing web apps against common attacks
+SKL_CRYPTOGRAPHY,Cryptography,technical,Security,,Encryption hashing and digital signatures
+SKL_SIEM,SIEM and log analysis,technical,Security,splunk|siem,Detecting threats from security logs
+SKL_INCIDENT_RESPONSE,Incident response,technical,Security,,Handling and recovering from security incidents
+SKL_SECURITY_COMPLIANCE,Security compliance,technical,Security,iso 27001|grc,Policies audits and regulatory standards
+SKL_THREAT_MODELING,Threat modeling,technical,Security,,Identifying likely attacks during design
+SKL_ANDROID,Android development,technical,Mobile,,Building Android apps
+SKL_IOS,iOS development,technical,Mobile,,Building iPhone and iPad apps
+SKL_FLUTTER,Flutter,technical,Mobile,,Cross-platform app framework
+SKL_REACT_NATIVE,React Native,technical,Mobile,,Cross-platform apps with React
+SKL_UI_DESIGN,UI design,technical,Design,visual design,Layouts typography and visual hierarchy
+SKL_UX_RESEARCH,UX research,technical,Design,user research,Understanding user needs through research
+SKL_FIGMA,Figma,technical,Design,,Interface design and prototyping tool
+SKL_WIREFRAMING,Wireframing and prototyping,technical,Design,prototyping,Sketching and testing interface ideas
+SKL_ACCESSIBILITY,Accessibility,technical,Design,a11y|wcag,Making products usable for people with disabilities
+SKL_MANUAL_TESTING,Manual testing,technical,Testing,,Test cases and exploratory testing
+SKL_TEST_AUTOMATION,Test automation,technical,Testing,selenium|playwright|cypress,Automated UI and API tests
+SKL_API_TESTING,API testing,technical,Testing,postman,Testing backend APIs
+SKL_PERF_TESTING,Performance testing,technical,Testing,load testing|jmeter,Measuring speed and load behavior
+SKL_EMBEDDED_C,Embedded C,technical,Electronics,,C programming for microcontrollers
+SKL_MICROCONTROLLERS,Microcontrollers,technical,Electronics,arduino|arm|8051,Programming and interfacing microcontrollers
+SKL_DIGITAL_ELECTRONICS,Digital electronics,technical,Electronics,,Logic gates circuits and digital systems
+SKL_VLSI,VLSI design,technical,Electronics,verilog|vhdl,Designing integrated circuits
+SKL_SIGNAL_PROCESSING,Signal processing,technical,Electronics,dsp,Analyzing and transforming signals
+SKL_IOT,Internet of Things,technical,Electronics,iot,Connected devices and sensors
+SKL_RTOS,Real-time operating systems,technical,Electronics,rtos|freertos,Operating systems for time-critical devices
+SKL_CAD,CAD modeling,domain,Mechanical,autocad|solidworks,Computer-aided design of parts
+SKL_GAME_DEV,Game development,technical,Games,,Designing and programming games
+SKL_UNITY,Unity,technical,Games,,Game engine using C#
+SKL_BLOCKCHAIN,Blockchain fundamentals,technical,Web3,web3,Distributed ledgers and smart contracts
+SKL_ITIL,IT service management,technical,IT operations,itil,Managing IT support and services
+SKL_TROUBLESHOOTING,Technical troubleshooting,technical,IT operations,debugging|technical support,Diagnosing and fixing technical problems
+SKL_PRODUCT_MGMT,Product management,management,Product,pm,Deciding what to build and why
+SKL_AGILE,Agile and Scrum,management,Delivery,scrum|kanban,Iterative team delivery practices
+SKL_PROJECT_MGMT,Project management,management,Delivery,pmp,Planning scheduling and tracking work
+SKL_STAKEHOLDER_MGMT,Stakeholder management,management,Leadership,,Aligning people with different goals
+SKL_REQUIREMENTS,Requirement analysis,management,Business analysis,brd,Gathering and documenting requirements
+SKL_BUSINESS_ANALYSIS,Business analysis,management,Business analysis,,Improving processes using data and requirements
+SKL_MARKET_RESEARCH,Market research,management,Business,,Understanding customers competitors and markets
+SKL_ROADMAPPING,Product roadmapping,management,Product,,Prioritizing and planning product work
+SKL_TEAM_LEADERSHIP,Team leadership,management,Leadership,people management,Leading and developing a team
+SKL_BUDGETING,Budgeting,management,Business,,Planning and controlling spending
+SKL_RISK_MGMT,Risk management,management,Business,,Identifying and reducing risks
+SKL_FINANCIAL_ANALYSIS,Financial analysis,domain,Finance,financial modeling,Analyzing financial statements and models
+SKL_ACCOUNTING,Accounting fundamentals,domain,Finance,tally|bookkeeping,Recording and reporting financial transactions
+SKL_TAXATION,Taxation basics,domain,Finance,gst|income tax,Tax rules for individuals and businesses
+SKL_QUANT_APTITUDE,Quantitative aptitude,domain,Exam preparation,,Arithmetic and data interpretation for competitive exams
+SKL_REASONING,Logical reasoning,domain,Exam preparation,,Puzzles and verbal and non-verbal reasoning
+SKL_GENERAL_AWARENESS,General awareness,domain,Exam preparation,current affairs|gk,Current affairs polity economy and history
+SKL_SUBJECT_TEACHING,Subject expertise for teaching,domain,Education,,Deep knowledge of a subject to teach it
+SKL_COMMUNICATION,Communication,soft,Communication,verbal communication,Explaining ideas clearly in speech and writing
+SKL_PROBLEM_SOLVING,Problem solving,soft,Thinking,,Breaking down and solving unfamiliar problems
+SKL_CRITICAL_THINKING,Critical thinking,soft,Thinking,analytical thinking,Evaluating evidence and arguments
+SKL_TEAMWORK,Teamwork,soft,Collaboration,collaboration,Working effectively with others
+SKL_PRESENTATION,Presentation,soft,Communication,public speaking,Presenting to an audience
+SKL_TECH_WRITING,Technical writing,soft,Communication,documentation,Writing clear technical documents
+SKL_TIME_MGMT,Time management,soft,Self-management,,Planning and prioritizing your own work
+SKL_RESEARCH_METHODS,Research methodology,soft,Research,,Designing experiments and reviewing literature
+SKL_ACADEMIC_WRITING,Academic writing,soft,Research,paper writing,Writing research papers and theses
+SKL_TEACHING,Teaching,soft,Education,,Explaining topics so others learn
+SKL_MENTORING,Mentoring,soft,Leadership,coaching,Guiding others to grow
+SKL_NEGOTIATION,Negotiation,soft,Communication,,Reaching agreements
+SKL_ADAPTABILITY,Adaptability,soft,Self-management,,Learning quickly and handling change
+SKL_ATTENTION_DETAIL,Attention to detail,soft,Self-management,,Noticing small errors and inconsistencies
+SKL_CUSTOMER_EMPATHY,Customer empathy,soft,Collaboration,user empathy,Understanding customer problems and feelings
+SKL_ENTREPRENEURSHIP,Entrepreneurship,management,Business,startups,Starting and growing a business
+SKL_SALES,Sales and business development,management,Business,bizdev,Finding customers and closing deals

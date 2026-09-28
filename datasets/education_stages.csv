@@ -1,1 +1,23 @@
 stage_id,stage_name,level,stream_or_branch,typical_duration_years,description
+EDU_CLASS_10,Class 10,school,,1,Secondary school final year; next step is choosing a stream for Class 11-12
+EDU_12_PCM,Class 12 – Science (PCM),school,Physics Chemistry Mathematics,2,Senior secondary with mathematics; opens engineering and most science and computing degrees
+EDU_12_PCB,Class 12 – Science (PCB),school,Physics Chemistry Biology,2,Senior secondary with biology; opens medical and life science degrees
+EDU_12_COMMERCE,Class 12 – Commerce,school,Commerce,2,Senior secondary with accountancy and business studies
+EDU_12_HUMANITIES,Class 12 – Humanities,school,Humanities / Arts,2,Senior secondary with arts and social science subjects
+EDU_DIPLOMA_CS,Diploma – Computer Engineering,diploma,Computer Engineering,3,Polytechnic diploma after Class 10; allows lateral entry to B.Tech or direct jobs
+EDU_BTECH_CSE,B.Tech – Computer Science,ug,Computer Science and Engineering,4,Undergraduate engineering degree in computing
+EDU_BTECH_ECE,B.Tech – Electronics and Communication,ug,Electronics and Communication,4,Undergraduate engineering degree in electronics and communication
+EDU_BTECH_MECH,B.Tech – Mechanical,ug,Mechanical Engineering,4,Undergraduate engineering degree in mechanical engineering
+EDU_BCA,BCA,ug,Computer Applications,3,Bachelor of Computer Applications
+EDU_BSC_CS,B.Sc – Computer Science,ug,Computer Science,3,Bachelor of Science in computer science
+EDU_BSC_MATH_STATS,B.Sc – Mathematics / Statistics,ug,Mathematics or Statistics,3,Bachelor of Science with a mathematics or statistics major
+EDU_BCOM,B.Com,ug,Commerce,3,Bachelor of Commerce
+EDU_BA,BA,ug,Arts,3,Bachelor of Arts in any discipline
+EDU_MTECH_CSE,M.Tech – Computer Science,pg,Computer Science and Engineering,2,Postgraduate engineering degree in computing
+EDU_MCA,MCA,pg,Computer Applications,2,Master of Computer Applications
+EDU_MS_CS_ABROAD,MS – Computer Science (abroad),pg,Computer Science,2,Master of Science in computer science at a foreign university
+EDU_MSC_DS,M.Sc – Data Science,pg,Data Science,2,Master of Science in data science or statistics
+EDU_MBA,MBA,pg,Business Administration,2,Master of Business Administration
+EDU_PHD_CS,PhD – Computer Science,doctoral,Computer Science,5,Doctoral research degree in computing
+EDU_WORKING_TECH,Working professional – Technology,professional,,,Currently employed in a technology role
+EDU_WORKING_NONTECH,Working professional – Non-technology,professional,,,Currently employed outside technology (for example teaching or sales)

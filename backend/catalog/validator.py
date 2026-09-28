@@ -1,0 +1,242 @@
+"""Checks every dataset CSV against catalog/schema.py.
+
+Run from the backend folder:
+    python -m catalog.validator            # prints a report, exit code 1 on errors
+Errors block loading the data; warnings are shown but allowed.
+"""
+import csv
+import re
+import sys
+from collections import defaultdict
+from dataclasses import dataclass, field
+from datetime import date
+from pathlib import Path
+
+from catalog.schema import DATASETS_DIR, ID_COLUMNS, PLANNED_FILES, SPECS, FileSpec
+
+DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+URL_RE = re.compile(r"^https?://[^\s/$.?#][^\s]*$")
+
+
+@dataclass
+class Report:
+    errors: list[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
+    counts: dict[str, int] = field(default_factory=dict)
+
+    @property
+    def ok(self) -> bool:
+        return not self.errors
+
+    def error(self, file: str, row: int | None, message: str) -> None:
+        self.errors.append(f"{file}{f' row {row}' if row else ''}: {message}")
+
+    def warn(self, file: str, row: int | None, message: str) -> None:
+        self.warnings.append(f"{file}{f' row {row}' if row else ''}: {message}")
+
+
+def split_ids(value: str) -> list[str]:
+    return [part.strip() for part in value.split("|") if part.strip()]
+
+
+def read_csv(path: Path) -> tuple[list[str], list[dict[str, str]]]:
+    # utf-8-sig: tolerate a byte-order mark added by Excel
+    with path.open(encoding="utf-8-sig", newline="") as handle:
+        reader = csv.DictReader(handle)
+        header = reader.fieldnames or []
+        rows = [{k: (v or "").strip() for k, v in row.items() if k is not None} for row in reader]
+    return header, rows
+
+
+def load_all(data_dir: Path, report: Report) -> dict[str, list[dict[str, str]]]:
+    tables: dict[str, list[dict[str, str]]] = {}
+    for name in [*SPECS, *PLANNED_FILES]:
+        path = data_dir / name
+        if not path.exists():
+            report.error(name, None, "file is missing")
+            continue
+        try:
+            header, rows = read_csv(path)
+        except (UnicodeDecodeError, csv.Error) as exc:
+            report.error(name, None, f"cannot be read as UTF-8 CSV ({exc})")
+            continue
+        spec = SPECS.get(name)
+        if spec and tuple(header) != spec.columns:
+            missing = [c for c in spec.columns if c not in header]
+            extra = [c for c in header if c not in spec.columns]
+            report.error(name, None, f"header mismatch (missing: {missing or '-'}, unexpected: {extra or '-'})")
+        elif not spec and PLANNED_FILES[name] not in header:
+            report.error(name, None, f"header must contain '{PLANNED_FILES[name]}'")
+        tables[name] = rows
+        report.counts[name] = len(rows)
+    return tables
+
+
+def check_rows(spec: FileSpec, rows: list[dict[str, str]], report: Report) -> None:
+    name = spec.name
+    seen: dict[str, int] = {}
+    for line, row in enumerate(rows, start=2):  # line 1 is the header
+        for column in spec.required:
+            if not row.get(column):
+                report.error(name, line, f"'{column}' is required")
+
+        if spec.id_column and (row_id := row.get(spec.id_column)):
+            if row_id in seen:
+                report.error(name, line, f"duplicate id '{row_id}' (first on row {seen[row_id]})")
+            seen.setdefault(row_id, line)
+            if spec.id_prefix and not row_id.startswith(spec.id_prefix):
+                report.error(name, line, f"id '{row_id}' must start with '{spec.id_prefix}'")
+            if not re.fullmatch(r"[A-Z0-9_]+", row_id):
+                report.error(name, line, f"id '{row_id}' may only use A-Z, 0-9 and _")
+
+        for column, allowed in spec.enums.items():
+            for value in split_ids(row.get(column, "")):
+                if value not in allowed:
+                    report.error(name, line, f"'{column}' has invalid value '{value}'")
+
+        for column, (low, high) in spec.int_ranges.items():
+            value = row.get(column, "")
+            if value and (not value.lstrip("-").isdigit() or not low <= int(value) <= high):
+                report.error(name, line, f"'{column}' must be a whole number from {low} to {high}")
+
+        for column in spec.numbers:
+            value = row.get(column, "")
+            if value:
+                try:
+                    if float(value) < 0:
+                        raise ValueError
+                except ValueError:
+                    report.error(name, line, f"'{column}' must be a non-negative number")
+
+        for column in spec.booleans:
+            if row.get(column) and row[column] not in ("true", "false"):
+                report.error(name, line, f"'{column}' must be 'true' or 'false'")
+
+        for column in spec.dates:
+            value = row.get(column, "")
+            if value:
+                try:
+                    if not DATE_RE.match(value):
+                        raise ValueError
+                    if date.fromisoformat(value) > date.today():
+                        report.error(name, line, f"'{column}' is in the future")
+                except ValueError:
+                    report.error(name, line, f"'{column}' must be a real date in YYYY-MM-DD format")
+
+        for column in spec.urls:
+            value = row.get(column, "")
+            if value and not URL_RE.match(value):
+                report.error(name, line, f"'{column}' is not a valid http(s) URL")
+
+    if spec.unique_together:
+        pairs: dict[tuple, int] = {}
+        for line, row in enumerate(rows, start=2):
+            key = tuple(row.get(c, "") for c in spec.unique_together)
+            if key in pairs:
+                report.error(name, line, f"duplicate {spec.unique_together} {key} (first on row {pairs[key]})")
+            pairs.setdefault(key, line)
+
+
+def check_foreign_keys(tables: dict[str, list[dict[str, str]]], report: Report) -> None:
+    ids = {name: {row.get(col, "") for row in tables.get(name, [])} for name, col in ID_COLUMNS.items()}
+
+    for name, spec in SPECS.items():
+        for line, row in enumerate(tables.get(name, []), start=2):
+            for column, target in spec.foreign_keys.items():
+                for ref in split_ids(row.get(column, "")):
+                    if ref not in ids.get(target, set()):
+                        report.error(name, line, f"'{column}' refers to unknown id '{ref}' in {target}")
+
+    # Polymorphic references: the target file depends on another column
+    by_type = {"education": "education_stages.csv", "career": "careers.csv", "exam": "entrance_exams.csv"}
+    for line, row in enumerate(tables.get("education_paths.csv", []), start=2):
+        target = by_type.get(row.get("to_type", ""))
+        if target and row.get("to_id") and row["to_id"] not in ids[target]:
+            report.error("education_paths.csv", line, f"'to_id' '{row['to_id']}' not found in {target}")
+        if row.get("from_stage_id") and row.get("from_stage_id") == row.get("to_id"):
+            report.error("education_paths.csv", line, "a stage cannot lead to itself")
+    for line, row in enumerate(tables.get("career_transition_paths.csv", []), start=2):
+        target = by_type.get(row.get("from_type", ""))
+        if target and row.get("from_id") and row["from_id"] not in ids[target]:
+            report.error("career_transition_paths.csv", line, f"'from_id' '{row['from_id']}' not found in {target}")
+
+
+def check_logic(tables: dict[str, list[dict[str, str]]], report: Report) -> None:
+    """Rules that span columns or files (the 'graph' checks)."""
+    skills = tables.get("skills.csv", [])
+    names: dict[str, int] = {}
+    for line, row in enumerate(skills, start=2):
+        key = row.get("skill_name", "").casefold()
+        if key and key in names:
+            report.error("skills.csv", line, f"duplicate skill name '{row.get('skill_name')}' (row {names[key]})")
+        names.setdefault(key, line)
+
+    for line, row in enumerate(tables.get("career_paths.csv", []), start=2):
+        if row.get("from_career_id") == row.get("to_career_id"):
+            report.error("career_paths.csv", line, "a career cannot lead to itself")
+
+    for line, row in enumerate(tables.get("career_transition_paths.csv", []), start=2):
+        low, high = row.get("estimated_months_min", ""), row.get("estimated_months_max", "")
+        if low.isdigit() and high.isdigit() and int(low) > int(high):
+            report.error("career_transition_paths.csv", line, "estimated_months_min is greater than max")
+
+    careers = tables.get("careers.csv", [])
+    mapping = tables.get("skill_career_mapping.csv", [])
+    per_career: dict[str, list[dict]] = defaultdict(list)
+    for row in mapping:
+        per_career[row.get("career_id", "")].append(row)
+    for row in careers:
+        cid = row.get("career_id", "")
+        links = per_career.get(cid, [])
+        if len(links) < 3:
+            report.error("skill_career_mapping.csv", None, f"career '{cid}' has {len(links)} skills (need at least 3)")
+        elif not any(link.get("is_mandatory") == "true" for link in links):
+            report.warn("skill_career_mapping.csv", None, f"career '{cid}' has no mandatory skill")
+
+    # Graph: every career must be reachable from some stage or career
+    reachable = (
+        {r.get("to_id", "") for r in tables.get("education_paths.csv", []) if r.get("to_type") == "career"}
+        | {r.get("to_career_id", "") for r in tables.get("career_paths.csv", [])}
+        | {r.get("to_career_id", "") for r in tables.get("career_transition_paths.csv", [])}
+    )
+    for row in careers:
+        if row.get("career_id") not in reachable:
+            report.error("careers.csv", None, f"career '{row.get('career_id')}' is not reachable by any path")
+
+    # Graph: every stage except working professionals should lead somewhere
+    starts = {r.get("from_stage_id", "") for r in tables.get("education_paths.csv", [])}
+    for row in tables.get("education_stages.csv", []):
+        if row.get("stage_id") not in starts:
+            report.warn("education_stages.csv", None, f"stage '{row.get('stage_id')}' has no outgoing path yet")
+
+    # Reliability: unverified exam info must link to the official source
+    for line, row in enumerate(tables.get("entrance_exams.csv", []), start=2):
+        if row.get("verified") == "false" and not row.get("official_url"):
+            report.error("entrance_exams.csv", line, "unverified exam must have an official_url")
+
+
+def validate(data_dir: Path = DATASETS_DIR) -> tuple[Report, dict[str, list[dict[str, str]]]]:
+    report = Report()
+    tables = load_all(Path(data_dir), report)
+    for name, spec in SPECS.items():
+        if name in tables:
+            check_rows(spec, tables[name], report)
+    check_foreign_keys(tables, report)
+    check_logic(tables, report)
+    return report, tables
+
+
+def main() -> int:
+    report, _ = validate()
+    for name, count in report.counts.items():
+        print(f"  {name:32} {count:>4} rows")
+    for warning in report.warnings:
+        print(f"WARNING  {warning}")
+    for error in report.errors:
+        print(f"ERROR    {error}")
+    print(f"\n{len(report.errors)} error(s), {len(report.warnings)} warning(s)")
+    return 0 if report.ok else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,1 +1,66 @@
 path_id,from_stage_id,to_type,to_id,required_exam_ids,eligibility_summary,duration_years,advantages,limitations,verified,source_url,last_verified
+EP_001,EDU_CLASS_10,education,EDU_12_PCM,,Pass Class 10; school admission rules apply,2,Keeps engineering science and most computing options open,Mathematics-heavy; demanding if you dislike maths,false,,2026-09-28
+EP_002,EDU_CLASS_10,education,EDU_12_PCB,,Pass Class 10; school admission rules apply,2,Leads to medicine and life sciences,Fewer computing options without mathematics,false,,2026-09-28
+EP_003,EDU_CLASS_10,education,EDU_12_COMMERCE,,Pass Class 10; school admission rules apply,2,Leads to commerce finance business and CA,Engineering is not possible without PCM,false,,2026-09-28
+EP_004,EDU_CLASS_10,education,EDU_12_HUMANITIES,,Pass Class 10; school admission rules apply,2,Leads to law design media civil services and social sciences,Engineering and medicine are not possible,false,,2026-09-28
+EP_005,EDU_CLASS_10,education,EDU_DIPLOMA_CS,,Pass Class 10; polytechnic admission rules apply,3,Hands-on and job-ready earlier; lateral entry to B.Tech possible,Some employers and exams prefer a full degree,false,,2026-09-28
+EP_006,EDU_12_PCM,education,EDU_BTECH_CSE,EXM_JEE_MAIN,Class 12 with PCM; admission through JEE Main or state/university tests,4,Broadest route into software AI and data careers,Competitive admissions; fees vary widely,false,https://jeemain.nta.nic.in/,2026-09-28
+EP_007,EDU_12_PCM,education,EDU_BTECH_ECE,EXM_JEE_MAIN,Class 12 with PCM; admission through JEE Main or state/university tests,4,Opens electronics VLSI embedded and also software jobs,Core electronics jobs are fewer than software jobs,false,https://jeemain.nta.nic.in/,2026-09-28
+EP_008,EDU_12_PCM,education,EDU_BTECH_MECH,EXM_JEE_MAIN,Class 12 with PCM; admission through JEE Main or state/university tests,4,Core engineering; PSU and manufacturing careers,Switching to software needs extra self-study,false,https://jeemain.nta.nic.in/,2026-09-28
+EP_009,EDU_12_PCM,education,EDU_BCA,EXM_CUET_UG,Class 12 (mathematics often required); university rules apply,3,Shorter and cheaper route into software,Some roles and exams prefer B.Tech; MCA often needed later,false,https://cuet.nta.nic.in/,2026-09-28
+EP_010,EDU_12_PCM,education,EDU_BSC_CS,EXM_CUET_UG,Class 12 with mathematics; university rules apply,3,Strong theory base; good for MSc or MCA later,Fewer campus placements than B.Tech in many colleges,false,https://cuet.nta.nic.in/,2026-09-28
+EP_011,EDU_12_PCM,education,EDU_BSC_MATH_STATS,EXM_CUET_UG,Class 12 with mathematics; university rules apply,3,Excellent base for data science statistics and research,Needs programming skills added on your own,false,https://cuet.nta.nic.in/,2026-09-28
+EP_012,EDU_12_COMMERCE,education,EDU_BCOM,EXM_CUET_UG,Class 12; university rules apply,3,Direct route to accounting finance and business,Technical roles need extra skills,false,https://cuet.nta.nic.in/,2026-09-28
+EP_013,EDU_12_COMMERCE,education,EDU_BCA,EXM_CUET_UG,Class 12; many universities require mathematics; check each university,3,Moves a commerce student into computing,Check mathematics requirement before applying,false,https://cuet.nta.nic.in/,2026-09-28
+EP_014,EDU_12_HUMANITIES,education,EDU_BA,EXM_CUET_UG,Class 12; university rules apply,3,Wide choice of subjects; good for civil services and teaching,Technical careers need extra skills,false,https://cuet.nta.nic.in/,2026-09-28
+EP_015,EDU_DIPLOMA_CS,education,EDU_BTECH_CSE,,Lateral entry usually into the second year; state/university rules apply,3,Degree in less time; builds on diploma skills,Seats and rules vary by state,false,,2026-09-28
+EP_016,EDU_DIPLOMA_CS,career,CAR_TECH_SUPPORT,,Diploma plus practical skills,,Start earning early,Growth may need a degree later,false,,2026-09-28
+EP_017,EDU_BTECH_CSE,career,CAR_SOFTWARE_ENGINEER,,Degree plus strong fundamentals and projects,,Most common and widest range of employers,Competitive entry-level hiring,false,,2026-09-28
+EP_018,EDU_BTECH_CSE,career,CAR_DATA_SCIENTIST,,Degree plus statistics ML and projects,,Strong demand for analytical skills,Many roles expect projects or a master's,false,,2026-09-28
+EP_019,EDU_BTECH_CSE,career,CAR_ML_ENGINEER,,Degree plus ML deep learning and deployment projects,,Fast-growing field,Needs strong maths and a portfolio,false,,2026-09-28
+EP_020,EDU_BTECH_CSE,career,CAR_CYBERSECURITY_ANALYST,,Degree plus networking and security skills; certifications help,,Steady demand across sectors,Often needs certifications and hands-on labs,false,,2026-09-28
+EP_021,EDU_BTECH_CSE,career,CAR_DATA_ENGINEER,,Degree plus SQL pipelines and cloud skills,,High demand in data-driven companies,Less visible to freshers; often reached via backend roles,false,,2026-09-28
+EP_022,EDU_BTECH_CSE,career,CAR_DEVOPS_ENGINEER,,Degree plus Linux cloud containers and CI/CD,,Well paid infrastructure skills,Entry roles often need prior development experience,false,,2026-09-28
+EP_023,EDU_BTECH_CSE,education,EDU_MTECH_CSE,EXM_GATE,Engineering degree; admission at many institutes uses GATE score,2,Specialization research exposure and teaching eligibility,Two years out of the job market,false,https://gate2027.iitm.ac.in/,2026-09-28
+EP_024,EDU_BTECH_CSE,education,EDU_MS_CS_ABROAD,EXM_GRE|EXM_IELTS|EXM_TOEFL,Bachelor's degree; English test and sometimes GRE; each university sets its own rules,2,International exposure and research opportunities,High cost; visa and job rules change,false,,2026-09-28
+EP_025,EDU_BTECH_CSE,education,EDU_MBA,EXM_CAT,Bachelor's degree; admission through CAT or other management tests,2,Move into management consulting or product roles,Expensive; work experience often helps admissions,false,https://iimcat.ac.in/,2026-09-28
+EP_026,EDU_BTECH_CSE,career,CAR_PSU_ENGINEER,EXM_GATE,Engineering degree; many PSUs shortlist using GATE scores,,Job security in the public sector,Few openings; high GATE scores needed,false,https://gate2027.iitm.ac.in/,2026-09-28
+EP_027,EDU_BTECH_CSE,career,CAR_CIVIL_SERVICES,EXM_UPSC_CSE,Bachelor's degree in any discipline; age and attempt limits,,Public service and administrative impact,Very competitive; long preparation,false,https://upsc.gov.in/,2026-09-28
+EP_028,EDU_BTECH_CSE,career,CAR_TECH_ENTREPRENEUR,,No formal requirement,,Build your own product,High risk; income uncertain,false,https://www.startupindia.gov.in/,2026-09-28
+EP_029,EDU_BTECH_ECE,career,CAR_EMBEDDED_ENGINEER,,Degree plus embedded C and microcontroller projects,,Core electronics use,Fewer openings than software,false,,2026-09-28
+EP_030,EDU_BTECH_ECE,career,CAR_VLSI_ENGINEER,,Degree plus digital design and Verilog/VHDL,,Growing semiconductor sector,Often prefers M.Tech for design roles,false,,2026-09-28
+EP_031,EDU_BTECH_ECE,career,CAR_SOFTWARE_ENGINEER,,Degree plus programming and DSA self-study,,Many software employers hire from ECE,Needs extra CS fundamentals,false,,2026-09-28
+EP_032,EDU_BTECH_MECH,career,CAR_PSU_ENGINEER,EXM_GATE,Engineering degree; many PSUs shortlist using GATE scores,,Core engineering and job security,Few openings,false,https://gate2027.iitm.ac.in/,2026-09-28
+EP_033,EDU_BTECH_MECH,education,EDU_MBA,EXM_CAT,Bachelor's degree; admission through CAT or others,2,Move into operations or management,Expensive,false,https://iimcat.ac.in/,2026-09-28
+EP_034,EDU_BCA,education,EDU_MCA,EXM_NIMCET|EXM_CUET_PG,Bachelor's degree; mathematics requirements vary by institute,2,Common route to better software roles,Two more years of study,false,https://nimcet.admissions.nic.in/,2026-09-28
+EP_035,EDU_BCA,career,CAR_SOFTWARE_ENGINEER,,Degree plus projects and DSA,,Faster entry into jobs,Some large employers prefer B.Tech/MCA,false,,2026-09-28
+EP_036,EDU_BCA,career,CAR_DATA_ANALYST,,Degree plus SQL Excel and BI tools,,Quick entry with practical tools,Growth needs statistics,false,,2026-09-28
+EP_037,EDU_BSC_CS,education,EDU_MCA,EXM_NIMCET|EXM_CUET_PG,Bachelor's degree with mathematics; institute rules apply,2,Stronger job prospects in software,Two more years,false,https://nimcet.admissions.nic.in/,2026-09-28
+EP_038,EDU_BSC_MATH_STATS,education,EDU_MSC_DS,EXM_CUET_PG,Bachelor's degree with mathematics or statistics; university rules apply,2,Deep statistics for data science,Needs programming practice,false,https://exams.nta.nic.in/cuet-pg/,2026-09-28
+EP_039,EDU_BSC_MATH_STATS,career,CAR_DATA_ANALYST,,Degree plus SQL and Excel,,Maths background is a strength,Needs tools and business context,false,,2026-09-28
+EP_040,EDU_BCOM,career,CAR_ACCOUNTANT,,Degree; professional qualifications help,,Direct fit,Growth often needs CA/CMA/CS,false,,2026-09-28
+EP_041,EDU_BCOM,career,CAR_DATA_ANALYST,,Degree plus SQL Excel and BI tools,,Business understanding is valued,Needs technical skills added,false,,2026-09-28
+EP_042,EDU_BCOM,education,EDU_MBA,EXM_CAT,Bachelor's degree; admission through CAT or others,2,Finance marketing and management roles,Expensive,false,https://iimcat.ac.in/,2026-09-28
+EP_043,EDU_BA,career,CAR_SCHOOL_TEACHER,,Degree plus a teaching qualification such as B.Ed and eligibility tests where required,,Stable and meaningful,Qualification rules vary by state and board,false,,2026-09-28
+EP_044,EDU_BA,career,CAR_CIVIL_SERVICES,EXM_UPSC_CSE,Bachelor's degree in any discipline; age and attempt limits,,Humanities subjects help in preparation,Very competitive,false,https://upsc.gov.in/,2026-09-28
+EP_045,EDU_MTECH_CSE,education,EDU_PHD_CS,,Master's degree; institute interviews and tests; fellowships have separate rules,5,Research career and faculty positions,Long duration; stipend-level income,false,,2026-09-28
+EP_046,EDU_MTECH_CSE,career,CAR_ASSISTANT_PROFESSOR,EXM_UGC_NET,Master's degree plus eligibility rules of the regulator and institute; PhD often preferred,,Teaching and research,Many institutes now require a PhD,false,https://ugcnet.nta.ac.in/,2026-09-28
+EP_047,EDU_MTECH_CSE,career,CAR_ML_ENGINEER,,Master's degree plus ML projects,,Specialization helps for advanced roles,Industry still expects practical skills,false,,2026-09-28
+EP_048,EDU_MTECH_CSE,career,CAR_AI_RESEARCH_SCIENTIST,,Master's with strong research; PhD often preferred,,Work on new AI methods,Few roles; publications usually needed,false,,2026-09-28
+EP_049,EDU_MCA,career,CAR_SOFTWARE_ENGINEER,,Degree plus projects and DSA,,Widely accepted by IT employers,Competitive entry roles,false,,2026-09-28
+EP_050,EDU_MS_CS_ABROAD,career,CAR_ML_ENGINEER,,Degree plus projects; work authorisation rules depend on the country,,Access to international employers,Visa uncertainty,false,,2026-09-28
+EP_051,EDU_MSC_DS,career,CAR_DATA_SCIENTIST,,Degree plus projects,,Direct fit,Needs engineering and deployment skills too,false,,2026-09-28
+EP_052,EDU_MBA,career,CAR_PRODUCT_MANAGER,,MBA plus product sense; tech background helps,,Leadership and business impact,Competitive entry; experience often needed,false,,2026-09-28
+EP_053,EDU_MBA,career,CAR_BUSINESS_ANALYST,,MBA plus analytics skills,,Common post-MBA role,Needs data skills,false,,2026-09-28
+EP_054,EDU_MBA,career,CAR_FINANCIAL_ANALYST,,MBA (finance) plus modelling skills,,Direct fit,Certifications like CFA often help,false,,2026-09-28
+EP_055,EDU_PHD_CS,career,CAR_AI_RESEARCH_SCIENTIST,,PhD with publications,,Strongest route to research roles,Long path,false,,2026-09-28
+EP_056,EDU_PHD_CS,career,CAR_ASSISTANT_PROFESSOR,,PhD plus institute and regulator requirements,,Preferred qualification for faculty,Positions are limited,false,,2026-09-28
+EP_057,EDU_WORKING_TECH,education,EDU_MBA,EXM_CAT,Bachelor's degree; work experience valued by many programmes,2,Move into leadership,Loss of salary during full-time study,false,https://iimcat.ac.in/,2026-09-28
+EP_058,EDU_WORKING_TECH,career,CAR_TECH_ENTREPRENEUR,,No formal requirement,,Uses industry experience,High risk,false,https://www.startupindia.gov.in/,2026-09-28
+EP_059,EDU_WORKING_NONTECH,career,CAR_DATA_ANALYST,,Any degree plus SQL Excel and BI tools,,Domain knowledge is an advantage,Needs 4–9 months of skill building,false,,2026-09-28
+EP_060,EDU_BCOM,career,CAR_BANK_PO,EXM_IBPS_PO,Bachelor's degree in any discipline; age limits apply,,Stable public sector banking career,Competitive exam; transfers are common,false,https://www.ibps.in/,2026-09-28
+EP_061,EDU_BTECH_CSE,career,CAR_GAME_DEVELOPER,,Degree plus game projects in an engine such as Unity,,Creative technical work,Smaller job market than general software,false,,2026-09-28
+EP_062,EDU_BCA,career,CAR_QA_ENGINEER,,Degree plus testing and automation skills,,Good entry route into software companies,Pure manual testing roles are shrinking; learn automation,false,,2026-09-28
+EP_063,EDU_MBA,career,CAR_TECH_CONSULTANT,,MBA plus technology understanding; tech background helps,,Varied client work,Travel and long hours are common,false,,2026-09-28
+EP_064,EDU_12_PCB,exam,EXM_NEET_UG,EXM_NEET_UG,Class 12 with Physics Chemistry Biology and English; check the current NEET bulletin,,Required for MBBS BDS and most medical courses,Very competitive; medical careers are not yet covered in detail here,false,https://neet.nta.nic.in/,2026-09-28
+EP_065,EDU_12_PCB,education,EDU_BA,EXM_CUET_UG,Class 12; university rules apply,3,Opens teaching civil services and social sciences,Engineering needs mathematics,false,https://cuet.nta.nic.in/,2026-09-28
