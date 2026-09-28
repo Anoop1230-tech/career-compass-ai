@@ -10,6 +10,7 @@ from pathlib import Path
 _TEST_DB = Path(tempfile.gettempdir()) / "career_compass_pytest.db"
 os.environ["DATABASE_URL"] = f"sqlite:///{_TEST_DB.as_posix()}"
 os.environ["ENVIRONMENT"] = "test"
+os.environ["AUTO_SEED"] = "false"  # tests that need reference data seed it explicitly
 
 import pytest  # noqa: E402
 from fastapi.testclient import TestClient  # noqa: E402
@@ -19,11 +20,21 @@ from database import Base, engine, init_db  # noqa: E402
 from services.rate_limit import auth_limiter  # noqa: E402
 
 
-@pytest.fixture(autouse=True)
-def clean_database():
+@pytest.fixture(scope="session", autouse=True)
+def create_tables():
+    Base.metadata.drop_all(bind=engine)  # start clean even if a previous run crashed
     init_db()
     yield
     Base.metadata.drop_all(bind=engine)
+
+
+@pytest.fixture(autouse=True)
+def clean_database():
+    yield
+    # Emptying tables is much faster than dropping and recreating them
+    with engine.begin() as connection:
+        for table in reversed(Base.metadata.sorted_tables):  # children before parents
+            connection.execute(table.delete())
     auth_limiter.reset()
 
 

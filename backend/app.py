@@ -9,7 +9,8 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
 
 from config import settings
-from database import init_db
+from catalog.seed import auto_seed
+from database import SessionLocal, init_db
 from routes import auth, health, profile
 
 logger = logging.getLogger("career_compass")
@@ -18,6 +19,9 @@ logger = logging.getLogger("career_compass")
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     init_db()  # create tables on startup
+    if settings.AUTO_SEED:
+        with SessionLocal() as db:
+            auto_seed(db)  # load reference data from datasets/ if it changed
     yield
 
 

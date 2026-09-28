@@ -33,6 +33,7 @@ class Base(DeclarativeBase):
 def init_db() -> None:
     """Create any missing tables. (Phase 15 switches to Alembic migrations.)"""
     import models  # noqa: F401  (registers the tables on Base)
+    import catalog.models  # noqa: F401  (reference data tables)
 
     Base.metadata.create_all(bind=engine)
 
