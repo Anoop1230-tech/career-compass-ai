@@ -102,6 +102,7 @@ Loading is safe: invalid data changes nothing, the load is all-or-nothing, and u
 | GET | /api/recommendations?domain=&limit= | yes | Ranked, explained career matches |
 | GET | /api/recommendations/{career_id} | yes | Fit score and rank for one career |
 | GET | /api/skill-gap/{career_id} | yes | Prioritised skill gap for a target career |
+| GET | /api/transitions/check?to=&from_stage=&from_career= | optional | Dream career check: route, verdict, blockers |
 | GET | /api/next-steps?stage= | optional | Next steps from a stage (profile stage when logged in) |
 
 `kind` is `interest`, `personality` or `aptitude`. Assessment results are for self-reflection and career guidance, not clinical or professional psychological assessments.

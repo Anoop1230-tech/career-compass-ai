@@ -14,8 +14,8 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 6 | Next Step Engine | "Where am I → what can I do next?" paths with eligibility, time, exams, pros/cons | ✅ |
 | 7 | Recommendation Engine | Weighted, explainable career scores with a "Why" section | ✅ |
 | 8 | Skill Gap Analysis | Your skills vs target career skills, prioritized gaps | ✅ |
-| 9 | Transition Engine and Dream Career Checker | "I am X, can I become Y?" analysis | ⬜ next |
-| 10 | Roadmap Generator and Career Explorer | Stage-wise roadmap that skips what you know; interactive career tree | ⬜ |
+| 9 | Transition Engine and Dream Career Checker | "I am X, can I become Y?" analysis | ✅ |
+| 10 | Roadmap Generator and Career Explorer | Stage-wise roadmap that skips what you know; interactive career tree | ⬜ next |
 | 11 | Exams, colleges and scholarships | Filterable lists with official source links and "last verified" dates | ⬜ |
 | 12 | AI Career Mentor | Chat assistant that uses your profile and roadmap as context | ⬜ |
 | 13 | ML evaluation | Compare ML models against the rule-based engine; keep ML only if it is genuinely better | ⬜ |
@@ -153,3 +153,19 @@ Known limits: weights are expert-set, not learned (Phase 13 tests ML against the
 Result: 213 backend tests, 83 frontend unit tests, 78 browser tests passing; lint 0 warnings.
 
 Known limits: skill levels are self-rated; time estimates are generic, not per skill.
+
+---
+
+## Phase 9 – Transition Engine and Dream Career Checker – ✅ done
+
+- 9.1 Shortest study route from any stage to a career (breadth-first search over the education paths), with years and exams per step
+- 9.2 Recorded switches (e.g. teacher → data analyst) and career progressions (e.g. software engineer → engineering manager)
+- 9.3 One honest verdict: direct / achievable / hard / not directly from here, with reasons, blockers (degree level, entrance exams), typical time and your skill readiness
+- 9.4 Closer alternatives in the same area when the dream is hard
+- 9.5 API GET /api/transitions/check?to=&from_stage=&from_career= (visitors choose a start; logged-in users default to their profile)
+- 9.6 "Can I become…?" page, linked from Next Steps
+- 9.7 Tests: 14 backend (8 verdict cases), 3 unit, 1 browser
+
+Result: 227 backend tests, 86 frontend unit tests, 80 browser tests passing; lint 0 warnings.
+
+Known limits: routes only use the connections recorded in the datasets; "hard" means "no recorded route", not "impossible".
