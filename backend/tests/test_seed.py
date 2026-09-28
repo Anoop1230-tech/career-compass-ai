@@ -114,3 +114,26 @@ def test_server_starts_even_if_datasets_are_broken(monkeypatch, db):
     monkeypatch.setattr(seed_module, "seed", broken)
     with TestClient(app) as client:
         assert client.get("/api/health").status_code == 200
+
+
+
+def test_question_banks_are_loaded(db):
+    from catalog.models import AptitudeQuestion, InterestQuestion, PersonalityQuestion
+
+    seed(db)
+    assert db.query(InterestQuestion).count() == 36
+    assert db.query(PersonalityQuestion).count() == 30
+    q = db.get(AptitudeQuestion, "AQ_N01")
+    assert set(q.options) == {"a", "b", "c", "d"}
+    assert q.options[q.correct_option] == "\u20b91000"
+    assert db.get(PersonalityQuestion, "PQ_E02").keyed == "-"
+
+
+def test_table_layout_change_triggers_reload(db, monkeypatch):
+    import catalog.seed as seed_module
+
+    seed(db)
+    assert seed(db)["status"] == "unchanged"
+    # Simulate a new table being added in a later version of the code
+    monkeypatch.setattr(seed_module, "DELETE_ORDER", seed_module.DELETE_ORDER[:-1])
+    assert seed_module.fingerprint(DATASETS_DIR) != db.get(seed_module.CatalogMeta, "fingerprint").value

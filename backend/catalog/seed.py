@@ -22,6 +22,7 @@ from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 
 from catalog.models import (
+    AptitudeQuestion,
     Career,
     CareerPath,
     CareerSkill,
@@ -29,6 +30,8 @@ from catalog.models import (
     CatalogMeta,
     EducationPath,
     Exam,
+    InterestQuestion,
+    PersonalityQuestion,
     Skill,
     Stage,
 )
@@ -38,7 +41,10 @@ from catalog.validator import split_ids, validate
 logger = logging.getLogger("career_compass.seed")
 
 # Delete children before parents (foreign keys)
-DELETE_ORDER = [CareerSkill, EducationPath, CareerPath, CareerTransition, Exam, Career, Skill, Stage]
+DELETE_ORDER = [
+    CareerSkill, EducationPath, CareerPath, CareerTransition, Exam, Career, Skill, Stage,
+    InterestQuestion, PersonalityQuestion, AptitudeQuestion,
+]
 
 
 class SeedError(Exception):
@@ -47,6 +53,10 @@ class SeedError(Exception):
 
 def fingerprint(data_dir: Path) -> str:
     digest = hashlib.sha256()
+    # Include the table layout, so adding a table or column triggers a reload
+    for model in DELETE_ORDER:
+        digest.update(model.__tablename__.encode())
+        digest.update(",".join(sorted(model.__table__.columns.keys())).encode())
     for name in sorted([*SPECS, *PLANNED_FILES]):
         path = data_dir / name
         digest.update(name.encode())
@@ -140,6 +150,23 @@ def build_objects(tables: dict[str, list[dict[str, str]]]) -> list:
             recommended_course_ids=split_ids(r["recommended_course_ids"]),
             recommended_certification_ids=split_ids(r["recommended_certification_ids"]),
             steps=split_ids(r["steps"]), notes=text(r["notes"]), source_url=text(r["source_url"]),
+        ))
+    for r in tables["interest_questions.csv"]:
+        objects.append(InterestQuestion(
+            question_id=r["question_id"], text=r["question_text"], riasec_type=r["riasec_type"],
+            source=r["source"], license=r["license"],
+        ))
+    for r in tables["personality_questions.csv"]:
+        objects.append(PersonalityQuestion(
+            question_id=r["question_id"], text=r["question_text"], trait=r["trait"], keyed=r["keyed"],
+            source=r["source"], license=r["license"],
+        ))
+    for r in tables["aptitude_questions.csv"]:
+        objects.append(AptitudeQuestion(
+            question_id=r["question_id"], category=r["category"], difficulty=r["difficulty"],
+            text=r["question_text"], options={x: r[f"option_{x}"] for x in "abcd"},
+            correct_option=r["correct_option"], explanation=text(r["explanation"]),
+            source=r["source"], license=r["license"],
         ))
     return objects
 

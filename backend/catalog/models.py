@@ -152,3 +152,42 @@ class CatalogMeta(Base):
 
     key: Mapped[str] = mapped_column(String(40), primary_key=True)
     value: Mapped[str] = mapped_column(Text)
+
+
+
+# ---------------------------------------------------------------- question banks
+class InterestQuestion(Base):
+    __tablename__ = "interest_questions"
+
+    question_id: Mapped[str] = mapped_column(String(20), primary_key=True)
+    text: Mapped[str] = mapped_column(Text)
+    riasec_type: Mapped[str] = mapped_column(String(1), index=True)
+    source: Mapped[str] = mapped_column(String(200))
+    license: Mapped[str] = mapped_column(String(100))
+
+
+class PersonalityQuestion(Base):
+    __tablename__ = "personality_questions"
+
+    question_id: Mapped[str] = mapped_column(String(20), primary_key=True)
+    text: Mapped[str] = mapped_column(Text)
+    trait: Mapped[str] = mapped_column(String(30), index=True)
+    keyed: Mapped[str] = mapped_column(String(1))  # "+" normal, "-" reverse-scored
+    source: Mapped[str] = mapped_column(String(200))
+    license: Mapped[str] = mapped_column(String(100))
+
+
+class AptitudeQuestion(Base):
+    """correct_option and explanation are NEVER sent to the browser before submission."""
+
+    __tablename__ = "aptitude_questions"
+
+    question_id: Mapped[str] = mapped_column(String(20), primary_key=True)
+    category: Mapped[str] = mapped_column(String(30), index=True)
+    difficulty: Mapped[str] = mapped_column(String(10))
+    text: Mapped[str] = mapped_column(Text)
+    options: Mapped[dict] = mapped_column(JSON)  # {"a": "...", "b": "...", "c": "...", "d": "..."}
+    correct_option: Mapped[str] = mapped_column(String(1))
+    explanation: Mapped[str | None] = mapped_column(Text)
+    source: Mapped[str] = mapped_column(String(200))
+    license: Mapped[str] = mapped_column(String(100))
