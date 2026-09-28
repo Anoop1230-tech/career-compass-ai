@@ -1,0 +1,88 @@
+import { render, screen, waitFor, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import AppRoutes from "./AppRoutes";
+import { NAV_ITEMS, PAGES } from "./navigation";
+import * as api from "./services/api";
+
+function renderAt(path = "/") {
+  return render(
+    <MemoryRouter initialEntries={[path]}>
+      <AppRoutes />
+    </MemoryRouter>,
+  );
+}
+
+describe("App shell", () => {
+  beforeEach(() => {
+    vi.spyOn(api, "getHealth").mockResolvedValue({ status: "ok", database: "connected" });
+  });
+
+  it("renders the home page with main heading", async () => {
+    renderAt("/");
+    expect(await screen.findByRole("heading", { level: 1, name: /where are you now/i })).toBeInTheDocument();
+  });
+
+  it("shows every nav item in the header", async () => {
+    renderAt("/");
+    const nav = await screen.findByRole("navigation", { name: "Main" });
+    for (const item of NAV_ITEMS) {
+      expect(within(nav).getByRole("link", { name: item.label })).toBeInTheDocument();
+    }
+  });
+
+  it.each(PAGES.map((p) => [p.path, p.title]))("route %s renders its page", async (path, title) => {
+    renderAt(path);
+    expect(await screen.findByRole("heading", { level: 1, name: title })).toBeInTheDocument();
+  });
+
+  it("navigates when a nav link is clicked", async () => {
+    const user = userEvent.setup();
+    renderAt("/");
+    const nav = await screen.findByRole("navigation", { name: "Main" });
+    await user.click(within(nav).getByRole("link", { name: "Explore" }));
+    expect(await screen.findByRole("heading", { level: 1, name: "Career Explorer" })).toBeInTheDocument();
+  });
+
+  it("shows a 404 page for unknown routes", async () => {
+    renderAt("/this/does/not/exist");
+    expect(await screen.findByRole("heading", { name: "Page not found" })).toBeInTheDocument();
+  });
+
+  it("shows 'Server online' when the backend is healthy", async () => {
+    renderAt("/");
+    expect(await screen.findByText("Server online")).toBeInTheDocument();
+  });
+
+  it("shows offline status and recovers after Retry", async () => {
+    api.getHealth.mockRejectedValueOnce({ message: "Network Error" });
+    const user = userEvent.setup();
+    renderAt("/");
+    expect(await screen.findByText("Server offline")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Retry" }));
+    expect(await screen.findByText("Server online")).toBeInTheDocument();
+  });
+});
+
+describe("Mobile menu", () => {
+  beforeEach(() => {
+    vi.spyOn(api, "getHealth").mockResolvedValue({ status: "ok" });
+  });
+
+  it("opens, closes with Escape, and closes after picking a link", async () => {
+    const user = userEvent.setup();
+    renderAt("/");
+    const toggle = await screen.findByRole("button", { name: "Open menu" });
+
+    await user.click(toggle);
+    expect(toggle).toHaveAttribute("aria-expanded", "true");
+    await user.keyboard("{Escape}");
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+
+    await user.click(toggle);
+    const nav = screen.getByRole("navigation", { name: "Main" });
+    await user.click(within(nav).getByRole("link", { name: "Roadmap" }));
+    await waitFor(() => expect(toggle).toHaveAttribute("aria-expanded", "false"));
+  });
+});

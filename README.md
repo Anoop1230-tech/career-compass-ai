@@ -2,42 +2,56 @@
 
 Personalized career guidance and roadmap platform: "Given my current education, skills, interests, experience and goals, what can I do next?"
 
-See [WORKFLOW.md](WORKFLOW.md) for architecture and phases, and [docs/DATA_REQUIREMENTS.md](docs/DATA_REQUIREMENTS.md) for the dataset design.
+- [WORKFLOW.md](WORKFLOW.md): architecture and user/data workflow
+- [PHASES.md](PHASES.md): build plan and progress
+- [docs/DATA_REQUIREMENTS.md](docs/DATA_REQUIREMENTS.md): dataset design
 
 ## Tech stack
 
-- Frontend: React, Vite, React Router, Axios
-- Backend: Python, FastAPI, Uvicorn, SQLAlchemy
+- Frontend: React 19, Vite 8, React Router 7, Axios
+- Backend: Python 3.11, FastAPI, Uvicorn, SQLAlchemy 2
 - Database: SQLite (dev), PostgreSQL (production)
+- Testing: pytest, Vitest + React Testing Library, Playwright
 - Data/ML: Pandas, NumPy, scikit-learn, Matplotlib, Seaborn
 
-## Run locally (Windows PowerShell)
-
-Backend (terminal 1):
+## First-time setup (Windows PowerShell)
 
 ```powershell
+# Backend
 cd backend
 python -m venv venv
-.\venv\Scripts\Activate.ps1
-pip install -r requirements.txt
+.\venv\Scripts\python.exe -m pip install -r requirements.txt
 copy .env.example .env
-pytest -v
-uvicorn app:app --reload
+cd ..
+
+# Frontend + root tools
+npm install
+npm --prefix frontend install
+copy frontend\.env.example frontend\.env
+npx --prefix frontend playwright install chromium
 ```
 
-Frontend (terminal 2):
+## Run
+
+Double-click `start-dev.bat`, or from the project root:
 
 ```powershell
-cd frontend
-npm install
-copy .env.example .env
 npm run dev
 ```
 
-Open http://localhost:5173 — it should show "Backend: ok, Database: connected".
-API docs: http://localhost:8000/docs
+This starts both servers in one terminal. Open http://localhost:5173. The footer shows "Server online" when the backend is connected. API docs are at http://localhost:8000/docs.
 
-## Status
+## Test
 
-- [x] Phase 1: project setup
-- [ ] Phase 2: user profile and auth
+```powershell
+npm test            # everything: backend + frontend unit + browser tests
+npm run test:api    # backend (pytest)
+npm run test:web    # frontend unit tests (Vitest)
+npm run test:e2e    # browser tests, desktop + mobile (Playwright)
+npm run lint
+npm run build
+```
+
+## How the frontend talks to the backend
+
+The browser only talks to `http://localhost:5173`. Requests to `/api/...` are forwarded by the Vite dev server to FastAPI on `http://127.0.0.1:8000`, so there are no CORS or localhost/127.0.0.1 problems.

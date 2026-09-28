@@ -15,8 +15,10 @@ models/*.pkl
 models/*.joblib
 
 # Node
-frontend/node_modules/
+node_modules/
 frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
 
 # OS / editor
 .DS_Store

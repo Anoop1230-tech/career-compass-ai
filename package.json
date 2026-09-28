@@ -1,0 +1,20 @@
+{
+  "name": "career-compass-ai",
+  "private": true,
+  "version": "0.2.0",
+  "description": "Personalized career guidance and roadmap platform",
+  "scripts": {
+    "dev": "concurrently -k -n API,WEB -c blue,green \"npm:dev:api\" \"npm:dev:web\"",
+    "dev:api": "cd backend && venv\\Scripts\\python.exe -m uvicorn app:app --reload --reload-dir . --host 127.0.0.1 --port 8000",
+    "dev:web": "npm --prefix frontend run dev",
+    "test": "npm run test:api && npm run test:web && npm run test:e2e",
+    "test:api": "cd backend && venv\\Scripts\\python.exe -m pytest -q",
+    "test:web": "npm --prefix frontend run test",
+    "test:e2e": "npm --prefix frontend run test:e2e",
+    "lint": "npm --prefix frontend run lint",
+    "build": "npm --prefix frontend run build"
+  },
+  "devDependencies": {
+    "concurrently": "9.2.4"
+  }
+}
