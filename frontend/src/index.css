@@ -216,7 +216,7 @@ img, svg { display: block; max-width: 100%; }
   justify-content: center;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
   .menu-toggle { display: inline-flex; }
   .nav {
     display: none;
@@ -597,10 +597,11 @@ img, svg { display: block; max-width: 100%; }
   font-size: var(--text-sm);
   color: var(--color-muted);
 }
-@media (min-width: 1101px) and (max-width: 1280px) {
+/* Desktop: 7 nav items leave no room for the email; it shows in the mobile menu and on the profile page */
+@media (min-width: 1201px) {
   .user-menu__email { display: none; }
 }
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
   .user-menu { flex-direction: column; align-items: stretch; }
   .user-menu__email { max-width: none; padding: var(--space-2) var(--space-3); }
 }
@@ -780,3 +781,22 @@ img, svg { display: block; max-width: 100%; }
 
 .badge--ok { color: var(--color-success); border-color: #b7dfc6; background: #f1faf4; }
 .badge--warn { color: var(--color-warning); border-color: #ecd9a6; background: #fdf8ec; }
+
+/* ---------- Recommendations ---------- */
+.rec-list { display: grid; gap: var(--space-4); margin-top: var(--space-5); }
+.rec-card { display: flex; flex-direction: column; gap: var(--space-3); }
+.rec-card > p { margin: 0; }
+.rec-card__head { display: flex; align-items: flex-start; gap: var(--space-4); }
+.rec-card__rank {
+  flex-shrink: 0; width: 32px; height: 32px; display: grid; place-items: center;
+  border-radius: 50%; background: var(--color-surface); border: 1px solid var(--color-border);
+  font-weight: 700; font-size: var(--text-sm);
+}
+.rec-card__title { flex: 1; min-width: 0; }
+.rec-card__title h2 { font-size: var(--text-lg); margin: 0; }
+.rec-card__title h2 a { color: var(--color-text); }
+.rec-card__title p { margin: 0; }
+.rec-card__score { flex-shrink: 0; text-align: right; }
+.rec-card__score strong { font-size: var(--text-2xl); color: var(--color-accent); }
+.fit-breakdown { margin-top: var(--space-2); }
+.fit-breakdown p { margin: var(--space-1) 0 0; }

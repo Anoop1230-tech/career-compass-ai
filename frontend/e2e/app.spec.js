@@ -143,3 +143,25 @@ test("header items never wrap onto two lines", async ({ page, isMobile }) => {
     expect(overflow, `sideways scroll at ${width}px`).toBeLessThanOrEqual(0);
   }
 });
+
+test("logged-in header fits on one line at every width", async ({ page, isMobile }) => {
+  test.skip(isMobile, "width sweep is desktop only");
+  // Long email = widest possible header
+  const email = `a_very_long_header_test_${Date.now()}_${Math.random().toString(36).slice(2, 7)}@example.com`;
+  const registered = await page.request.post("/api/auth/register", { data: { email, password: "secret123" } });
+  expect(registered.ok()).toBeTruthy();
+  await page.goto("/careers");
+  await expect(page.getByRole("button", { name: "Log out" })).toBeAttached();
+  for (const width of [1920, 1600, 1440, 1366, 1280, 1201, 1200, 1024, 768]) {
+    await page.setViewportSize({ width, height: 800 });
+    const header = await page.locator(".header__inner").evaluate((el) => ({
+      height: el.getBoundingClientRect().height,
+      overflow: el.scrollWidth - el.clientWidth,
+      right: Math.max(...[...el.querySelectorAll("a, button")].filter((n) => n.offsetParent !== null)
+        .map((n) => n.getBoundingClientRect().right)),
+    }));
+    expect(header.overflow, `header overflow at ${width}px`).toBeLessThanOrEqual(0);
+    expect(header.right, `header item cut off at ${width}px`).toBeLessThanOrEqual(width);
+    expect(header.height, `header height at ${width}px`).toBeLessThanOrEqual(66);
+  }
+});

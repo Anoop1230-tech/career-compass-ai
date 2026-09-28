@@ -82,3 +82,20 @@ test("logged-in user starts from their profile stage", async ({ page }) => {
   await page.getByRole("button", { name: "Back to my stage" }).click();
   await expect(page.getByLabel("Where are you now?")).toHaveValue("EDU_BTECH_CSE");
 });
+
+test("recommendations are ranked and explained", async ({ page }) => {
+  await loginWithProfile(page);
+  await page.goto("/for-you");
+  await expect(page.getByRole("heading", { level: 1, name: "Careers for you" })).toBeVisible();
+  await expect(page.getByText(/Confidence: \d+%/)).toBeVisible();
+  const cards = page.locator(".rec-card");
+  await expect(cards.first()).toBeVisible();
+  const scores = await page.locator(".rec-card__score strong").allInnerTexts();
+  const numbers = scores.map(Number);
+  expect(numbers).toEqual([...numbers].sort((a, b) => b - a));
+  await cards.first().getByRole("button", { name: "How this score was made" }).click();
+  await expect(cards.first().getByText("weight 22%").first()).toBeVisible();
+  await page.getByLabel("Area").selectOption("Finance");
+  await expect(page).toHaveURL(/domain=Finance/);
+  await expect(page.locator(".rec-card").first()).toContainText("Finance");
+});

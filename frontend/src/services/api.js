@@ -86,5 +86,9 @@ export const getAssessmentResult = async (kind) => (await api.get(`/assessments/
 // ---- guidance engines (work for visitors; personalised when logged in)
 export const getNextSteps = async (stage, signal) =>
   (await api.get("/next-steps", { params: stage ? { stage } : {}, signal })).data;
+export const getRecommendations = async ({ domain, limit = 10 } = {}, signal) =>
+  (await api.get("/recommendations", { params: { domain: domain || undefined, limit }, signal })).data;
+export const getCareerFit = async (careerId, signal) =>
+  (await api.get(`/recommendations/${encodeURIComponent(careerId)}`, { signal })).data;
 
 export default api;

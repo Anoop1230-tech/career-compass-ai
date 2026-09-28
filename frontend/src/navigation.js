@@ -40,6 +40,7 @@ export const PAGES = [
 ];
 
 export const NAV_ITEMS = [
+  { path: "/for-you", label: "For You" },
   { path: "/careers", label: "Careers" },
   { path: "/next-steps", label: "Next Steps" },
   { path: "/assessments", label: "Assessments" },
