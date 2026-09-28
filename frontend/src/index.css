@@ -800,3 +800,30 @@ img, svg { display: block; max-width: 100%; }
 .rec-card__score strong { font-size: var(--text-2xl); color: var(--color-accent); }
 .fit-breakdown { margin-top: var(--space-2); }
 .fit-breakdown p { margin: var(--space-1) 0 0; }
+
+/* ---------- Skill gap ---------- */
+.gap-summary { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin: var(--space-5) 0; }
+.gap-summary p { margin: 0 0 var(--space-2); }
+.table-wrap { overflow-x: auto; border: 1px solid var(--color-border); border-radius: var(--radius-md); }
+.table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+.table th, .table td { text-align: left; padding: var(--space-3); border-bottom: 1px solid var(--color-border); vertical-align: top; }
+.table thead th { background: var(--color-surface); color: var(--color-muted); font-weight: 600; white-space: nowrap; }
+.table tbody tr:last-child > * { border-bottom: 0; }
+.table tbody th { font-weight: 400; min-width: 200px; }
+.gap-name { font-weight: 600; margin-right: var(--space-2); }
+.gap-desc { display: block; margin-top: 2px; }
+.dim { color: var(--color-border-strong); }
+.badge--missing { color: var(--color-danger); border-color: #f0c4c0; background: #fdf3f2; }
+.badge--partial { color: var(--color-warning); border-color: #ecd9a6; background: #fdf8ec; }
+
+/* Tables become stacked cards on phones (no sideways scrolling) */
+@media (max-width: 640px) {
+  .table--stack thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .table--stack, .table--stack tbody, .table--stack tr, .table--stack th, .table--stack td { display: block; width: 100%; }
+  .table--stack tr { padding: var(--space-3); border-bottom: 1px solid var(--color-border); }
+  .table--stack tbody tr:last-child { border-bottom: 0; }
+  .table--stack th, .table--stack td { border: 0; padding: var(--space-1) 0; }
+  .table--stack tbody th { min-width: 0; }
+  .table--stack td[data-label] { display: flex; justify-content: space-between; gap: var(--space-3); }
+  .table--stack td[data-label]::before { content: attr(data-label); color: var(--color-muted); }
+}

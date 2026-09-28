@@ -120,6 +120,10 @@ export default function CareerDetailPage() {
             {c.work_style.length > 0 && (<><dt>Work setting</dt><dd>{c.work_style.map(pretty).join(", ")}</dd></>)}
             {c.key_aptitudes.length > 0 && (<><dt>Useful strengths</dt><dd>{c.key_aptitudes.map(pretty).join(", ")}</dd></>)}
           </dl>
+          <div className="btn-row" style={{ marginTop: "var(--space-4)" }}>
+            <Link to={`/skill-gap?career=${c.career_id}`} className="btn btn--secondary btn--small">Check my skill gap</Link>
+            <Link to={`/roadmap?career=${c.career_id}`} className="btn btn--secondary btn--small">Get a roadmap</Link>
+          </div>
         </header>
 
         <div className="detail-grid">

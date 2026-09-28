@@ -90,5 +90,7 @@ export const getRecommendations = async ({ domain, limit = 10 } = {}, signal) =>
   (await api.get("/recommendations", { params: { domain: domain || undefined, limit }, signal })).data;
 export const getCareerFit = async (careerId, signal) =>
   (await api.get(`/recommendations/${encodeURIComponent(careerId)}`, { signal })).data;
+export const getSkillGap = async (careerId, signal) =>
+  (await api.get(`/skill-gap/${encodeURIComponent(careerId)}`, { signal })).data;
 
 export default api;

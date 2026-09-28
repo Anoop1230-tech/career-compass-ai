@@ -99,3 +99,15 @@ test("recommendations are ranked and explained", async ({ page }) => {
   await expect(page).toHaveURL(/domain=Finance/);
   await expect(page.locator(".rec-card").first()).toContainText("Finance");
 });
+
+test("skill gap from a career page", async ({ page }) => {
+  await loginWithProfile(page);
+  await page.goto("/careers/CAR_DATA_SCIENTIST");
+  await page.getByRole("link", { name: "Check my skill gap" }).click();
+  await expect(page).toHaveURL(/skill-gap\?career=CAR_DATA_SCIENTIST/);
+  await expect(page.getByText("Readiness for Data Scientist")).toBeVisible();
+  await expect(page.getByRole("table", { name: /Core skills to learn/ })).toBeVisible();
+  await expect(page.getByText(/Python · advanced/)).toBeVisible();
+  await page.getByLabel("Target career").selectOption("CAR_ACCOUNTANT");
+  await expect(page.getByText("Readiness for Accountant")).toBeVisible();
+});
