@@ -11,7 +11,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from config import settings
 from catalog.seed import auto_seed
 from database import SessionLocal, init_db
-from routes import assessments, auth, catalog, health, next_steps, profile
+from routes import assessments, auth, catalog, health, next_steps, profile, recommendations
 
 logger = logging.getLogger("career_compass")
 
@@ -89,6 +89,7 @@ app.include_router(profile.router, prefix="/api")
 app.include_router(catalog.router, prefix="/api")
 app.include_router(assessments.router, prefix="/api")
 app.include_router(next_steps.router, prefix="/api")
+app.include_router(recommendations.router, prefix="/api")
 
 
 @app.get("/")
