@@ -58,3 +58,32 @@ class Profile(Base):
     )
 
     user: Mapped[User] = relationship(back_populates="profile")
+
+
+
+class AssessmentAttempt(Base):
+    """One sitting of a test. For aptitude, stores how the options were shuffled
+    for this user, so the browser never needs to know the real answer letters."""
+
+    __tablename__ = "assessment_attempts"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    kind: Mapped[str] = mapped_column(String(20))  # interest | personality | aptitude
+    # aptitude only: {question_id: {"a": "c", "b": "a", ...}} shown letter -> original letter
+    option_map: Mapped[dict] = mapped_column(JSON, default=dict)
+    question_order: Mapped[list] = mapped_column(JSON, default=list)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    submitted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
+class AssessmentResult(Base):
+    """Latest scores of a user for one test kind (older results are kept for history)."""
+
+    __tablename__ = "assessment_results"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    kind: Mapped[str] = mapped_column(String(20), index=True)
+    result: Mapped[dict] = mapped_column(JSON)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
