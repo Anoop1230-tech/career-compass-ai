@@ -1,1 +1,41 @@
 question_id,category,difficulty,question_text,option_a,option_b,option_c,option_d,correct_option,explanation,source,license
+AQ_N01,numerical,easy,A shirt costs ₹800 after a 20% discount. What was the original price?,₹960,₹1000,₹1040,₹1200,b,800 is 80% of the original price so the original is 800 / 0.8 = 1000,Self-written,Project original
+AQ_N02,numerical,easy,A train covers 360 km in 4 hours. What is its average speed?,80 km/h,85 km/h,90 km/h,95 km/h,c,360 / 4 = 90,Self-written,Project original
+AQ_N03,numerical,easy,What is 15% of 240?,30,32,36,40,c,0.15 × 240 = 36,Self-written,Project original
+AQ_N04,numerical,medium,"What is the average of 12, 18, 25, 33 and 42?",24,25,26,27,c,The sum is 130 and 130 / 5 = 26,Self-written,Project original
+AQ_N05,numerical,medium,What is the simple interest on ₹5000 at 8% per year for 3 years?,₹1000,₹1200,₹1250,₹1500,b,5000 × 8 × 3 / 100 = 1200,Self-written,Project original
+AQ_N06,numerical,medium,A and B share ₹64 in the ratio 3:5. How much does B get?,₹24,₹32,₹40,₹48,c,B gets 5/8 of 64 = 40,Self-written,Project original
+AQ_N07,numerical,medium,6 workers finish a job in 10 days. How many days would 15 workers take at the same rate?,3,4,5,6,b,The job is 60 worker-days and 60 / 15 = 4,Self-written,Project original
+AQ_N08,numerical,hard,A price rises by 10% and then falls by 10%. What is the overall change?,No change,1% decrease,1% increase,2% decrease,b,1.1 × 0.9 = 0.99 so the price falls by 1%,Self-written,Project original
+AQ_L01,logical,easy,"What comes next: 2, 6, 12, 20, 30, ?",40,42,44,48,b,The differences are 4 6 8 10 so the next difference is 12,Self-written,Project original
+AQ_L02,logical,easy,"What comes next: 3, 9, 27, 81, ?",162,243,324,729,b,Each term is multiplied by 3,Self-written,Project original
+AQ_L03,logical,medium,All roses are flowers. Some flowers fade quickly. Which conclusion definitely follows?,All roses fade quickly,Some roses fade quickly,No rose fades quickly,None of these definitely follows,d,The flowers that fade quickly may or may not include any roses,Self-written,Project original
+AQ_L04,logical,medium,"If CAT is written as DBU, how is DOG written?",EPH,CNF,DPH,EOG,a,Each letter moves one place forward in the alphabet,Self-written,Project original
+AQ_L05,logical,medium,A is B's brother. C is A's mother. How is C related to B?,Aunt,Mother,Sister,Grandmother,b,The mother of B's brother is B's mother,Self-written,Project original
+AQ_L06,logical,easy,"Which number is the odd one out: 13, 17, 21, 23?",13,17,21,23,c,21 = 3 × 7 is the only number that is not prime,Self-written,Project original
+AQ_L07,logical,hard,"What comes next: A, C, F, J, O, ?",T,U,V,W,b,The gaps are +2 +3 +4 +5 so the next gap is +6 and O + 6 = U,Self-written,Project original
+AQ_L08,logical,hard,Today is Wednesday. What day of the week will it be 100 days from today?,Thursday,Friday,Saturday,Sunday,b,100 = 14 weeks + 2 days and Wednesday + 2 = Friday,Self-written,Project original
+AQ_V01,verbal,easy,Choose the word closest in meaning to ABUNDANT.,Scarce,Plentiful,Rapid,Hidden,b,Abundant means existing in large amounts,Self-written,Project original
+AQ_V02,verbal,easy,Choose the word opposite in meaning to TRANSPARENT.,Clear,Opaque,Bright,Thin,b,Opaque means light cannot pass through,Self-written,Project original
+AQ_V03,verbal,easy,Which sentence is grammatically correct?,She don't like coffee.,She doesn't likes coffee.,She doesn't like coffee.,She not like coffee.,c,Doesn't is followed by the base form of the verb,Self-written,Project original
+AQ_V04,verbal,medium,BOOK is to LIBRARY as PAINTING is to ?,Artist,Gallery,Brush,Frame,b,A library stores and shows books; a gallery stores and shows paintings,Self-written,Project original
+AQ_V05,verbal,medium,Fill in the blank: He is ___ honest man.,a,an,the,no article is needed,b,Honest starts with a vowel sound so it takes 'an',Self-written,Project original
+AQ_V06,verbal,medium,What does the idiom 'break the ice' mean?,To cause trouble,To start a friendly conversation in an awkward situation,To end a relationship,To win easily,b,It means easing tension when people first meet,Self-written,Project original
+AQ_V07,verbal,medium,Which word is spelled incorrectly?,Accommodate,Necessary,Definately,Separate,c,The correct spelling is 'definitely',Self-written,Project original
+AQ_V08,verbal,hard,Choose the word closest in meaning to DILIGENT.,Lazy,Careful and hard-working,Clever,Quiet,b,Diligent describes steady careful effort,Self-written,Project original
+AQ_S01,spatial,easy,How many faces does a cube have?,4,6,8,12,b,A cube has 6 square faces,Self-written,Project original
+AQ_S02,spatial,easy,"You face north, turn right 90° and then right 90° again. Which way do you face?",East,South,West,North,b,North → East → South,Self-written,Project original
+AQ_S03,spatial,medium,What does the small letter 'b' look like in a mirror placed to its right?,d,p,q,b,a,A vertical mirror swaps left and right so b becomes d,Self-written,Project original
+AQ_S04,spatial,medium,"You walk 3 km east and then 4 km north. How far are you from the start in a straight line?",5 km,6 km,7 km,1 km,a,By Pythagoras √(3² + 4²) = 5,Self-written,Project original
+AQ_S05,spatial,hard,A cube painted on all sides is cut into 27 equal small cubes. How many small cubes have exactly one painted face?,6,8,12,1,a,Only the centre cube of each of the 6 faces has exactly one painted side,Self-written,Project original
+AQ_S06,spatial,easy,What is the angle between the hour and minute hands of a clock at 3:00?,45°,60°,90°,120°,c,Each hour mark is 30° apart and 3 × 30° = 90°,Self-written,Project original
+AQ_S07,spatial,medium,How many edges does a cube have?,6,8,10,12,d,4 edges on the top + 4 on the bottom + 4 vertical = 12,Self-written,Project original
+AQ_S08,spatial,hard,"You face east, turn around 180° and then turn left 90°. Which way do you face?",North,South,East,West,b,East → West after turning around; left of West is South,Self-written,Project original
+AQ_P01,problem_solving,hard,"There are 8 identical-looking balls; one is heavier. Using a balance scale, what is the minimum number of weighings that always finds the heavy ball?",1,2,3,4,b,Weigh 3 against 3; then weigh 1 against 1 from the group that must contain it,Self-written,Project original
+AQ_P02,problem_solving,easy,"Task A needs task B to be finished first, and task B needs task C. Which task must you do first?",A,B,C,Any of them,c,C has no dependency so it must come first,Self-written,Project original
+AQ_P03,problem_solving,medium,A bug happens on the live website but not on your laptop. What is the best first step?,Rewrite the feature,Compare the live settings and logs with your local setup,Ignore it,Restart your laptop,b,A difference that only appears live usually comes from configuration or data so check logs and settings first,Self-written,Project original
+AQ_P04,problem_solving,medium,"If 5 machines make 5 parts in 5 minutes, how long do 100 machines take to make 100 parts?",1 minute,5 minutes,20 minutes,100 minutes,b,Each machine makes 1 part in 5 minutes,Self-written,Project original
+AQ_P05,problem_solving,medium,A bat and a ball cost ₹110 in total. The bat costs ₹100 more than the ball. How much is the ball?,₹5,₹10,₹15,₹20,a,Ball = x and bat = x + 100 so 2x + 100 = 110 and x = 5,Self-written,Project original
+AQ_P06,problem_solving,hard,"Meetings are at 9:00–10:00, 9:30–11:00, 10:00–11:30 and 11:00–12:00. What is the minimum number of rooms needed?",1,2,3,4,b,At most two meetings overlap at any moment,Self-written,Project original
+AQ_P07,problem_solving,medium,Lily pads on a pond double every day and cover it fully on day 20. On which day was it half covered?,Day 10,Day 18,Day 19,Day 1,c,It doubles once more from day 19 to day 20,Self-written,Project original
+AQ_P08,problem_solving,medium,6 people each shake hands once with every other person. How many handshakes happen?,12,15,30,36,b,6 × 5 / 2 = 15,Self-written,Project original
