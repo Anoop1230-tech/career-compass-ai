@@ -1,20 +1,31 @@
 """FastAPI application entry point."""
 import logging
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
 
 from config import settings
-from routes import health
+from database import init_db
+from routes import auth, health, profile
 
 logger = logging.getLogger("career_compass")
 
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    init_db()  # create tables on startup
+    yield
+
+
 app = FastAPI(
     title=settings.APP_NAME,
-    version="0.2.0",
+    version="0.3.0",
     description="Personalized career guidance and roadmap API",
+    lifespan=lifespan,
 )
 
 # CORS: only needed when the frontend runs on a different origin than the API.
@@ -29,6 +40,25 @@ app.add_middleware(
 
 
 # ---------- Error handlers: every failure returns clean JSON ----------
+def _field_name(loc: tuple) -> str:
+    parts = [str(p) for p in loc if p not in ("body", "query", "path")]
+    return ".".join(parts) or "request"
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_error_handler(request: Request, exc: RequestValidationError):
+    """422 with one readable sentence (`detail`) plus per-field errors for forms."""
+    errors = [
+        {"field": _field_name(err.get("loc", ())), "message": err.get("msg", "Invalid value").removeprefix("Value error, ")}
+        for err in exc.errors()
+    ]
+    first = errors[0] if errors else {"field": "request", "message": "Invalid request"}
+    return JSONResponse(
+        status_code=422,
+        content={"detail": f"{first['field']}: {first['message']}", "errors": errors},
+    )
+
+
 @app.exception_handler(SQLAlchemyError)
 async def database_error_handler(request: Request, exc: SQLAlchemyError):
     logger.exception("Database error on %s", request.url.path)
@@ -50,6 +80,8 @@ async def unhandled_error_handler(request: Request, exc: Exception):
 
 # All routes live under /api so the frontend and API paths never collide
 app.include_router(health.router, prefix="/api")
+app.include_router(auth.router, prefix="/api")
+app.include_router(profile.router, prefix="/api")
 
 
 @app.get("/")

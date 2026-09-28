@@ -1,9 +1,19 @@
 import { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import { NAV_ITEMS } from "../navigation";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const { status, user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    setOpen(false);
+    // Leave protected pages first, otherwise they would redirect to /login
+    navigate("/", { replace: true });
+    await logout();
+  };
 
   // Close the mobile menu when any link inside it is clicked
   const closeOnLinkClick = (event) => {
@@ -57,9 +67,28 @@ export default function Header() {
             </NavLink>
           ))}
           <div className="nav__actions">
-            <Link to="/profile" className="btn btn--primary btn--small">
-              Get started
-            </Link>
+            {status === "authenticated" ? (
+              <div className="user-menu">
+                <span className="user-menu__email" title={user.email}>
+                  {user.email}
+                </span>
+                <NavLink to="/profile" end className="btn btn--secondary btn--small">
+                  My profile
+                </NavLink>
+                <button type="button" className="btn btn--ghost btn--small" onClick={handleLogout}>
+                  Log out
+                </button>
+              </div>
+            ) : status === "anonymous" ? (
+              <div className="user-menu">
+                <NavLink to="/login" className="btn btn--ghost btn--small">
+                  Log in
+                </NavLink>
+                <Link to="/register" className="btn btn--primary btn--small">
+                  Get started
+                </Link>
+              </div>
+            ) : null}
           </div>
         </nav>
       </div>

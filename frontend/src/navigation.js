@@ -55,15 +55,6 @@ export const PAGES = [
     description:
       "Short interest, aptitude and personality tests that make your recommendations more accurate.",
   },
-  {
-    path: "/profile",
-    label: "Profile",
-    inNav: false,
-    phase: 3,
-    title: "Your Profile",
-    description:
-      "Create an account and describe your education, skills, experience, interests and goals.",
-  },
 ];
 
 export const NAV_ITEMS = PAGES.filter((page) => page.inNav);

@@ -8,7 +8,8 @@ const ROUTES = [
   ["/resources", "Exams, Colleges & Scholarships"],
   ["/mentor", "AI Career Mentor"],
   ["/assessments", "Assessments"],
-  ["/profile", "Your Profile"],
+  ["/login", "Log in"],
+  ["/register", "Create your account"],
   ["/no-such-page", "Page not found"],
 ];
 
@@ -17,7 +18,7 @@ test.beforeEach(async ({ page }, testInfo) => {
   const problems = [];
   page.on("pageerror", (err) => problems.push(`pageerror: ${err.message}`));
   page.on("console", (msg) => {
-    if (msg.type() === "error") problems.push(`console: ${msg.text()}`);
+    if (msg.type() === "error" && !msg.text().includes("status of 401")) problems.push(`console: ${msg.text()}`);
   });
   testInfo.problems = problems;
 });

@@ -1,6 +1,7 @@
 import { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
+import ProtectedRoute from "./components/ProtectedRoute";
 import { PAGES } from "./navigation";
 // Home is the landing page: load it immediately so the first paint has content.
 import HomePage from "./pages/HomePage";
@@ -9,12 +10,19 @@ import HomePage from "./pages/HomePage";
 // so the first visit stays small and fast.
 const ComingSoonPage = lazy(() => import("./pages/ComingSoonPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
+const AuthPage = lazy(() => import("./pages/AuthPage"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+const ProfileEditPage = lazy(() => import("./pages/ProfileEditPage"));
 
 export default function AppRoutes() {
   return (
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<HomePage />} />
+        <Route path="/login" element={<AuthPage mode="login" key="login" />} />
+        <Route path="/register" element={<AuthPage mode="register" key="register" />} />
+        <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+        <Route path="/profile/edit" element={<ProtectedRoute><ProfileEditPage /></ProtectedRoute>} />
         {PAGES.map((page) => (
           <Route
             key={page.path}

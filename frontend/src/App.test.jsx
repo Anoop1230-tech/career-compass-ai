@@ -1,22 +1,13 @@
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MemoryRouter } from "react-router-dom";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import AppRoutes from "./AppRoutes";
+import { beforeEach, describe, expect, it } from "vitest";
 import { NAV_ITEMS, PAGES } from "./navigation";
 import * as api from "./services/api";
-
-function renderAt(path = "/") {
-  return render(
-    <MemoryRouter initialEntries={[path]}>
-      <AppRoutes />
-    </MemoryRouter>,
-  );
-}
+import { mockApi, renderApp as renderAt } from "./test/utils";
 
 describe("App shell", () => {
   beforeEach(() => {
-    vi.spyOn(api, "getHealth").mockResolvedValue({ status: "ok", database: "connected" });
+    mockApi();
   });
 
   it("renders the home page with main heading", async () => {
@@ -67,7 +58,7 @@ describe("App shell", () => {
 
 describe("Mobile menu", () => {
   beforeEach(() => {
-    vi.spyOn(api, "getHealth").mockResolvedValue({ status: "ok" });
+    mockApi();
   });
 
   it("opens, closes with Escape, and closes after picking a link", async () => {

@@ -55,3 +55,25 @@ npm run build
 ## How the frontend talks to the backend
 
 The browser only talks to `http://localhost:5173`. Requests to `/api/...` are forwarded by the Vite dev server to FastAPI on `http://127.0.0.1:8000`, so there are no CORS or localhost/127.0.0.1 problems.
+
+## Accounts and security
+
+- Passwords are hashed with Argon2; the plain password is never stored.
+- Login uses a signed token in an httpOnly, SameSite=Lax cookie (JavaScript cannot read it).
+- `backend/.env` must contain a long random `SECRET_KEY` (see `.env.example`). The app refuses to start in production without one.
+- Login/register are rate limited (10 attempts per minute per IP by default).
+- Tests use their own temporary databases; browser tests use ports 8001/5174, so your dev data and running servers are never touched.
+
+## API endpoints
+
+| Method | Path | Login | Purpose |
+|---|---|---|---|
+| GET | /api/health | no | Server and database status |
+| POST | /api/auth/register | no | Create account (logs in) |
+| POST | /api/auth/login | no | Log in |
+| POST | /api/auth/logout | no | Log out |
+| GET | /api/auth/me | yes | Current user |
+| GET | /api/profile/options | no | Choice lists for the profile form |
+| GET / PUT / DELETE | /api/profile | yes | Read, save, delete your profile |
+
+Full interactive docs: http://localhost:8000/docs
