@@ -38,6 +38,9 @@ def check(url: str, client: httpx.Client, retries: int = 1) -> tuple[str, str]:
             response = client.get(url)
         if response.status_code < 400:
             return url, "ok"
+        if response.status_code == 403:
+            # Some official sites block automated clients but work in a browser
+            return url, "warn: site blocks automated checks (HTTP 403); open it in a browser to confirm"
         return url, f"HTTP {response.status_code}"
     except httpx.TimeoutException:
         # Government sites are sometimes slow for a moment; try once more
@@ -55,6 +58,9 @@ def check(url: str, client: httpx.Client, retries: int = 1) -> tuple[str, str]:
                         return url, "warn: reachable, but the site's certificate chain is incomplete"
             except httpx.HTTPError:
                 pass
+        elif retries > 0:
+            # Connection resets happen on busy sites; one more try
+            return check(url, client, retries - 1)
         return url, f"error: {type(exc).__name__}"
     except httpx.HTTPError as exc:
         return url, f"error: {type(exc).__name__}"

@@ -28,12 +28,15 @@ from catalog.models import (
     CareerSkill,
     CareerTransition,
     CatalogMeta,
+    College,
     EducationPath,
     Exam,
     InterestQuestion,
     PersonalityQuestion,
+    Scholarship,
     Skill,
     Stage,
+    University,
 )
 from catalog.schema import DATASETS_DIR, PLANNED_FILES, SPECS
 from catalog.validator import split_ids, validate
@@ -43,7 +46,7 @@ logger = logging.getLogger("career_compass.seed")
 # Delete children before parents (foreign keys)
 DELETE_ORDER = [
     CareerSkill, EducationPath, CareerPath, CareerTransition, Exam, Career, Skill, Stage,
-    InterestQuestion, PersonalityQuestion, AptitudeQuestion,
+    InterestQuestion, PersonalityQuestion, AptitudeQuestion, College, Scholarship, University,
 ]
 
 
@@ -168,8 +171,32 @@ def build_objects(tables: dict[str, list[dict[str, str]]]) -> list:
             correct_option=r["correct_option"], explanation=text(r["explanation"]),
             source=r["source"], license=r["license"],
         ))
+    for r in tables["universities.csv"]:
+        objects.append(University(
+            university_id=r["university_id"], name=r["university_name"], type=r["type"], state=r["state"],
+            city=text(r["city"]), ugc_recognized=boolean(r["ugc_recognized"]) if r["ugc_recognized"] else None,
+            nirf_rank=integer(r["nirf_rank"]), nirf_category=text(r["nirf_category"]), nirf_year=integer(r["nirf_year"]),
+            official_url=r["official_url"], last_verified=day(r["last_verified"]),
+        ))
+    for r in tables["colleges.csv"]:
+        objects.append(College(
+            college_id=r["college_id"], name=r["college_name"], university_id=text(r["university_id"]),
+            type=r["type"], state=r["state"], city=text(r["city"]),
+            stage_ids_offered=split_ids(r["stage_ids_offered"]), accepted_exam_ids=split_ids(r["accepted_exam_ids"]),
+            approvals=split_ids(r["approvals"]), nirf_rank=integer(r["nirf_rank"]), nirf_year=integer(r["nirf_year"]),
+            fees_note=text(r["fees_note"]), official_url=r["official_url"], last_verified=day(r["last_verified"]),
+        ))
+    for r in tables["scholarships.csv"]:
+        objects.append(Scholarship(
+            scholarship_id=r["scholarship_id"], name=r["scholarship_name"], provider=r["provider"],
+            provider_type=r["provider_type"], eligible_stage_ids=split_ids(r["eligible_stage_ids"]),
+            eligibility_summary=r["eligibility_summary"], income_limit_note=text(r["income_limit_note"]),
+            category_note=text(r["category_note"]), gender_note=text(r["gender_note"]),
+            state_restriction=text(r["state_restriction"]), amount_note=text(r["amount_note"]),
+            application_window_note=text(r["application_window_note"]), official_url=r["official_url"],
+            verified=boolean(r["verified"]), last_verified=day(r["last_verified"]),
+        ))
     return objects
-
 
 def loaded_fingerprint(db: Session) -> str | None:
     row = db.get(CatalogMeta, "fingerprint")

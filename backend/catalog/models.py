@@ -191,3 +191,59 @@ class AptitudeQuestion(Base):
     explanation: Mapped[str | None] = mapped_column(Text)
     source: Mapped[str] = mapped_column(String(200))
     license: Mapped[str] = mapped_column(String(100))
+
+
+# ---------------------------------------------------------------- institutions and scholarships
+class University(Base):
+    __tablename__ = "universities"
+
+    university_id: Mapped[str] = mapped_column(String(40), primary_key=True)
+    name: Mapped[str] = mapped_column(String(200), index=True)
+    type: Mapped[str] = mapped_column(String(40))
+    state: Mapped[str] = mapped_column(String(60), index=True)
+    city: Mapped[str | None] = mapped_column(String(80))
+    ugc_recognized: Mapped[bool | None] = mapped_column(Boolean)
+    nirf_rank: Mapped[int | None] = mapped_column(Integer)
+    nirf_category: Mapped[str | None] = mapped_column(String(60))
+    nirf_year: Mapped[int | None] = mapped_column(Integer)
+    official_url: Mapped[str] = mapped_column(String(300))
+    last_verified: Mapped[date] = mapped_column(Date)
+
+
+class College(Base):
+    __tablename__ = "colleges"
+
+    college_id: Mapped[str] = mapped_column(String(40), primary_key=True)
+    name: Mapped[str] = mapped_column(String(200), index=True)
+    university_id: Mapped[str | None] = mapped_column(ForeignKey("universities.university_id", ondelete="SET NULL"))
+    type: Mapped[str] = mapped_column(String(40))
+    state: Mapped[str] = mapped_column(String(60), index=True)
+    city: Mapped[str | None] = mapped_column(String(80))
+    stage_ids_offered: Mapped[list] = mapped_column(JSON, default=list)
+    accepted_exam_ids: Mapped[list] = mapped_column(JSON, default=list)
+    approvals: Mapped[list] = mapped_column(JSON, default=list)
+    nirf_rank: Mapped[int | None] = mapped_column(Integer)
+    nirf_year: Mapped[int | None] = mapped_column(Integer)
+    fees_note: Mapped[str | None] = mapped_column(Text)
+    official_url: Mapped[str] = mapped_column(String(300))
+    last_verified: Mapped[date] = mapped_column(Date)
+
+
+class Scholarship(Base):
+    __tablename__ = "scholarships"
+
+    scholarship_id: Mapped[str] = mapped_column(String(40), primary_key=True)
+    name: Mapped[str] = mapped_column(String(200), index=True)
+    provider: Mapped[str] = mapped_column(String(200))
+    provider_type: Mapped[str] = mapped_column(String(40))
+    eligible_stage_ids: Mapped[list] = mapped_column(JSON, default=list)
+    eligibility_summary: Mapped[str] = mapped_column(Text)
+    income_limit_note: Mapped[str | None] = mapped_column(Text)
+    category_note: Mapped[str | None] = mapped_column(Text)
+    gender_note: Mapped[str | None] = mapped_column(Text)
+    state_restriction: Mapped[str | None] = mapped_column(String(80))
+    amount_note: Mapped[str | None] = mapped_column(Text)
+    application_window_note: Mapped[str | None] = mapped_column(Text)
+    official_url: Mapped[str] = mapped_column(String(300))
+    verified: Mapped[bool] = mapped_column(Boolean)
+    last_verified: Mapped[date] = mapped_column(Date)

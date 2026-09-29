@@ -1,1 +1,11 @@
 university_id,university_name,type,state,city,ugc_recognized,nirf_rank,nirf_category,nirf_year,aishe_code,official_url,last_verified
+UNI_DU,University of Delhi,central,Delhi,New Delhi,true,,,,,https://www.du.ac.in/,2026-09-29
+UNI_JNU,Jawaharlal Nehru University,central,Delhi,New Delhi,true,,,,,https://www.jnu.ac.in/,2026-09-29
+UNI_BHU,Banaras Hindu University,central,Uttar Pradesh,Varanasi,true,,,,,https://www.bhu.ac.in/,2026-09-29
+UNI_UOH,University of Hyderabad,central,Telangana,Hyderabad,true,,,,,https://uohyd.ac.in/,2026-09-29
+UNI_AMU,Aligarh Muslim University,central,Uttar Pradesh,Aligarh,true,,,,,https://www.amu.ac.in/,2026-09-29
+UNI_IGNOU,Indira Gandhi National Open University,central,Delhi,New Delhi,true,,,,,https://www.ignou.ac.in/,2026-09-29
+UNI_ANNA,Anna University,state,Tamil Nadu,Chennai,true,,,,,https://www.annauniv.edu/,2026-09-29
+UNI_JADAVPUR,Jadavpur University,state,West Bengal,Kolkata,true,,,,,https://jadavpuruniversity.in/,2026-09-29
+UNI_SPPU,Savitribai Phule Pune University,state,Maharashtra,Pune,true,,,,,https://www.unipune.ac.in/,2026-09-29
+UNI_MUMBAI,University of Mumbai,state,Maharashtra,Mumbai,true,,,,,https://mu.ac.in/,2026-09-29

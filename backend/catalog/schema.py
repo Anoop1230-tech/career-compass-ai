@@ -15,6 +15,7 @@ BIG_FIVE = {"extraversion", "agreeableness", "conscientiousness", "emotional_sta
 WORK_STYLE_TRAITS = {"leadership", "risk_tolerance", "team_orientation", "creativity", "research_orientation"}
 PERSONALITY_TRAITS = BIG_FIVE | WORK_STYLE_TRAITS
 APTITUDE_CATEGORIES = {"numerical", "logical", "verbal", "spatial", "problem_solving"}
+INSTITUTION_TYPES = {"central", "state", "deemed", "private", "institute_of_national_importance"}
 
 # Minimum questions per scale, so every score is based on enough answers
 MIN_PER_RIASEC_TYPE = 4
@@ -187,17 +188,57 @@ SPECS: dict[str, FileSpec] = {
                 "correct_option": {"a", "b", "c", "d"},
             },
         ),
+        FileSpec(
+            "universities.csv",
+            ("university_id", "university_name", "type", "state", "city", "ugc_recognized", "nirf_rank",
+             "nirf_category", "nirf_year", "aishe_code", "official_url", "last_verified"),
+            id_column="university_id",
+            id_prefix="UNI_",
+            required=("university_id", "university_name", "type", "state", "official_url", "last_verified"),
+            enums={"type": INSTITUTION_TYPES},
+            int_ranges={"nirf_rank": (1, 1000), "nirf_year": (2016, 2100)},
+            booleans=("ugc_recognized",),
+            dates=("last_verified",),
+            urls=("official_url",),
+        ),
+        FileSpec(
+            "colleges.csv",
+            ("college_id", "college_name", "university_id", "type", "state", "city", "stage_ids_offered",
+             "accepted_exam_ids", "approvals", "nirf_rank", "nirf_year", "fees_note", "aishe_code", "official_url",
+             "last_verified"),
+            id_column="college_id",
+            id_prefix="COL_",
+            required=("college_id", "college_name", "type", "state", "stage_ids_offered", "official_url",
+                      "last_verified"),
+            enums={"type": INSTITUTION_TYPES},
+            foreign_keys={"university_id": "universities.csv", "stage_ids_offered": "education_stages.csv",
+                          "accepted_exam_ids": "entrance_exams.csv"},
+            int_ranges={"nirf_rank": (1, 1000), "nirf_year": (2016, 2100)},
+            dates=("last_verified",),
+            urls=("official_url",),
+        ),
+        FileSpec(
+            "scholarships.csv",
+            ("scholarship_id", "scholarship_name", "provider", "provider_type", "eligible_stage_ids",
+             "eligibility_summary", "income_limit_note", "category_note", "gender_note", "state_restriction",
+             "amount_note", "application_window_note", "official_url", "verified", "last_verified"),
+            id_column="scholarship_id",
+            id_prefix="SCH_",
+            required=("scholarship_id", "scholarship_name", "provider", "provider_type", "eligible_stage_ids",
+                      "eligibility_summary", "official_url", "verified", "last_verified"),
+            enums={"provider_type": {"central_government", "state_government", "private", "university", "international"}},
+            foreign_keys={"eligible_stage_ids": "education_stages.csv"},
+            booleans=("verified",),
+            dates=("last_verified",),
+            urls=("official_url",),
+        ),
     ]
 }
-
 # Header-only files still being filled in later phases. Only their header is checked.
 PLANNED_FILES: dict[str, str] = {
     "career_roadmaps.csv": "roadmap_id",
     "courses.csv": "course_id",
     "certifications.csv": "certification_id",
-    "universities.csv": "university_id",
-    "colleges.csv": "college_id",
-    "scholarships.csv": "scholarship_id",
 }
 
 # Which ID column each file exposes for foreign keys
