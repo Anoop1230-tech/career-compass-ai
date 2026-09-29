@@ -17,8 +17,8 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 9 | Transition Engine and Dream Career Checker | "I am X, can I become Y?" analysis | ✅ |
 | 10 | Roadmap Generator and Career Explorer | Stage-wise roadmap that skips what you know; interactive career tree | ✅ |
 | 11 | Exams, colleges and scholarships | Filterable lists with official source links and "last verified" dates | ✅ |
-| 12 | AI Career Mentor | Chat assistant that uses your profile and roadmap as context | ⬜ next |
-| 13 | ML evaluation | Compare ML models against the rule-based engine; keep ML only if it is genuinely better | ⬜ |
+| 12 | AI Career Mentor | Chat assistant that uses your profile and roadmap as context | ✅ |
+| 13 | ML evaluation | Compare ML models against the rule-based engine; keep ML only if it is genuinely better | ⬜ next |
 | 14 | Hardening and final testing | Full test run, accessibility and performance checks, error handling review | ⬜ |
 | 15 | Deployment | PostgreSQL, production build, hosting, HTTPS | ⬜ |
 
@@ -200,3 +200,20 @@ Known limits: roadmap items are skills from the datasets (no course links yet �
 Result: 242 backend tests, 90 frontend unit tests, 86 browser tests passing; lint 0 warnings; validator 0 errors.
 
 Known limits: a starter list, not a full directory; courses and certifications datasets are still empty.
+
+---
+
+## Phase 12 – AI Career Mentor – ✅ done
+
+- 12.1 Mentor engine that works fully offline: understands 13 kinds of question (next steps, which careers suit me, can I become X, skills, roadmap, exams, one exam, scholarships, colleges, compare two careers, salary, career info, greeting) and answers from the same engines as the rest of the app
+- 12.2 Grounded and honest: answers cite data from the datasets and link to the page with details; never gives salary numbers or cut-offs; asks for a profile when it needs one
+- 12.3 Conversation memory: follow-ups ("what skills should I learn?") use the last career discussed, or your roadmap target
+- 12.4 Optional language model (any OpenAI-compatible API via LLM_API_URL / LLM_API_KEY / LLM_MODEL): only rephrases the grounded draft, never receives email or password, and falls back to the local answer on any error. Off by default
+- 12.5 API GET /api/mentor/history, POST /api/mentor/chat, DELETE /api/mentor/history; login required, history private per user, 30 messages per minute limit, 500-character limit
+- 12.6 Mentor page: chat with bullet formatting (rendered as text, no HTML), action links, suggestion chips, keeps your question if sending fails, clear conversation
+- 12.7 Removed the old "coming soon" placeholder system: every menu item is now a real page
+- 12.8 Tests: 23 backend (16 intent cases, privacy, rate limit, LLM success and failure), 5 unit, 1 browser
+
+Result: 265 backend tests, 94 frontend unit tests, 88 browser tests passing; lint 0 warnings.
+
+Known limits: the offline mentor matches keywords, so unusual phrasing may get the "I'm not sure" answer with suggestions; English only.

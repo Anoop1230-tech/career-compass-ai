@@ -110,6 +110,9 @@ Loading is safe: invalid data changes nothing, the load is all-or-nothing, and u
 | GET | /api/explore?stage= | optional | Career tree root |
 | GET | /api/explore/{kind}/{id} | no | Children of a tree node |
 | GET | /api/resources/exams, /colleges, /universities, /scholarships | optional | Filterable lists with official links (for_me=true uses your stage) |
+| GET | /api/mentor/history | yes | Your mentor conversation |
+| POST | /api/mentor/chat | yes | Ask the career mentor (30 per minute) |
+| DELETE | /api/mentor/history | yes | Delete your conversation |
 | GET | /api/next-steps?stage= | optional | Next steps from a stage (profile stage when logged in) |
 
 `kind` is `interest`, `personality` or `aptitude`. Assessment results are for self-reflection and career guidance, not clinical or professional psychological assessments.
