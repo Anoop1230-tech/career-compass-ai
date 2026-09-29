@@ -7,14 +7,66 @@ import * as api from "../services/api";
 
 const TYPE_LABEL = { stage: "Study", career: "Career", exam: "Exam" };
 
+function duration(years) {
+  if (years < 1) return `${Math.round(years * 12)} months`;
+  return years === 1 ? "1 year" : `${years} years`;
+}
+
 function edgeText(edge) {
   if (!edge) return null;
   const parts = [];
-  if (edge.years) parts.push(`${edge.years} years`);
+  if (edge.years) parts.push(duration(edge.years));
   if (edge.experience) parts.push(`after ${edge.experience} years`);
   if (edge.months) parts.push(`${edge.months} months`);
   if (edge.exams?.length) parts.push(`via ${edge.exams.join(" / ")}`);
   return parts.join(" · ");
+}
+
+const COURSE_PREFIX = "Professional course – ";
+
+/** Renders a list of tree nodes, with all professional courses folded under one "Professional courses" row. */
+function TreeList({ nodes, depth, label, keyPrefix }) {
+  const courses = nodes.filter((n) => n.type === "stage" && n.level === "course");
+  const rest = nodes.filter((n) => !courses.includes(n));
+  const firstCareer = rest.findIndex((n) => n.type !== "stage");
+  const at = firstCareer === -1 ? rest.length : firstCareer;
+  const item = (n) => <TreeNode key={`${keyPrefix}-${n.type}-${n.id}`} node={n} depth={depth} />;
+  return (
+    <ul className="tree" aria-label={label}>
+      {rest.slice(0, at).map(item)}
+      {courses.length > 0 && <CourseGroup courses={courses} depth={depth} />}
+      {rest.slice(at).map(item)}
+    </ul>
+  );
+}
+
+function CourseGroup({ courses, depth }) {
+  const [open, setOpen] = useState(false);
+  const short = courses.map((c) => ({ ...c, title: c.title.replace(COURSE_PREFIX, "") }));
+  return (
+    <li className="tree-node tree-node--group">
+      <div className="tree-node__row">
+        <button type="button" className="tree-toggle" aria-expanded={open}
+          aria-label={`${open ? "Collapse" : "Expand"} Professional courses`} onClick={() => setOpen(!open)}>
+          <span aria-hidden="true">{open ? "−" : "+"}</span>
+        </button>
+        <div className="tree-node__body">
+          <span className="badge tree-badge tree-badge--group">Courses</span>{" "}
+          <span className="tree-node__title">Professional courses</span>
+          <span className="tree-node__meta muted small">
+            {courses.length} courses · music, dance, design, writing, acting, film, cooking and more · no degree needed
+          </span>
+        </div>
+      </div>
+      {open && (
+        <div className="tree-node__children">
+          <ul className="tree" aria-label="Professional courses">
+            {short.map((c) => <TreeNode key={`course-${c.id}`} node={c} depth={depth + 1} />)}
+          </ul>
+        </div>
+      )}
+    </li>
+  );
 }
 
 function TreeNode({ node, depth }) {
@@ -59,9 +111,7 @@ function TreeNode({ node, depth }) {
           {state.status === "error" && <p className="text-danger small" role="alert">{state.error}</p>}
           {state.status === "ready" && state.children.length === 0 && <p className="muted small">Nothing further recorded.</p>}
           {state.children.length > 0 && (
-            <ul className="tree" aria-label={`Options after ${node.title}`}>
-              {state.children.map((child) => <TreeNode key={`${child.type}-${child.id}`} node={child} depth={depth + 1} />)}
-            </ul>
+            <TreeList nodes={state.children} depth={depth + 1} label={`Options after ${node.title}`} keyPrefix={node.id} />
           )}
         </div>
       )}
@@ -109,9 +159,8 @@ export default function ExplorePage() {
           <div className="card tree-card">
             <h2 className="tree-root">{root.data.root.title}</h2>
             {root.data.root.subtitle && <p className="muted small">{root.data.root.subtitle}</p>}
-            <ul className="tree" aria-label={`Options after ${root.data.root.title}`}>
-              {root.data.root.children.map((child) => <TreeNode key={`${root.data.root.id}-${child.type}-${child.id}`} node={child} depth={1} />)}
-            </ul>
+            <TreeList nodes={root.data.root.children} depth={1} label={`Options after ${root.data.root.title}`}
+              keyPrefix={root.data.root.id} />
           </div>
         )}
       </div>

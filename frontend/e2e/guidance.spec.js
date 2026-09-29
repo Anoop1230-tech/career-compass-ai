@@ -185,6 +185,12 @@ test("explorer expands from class 10 to careers", async ({ page }) => {
   await expect(btech.getByRole("link", { name: "Software Engineer" })).toBeVisible();
   await btech.getByRole("button", { name: "Expand Software Engineer" }).click();
   await expect(page.getByRole("list", { name: "Options after Software Engineer" }).getByText("Backend Developer")).toBeVisible();
+
+  // All professional courses sit under one "Professional courses" heading
+  await btech.getByRole("button", { name: "Expand Professional courses" }).click();
+  const courses = btech.getByRole("list", { name: "Professional courses" });
+  await expect(courses.locator(":scope > li")).toHaveCount(7);
+  await expect(courses.getByText("Dance and choreography", { exact: true })).toBeVisible();
 });
 
 test("exams, colleges and scholarships with filters", async ({ page }) => {

@@ -92,4 +92,23 @@ describe("Career explorer", () => {
     await userEvent.click(screen.getByRole("button", { name: "Collapse Class 12 – Science (PCM)" }));
     expect(screen.queryByRole("list", { name: "Options after Class 12 – Science (PCM)" })).not.toBeInTheDocument();
   });
+
+  it("puts all professional courses under one heading", async () => {
+    mockApi();
+    vi.spyOn(api, "getStages").mockResolvedValue([{ stage_id: "EDU_BTECH_CSE", name: "B.Tech", level: "ug" }]);
+    const course = (id, title, years) => ({ type: "stage", level: "course", id, title: `Professional course – ${title}`,
+      has_children: true, edge: { label: "Study", years, exams: [] } });
+    vi.spyOn(api, "getExploreRoot").mockResolvedValue({ source: "default", root: {
+      type: "stage", id: "EDU_BTECH_CSE", title: "B.Tech", subtitle: "", has_children: true, children: [
+        { type: "stage", level: "pg", id: "EDU_MBA", title: "MBA", has_children: true, edge: { label: "Study", years: 2, exams: [] } },
+        course("EDU_COURSE_MUSIC", "Music", 1), course("EDU_COURSE_WRITING", "Writing", 0.5)] } });
+    renderApp("/explore");
+    await screen.findByRole("button", { name: "Expand MBA" });
+    expect(screen.queryByText(/Music/)).not.toBeInTheDocument(); // folded away at first
+    await userEvent.click(screen.getByRole("button", { name: "Expand Professional courses" }));
+    const list = screen.getByRole("list", { name: "Professional courses" });
+    expect(within(list).getByText("Music")).toBeInTheDocument(); // no repeated "Professional course –" prefix
+    expect(within(list).getByText("1 year")).toBeInTheDocument();
+    expect(within(list).getByText("6 months")).toBeInTheDocument();
+  });
 });

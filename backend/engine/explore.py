@@ -18,7 +18,7 @@ def _career_has_children(catalog: Catalog, career_id: str) -> bool:
 def node_info(catalog: Catalog, kind: str, node_id: str) -> dict:
     if kind == "stage" and node_id in catalog.stages:
         s = catalog.stages[node_id]
-        return {"type": "stage", "id": node_id, "title": s.name, "subtitle": s.description,
+        return {"type": "stage", "id": node_id, "title": s.name, "subtitle": s.description, "level": s.level,
                 "has_children": bool(catalog.paths_from(node_id))}
     if kind == "career" and node_id in catalog.careers:
         c = catalog.careers[node_id]
