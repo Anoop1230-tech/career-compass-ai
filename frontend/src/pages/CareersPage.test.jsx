@@ -47,26 +47,34 @@ describe("Careers directory", () => {
     vi.spyOn(api, "getCareers").mockResolvedValue(LIST);
   });
 
-  it("lists careers with a result count", async () => {
+  it("lists careers grouped by field, in a fixed field order, with a result count", async () => {
     renderApp("/careers");
     expect(await screen.findByRole("heading", { name: "Data Scientist" })).toBeInTheDocument();
     expect(screen.getByText("2 careers found")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Data Scientist/ })).toHaveAttribute("href", "/careers/CAR_DATA_SCIENTIST");
+    // Technology comes before Government even though the API lists fields alphabetically
+    const fields = screen.getAllByRole("heading", { level: 2 }).map((h) => h.textContent);
+    expect(fields).toEqual(["Technology 1", "Government 1"]);
+    const gov = screen.getByRole("region", { name: /Government/ });
+    expect(within(gov).getByRole("heading", { level: 3, name: "Civil Services Officer" })).toBeInTheDocument();
+    expect(within(gov).queryByText("Data Scientist")).not.toBeInTheDocument();
+    const jump = screen.getByRole("navigation", { name: "Jump to a category" });
+    expect(within(jump).getByRole("link", { name: /Government/ })).toHaveAttribute("href", "#field-government");
   });
 
   it("filters come from the URL and are sent to the API", async () => {
     renderApp("/careers?q=data&domain=Technology&page=2");
     await screen.findByRole("heading", { name: "Data Scientist" });
     expect(api.getCareers).toHaveBeenLastCalledWith(
-      expect.objectContaining({ q: "data", domain: "Technology", offset: 24 }),
+      expect.objectContaining({ q: "data", domain: "Technology", limit: 100, offset: 0 }),
       expect.anything(),
     );
     expect(screen.getByLabelText("Search")).toHaveValue("data");
   });
 
-  it("typing searches after a short pause, and a filter resets paging", async () => {
+  it("typing searches after a short pause", async () => {
     const user = userEvent.setup();
-    renderApp("/careers?page=2");
+    renderApp("/careers");
     await screen.findByRole("heading", { name: "Data Scientist" });
     await user.type(screen.getByLabelText("Search"), "secu");
     await waitFor(() =>

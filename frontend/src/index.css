@@ -1016,6 +1016,23 @@ img, svg { display: block; max-width: 100%; }
 
 .pagination { display: flex; align-items: center; justify-content: center; gap: var(--space-4); margin-top: var(--space-6); }
 
+/* Careers grouped by field */
+.field-jump { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0 0 var(--space-5); }
+.field-jump__link {
+  display: inline-flex; align-items: center; gap: var(--space-2); min-height: 40px; padding: 0 var(--space-4);
+  border: 1px solid var(--color-border); border-radius: 999px; background: var(--color-card);
+  color: var(--color-text); font-size: var(--text-sm); font-weight: 600; text-decoration: none;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.field-jump__link:hover { border-color: var(--color-accent-line); background: var(--color-accent-soft); }
+.field-jump__count { color: var(--color-muted); font-weight: 500; }
+.career-field { margin-top: var(--space-7); scroll-margin-top: var(--space-6); }
+.career-field:first-of-type { margin-top: 0; }
+.career-field__head { border-bottom: 1px solid var(--color-border); padding-bottom: var(--space-3); margin-bottom: var(--space-4); }
+.career-field__head h2 { margin: 0; font-size: var(--text-xl); }
+.career-field__head p { margin: var(--space-1) 0 0; }
+.career-field__count { font-family: var(--font-sans); font-size: var(--text-base); font-weight: 500; }
+
 .breadcrumb { font-size: var(--text-sm); color: var(--color-muted); margin-bottom: var(--space-4); }
 .breadcrumb a { color: var(--color-muted); }
 .breadcrumb a:hover { color: var(--color-accent); }

@@ -19,6 +19,15 @@ test("browse, search and filter careers", async ({ page }) => {
   await page.goto("/careers");
   await expect(page.getByText("55 careers found")).toBeVisible();
 
+  // Grouped by field, all on one page, in a fixed order
+  const main = page.getByRole("main");
+  await expect(main.getByRole("heading", { level: 2 })).toHaveText([
+    "Technology 24", "Business 3", "Finance 2", "Government 3", "Education 2", "Creative Arts 18", "Vocational 3"]);
+  await expect(main.getByRole("heading", { level: 3 })).toHaveCount(55);
+  await page.getByRole("navigation", { name: "Jump to a category" }).getByRole("link", { name: /Creative Arts/ }).click();
+  await expect(page).toHaveURL(/#field-creative-arts$/);
+  await expect(page.getByRole("heading", { level: 2, name: /Creative Arts/ })).toBeInViewport();
+
   await page.getByLabel("Search").fill("data");
   await expect(page).toHaveURL(/q=data/);
   await expect(page.getByRole("heading", { name: "Data Scientist" })).toBeVisible();

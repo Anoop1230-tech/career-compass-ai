@@ -2,7 +2,38 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import * as api from "../services/api";
 
-const PAGE_SIZE = 24;
+// All careers fit on one page (the catalog is small), grouped by field
+const LIMIT = 100;
+
+// Field order and a one-line explanation for each section; unknown fields are added at the end
+const CATEGORIES = [
+  { name: "Technology", text: "Software, data, AI, cloud, security and electronics." },
+  { name: "Business", text: "Product, analysis, management and starting your own business." },
+  { name: "Finance", text: "Accounts, audit and financial analysis." },
+  { name: "Government", text: "Civil services, public sector and banking jobs through exams." },
+  { name: "Education", text: "Teaching in schools and colleges." },
+  { name: "Creative Arts", text: "Music, dance, design, writing, acting, comedy, film and media. No degree needed." },
+  { name: "Vocational", text: "Hands-on skill careers: cooking, fitness and beauty. No degree needed." },
+];
+
+const slug = (name) => `field-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+
+/** Groups careers by field in CATEGORIES order; inside a field, by sub-area and then name. */
+function groupByField(items) {
+  const byField = new Map();
+  for (const c of items) {
+    if (!byField.has(c.domain)) byField.set(c.domain, []);
+    byField.get(c.domain).push(c);
+  }
+  const known = CATEGORIES.filter((cat) => byField.has(cat.name));
+  const extra = [...byField.keys()].filter((d) => !CATEGORIES.some((cat) => cat.name === d)).sort()
+    .map((name) => ({ name, text: "" }));
+  return [...known, ...extra].map((cat) => ({
+    ...cat,
+    careers: byField.get(cat.name).sort((a, b) =>
+      (a.sub_domain || "").localeCompare(b.sub_domain || "") || a.name.localeCompare(b.name)),
+  }));
+}
 
 /** Waits until the user stops typing before searching. */
 function useDebounced(value, delay = 250) {
@@ -20,7 +51,6 @@ export default function CareersPage() {
   const q = params.get("q") || "";
   const domain = params.get("domain") || "";
   const stage = params.get("stage") || "";
-  const page = Math.max(1, Number.parseInt(params.get("page") || "1", 10) || 1);
 
   const [text, setText] = useState(q);
   const debouncedText = useDebounced(text);
@@ -31,7 +61,7 @@ export default function CareersPage() {
   const update = (changes) => {
     const next = new URLSearchParams(params);
     Object.entries(changes).forEach(([key, value]) => (value ? next.set(key, value) : next.delete(key)));
-    if (!("page" in changes)) next.delete("page"); // new filter -> back to page 1
+    next.delete("page"); // old paged links still work: everything is on one page now
     setParams(next, { replace: true });
   };
 
@@ -48,17 +78,17 @@ export default function CareersPage() {
   useEffect(() => {
     const controller = new AbortController(); // cancel outdated searches
     api
-      .getCareers({ q, domain, stage, limit: PAGE_SIZE, offset: (page - 1) * PAGE_SIZE }, controller.signal)
+      .getCareers({ q, domain, stage, limit: LIMIT, offset: 0 }, controller.signal)
       .then((data) => setState({ status: "ready", data, error: "" }))
       .catch((err) => {
         if (controller.signal.aborted) return;
         setState({ status: "error", data: null, error: api.getErrorMessage(err) });
       });
     return () => controller.abort();
-  }, [q, domain, stage, page, attempt]);
+  }, [q, domain, stage, attempt]);
 
   const data = state.data;
-  const pages = data ? Math.max(1, Math.ceil(data.total / PAGE_SIZE)) : 1;
+  const fields = data ? groupByField(data.items) : [];
   const hasFilters = Boolean(q || domain || stage);
 
   return (
@@ -140,34 +170,36 @@ export default function CareersPage() {
           </div>
         )}
 
-        {state.status === "ready" && data.items.length > 0 && (
-          <ul className="grid" style={{ listStyle: "none", margin: 0, padding: 0 }}>
-            {data.items.map((c) => (
-              <li key={c.career_id}>
-                <Link to={`/careers/${c.career_id}`} className="card card--link career-card">
-                  <span className="badge">{c.sub_domain || c.domain}</span>
-                  <h2 className="career-card__title">{c.name}</h2>
-                  <p className="muted">{c.description}</p>
-                  <span className="card__arrow">View details →</span>
-                </Link>
-              </li>
+        {state.status === "ready" && fields.length > 1 && (
+          <nav className="field-jump" aria-label="Jump to a category">
+            {fields.map((f) => (
+              <a key={f.name} href={`#${slug(f.name)}`} className="field-jump__link">
+                {f.name} <span className="field-jump__count">{f.careers.length}</span>
+              </a>
             ))}
-          </ul>
-        )}
-
-        {state.status === "ready" && pages > 1 && (
-          <nav className="pagination" aria-label="Pages">
-            <button type="button" className="btn btn--secondary btn--small" disabled={page <= 1}
-              onClick={() => update({ page: String(page - 1) })}>
-              Previous
-            </button>
-            <span className="muted">Page {page} of {pages}</span>
-            <button type="button" className="btn btn--secondary btn--small" disabled={page >= pages}
-              onClick={() => update({ page: String(page + 1) })}>
-              Next
-            </button>
           </nav>
         )}
+
+        {state.status === "ready" && fields.map((f) => (
+          <section key={f.name} className="career-field" aria-labelledby={slug(f.name)}>
+            <div className="career-field__head">
+              <h2 id={slug(f.name)}>{f.name} <span className="muted career-field__count">{f.careers.length}</span></h2>
+              {f.text && <p className="muted">{f.text}</p>}
+            </div>
+            <ul className="grid" style={{ listStyle: "none", margin: 0, padding: 0 }}>
+              {f.careers.map((c) => (
+                <li key={c.career_id}>
+                  <Link to={`/careers/${c.career_id}`} className="card card--link career-card">
+                    <span className="badge">{c.sub_domain || c.domain}</span>
+                    <h3 className="career-card__title">{c.name}</h3>
+                    <p className="muted">{c.description}</p>
+                    <span className="card__arrow">View details →</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
       </div>
     </section>
   );
