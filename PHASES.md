@@ -20,7 +20,7 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 12 | AI Career Mentor | Chat assistant that uses your profile and roadmap as context | ✅ |
 | 13 | ML evaluation | Compare ML models against the rule-based engine; keep ML only if it is genuinely better | ✅ |
 | 14 | Hardening and final testing | Full test run, accessibility and performance checks, error handling review | ✅ |
-| 15 | Deployment | PostgreSQL, production build, hosting, HTTPS | ⬜ next |
+| 15 | Deployment | PostgreSQL, production build, hosting, HTTPS | ✅ |
 
 ---
 
@@ -255,3 +255,19 @@ Caveat: labels are synthetic, not real career outcomes, so these numbers only sh
 - 14.7 Full run: validator 0 errors; link check 68 OK, 7 warnings, 0 dead; npm audit 0 on both packages
 
 Result: 276 backend tests, 94 frontend unit tests, 92 browser tests (incl. 4 accessibility scans) passing; lint 0 warnings.
+
+---
+
+## Phase 15 – Deployment – ✅ done
+
+- 15.1 PostgreSQL support: `DATABASE_URL` normalises `postgres://` / `postgresql://` to the `psycopg` (v3) driver; `pool_pre_ping` reconnects cleanly after idle drops; SQLite stays the zero-setup default for development and tests
+- 15.2 Alembic migrations (`backend/migrations/`, initial schema `0001`): production runs `alembic upgrade head` on startup; databases created before migrations existed are stamped first so tables are not built twice; tests still build tables straight from the models
+- 15.3 Single-service production: the FastAPI backend also serves the built React app (`frontend/dist`) on one origin — no CORS, the login cookie works as-is, security headers cover the pages; `/assets/*` cached for a year, `/api/*` never shadowed, path-traversal blocked, everything else falls back to `index.html` for React Router
+- 15.4 Production hardening via `ENVIRONMENT=production`: requires a real `SECRET_KEY` (refuses to start otherwise), sends HSTS, sets the session cookie `Secure` (HTTPS only)
+- 15.5 Hosting: multi-stage `Dockerfile` (Node build → non-root Python runtime, reads `$PORT`), `docker-compose.yml` (app + PostgreSQL for a local production-like run), `render.yaml` blueprint (managed PostgreSQL + generated secret + automatic HTTPS); `.dockerignore` keeps secrets and dev state out of the image
+- 15.6 HTTPS: managed platforms terminate TLS and redirect HTTP→HTTPS automatically; self-hosting uses a reverse proxy (Nginx/Caddy/load balancer). Documented in `docs/DEPLOYMENT.md` with a production checklist
+- 15.7 Tests: 5 backend (migrate stamp+upgrade on a pre-existing DB, fresh upgrade, frontend serving of assets/SPA routes, API not shadowed, path-traversal blocked, missing build reported)
+
+Result: 281 backend tests, 94 frontend unit tests, 92 browser tests passing; lint 0 warnings; production-mode smoke test verified (health "connected" via migrations, `/` serves the app, SPA routes fall back to index, `/api/*` still 404s correctly).
+
+Known limits: HSTS/`Secure` cookies assume TLS is terminated by the platform or a reverse proxy in front of the app; the rate limiter and in-progress assessment answers are still per-server (Redis needed to run several servers); Docker image not built in CI here (Docker was unavailable in the dev environment), but the Compose and Render configs are validated as well-formed and the app runs in production mode directly.

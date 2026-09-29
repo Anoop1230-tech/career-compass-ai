@@ -5,6 +5,7 @@ Personalized career guidance and roadmap platform: "Given my current education, 
 - [WORKFLOW.md](WORKFLOW.md): architecture and user/data workflow
 - [PHASES.md](PHASES.md): build plan and progress
 - [docs/DATA_REQUIREMENTS.md](docs/DATA_REQUIREMENTS.md): dataset design
+- [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md): production deployment (PostgreSQL, Docker, hosting, HTTPS)
 
 ## Tech stack
 

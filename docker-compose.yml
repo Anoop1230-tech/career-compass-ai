@@ -1,0 +1,37 @@
+# Local production-like stack: the app (backend + built frontend) plus PostgreSQL.
+#   docker compose up --build      then open http://localhost:8000
+# This mirrors production except HTTPS, which a hosting platform or a reverse
+# proxy terminates in front of the app (see docs/DEPLOYMENT.md).
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: career
+      POSTGRES_PASSWORD: career_dev_password
+      POSTGRES_DB: career_compass
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U career -d career_compass"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ENVIRONMENT: production
+      SERVE_FRONTEND: "true"
+      DATABASE_URL: postgresql+psycopg://career:career_dev_password@db:5432/career_compass
+      # Demo key only. Generate a real one for anything public:
+      #   python -c "import secrets; print(secrets.token_urlsafe(48))"
+      SECRET_KEY: local-compose-demo-key-not-for-production-use-only
+    ports:
+      - "8000:8000"
+
+volumes:
+  db-data:

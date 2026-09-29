@@ -1,0 +1,28 @@
+# Keep the build context small and never copy secrets or local state into the image.
+**/__pycache__/
+**/*.pyc
+**/.pytest_cache/
+backend/venv/
+backend/*.db
+backend/*.sqlite3
+
+# Secrets and env files (the image gets config from environment variables)
+**/.env
+**/.env.*
+!**/.env.example
+*.pem
+*.key
+*.p12
+credentials*.json
+
+# Node / build artifacts (frontend is built inside the image)
+**/node_modules/
+frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
+
+# Docs, tooling, VCS
+.git/
+.gitignore
+screenshots/
+*.md
