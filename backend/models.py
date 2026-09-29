@@ -102,3 +102,16 @@ class RoadmapProgress(Base):
     completed_skill_ids: Mapped[list] = mapped_column(JSON, default=list)
     is_target: Mapped[bool] = mapped_column(Boolean, default=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
+
+
+class MentorMessage(Base):
+    """Chat history with the career mentor (kept per user, deletable by the user)."""
+
+    __tablename__ = "mentor_messages"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    role: Mapped[str] = mapped_column(String(10))  # "user" | "mentor"
+    content: Mapped[str] = mapped_column(Text)
+    meta: Mapped[dict] = mapped_column(JSON, default=dict)  # intent, actions, suggestions, career_id, source
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)

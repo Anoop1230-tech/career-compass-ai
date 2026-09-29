@@ -28,6 +28,9 @@ class Settings:
     AUTH_RATE_LIMIT: int = int(os.getenv("AUTH_RATE_LIMIT", "10"))
     AUTH_RATE_WINDOW_SECONDS: int = int(os.getenv("AUTH_RATE_WINDOW_SECONDS", "60"))
 
+    # Mentor chat messages per user per minute
+    MENTOR_RATE_LIMIT: int = int(os.getenv("MENTOR_RATE_LIMIT", "30"))
+
     # Load datasets/*.csv into the database on startup when they change
     AUTO_SEED: bool = os.getenv("AUTO_SEED", "true").lower() == "true"
 
