@@ -28,6 +28,11 @@ def check(catalog, to, **kw):
 
 
 def test_education_route_is_shortest_chain(catalog):
+    creative = check(catalog, "CAR_SINGER", from_stage="EDU_BTECH_CSE")
+    assert creative["verdict"] == "achievable"
+    assert [s["id"] for s in creative["education_route"]] == ["EDU_COURSE_MUSIC", "CAR_SINGER"]
+    assert creative["blockers"] == []  # no degree or entrance exam needed
+    assert "about 1 year)" in creative["reasons"][0]
     route = education_route(catalog, "EDU_12_PCM", "CAR_DATA_SCIENTIST")
     assert [s["type"] for s in route] == ["education", "career"]
     assert route[-1]["id"] == "CAR_DATA_SCIENTIST"

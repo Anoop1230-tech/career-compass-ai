@@ -6,11 +6,13 @@ import useRequest from "../hooks/useRequest";
 import * as api from "../services/api";
 
 const LEVEL_LABELS = {
-  school: "School", diploma: "Diploma", ug: "Bachelor's", pg: "Master's",
+  school: "School", course: "Professional course", diploma: "Diploma", ug: "Bachelor's", pg: "Master's",
   doctoral: "Doctorate", professional: "Working",
 };
 const GROUPS = [
   { key: "education", label: "Study further" },
+  { key: "course", label: "Professional courses",
+    hint: "Music, dance, design, writing, acting and comedy, film, cooking, fitness and beauty. No degree needed; you can start alongside your studies or instead of them." },
   { key: "career", label: "Start a career" },
   { key: "exam", label: "Exams" },
   { key: "switches", label: "Switch paths" },
@@ -164,7 +166,7 @@ export default function NextStepsPage() {
   const selected = chosen || result?.stage.stage_id;
 
   const counts = result
-    ? Object.fromEntries(GROUPS.map((g) => [g.key, (g.key === "switches" ? result.switches : result.groups[g.key]).length]))
+    ? Object.fromEntries(GROUPS.map((g) => [g.key, (g.key === "switches" ? result.switches : result.groups[g.key] || []).length]))
     : {};
   const visible = GROUPS.filter((g) => counts[g.key] > 0 && (tab === "all" || tab === g.key));
 
@@ -251,6 +253,7 @@ export default function NextStepsPage() {
             {visible.map((g) => (
               <section key={g.key} className="detail-block" aria-labelledby={`group-${g.key}`}>
                 <h2 id={`group-${g.key}`} className="group-title">{g.label}</h2>
+                {g.hint && <p className="muted small" style={{ marginTop: "calc(var(--space-2) * -1)" }}>{g.hint}</p>}
                 <div className="option-grid">
                   {g.key === "switches"
                     ? result.switches.map((s) => <SwitchCard key={s.transition_id} item={s} />)

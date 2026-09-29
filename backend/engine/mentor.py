@@ -39,6 +39,21 @@ CAREER_ALIASES = {
     "app developer": "CAR_MOBILE_DEVELOPER", "game dev": "CAR_GAME_DEVELOPER", "tester": "CAR_QA_ENGINEER",
     "chip designer": "CAR_VLSI_ENGINEER", "vlsi": "CAR_VLSI_ENGINEER", "embedded": "CAR_EMBEDDED_ENGINEER",
     "ca": "CAR_ACCOUNTANT", "chartered accountant": "CAR_ACCOUNTANT", "consultant": "CAR_TECH_CONSULTANT",
+    "singer": "CAR_SINGER", "singing": "CAR_SINGER", "vocalist": "CAR_SINGER", "musician": "CAR_SINGER",
+    "music producer": "CAR_MUSIC_PRODUCER", "composer": "CAR_MUSIC_PRODUCER", "music director": "CAR_MUSIC_PRODUCER",
+    "dancer": "CAR_DANCER", "dancing": "CAR_DANCER", "choreographer": "CAR_CHOREOGRAPHER",
+    "graphic designer": "CAR_GRAPHIC_DESIGNER", "graphic design": "CAR_GRAPHIC_DESIGNER",
+    "fashion designer": "CAR_FASHION_DESIGNER", "fashion designing": "CAR_FASHION_DESIGNER",
+    "interior designer": "CAR_INTERIOR_DESIGNER", "animator": "CAR_ANIMATOR", "animation": "CAR_ANIMATOR", "vfx": "CAR_ANIMATOR",
+    "poet": "CAR_POET_LYRICIST", "poetry": "CAR_POET_LYRICIST", "lyricist": "CAR_POET_LYRICIST", "shayar": "CAR_POET_LYRICIST",
+    "writer": "CAR_CONTENT_WRITER", "content writer": "CAR_CONTENT_WRITER", "script writer": "CAR_CONTENT_WRITER",
+    "actor": "CAR_ACTOR", "actress": "CAR_ACTOR", "acting": "CAR_ACTOR",
+    "comedian": "CAR_STANDUP_COMEDIAN", "comedy": "CAR_STANDUP_COMEDIAN", "stand up": "CAR_STANDUP_COMEDIAN",
+    "standup": "CAR_STANDUP_COMEDIAN", "anchor": "CAR_ANCHOR_RJ", "rj": "CAR_ANCHOR_RJ", "radio jockey": "CAR_ANCHOR_RJ",
+    "photographer": "CAR_PHOTOGRAPHER", "video editor": "CAR_VIDEO_EDITOR", "film director": "CAR_FILMMAKER",
+    "director": "CAR_FILMMAKER", "youtuber": "CAR_CONTENT_CREATOR", "influencer": "CAR_CONTENT_CREATOR",
+    "chef": "CAR_CHEF", "cook": "CAR_CHEF", "gym trainer": "CAR_FITNESS_TRAINER", "yoga teacher": "CAR_FITNESS_TRAINER",
+    "yoga instructor": "CAR_FITNESS_TRAINER", "fitness trainer": "CAR_FITNESS_TRAINER", "makeup artist": "CAR_MAKEUP_ARTIST",
 }
 STAGE_ALIASES = {
     "class 10": "EDU_CLASS_10", "10th": "EDU_CLASS_10", "pcm": "EDU_12_PCM", "pcb": "EDU_12_PCB",
@@ -75,16 +90,20 @@ def _words(text: str) -> str:
 def find_careers(catalog: Catalog, message: str) -> list[str]:
     """Careers mentioned, in the order they appear."""
     text = _words(message)
-    hits: dict[str, int] = {}
+    spans: dict[str, tuple[int, int]] = {}
     names = {normalize(c.name.split("(")[0]).replace("/", " "): c.career_id for c in catalog.careers.values()}
     for label, cid in [*names.items(), *CAREER_ALIASES.items()]:
         label = " " + re.sub(r"[^a-z0-9+#]+", " ", label).strip() + " "
         pos = text.find(label)
         if pos >= 0 and cid in catalog.careers:
-            # Longer labels win at the same position ("data scientist" over "data")
-            if cid not in hits or pos < hits[cid]:
-                hits[cid] = pos
-    return [cid for cid, _ in sorted(hits.items(), key=lambda x: x[1])]
+            span = (pos, pos + len(label))
+            # Earliest mention wins; at the same position the longer label wins
+            if cid not in spans or span[0] < spans[cid][0] or (span[0] == spans[cid][0] and span[1] > spans[cid][1]):
+                spans[cid] = span
+    # "designer" inside "fashion designer" is not a separate mention
+    inside = {cid for cid, (a, b) in spans.items()
+              if any(o != cid and oa <= a and b <= ob and (ob - oa) > (b - a) for o, (oa, ob) in spans.items())}
+    return [cid for cid, _ in sorted(spans.items(), key=lambda x: x[1][0]) if cid not in inside]
 
 
 def find_stage(message: str) -> str | None:

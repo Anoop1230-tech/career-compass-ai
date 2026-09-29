@@ -17,7 +17,7 @@ test.afterEach(async ({}, testInfo) => {
 
 test("browse, search and filter careers", async ({ page }) => {
   await page.goto("/careers");
-  await expect(page.getByText("34 careers found")).toBeVisible();
+  await expect(page.getByText("55 careers found")).toBeVisible();
 
   await page.getByLabel("Search").fill("data");
   await expect(page).toHaveURL(/q=data/);
@@ -63,9 +63,9 @@ test("unknown career shows a friendly 404", async ({ page }) => {
 
 test("every career page opens without errors", async ({ page, request, isMobile }) => {
   test.skip(isMobile, "one pass is enough; layout is covered by other tests");
-  test.setTimeout(90_000);
+  test.setTimeout(150_000);
   const list = await (await request.get("/api/catalog/careers?limit=100")).json();
-  expect(list.total).toBe(34);
+  expect(list.total).toBe(55);
   for (const career of list.items) {
     await page.goto(`/careers/${career.career_id}`);
     await expect(page.getByRole("heading", { level: 1, name: career.name })).toBeVisible();

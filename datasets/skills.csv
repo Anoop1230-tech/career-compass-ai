@@ -155,3 +155,37 @@ SKL_ATTENTION_DETAIL,Attention to detail,soft,Self-management,,Noticing small er
 SKL_CUSTOMER_EMPATHY,Customer empathy,soft,Collaboration,user empathy,Understanding customer problems and feelings
 SKL_ENTREPRENEURSHIP,Entrepreneurship,management,Business,startups,Starting and growing a business
 SKL_SALES,Sales and business development,management,Business,bizdev,Finding customers and closing deals
+SKL_SINGING,Singing and vocal technique,domain,Music,singing|vocals|vocal training|hindustani vocal|carnatic vocal|singer,Breath control pitch range and caring for your voice
+SKL_MUSIC_THEORY,Music theory,domain,Music,ragas|scales|harmony|sight reading|sur|taal,Notes scales rhythm and how music is built
+SKL_INSTRUMENT,Playing a musical instrument,domain,Music,guitar|piano|keyboard|tabla|violin|flute|drums|harmonium|sitar,Playing at least one instrument well
+SKL_MUSIC_PRODUCTION,Music production,domain,Music,fl studio|ableton|logic pro|daw|beat making|music composition|composing,Composing arranging and producing songs on a computer
+SKL_AUDIO_ENGINEERING,Audio recording and mixing,domain,Music,mixing|mastering|pro tools|audacity|sound design|sound recording,Recording mixing and mastering sound
+SKL_DANCE,Dance technique,domain,Dance,dancing|dance|kathak|bharatanatyam|hip hop|contemporary dance|bollywood dance|salsa,Control rhythm and expression in one or more dance styles
+SKL_CHOREOGRAPHY,Choreography,domain,Dance,choreographing|dance direction,Creating and teaching dance routines
+SKL_STAGE_PERFORMANCE,Stage performance,domain,Performance,stage presence|live performance|performing|stage confidence,Performing confidently in front of a live audience
+SKL_GRAPHIC_DESIGN,Graphic design,domain,Design,photoshop|illustrator|canva|coreldraw|adobe photoshop|adobe illustrator|logo design,Layouts typography colour and brand visuals
+SKL_DRAWING,Drawing and sketching,domain,Design,sketching|illustration|drawing|painting|fashion illustration,Turning ideas into sketches and illustrations
+SKL_FASHION_DESIGN,Fashion design and pattern making,domain,Design,pattern making|garment construction|tailoring|stitching|fashion designing,Designing garments and turning them into patterns
+SKL_INTERIOR_DESIGN,Interior space planning,domain,Design,space planning|sketchup|3ds max|interior designing,Planning layouts furniture lighting and materials
+SKL_ANIMATION,2D and 3D animation,domain,Design,blender|maya|3d modeling|toon boom|animation|2d animation|3d animation,Modelling and animating characters and objects
+SKL_VFX,Visual effects and motion graphics,domain,Design,after effects|nuke|compositing|vfx|motion graphics,Compositing and effects for film and video
+SKL_CREATIVE_WRITING,Creative writing,domain,Writing,story writing|fiction|short stories|writing,Writing stories and original pieces
+SKL_POETRY,Poetry and lyric writing,domain,Writing,poetry|shayari|lyrics|lyric writing|ghazal|poems|spoken word,Writing poems songs and verse
+SKL_SCRIPTWRITING,Scriptwriting,domain,Writing,screenwriting|script writing|screenplay|dialogue writing,Writing scripts for films videos shows and ads
+SKL_COPYWRITING,Copywriting and SEO writing,domain,Writing,copywriting|seo|content writing|blogging|seo writing,Clear persuasive writing for brands and the web
+SKL_STORYTELLING,Storytelling,domain,Writing,narrative|story telling,Shaping ideas into stories people remember
+SKL_ACTING,Acting,domain,Performance,theatre|drama|method acting|acting skills,Playing characters on stage and camera
+SKL_COMEDY,Comedy writing and timing,domain,Performance,stand-up|standup|stand up comedy|improv|sketch comedy|comedy,Writing jokes and delivering them with timing
+SKL_VOICE,Voice and diction,domain,Performance,voice modulation|diction|voice over|voiceover|anchoring|hosting|dubbing,Clear expressive speaking for mic stage and camera
+SKL_PHOTOGRAPHY,Photography,domain,Film and Media,dslr|camera|photo editing|lightroom|product photography|photography skills,Composition light and photo editing
+SKL_VIDEO_EDITING,Video editing,domain,Film and Media,premiere pro|final cut|davinci resolve|capcut|video editor|reel editing,Cutting footage sound and colour into a finished video
+SKL_CINEMATOGRAPHY,Cinematography and filming,domain,Film and Media,camera work|shooting|filming|lighting|direction,Framing lighting and shooting video
+SKL_SOCIAL_MEDIA,Social media and audience growth,domain,Marketing,instagram|youtube|reels|social media marketing|content strategy|influencer,Planning posting and growing an online audience
+SKL_PORTFOLIO,Portfolio and self-promotion,domain,Career,portfolio|showreel|personal branding|self promotion,Showing your best work and finding gigs or clients
+SKL_COOKING,Culinary techniques,domain,Culinary,cooking|baking|culinary|bakery|food preparation|chef skills,Cooking methods recipes and kitchen work
+SKL_FOOD_SAFETY,Food safety and hygiene,domain,Culinary,fssai|haccp|food hygiene,Safe handling storage and hygiene of food
+SKL_FITNESS_TRAINING,Exercise training,domain,Fitness,gym training|workout planning|strength training|personal training|fitness,Planning safe effective workouts
+SKL_YOGA,Yoga,domain,Fitness,yoga|pranayama|asanas,Practising and teaching yoga safely
+SKL_NUTRITION,Nutrition basics,domain,Fitness,diet|diet planning|nutrition,Food diet and healthy eating basics
+SKL_FIRST_AID,First aid and CPR,domain,Fitness,cpr|first aid,Responding safely to injuries and emergencies
+SKL_MAKEUP,Makeup artistry,domain,Beauty,makeup|bridal makeup|hair styling|beauty|makeup artist,Makeup and styling for events camera and stage

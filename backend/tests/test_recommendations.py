@@ -76,6 +76,37 @@ def test_profiles_get_sensible_top_careers(catalog):
     assert top(catalog, design, 1) == ["CAR_UI_UX_DESIGNER"]
 
 
+def test_creative_profiles_get_creative_careers(catalog):
+    """A B.Tech student who sings, dances or does comedy sees those careers ranked first, not only tech jobs."""
+    artistic = {"R": 20, "I": 30, "A": 95, "S": 70, "E": 70, "C": 10}
+    singer = ctx("EDU_BTECH_CSE", skills={"SKL_SINGING": 3, "SKL_MUSIC_THEORY": 2}, interests=["music"], riasec=artistic)
+    assert top(catalog, singer, 1) == ["CAR_SINGER"]
+
+    dancer = ctx("EDU_BTECH_CSE", skills={"SKL_DANCE": 3, "SKL_STAGE_PERFORMANCE": 2}, interests=["dance"], riasec=artistic)
+    assert set(top(catalog, dancer, 2)) == {"CAR_DANCER", "CAR_CHOREOGRAPHER"}
+
+    comic = ctx("EDU_BTECH_CSE", skills={"SKL_COMEDY": 2, "SKL_STAGE_PERFORMANCE": 2, "SKL_CREATIVE_WRITING": 2},
+                interests=["performing_arts"], riasec=artistic)
+    assert top(catalog, comic, 1) == ["CAR_STANDUP_COMEDIAN"]
+
+    poet = ctx("EDU_12_HUMANITIES", skills={"SKL_POETRY": 3, "SKL_CREATIVE_WRITING": 2}, interests=["writing"],
+               riasec=artistic)
+    assert top(catalog, poet, 1) == ["CAR_POET_LYRICIST"]
+
+    # someone who left after Class 10 and loves cooking
+    cook = ctx("EDU_CLASS_10", skills={"SKL_COOKING": 2}, interests=["cooking"],
+               riasec={"R": 90, "I": 20, "A": 60, "S": 50, "E": 60, "C": 30})
+    assert top(catalog, cook, 1) == ["CAR_CHEF"]
+
+
+def test_creative_careers_reachable_from_every_starting_stage(catalog):
+    for stage in ("EDU_CLASS_10", "EDU_12_PCM", "EDU_BTECH_CSE", "EDU_BCOM", "EDU_WORKING_NONTECH"):
+        reach = reachable_careers(catalog, stage)
+        for career in ("CAR_SINGER", "CAR_DANCER", "CAR_GRAPHIC_DESIGNER", "CAR_POET_LYRICIST",
+                       "CAR_STANDUP_COMEDIAN", "CAR_PHOTOGRAPHER", "CAR_CHEF"):
+            assert reach[career] == 2, (stage, career)  # stage -> professional course -> career
+
+
 def test_each_signal_moves_the_score_the_right_way(catalog):
     reach = reachable_careers(catalog, "EDU_BTECH_CSE")
     career = catalog.careers["CAR_ML_ENGINEER"]
@@ -131,7 +162,7 @@ def test_api_returns_ranked_explained_list(api, make_user):
     client = make_user()
     client.put("/api/profile", json=valid_profile())
     body = client.get("/api/recommendations?limit=5").json()
-    assert len(body["items"]) == 5 and body["total"] == 34
+    assert len(body["items"]) == 5 and body["total"] == 55
     scores = [i["score"] for i in body["items"]]
     assert scores == sorted(scores, reverse=True)
     assert body["stage"]["stage_id"] == "EDU_BTECH_CSE"
@@ -141,7 +172,7 @@ def test_api_returns_ranked_explained_list(api, make_user):
     assert len(first["components"]) == 6 and first["strengths"]
 
     one = client.get(f"/api/recommendations/{first['career_id']}").json()
-    assert one["rank"] == 1 and one["out_of"] == 34 and one["score"] == first["score"]
+    assert one["rank"] == 1 and one["out_of"] == 55 and one["score"] == first["score"]
     assert client.get("/api/recommendations/CAR_NOPE").status_code == 404
     assert client.get("/api/recommendations?limit=0").status_code == 422
 

@@ -21,3 +21,10 @@ EDU_MBA,MBA,pg,Business Administration,2,Master of Business Administration
 EDU_PHD_CS,PhD – Computer Science,doctoral,Computer Science,5,Doctoral research degree in computing
 EDU_WORKING_TECH,Working professional – Technology,professional,,,Currently employed in a technology role
 EDU_WORKING_NONTECH,Working professional – Non-technology,professional,,,Currently employed outside technology (for example teaching or sales)
+EDU_COURSE_MUSIC,"Professional course – Music (singing, instruments, production)",course,,1,"Vocal or instrument training with a guru or music school, plus music production and sound courses"
+EDU_COURSE_DANCE,Professional course – Dance and choreography,course,,1,"Classical or modern dance training at an academy or with a teacher, with regular stage practice"
+EDU_COURSE_DESIGN,"Professional course – Design (graphic, fashion, interior, animation)",course,,1,"Certificate, diploma or degree courses in graphic, fashion, interior design or animation"
+EDU_COURSE_WRITING,"Professional course – Writing (poetry, lyrics, scripts, content)",course,,0.5,"Creative writing, poetry, lyric, script and content-writing courses and workshops"
+EDU_COURSE_PERFORMING,"Professional course – Acting, stand-up comedy and anchoring",course,,1,"Theatre and acting workshops, comedy open-mic practice, anchoring and voice training"
+EDU_COURSE_MEDIA,"Professional course – Photography, film and video",course,,1,"Photography, filmmaking, video editing and content-creation courses"
+EDU_COURSE_VOCATIONAL,"Professional course – Culinary, fitness and beauty",course,,1,"Job-oriented courses for chefs, fitness and yoga trainers, and makeup artists"

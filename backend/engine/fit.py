@@ -19,10 +19,20 @@ INTEREST_DOMAINS: dict[str, set[str]] = {
     "research": {"AI/ML", "Higher Education", "Data"},
     "science": {"AI/ML", "Data", "Higher Education"},
     "design": {"Design"},
-    "arts": {"Design"},
-    "media": {"Design", "Product"},
+    "arts": {"Design", "Creative Arts"},
+    "media": {"Design", "Product", "Film and Media", "Writing", "Performing Arts"},
     "social_work": {"Education", "Administration"},
     "defence": {"Government"},
+    "music": {"Music"},
+    "dance": {"Dance"},
+    "writing": {"Writing"},
+    "performing_arts": {"Performing Arts"},
+    "film": {"Film and Media"},
+    "fashion": {"Design", "Beauty"},
+    "cooking": {"Culinary"},
+    "hospitality": {"Culinary"},
+    "fitness": {"Fitness"},
+    "sports": {"Fitness"},
 }
 
 # Profile goal -> which kind of next step or career it favours

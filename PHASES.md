@@ -22,6 +22,7 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 14 | Hardening and final testing | Full test run, accessibility and performance checks, error handling review | ✅ |
 | 15 | Deployment | PostgreSQL, production build, hosting, HTTPS | ✅ |
 | 16 | Guided dashboard and UI redesign | Dashboard with "what to do next", grouped sidebar navigation, new warm design, smooth transitions | ✅ |
+| 17 | Creative and skill-based careers | Professional courses (music, dance, design, writing, acting and comedy, film, culinary, fitness, beauty) and 21 careers that need no degree | ✅ |
 
 ---
 
@@ -290,3 +291,22 @@ Known limits: HSTS/`Secure` cookies assume TLS is terminated by the platform or 
 - 16.7 Tests: 8 new dashboard unit tests, nav-group and home-feature unit tests, logout unit test; browser tests updated for the new shell (width sweep at 8 widths, mobile drawer test, dashboard in the accessibility scan and route checks)
 
 Result: 281 backend tests, 105 frontend unit tests, 95 browser tests (5 skipped by design: desktop-only or mobile-only) passing; lint 0 warnings; axe-core 0 violations including the dashboard; initial JavaScript 108 kB gzipped.
+
+---
+
+## Phase 17 – Creative and skill-based careers – ✅ done
+
+For students who want a career built on talent and practice, and for those who are not continuing their studies.
+
+- 17.1 New education level `course` (professional course, no degree needed) and 7 course stages: Music (singing, instruments, production); Dance and choreography; Design (graphic, fashion, interior, animation); Writing (poetry, lyrics, scripts, content); Acting, stand-up comedy and anchoring; Photography, film and video; Culinary, fitness and beauty
+- 17.2 21 new careers with no degree requirement. Creative Arts: Singer, Music Composer and Producer, Sound Engineer, Dancer, Choreographer, Graphic Designer, Fashion Designer, Interior Designer, Animator and VFX Artist, Poet and Lyricist, Content and Script Writer, Actor, Stand-up Comedian, Anchor and Radio Jockey, Photographer, Video Editor, Filmmaker and Director, Content Creator. Vocational: Chef, Fitness Trainer and Yoga Instructor, Makeup Artist. Each has an O*NET source (Content Creator: YouTube Creators), RIASEC codes, 5–6 skills with levels and a mandatory core
+- 17.3 34 new skills with everyday aliases ("shayari", "tabla", "stand-up", "Canva", "DaVinci Resolve", "yoga"…) so profile skills are recognised
+- 17.4 Routes: every school, diploma, bachelor's and working stage (16 stages) → each course → its careers (133 education paths); 13 career progressions (for example Dancer → Choreographer, Graphic Designer → UI/UX Designer); 7 recorded switches (for example B.Tech → Stand-up Comedian, B.Tech → Content Creator, Teacher → Fitness Trainer). Course eligibility and honest limits (irregular early income, portfolio matters most) are stated; official links for NID, NSD, FTII and Skill India
+- 17.5 Next Steps shows a separate "Professional courses" group and tab, so courses never mix with M.Tech or MBA; Dream Career Checker finds "B.Tech → Music course → Singer" as achievable with no degree blocker
+- 17.6 Profile: new interests (Music & singing, Dance, Writing & poetry, Acting & comedy, Film/photography/video, Fashion & beauty, Cooking, Fitness & yoga) linked to the new areas; new stage "Not studying right now" (uses the last Class 12 stream or degree, otherwise Class 10); mentor understands "singer", "poet", "comedian", "youtuber", "chef" and more
+- 17.7 Home page: "Careers beyond a degree" section with the seven areas and "Courses from my stage"; career pages show "No degree needed"
+- 17.8 Fixes found on the way: "about 1 years" wording; the mentor no longer reports "designer" separately inside "fashion designer"
+
+Result: validator 0 errors, 0 warnings (29 stages, 55 careers, 190 skills, 419 career-skill links, 198 education paths); link check 92 OK, 7 warnings (unchanged older sites), 0 dead; 290 backend tests, 107 frontend unit tests, 97 browser tests passing; lint 0 warnings.
+
+Known limits: courses are described by type, not as a list of specific academies; salary is intentionally not shown; creative-career eligibility is general guidance marked "not yet verified".

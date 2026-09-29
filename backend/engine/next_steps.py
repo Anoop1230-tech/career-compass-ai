@@ -210,6 +210,11 @@ def next_steps(catalog: Catalog, stage_id: str, ctx: UserContext) -> dict:
     ]
 
     personalised = ctx.has_profile and bool(ctx.goals or ctx.interests or ctx.skills or ctx.riasec)
+
+    def is_course(option: dict) -> bool:
+        target = catalog.stages.get(option["target_id"])
+        return option["kind"] == "education" and target is not None and target.level == "course"
+
     return {
         "stage": {
             "stage_id": stage.stage_id, "name": stage.name, "level": stage.level,
@@ -217,7 +222,9 @@ def next_steps(catalog: Catalog, stage_id: str, ctx: UserContext) -> dict:
         },
         "personalised": personalised,
         "groups": {
-            "education": [o for o in options if o["kind"] == "education"],
+            "education": [o for o in options if o["kind"] == "education" and not is_course(o)],
+            # Music, dance, design, writing, acting/comedy, film, culinary/fitness/beauty: no degree needed
+            "course": [o for o in options if is_course(o)],
             "career": [o for o in options if o["kind"] == "career"],
             "exam": [o for o in options if o["kind"] == "exam"],
         },

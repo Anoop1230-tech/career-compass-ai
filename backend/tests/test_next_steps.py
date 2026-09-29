@@ -25,6 +25,9 @@ def api(client):
 
 # ---------------------------------------------------------------- stage mapping
 @pytest.mark.parametrize("stage, education, role, expected, exact", [
+    ("not_studying", {}, None, "EDU_CLASS_10", False),
+    ("not_studying", {"stream": "humanities"}, None, "EDU_12_HUMANITIES", False),
+    ("not_studying", {"degree": "B.Tech", "branch": "Computer Science"}, None, "EDU_BTECH_CSE", True),
     ("class_10", {}, None, "EDU_CLASS_10", True),
     ("class_11_12", {"stream": "pcm"}, None, "EDU_12_PCM", True),
     ("class_11_12", {"stream": "pcb"}, None, "EDU_12_PCB", True),
@@ -67,7 +70,8 @@ def test_skill_and_career_matching(catalog):
     assert match_skill(catalog, "Underwater basket weaving") is None
     assert match_career(catalog, "Senior Data Scientist") == "CAR_DATA_SCIENTIST"
     assert match_career(catalog, "Backend Developer II") == "CAR_BACKEND_DEVELOPER"
-    assert match_career(catalog, "Chef") is None
+    assert match_career(catalog, "Chef de partie") == "CAR_CHEF"
+    assert match_career(catalog, "Astronaut") is None
 
 
 # ---------------------------------------------------------------- engine
@@ -78,7 +82,7 @@ def test_every_stage_gives_valid_options(catalog):
         assert result["counts"]["options"] == len(options)
         for o in options:
             assert o["title"] and o["eligibility"] and o["next_action"]
-            assert o["kind"] in {"education", "career", "exam"}
+            assert o["kind"] in {"education", "career", "exam"}  # courses are education steps too
             for exam in o["exams"]:
                 assert exam["official_url"].startswith("https://")
     with pytest.raises(UnknownStage):
@@ -95,8 +99,42 @@ def test_btech_cse_options_are_complete(catalog):
     assert "GATE" in mtech["next_action"]
     assert any(c["id"] == "CAR_AI_RESEARCH_SCIENTIST" for c in mtech["opens"]["careers"])
     assert "Software Engineer" in {o["title"] for o in groups["career"]}
-    assert {s["career_id"] for s in result["switches"]} == {"CAR_DATA_SCIENTIST"}
+    assert {s["career_id"] for s in result["switches"]} == {
+        "CAR_DATA_SCIENTIST", "CAR_GRAPHIC_DESIGNER", "CAR_CONTENT_CREATOR", "CAR_MUSIC_PRODUCER",
+        "CAR_STANDUP_COMEDIAN"}
     assert result["personalised"] is False
+
+
+COURSE_STAGES = {"EDU_COURSE_MUSIC", "EDU_COURSE_DANCE", "EDU_COURSE_DESIGN", "EDU_COURSE_WRITING",
+                 "EDU_COURSE_PERFORMING", "EDU_COURSE_MEDIA", "EDU_COURSE_VOCATIONAL"}
+
+
+def test_professional_courses_are_their_own_group(catalog):
+    """A B.Tech student also sees music, dance, design, writing, acting/comedy, film and vocational courses."""
+    groups = next_steps(catalog, "EDU_BTECH_CSE", UserContext())["groups"]
+    assert {o["target_id"] for o in groups["course"]} == COURSE_STAGES
+    assert not COURSE_STAGES & {o["target_id"] for o in groups["education"]}  # not mixed with M.Tech / MBA
+    music = next(o for o in groups["course"] if o["target_id"] == "EDU_COURSE_MUSIC")
+    assert {c["id"] for c in music["opens"]["careers"]} == {"CAR_SINGER", "CAR_MUSIC_PRODUCER", "CAR_SOUND_ENGINEER"}
+    performing = next(o for o in groups["course"] if o["target_id"] == "EDU_COURSE_PERFORMING")
+    assert "CAR_STANDUP_COMEDIAN" in {c["id"] for c in performing["opens"]["careers"]}
+
+
+def test_courses_open_from_school_and_work_too(catalog):
+    for stage_id in ("EDU_CLASS_10", "EDU_12_HUMANITIES", "EDU_BA", "EDU_WORKING_NONTECH"):
+        groups = next_steps(catalog, stage_id, UserContext())["groups"]
+        assert {o["target_id"] for o in groups["course"]} == COURSE_STAGES, stage_id
+    # a course leads straight to its careers, and needs no degree
+    careers = next_steps(catalog, "EDU_COURSE_WRITING", UserContext())["groups"]["career"]
+    assert {o["target_id"] for o in careers} == {"CAR_POET_LYRICIST", "CAR_CONTENT_WRITER"}
+    assert all("No degree needed" in o["eligibility"] for o in careers)
+
+
+def test_creative_interest_ranks_matching_course_first(catalog):
+    ctx = UserContext(has_profile=True, interests=["dance"])
+    courses = next_steps(catalog, "EDU_BTECH_CSE", ctx)["groups"]["course"]
+    assert courses[0]["target_id"] == "EDU_COURSE_DANCE"
+    assert "it leads to careers matching your interests" in courses[0]["reasons"]
 
 
 def test_goals_and_skills_change_the_order(catalog):

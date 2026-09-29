@@ -75,7 +75,7 @@ scholarships ──► education_stages (who is eligible)
 |---|---|---|---|
 | stage_id | string | yes | `EDU_12_PCM`, `EDU_BTECH_CSE`, `EDU_MTECH_CSE` |
 | stage_name | string | yes | "Class 12 – PCM", "B.Tech CSE" |
-| level | enum | yes | `school`, `diploma`, `ug`, `pg`, `doctoral`, `professional` |
+| level | enum | yes | `school`, `course` (professional course such as music, dance, design, acting or culinary; no degree needed), `diploma`, `ug`, `pg`, `doctoral`, `professional` |
 | stream_or_branch | string | no | "PCM", "Computer Science" |
 | typical_duration_years | number | no | 4 |
 | description | text | no | Short description |

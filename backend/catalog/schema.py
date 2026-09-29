@@ -8,7 +8,8 @@ from pathlib import Path
 
 DATASETS_DIR = Path(__file__).resolve().parents[2] / "datasets"
 
-LEVELS = {"school", "diploma", "ug", "pg", "doctoral", "professional"}
+# "course" = professional / skill courses (music, dance, design, acting, culinary, ...) that need no degree
+LEVELS = {"school", "course", "diploma", "ug", "pg", "doctoral", "professional"}
 PROFICIENCY = {"beginner", "intermediate", "advanced"}
 RIASEC_TYPES = {"R", "I", "A", "S", "E", "C"}
 BIG_FIVE = {"extraversion", "agreeableness", "conscientiousness", "emotional_stability", "openness"}

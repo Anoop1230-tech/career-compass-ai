@@ -27,7 +27,7 @@ from database import get_db
 router = APIRouter(prefix="/catalog", tags=["catalog"])
 
 SearchText = Query(default=None, max_length=60, description="Case-insensitive search")
-LEVEL_ORDER = ["school", "diploma", "ug", "pg", "doctoral", "professional"]
+LEVEL_ORDER = ["school", "course", "diploma", "ug", "pg", "doctoral", "professional"]
 
 
 def _matches(query: str | None, *fields) -> bool:

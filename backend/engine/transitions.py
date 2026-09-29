@@ -23,7 +23,7 @@ from engine.recommend import reachable_careers
 from engine.skill_gap import skill_gap
 
 
-LEVEL_WORDS = {"school": "school", "diploma": "diploma", "ug": "bachelor's", "pg": "master's",
+LEVEL_WORDS = {"school": "school", "course": "professional course", "diploma": "diploma", "ug": "bachelor's", "pg": "master's",
                "doctoral": "doctoral", "professional": "work experience"}
 
 
@@ -142,7 +142,7 @@ def check_transition(catalog: Catalog, ctx: UserContext, to_career: str,
             years = sum(s["years"] or 0 for s in study)
             n = len(study)
             reasons.append(f"A known route exists with {n} study step{'s' if n != 1 else ''}"
-                           + (f" (about {years:g} years)." if years else "."))
+                           + (f" (about {years:g} year{'' if years == 1 else 's'})." if years else "."))
             months_min = months_max = int(years * 12) if years else None
         if switch:
             reasons.append(f"People commonly make this switch: {switch.difficulty} effort, about "

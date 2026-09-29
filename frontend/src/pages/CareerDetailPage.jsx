@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import * as api from "../services/api";
 
 const LEVEL_LABELS = {
-  school: "School", diploma: "Diploma", ug: "Bachelor's degree", pg: "Master's degree",
+  school: "No degree needed", course: "Professional course", diploma: "Diploma", ug: "Bachelor's degree", pg: "Master's degree",
   doctoral: "Doctorate", professional: "Work experience",
 };
 const RIASEC = {

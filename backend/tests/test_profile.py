@@ -10,7 +10,7 @@ from .conftest import valid_profile
 def test_options_endpoint_is_public_and_complete(client):
     body = client.get("/api/profile/options").json()
     stage_values = [s["value"] for s in body["stages"]]
-    assert len(stage_values) == 16
+    assert len(stage_values) == 17  # includes "not_studying"
     assert {"class_10", "ug_student", "working_professional", "career_changer", "other"} <= set(stage_values)
     for key in ("streams", "score_types", "skill_categories", "skill_levels", "interests", "goals", "work_modes"):
         assert body[key] and all({"value", "label"} <= set(item) for item in body[key])
@@ -47,7 +47,7 @@ def test_create_read_update_delete(make_user):
 @pytest.mark.parametrize(
     "stage",
     ["class_10", "class_11_12", "diploma", "masters_student", "phd_graduate", "working_professional",
-     "experienced_professional", "career_changer", "job_seeker", "entrepreneur", "other"],
+     "experienced_professional", "career_changer", "job_seeker", "not_studying", "entrepreneur", "other"],
 )
 def test_every_stage_can_save_a_minimal_profile(make_user, stage):
     client = make_user()

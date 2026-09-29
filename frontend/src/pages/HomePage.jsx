@@ -14,6 +14,17 @@ const STAGES = [
   { label: "Career changer", hint: "Switch to a new field", to: "/dream-check", icon: "target" },
 ];
 
+// Careers that need talent, practice and a portfolio rather than a degree
+const CREATIVE = [
+  { label: "Music & singing", hint: "Singer, composer, sound engineer", to: "/careers?q=Music", icon: "music" },
+  { label: "Dance", hint: "Dancer, choreographer", to: "/careers?q=Dance", icon: "dance" },
+  { label: "Design", hint: "Graphic, fashion, interior, animation", to: "/careers?domain=Creative+Arts&q=Design", icon: "palette" },
+  { label: "Writing & poetry", hint: "Poet, lyricist, content and script writer", to: "/careers?q=Writing", icon: "pen" },
+  { label: "Acting & comedy", hint: "Actor, stand-up comedian, anchor, RJ", to: "/careers?q=Performing+Arts", icon: "mic" },
+  { label: "Film, photo & video", hint: "Photographer, editor, filmmaker, creator", to: "/careers?q=Film+and+Media", icon: "camera" },
+  { label: "Cooking, fitness & beauty", hint: "Chef, fitness and yoga trainer, makeup artist", to: "/careers?domain=Vocational", icon: "heart" },
+];
+
 // The four-step journey, shown in the hero preview and in "How it works"
 const JOURNEY = [
   { icon: "user", title: "Build your profile", text: "Education, skills, interests and goals." },
@@ -120,7 +131,47 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section" aria-labelledby="how-title">
+      <section className="section" aria-labelledby="creative-title">
+        <div className="container">
+          <div className="section__intro">
+            <h2 id="creative-title">Careers beyond a degree</h2>
+            <p className="muted">
+              Talent and practice count more than marks here. Start a professional course alongside your studies, or
+              instead of them if you are not continuing. Every option shows the skills to learn and how people get in.
+            </p>
+          </div>
+          <ul className="stage-grid">
+            {CREATIVE.map((area) => (
+              <li key={area.label}>
+                <Link to={area.to} className="stage-card">
+                  <span className="icon-tile icon-tile--warm">
+                    <Icon name={area.icon} />
+                  </span>
+                  <span>
+                    <strong>{area.label}</strong>
+                    <span className="muted">{area.hint}</span>
+                  </span>
+                  <Icon name="arrow" size={18} className="icon stage-card__go" />
+                </Link>
+              </li>
+            ))}
+            <li>
+              <Link to="/next-steps" className="stage-card">
+                <span className="icon-tile">
+                  <Icon name="steps" />
+                </span>
+                <span>
+                  <strong>Courses from my stage</strong>
+                  <span className="muted">See the professional courses open to you now</span>
+                </span>
+                <Icon name="arrow" size={18} className="icon stage-card__go" />
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section className="section section--surface" aria-labelledby="how-title">
         <div className="container">
           <div className="section__intro">
             <h2 id="how-title">How it works</h2>
@@ -137,7 +188,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section section--surface" aria-labelledby="features-title">
+      <section className="section" aria-labelledby="features-title">
         <div className="container">
           <div className="section__intro">
             <h2 id="features-title">Everything in one place</h2>

@@ -62,6 +62,28 @@ describe("Next steps page", () => {
     expect(screen.getByRole("heading", { level: 2, name: "Switch paths" })).toBeInTheDocument();
   });
 
+  it("shows professional courses (music, comedy …) as their own group with the careers they open", async () => {
+    mockApi({ loggedIn: true });
+    const course = option({
+      path_id: "EP_100", target_id: "EDU_COURSE_MUSIC", title: "Professional course – Music (singing, instruments, production)",
+      eligibility: "Open to anyone; no degree is needed", exams: [], duration_years: 1, reasons: [],
+      next_action: "Shortlist institutes.",
+      opens: { careers: [{ id: "CAR_SINGER", name: "Singer" }, { id: "CAR_MUSIC_PRODUCER", name: "Music Composer and Producer" }], education: [] },
+    });
+    vi.spyOn(api, "getNextSteps").mockResolvedValue({
+      ...RESULT, result: { ...RESULT.result, groups: { ...RESULT.result.groups, course: [course] } },
+    });
+    renderApp("/next-steps");
+    const heading = await screen.findByRole("heading", { level: 2, name: "Professional courses" });
+    const group = heading.closest("section");
+    expect(group).toHaveTextContent("No degree needed");
+    expect(group).toHaveTextContent("Professional course – Music");
+    expect(group).toHaveTextContent("Singer");
+    await userEvent.click(screen.getByRole("button", { name: /Professional courses/ }));
+    expect(screen.queryByRole("heading", { level: 2, name: "Study further" })).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2, name: "Professional courses" })).toBeInTheDocument();
+  });
+
   it("filters by group", async () => {
     mockApi({ loggedIn: true });
     vi.spyOn(api, "getNextSteps").mockResolvedValue(RESULT);

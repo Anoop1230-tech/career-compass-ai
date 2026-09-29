@@ -116,6 +116,15 @@ def guess_stage(profile_stage: str | None, education: dict | None, current_role:
         return StageGuess("EDU_WORKING_TECH" if tech else "EDU_WORKING_NONTECH", True,
                           f"Working professional ({'technology' if tech else 'non-technology'} role).")
 
+    # Took a break or stopped studying: use the last completed level
+    if profile_stage == "not_studying" and not degree.strip():
+        twelfth = {"pcm": "EDU_12_PCM", "pcmb": "EDU_12_PCM", "pcb": "EDU_12_PCB",
+                   "commerce": "EDU_12_COMMERCE", "humanities": "EDU_12_HUMANITIES"}
+        if stream in twelfth:
+            return StageGuess(twelfth[stream], False, "Not studying right now: showing options after your Class 12 stream.")
+        return StageGuess("EDU_CLASS_10", False, "Not studying right now: showing options after Class 10. "
+                          "Add your last degree or Class 12 stream for a better match.")
+
     # Undergraduate student, graduate, fresh graduate, job seeker, other
     if _has(degree, "btech", "b tech", "be", "b e", "bachelor of technology", "bachelor of engineering"):
         if computing:

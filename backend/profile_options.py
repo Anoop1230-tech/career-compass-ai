@@ -16,6 +16,7 @@ STAGES = [
     ("experienced_professional", "Experienced professional"),
     ("career_changer", "Career changer"),
     ("job_seeker", "Job seeker"),
+    ("not_studying", "Not studying right now"),
     ("entrepreneur", "Entrepreneur"),
     ("other", "Other"),
 ]
@@ -75,6 +76,14 @@ INTERESTS = [
     ("agriculture", "Agriculture"),
     ("defence", "Defence"),
     ("hospitality", "Hospitality"),
+    ("music", "Music & singing"),
+    ("dance", "Dance"),
+    ("writing", "Writing & poetry"),
+    ("performing_arts", "Acting & comedy"),
+    ("film", "Film, photography & video"),
+    ("fashion", "Fashion & beauty"),
+    ("cooking", "Cooking"),
+    ("fitness", "Fitness & yoga"),
 ]
 
 GOALS = [

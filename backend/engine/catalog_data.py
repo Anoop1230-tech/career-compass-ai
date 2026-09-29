@@ -22,7 +22,7 @@ from catalog.models import (
     Stage,
 )
 
-LEVEL_ORDER = ["school", "diploma", "ug", "pg", "doctoral", "professional"]
+LEVEL_ORDER = ["school", "course", "diploma", "ug", "pg", "doctoral", "professional"]
 
 
 @dataclass

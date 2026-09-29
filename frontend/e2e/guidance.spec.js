@@ -112,6 +112,27 @@ test("skill gap from a career page", async ({ page }) => {
   await expect(page.getByText("Readiness for Accountant")).toBeVisible();
 });
 
+test("a B.Tech student finds professional courses and creative careers", async ({ page }) => {
+  await page.goto("/next-steps?stage=EDU_BTECH_CSE");
+  await page.getByRole("button", { name: /Professional courses/ }).click();
+  const group = page.getByRole("heading", { level: 2, name: "Professional courses" }).locator("..");
+  await expect(group.getByRole("article")).toHaveCount(7);
+  const performing = page.getByRole("article", { name: /Acting, stand-up comedy and anchoring/ });
+  await expect(performing).toContainText("Stand-up Comedian");
+
+  // Can I become a stand-up comedian from B.Tech? Yes, through a course, with no degree blocker
+  await page.goto("/dream-check?to=CAR_STANDUP_COMEDIAN&from_stage=EDU_BTECH_CSE");
+  await expect(page.getByRole("heading", { level: 2, name: "Yes – with a clear plan" })).toBeVisible();
+  await expect(page.locator(".dream-result").getByText(/Professional course – Acting/).first()).toBeVisible();
+
+  // The careers directory has the creative area, marked as needing no degree
+  await page.goto("/careers?domain=Creative+Arts");
+  await expect(page.getByText("18 careers found")).toBeVisible();
+  await page.getByRole("link", { name: /Singer/ }).first().click();
+  await expect(page.getByRole("heading", { level: 1, name: "Singer" })).toBeVisible();
+  await expect(page.getByText("No degree needed").first()).toBeVisible();
+});
+
 test("dream career checker uses the profile and explains the verdict", async ({ page }) => {
   await loginWithProfile(page);
   await page.goto("/next-steps");

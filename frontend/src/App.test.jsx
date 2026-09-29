@@ -35,6 +35,16 @@ describe("App shell", () => {
     }
   });
 
+  it("home page shows careers beyond a degree", async () => {
+    renderAt("/");
+    const section = (await screen.findByRole("heading", { name: "Careers beyond a degree" })).closest("section");
+    for (const name of [/Music & singing/, /Dance/, /Design/, /Writing & poetry/, /Acting & comedy/, /Film, photo & video/,
+      /Cooking, fitness & beauty/, /Courses from my stage/]) {
+      expect(within(section).getByRole("link", { name })).toBeInTheDocument();
+    }
+    expect(within(section).getByRole("link", { name: /Acting & comedy/ })).toHaveAttribute("href", "/careers?q=Performing+Arts");
+  });
+
   it("home page lists every feature, grouped the same way as the menu", async () => {
     renderAt("/");
     const features = (await screen.findByRole("heading", { name: "Everything in one place" })).closest("section");

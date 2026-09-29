@@ -14,7 +14,7 @@ def api(client):
 
 def test_stages_sorted_by_level(api):
     stages = api.get("/api/catalog/stages").json()
-    assert len(stages) == 22
+    assert len(stages) == 29
     assert stages[0]["level"] == "school"
     assert stages[-1]["level"] == "professional"
     ug = api.get("/api/catalog/stages?level=ug").json()
@@ -40,7 +40,13 @@ def test_skill_category_filter_and_limit(api):
 
 def test_career_list_search_filter_and_paging(api):
     all_careers = api.get("/api/catalog/careers").json()
-    assert all_careers["total"] == 34
+    assert all_careers["total"] == 55
+    assert {"Technology", "Creative Arts", "Vocational"} <= set(all_careers["domains"])
+    creative = api.get("/api/catalog/careers?domain=Creative+Arts&limit=50").json()
+    assert creative["total"] == 18
+    assert {"Singer", "Dancer", "Poet and Lyricist", "Stand-up Comedian", "Graphic Designer"} <= {
+        c["name"] for c in creative["items"]}
+    assert all(c["min_education_level"] == "school" for c in creative["items"])  # no degree needed
     assert "Technology" in all_careers["domains"]
 
     data = api.get("/api/catalog/careers?q=DATA").json()  # case-insensitive
@@ -52,8 +58,8 @@ def test_career_list_search_filter_and_paging(api):
     commerce = api.get("/api/catalog/careers?stage=EDU_BCOM").json()
     assert "Accountant" in {c["name"] for c in commerce["items"]}
 
-    page = api.get("/api/catalog/careers?limit=10&offset=30").json()
-    assert page["total"] == 34 and len(page["items"]) == 4
+    page = api.get("/api/catalog/careers?limit=10&offset=50").json()
+    assert page["total"] == 55 and len(page["items"]) == 5
 
 
 def test_no_results_is_empty_not_error(api):

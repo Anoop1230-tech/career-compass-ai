@@ -35,6 +35,9 @@ def ask(catalog, q, ctx=CTX, **kw):
 
 
 def test_entity_extraction(catalog):
+    assert find_careers(catalog, "Can I become a singer?") == ["CAR_SINGER"]
+    assert find_careers(catalog, "I love poetry and stand up comedy") == ["CAR_POET_LYRICIST", "CAR_STANDUP_COMEDIAN"]
+    assert find_careers(catalog, "how to become a fashion designer") == ["CAR_FASHION_DESIGNER"]
     assert find_careers(catalog, "Can I become a Data Scientist?") == ["CAR_DATA_SCIENTIST"]
     assert find_careers(catalog, "compare data analyst vs data scientist") == ["CAR_DATA_ANALYST", "CAR_DATA_SCIENTIST"]
     assert find_careers(catalog, "I want to be an ethical hacker") == ["CAR_PENETRATION_TESTER"]
