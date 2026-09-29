@@ -11,7 +11,8 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from config import settings
 from catalog.seed import auto_seed
-from database import SessionLocal, init_db
+from database import SessionLocal, init_db, migrate
+from services.frontend import mount_frontend
 from services.security import SecurityHeadersMiddleware
 from routes import (
     assessments, auth, catalog, explore, health, mentor, next_steps, profile, recommendations, resources, roadmap,
@@ -23,7 +24,10 @@ logger = logging.getLogger("career_compass")
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
-    init_db()  # create tables on startup
+    if settings.ENVIRONMENT == "test":
+        init_db()  # tests build tables straight from the models
+    else:
+        logger.info("Database migrations: %s", migrate())
     if settings.AUTO_SEED:
         with SessionLocal() as db:
             auto_seed(db)  # load reference data from datasets/ if it changed
@@ -107,6 +111,10 @@ app.include_router(resources.router, prefix="/api")
 app.include_router(mentor.router, prefix="/api")
 
 
-@app.get("/")
-def root():
-    return {"message": "Career Compass AI API. See /docs for documentation."}
+
+# Production: this same server also serves the React app (must be registered last)
+if not (settings.SERVE_FRONTEND and mount_frontend(app)):
+
+    @app.get("/")
+    def root():
+        return {"message": "Career Compass AI API. See /docs for documentation."}

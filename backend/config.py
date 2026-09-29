@@ -31,6 +31,11 @@ class Settings:
     # Mentor chat messages per user per minute
     MENTOR_RATE_LIMIT: int = int(os.getenv("MENTOR_RATE_LIMIT", "30"))
 
+    # Serve the built frontend (frontend/dist) from this server. On by default in production.
+    SERVE_FRONTEND: bool = os.getenv("SERVE_FRONTEND", "").lower() == "true" or (
+        os.getenv("SERVE_FRONTEND") is None and os.getenv("ENVIRONMENT", "").lower() == "production"
+    )
+
     # Load datasets/*.csv into the database on startup when they change
     AUTO_SEED: bool = os.getenv("AUTO_SEED", "true").lower() == "true"
 
