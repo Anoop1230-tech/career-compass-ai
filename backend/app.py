@@ -5,13 +5,18 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
 
 from config import settings
 from catalog.seed import auto_seed
 from database import SessionLocal, init_db
-from routes import assessments, auth, catalog, explore, health, mentor, next_steps, profile, recommendations, resources, roadmap, skill_gap, transitions
+from services.security import SecurityHeadersMiddleware
+from routes import (
+    assessments, auth, catalog, explore, health, mentor, next_steps, profile, recommendations, resources, roadmap,
+    skill_gap, transitions,
+)
 
 logger = logging.getLogger("career_compass")
 
@@ -27,7 +32,7 @@ async def lifespan(_app: FastAPI):
 
 app = FastAPI(
     title=settings.APP_NAME,
-    version="0.3.0",
+    version="1.0.0",
     description="Personalized career guidance and roadmap API",
     lifespan=lifespan,
 )
@@ -41,6 +46,10 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
     allow_headers=["*"],
 )
+# Compress larger JSON responses (catalog lists, roadmaps)
+app.add_middleware(GZipMiddleware, minimum_size=1024)
+# Security headers on every response; HSTS only when served over HTTPS in production
+app.add_middleware(SecurityHeadersMiddleware, hsts=settings.is_production)
 
 
 # ---------- Error handlers: every failure returns clean JSON ----------

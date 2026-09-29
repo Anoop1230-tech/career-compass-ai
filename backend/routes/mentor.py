@@ -2,7 +2,7 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, status
-from pydantic import BaseModel, StringConstraints
+from pydantic import BaseModel, ConfigDict, StringConstraints
 from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 
@@ -23,6 +23,8 @@ HISTORY_LIMIT = 50
 
 
 class ChatIn(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+
     message: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=500)]
 
 

@@ -1,7 +1,7 @@
 """Roadmap API. Anyone can view a roadmap; logged-in users get it
 personalised, can set a target career and tick off skills as learned."""
 from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, StrictBool
 from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
@@ -17,7 +17,9 @@ router = APIRouter(prefix="/roadmap", tags=["roadmap"])
 
 
 class SkillDone(BaseModel):
-    done: bool
+    model_config = ConfigDict(extra="forbid")
+
+    done: StrictBool  # only true/false, not "yes" or 1
 
 
 def _progress(db: Session, user_id: int, career_id: str) -> RoadmapProgress | None:
