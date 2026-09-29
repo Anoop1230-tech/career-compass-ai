@@ -538,6 +538,17 @@ img, svg { display: block; max-width: 100%; }
 .hero__trust li { display: inline-flex; align-items: center; gap: var(--space-2); }
 .hero__trust .icon { color: var(--color-success); }
 
+/* Hero illustration (runner around a compass) */
+.hero-art { margin: 0; display: flex; justify-content: center; }
+.hero-art__svg { width: 100%; max-width: 480px; height: auto; display: block; }
+@media (max-width: 1100px) { .hero-art__svg { max-width: 380px; } }
+.hero-art__needle { transform-origin: 240px 210px; animation: needle-sway 7s ease-in-out infinite; }
+@keyframes needle-sway {
+  0%, 100% { transform: rotate(-8deg); }
+  50% { transform: rotate(10deg); }
+}
+@media (prefers-reduced-motion: reduce) { .hero-art__needle { animation: none; } }
+
 /* Journey preview card on the right of the hero */
 .journey {
   position: relative;

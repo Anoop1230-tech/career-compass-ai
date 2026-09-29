@@ -35,6 +35,11 @@ describe("App shell", () => {
     }
   });
 
+  it("home page shows the hero illustration with a text description", async () => {
+    renderAt("/");
+    expect(await screen.findByRole("img", { name: /runner on a winding track around a large compass/ })).toBeInTheDocument();
+  });
+
   it("home page shows careers beyond a degree", async () => {
     renderAt("/");
     const section = (await screen.findByRole("heading", { name: "Careers beyond a degree" })).closest("section");

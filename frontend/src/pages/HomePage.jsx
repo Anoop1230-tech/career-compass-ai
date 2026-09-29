@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import HeroIllustration from "../components/HeroIllustration";
 import Icon from "../components/Icon";
 import { useAuth } from "../context/AuthContext";
 import { NAV_GROUPS } from "../navigation";
@@ -25,7 +26,7 @@ const CREATIVE = [
   { label: "Cooking, fitness & beauty", hint: "Chef, fitness and yoga trainer, makeup artist", to: "/careers?domain=Vocational", icon: "heart" },
 ];
 
-// The four-step journey, shown in the hero preview and in "How it works"
+// The four-step journey, shown in "How it works"
 const JOURNEY = [
   { icon: "user", title: "Build your profile", text: "Education, skills, interests and goals." },
   { icon: "clipboard", title: "Take short assessments", text: "Optional tests that sharpen your results." },
@@ -84,25 +85,9 @@ export default function HomePage() {
             </ul>
           </div>
 
-          <aside className="journey" aria-label="Your journey in four steps">
-            <div className="journey__head">
-              <strong>Your journey</strong>
-              <span className="badge">4 steps</span>
-            </div>
-            <ol className="journey__list">
-              {JOURNEY.map((step, i) => (
-                <li key={step.title} className={i === 0 ? "journey__item journey__item--active" : "journey__item"}>
-                  <span className={i % 2 ? "icon-tile icon-tile--warm" : "icon-tile"}>
-                    <Icon name={step.icon} />
-                  </span>
-                  <div>
-                    <strong>{step.title}</strong>
-                    <p>{step.text}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </aside>
+          <figure className="hero-art">
+            <HeroIllustration />
+          </figure>
         </div>
       </section>
 
