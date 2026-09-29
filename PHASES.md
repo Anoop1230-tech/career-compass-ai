@@ -19,8 +19,8 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 11 | Exams, colleges and scholarships | Filterable lists with official source links and "last verified" dates | ✅ |
 | 12 | AI Career Mentor | Chat assistant that uses your profile and roadmap as context | ✅ |
 | 13 | ML evaluation | Compare ML models against the rule-based engine; keep ML only if it is genuinely better | ✅ |
-| 14 | Hardening and final testing | Full test run, accessibility and performance checks, error handling review | ⬜ next |
-| 15 | Deployment | PostgreSQL, production build, hosting, HTTPS | ⬜ |
+| 14 | Hardening and final testing | Full test run, accessibility and performance checks, error handling review | ✅ |
+| 15 | Deployment | PostgreSQL, production build, hosting, HTTPS | ⬜ next |
 
 ---
 
@@ -241,3 +241,17 @@ Known limits: the offline mentor matches keywords, so unusual phrasing may get t
 **Decision: keep the rule engine.** No model beat the rules by 5.0 points on every test set. The best model (logistic_regression) is slightly better than the rules (worst-case margin +1.5 points), which is too small to give up explainable scores that need no training data. The rule engine stays.
 
 Caveat: labels are synthetic, not real career outcomes, so these numbers only show the engine ranks sensibly. Collecting real, consented feedback ("did this recommendation fit you?") is needed before any model could be trusted.
+
+---
+
+## Phase 14 – Hardening and final testing – ✅ done
+
+- 14.1 Security headers on every response (strict Content-Security-Policy, no framing, no MIME sniffing, referrer and permissions policies, HSTS in production), `Cache-Control: no-store` on all API responses, 256 KB request size limit, gzip for large responses
+- 14.2 Strict input: extra fields rejected on mentor and roadmap requests, true/false fields accept only true/false (found by the new robustness test)
+- 14.3 Robustness test: 180 odd inputs (empty, SQL-injection-like, script tags, path traversal, emoji, long ids) across 18 endpoints – no server errors, always JSON
+- 14.4 Accessibility: automated axe-core WCAG 2.1 A/AA scan of 23 pages (visitor and logged in) on desktop and mobile – 0 violations
+- 14.5 Performance: API responses 10–35 ms (median, local), engine budget test (under 500 ms); initial JavaScript 106 kB gzipped, every other page loads on demand (1–4 kB each)
+- 14.6 Home page: stage cards open the matching stage; all features listed
+- 14.7 Full run: validator 0 errors; link check 68 OK, 7 warnings, 0 dead; npm audit 0 on both packages
+
+Result: 276 backend tests, 94 frontend unit tests, 92 browser tests (incl. 4 accessibility scans) passing; lint 0 warnings.
