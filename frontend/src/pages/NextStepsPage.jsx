@@ -12,7 +12,7 @@ const LEVEL_LABELS = {
 const GROUPS = [
   { key: "education", label: "Study further" },
   { key: "course", label: "Professional courses",
-    hint: "Music, dance, design, writing, acting and comedy, film, cooking, fitness and beauty. No degree needed; you can start alongside your studies or instead of them." },
+    hint: "Open to everyone at any stage – school, college, master's, a job, or not studying. Music, dance, design, writing, acting and comedy, film, cooking, fitness and beauty. No degree needed." },
   { key: "career", label: "Start a career" },
   { key: "exam", label: "Exams" },
   { key: "switches", label: "Switch paths" },
@@ -21,6 +21,33 @@ const GROUPS = [
 function years(value) {
   if (value == null) return null;
   return value === 1 ? "1 year" : `${value} years`;
+}
+
+/** Professional courses are open at every stage, so they are shown even before a stage is chosen. */
+function OpenCourses({ stages }) {
+  const courses = stages.filter((s) => s.level === "course");
+  if (!courses.length) return null;
+  return (
+    <section className="detail-block" aria-labelledby="open-courses">
+      <h2 id="open-courses" className="group-title">Professional courses – open to everyone</h2>
+      <p className="muted small">
+        Whatever you are doing now (school, college, a job, or not studying), you can start one of these. No degree
+        needed. Open one to see the careers it leads to.
+      </p>
+      <ul className="stage-grid">
+        {courses.map((c) => (
+          <li key={c.stage_id}>
+            <Link to={`/next-steps?stage=${c.stage_id}`} className="stage-card">
+              <span>
+                <strong>{c.name.replace("Professional course – ", "")}</strong>
+                <span className="muted">{c.description}</span>
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 }
 
 function OptionCard({ option }) {
@@ -223,9 +250,12 @@ export default function NextStepsPage() {
         {steps.status === "error" && <ErrorNotice message={steps.error} onRetry={steps.reload} />}
 
         {steps.status === "ready" && !result && (
-          <div className="notice" style={{ marginTop: "var(--space-5)" }}>
-            <p style={{ margin: 0 }}>Choose your current stage above to see what you can do next.</p>
-          </div>
+          <>
+            <div className="notice" style={{ marginTop: "var(--space-5)" }}>
+              <p style={{ margin: 0 }}>Choose your current stage above to see what you can do next.</p>
+            </div>
+            {stages.status === "ready" && <OpenCourses stages={stages.data} />}
+          </>
         )}
 
         {steps.status === "ready" && result && (

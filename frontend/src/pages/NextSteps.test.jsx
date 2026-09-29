@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import * as api from "../services/api";
@@ -7,6 +7,8 @@ import { httpError, mockApi, renderApp } from "../test/utils";
 const STAGES = [
   { stage_id: "EDU_12_PCM", name: "Class 12 – Science (PCM)", level: "school" },
   { stage_id: "EDU_BTECH_CSE", name: "B.Tech – Computer Science", level: "ug" },
+  { stage_id: "EDU_COURSE_MUSIC", name: "Professional course – Music (singing, instruments, production)", level: "course",
+    description: "Vocal or instrument training" },
 ];
 
 const option = (over) => ({
@@ -102,6 +104,9 @@ describe("Next steps page", () => {
         : { context: { logged_in: false, has_profile: false, source: "none" }, result: null }));
     renderApp("/next-steps");
     expect(await screen.findByText(/Choose your current stage above/)).toBeInTheDocument();
+    // Professional courses are open to everyone, so they show before any stage is chosen
+    const courses = (await screen.findByRole("heading", { name: "Professional courses – open to everyone" })).closest("section");
+    expect(within(courses).getByRole("link", { name: /Music/ })).toHaveAttribute("href", "/next-steps?stage=EDU_COURSE_MUSIC");
     await userEvent.selectOptions(await screen.findByLabelText("Where are you now?"), "EDU_BTECH_CSE");
     expect(await screen.findByRole("heading", { level: 2, name: "B.Tech – Computer Science" })).toBeInTheDocument();
     expect(api.getNextSteps).toHaveBeenLastCalledWith("EDU_BTECH_CSE", expect.anything());

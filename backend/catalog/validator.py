@@ -209,6 +209,19 @@ def check_logic(tables: dict[str, list[dict[str, str]]], report: Report) -> None
         if row.get("stage_id") not in starts:
             report.warn("education_stages.csv", None, f"stage '{row.get('stage_id')}' has no outgoing path yet")
 
+    # Professional courses (music, dance, design, ...) are open to everyone: every stage must offer all of them
+    stages = tables.get("education_stages.csv", [])
+    courses = {r.get("stage_id", "") for r in stages if r.get("level") == "course"}
+    offered: dict[str, set[str]] = defaultdict(set)
+    for r in tables.get("education_paths.csv", []):
+        if r.get("to_type") == "education" and r.get("to_id") in courses:
+            offered[r.get("from_stage_id", "")].add(r["to_id"])
+    for row in stages:
+        sid = row.get("stage_id", "")
+        if row.get("level") != "course" and courses - offered[sid]:
+            report.error("education_paths.csv", None, f"stage '{sid}' is missing professional courses: "
+                         + ", ".join(sorted(courses - offered[sid])))
+
     # Reliability: unverified exam info must link to the official source
     for line, row in enumerate(tables.get("entrance_exams.csv", []), start=2):
         if row.get("verified") == "false" and not row.get("official_url"):

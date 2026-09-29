@@ -120,10 +120,13 @@ def test_professional_courses_are_their_own_group(catalog):
     assert "CAR_STANDUP_COMEDIAN" in {c["id"] for c in performing["opens"]["careers"]}
 
 
-def test_courses_open_from_school_and_work_too(catalog):
-    for stage_id in ("EDU_CLASS_10", "EDU_12_HUMANITIES", "EDU_BA", "EDU_WORKING_NONTECH"):
-        groups = next_steps(catalog, stage_id, UserContext())["groups"]
-        assert {o["target_id"] for o in groups["course"]} == COURSE_STAGES, stage_id
+def test_courses_are_open_to_everyone(catalog):
+    """Every stage (school, diploma, bachelor's, master's, PhD, working) offers all seven professional courses."""
+    stages = [s for s in catalog.stages.values() if s.level != "course"]
+    assert {s.level for s in stages} == {"school", "diploma", "ug", "pg", "doctoral", "professional"}
+    for stage in stages:
+        groups = next_steps(catalog, stage.stage_id, UserContext())["groups"]
+        assert {o["target_id"] for o in groups["course"]} == COURSE_STAGES, stage.stage_id
     # a course leads straight to its careers, and needs no degree
     careers = next_steps(catalog, "EDU_COURSE_WRITING", UserContext())["groups"]["career"]
     assert {o["target_id"] for o in careers} == {"CAR_POET_LYRICIST", "CAR_CONTENT_WRITER"}

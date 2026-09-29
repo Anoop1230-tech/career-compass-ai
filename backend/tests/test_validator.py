@@ -133,3 +133,13 @@ def test_too_few_questions_for_a_scale(data_copy):
     lines = [l for l in path.read_text(encoding="utf-8").splitlines() if not l.startswith("IQ_C0")]
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     assert "type 'C' has 0 questions" in errors_for(data_copy)
+
+
+def test_every_stage_must_offer_every_professional_course(data_copy):
+    # A new stage that only leads to a degree, with none of the courses, is an error
+    append(data_copy / "education_stages.csv", "EDU_TEST_NEW,Test stage,ug,,3,A new degree added later")
+    append(data_copy / "education_paths.csv",
+           "EP_999,EDU_TEST_NEW,education,EDU_MBA,,Any degree,2,,,false,,2026-09-29")
+    errors = errors_for(data_copy)
+    assert "stage 'EDU_TEST_NEW' is missing professional courses" in errors
+    assert "EDU_COURSE_MUSIC" in errors

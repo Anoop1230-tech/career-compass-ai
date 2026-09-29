@@ -39,7 +39,7 @@ describe("App shell", () => {
     renderAt("/");
     const section = (await screen.findByRole("heading", { name: "Careers beyond a degree" })).closest("section");
     for (const name of [/Music & singing/, /Dance/, /Design/, /Writing & poetry/, /Acting & comedy/, /Film, photo & video/,
-      /Cooking, fitness & beauty/, /Courses from my stage/]) {
+      /Cooking, fitness & beauty/, /All professional courses/]) {
       expect(within(section).getByRole("link", { name })).toBeInTheDocument();
     }
     expect(within(section).getByRole("link", { name: /Acting & comedy/ })).toHaveAttribute("href", "/careers?q=Performing+Arts");

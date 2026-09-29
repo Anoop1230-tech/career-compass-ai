@@ -131,6 +131,14 @@ test("a B.Tech student finds professional courses and creative careers", async (
   await page.getByRole("link", { name: /Singer/ }).first().click();
   await expect(page.getByRole("heading", { level: 1, name: "Singer" })).toBeVisible();
   await expect(page.getByText("No degree needed").first()).toBeVisible();
+
+  // Open to everyone: an MBA or PhD student gets the same seven courses, and so does a visitor with no stage
+  for (const stage of ["EDU_MBA", "EDU_PHD_CS", "EDU_CLASS_10"]) {
+    await page.goto(`/next-steps?stage=${stage}`);
+    await expect(page.getByRole("button", { name: /Professional courses/ })).toContainText("7");
+  }
+  await page.goto("/next-steps");
+  await expect(page.getByRole("heading", { name: "Professional courses – open to everyone" })).toBeVisible();
 });
 
 test("dream career checker uses the profile and explains the verdict", async ({ page }) => {

@@ -136,8 +136,9 @@ export default function HomePage() {
           <div className="section__intro">
             <h2 id="creative-title">Careers beyond a degree</h2>
             <p className="muted">
-              Talent and practice count more than marks here. Start a professional course alongside your studies, or
-              instead of them if you are not continuing. Every option shows the skills to learn and how people get in.
+              Talent and practice count more than marks here, and these courses are open to everyone: school students,
+              college and master's students, working people, and anyone who is not studying right now. Every option shows
+              the skills to learn and how people get in.
             </p>
           </div>
           <ul className="stage-grid">
@@ -161,8 +162,8 @@ export default function HomePage() {
                   <Icon name="steps" />
                 </span>
                 <span>
-                  <strong>Courses from my stage</strong>
-                  <span className="muted">See the professional courses open to you now</span>
+                  <strong>All professional courses</strong>
+                  <span className="muted">Open to everyone, at any stage of life</span>
                 </span>
                 <Icon name="arrow" size={18} className="icon stage-card__go" />
               </Link>
