@@ -109,6 +109,7 @@ Loading is safe: invalid data changes nothing, the load is all-or-nothing, and u
 | PUT | /api/roadmap/{career_id}/skills/{skill_id} | yes | Mark a roadmap skill as learned or not |
 | GET | /api/explore?stage= | optional | Career tree root |
 | GET | /api/explore/{kind}/{id} | no | Children of a tree node |
+| GET | /api/resources/exams, /colleges, /universities, /scholarships | optional | Filterable lists with official links (for_me=true uses your stage) |
 | GET | /api/next-steps?stage= | optional | Next steps from a stage (profile stage when logged in) |
 
 `kind` is `interest`, `personality` or `aptitude`. Assessment results are for self-reflection and career guidance, not clinical or professional psychological assessments.

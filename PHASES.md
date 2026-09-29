@@ -16,8 +16,8 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 8 | Skill Gap Analysis | Your skills vs target career skills, prioritized gaps | ✅ |
 | 9 | Transition Engine and Dream Career Checker | "I am X, can I become Y?" analysis | ✅ |
 | 10 | Roadmap Generator and Career Explorer | Stage-wise roadmap that skips what you know; interactive career tree | ✅ |
-| 11 | Exams, colleges and scholarships | Filterable lists with official source links and "last verified" dates | ⬜ next |
-| 12 | AI Career Mentor | Chat assistant that uses your profile and roadmap as context | ⬜ |
+| 11 | Exams, colleges and scholarships | Filterable lists with official source links and "last verified" dates | ✅ |
+| 12 | AI Career Mentor | Chat assistant that uses your profile and roadmap as context | ⬜ next |
 | 13 | ML evaluation | Compare ML models against the rule-based engine; keep ML only if it is genuinely better | ⬜ |
 | 14 | Hardening and final testing | Full test run, accessibility and performance checks, error handling review | ⬜ |
 | 15 | Deployment | PostgreSQL, production build, hosting, HTTPS | ⬜ |
@@ -184,3 +184,19 @@ Known limits: routes only use the connections recorded in the datasets; "hard" m
 Result: 237 backend tests, 88 frontend unit tests, 84 browser tests passing; lint 0 warnings.
 
 Known limits: roadmap items are skills from the datasets (no course links yet – courses.csv is still empty); ticking a skill does not change the profile skill level.
+
+---
+
+## Phase 11 – Exams, colleges and scholarships – ✅ done
+
+- 11.1 New datasets with validator rules and database tables: 10 universities, 20 institutes (IITs, NITs, IIITs, IISc, IIMs, university departments), 11 scholarships (NSP, Central Sector Scheme, AICTE Pragati/Saksham/PG, INSPIRE-SHE, PMRF, UGC-NET JRF, PM Scholarship Scheme, Post Matric SC, Reliance Foundation UG)
+- 11.2 Data honesty: every entry has an official https link and a last-checked date; scholarships are marked "not yet verified"; fees, NIRF ranks and amounts are left empty instead of guessed
+- 11.3 Link checker run: 68 OK, 7 warnings (sites with incomplete certificate chains or that block automated checks), 0 dead links; the PM Scholarship link now points to the National Scholarship Portal where applications happen
+- 11.4 API /api/resources/filters|exams|colleges|universities|scholarships with search, state, type, exam, programme and "only for my stage" filters
+- 11.5 "Exams & Colleges" page with three tabs, filters kept in the URL
+- 11.6 Fixed a crash found by the tests: switching tabs could briefly render old data with the new layout (fixed once in the shared data hook for every page)
+- 11.7 Tests: 5 backend, 3 unit, 1 browser
+
+Result: 242 backend tests, 90 frontend unit tests, 86 browser tests passing; lint 0 warnings; validator 0 errors.
+
+Known limits: a starter list, not a full directory; courses and certifications datasets are still empty.
