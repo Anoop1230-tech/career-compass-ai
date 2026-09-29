@@ -37,7 +37,7 @@ describe("App shell", () => {
 
   it("home page shows the hero illustration with a text description", async () => {
     renderAt("/");
-    expect(await screen.findByRole("img", { name: /runner on a winding track around a large compass/ })).toBeInTheDocument();
+    expect(await screen.findByRole("img", { name: /student at a signpost choosing between career paths/ })).toBeInTheDocument();
   });
 
   it("home page shows careers beyond a degree", async () => {
