@@ -1,0 +1,74 @@
+{
+  "setup": {
+    "careers": 34,
+    "train_personas": 2040,
+    "test_personas_per_set": {
+      "held-out": 680,
+      "shifted": 680
+    },
+    "features": 214,
+    "seed": 7,
+    "min_win_top3_points": 5.0
+  },
+  "results": {
+    "rule_engine": {
+      "held-out": {
+        "top1": 94.0,
+        "top3": 98.4,
+        "mrr": 0.964
+      },
+      "shifted": {
+        "top1": 78.8,
+        "top3": 92.2,
+        "mrr": 0.861
+      }
+    },
+    "logistic_regression": {
+      "held-out": {
+        "top1": 95.7,
+        "top3": 99.9,
+        "mrr": 0.977
+      },
+      "shifted": {
+        "top1": 81.6,
+        "top3": 95.0,
+        "mrr": 0.886
+      }
+    },
+    "random_forest": {
+      "held-out": {
+        "top1": 97.8,
+        "top3": 99.9,
+        "mrr": 0.988
+      },
+      "shifted": {
+        "top1": 81.0,
+        "top3": 94.9,
+        "mrr": 0.882
+      }
+    },
+    "k_nearest_neighbours": {
+      "held-out": {
+        "top1": 71.8,
+        "top3": 86.6,
+        "mrr": 0.802
+      },
+      "shifted": {
+        "top1": 48.1,
+        "top3": 72.2,
+        "mrr": 0.625
+      }
+    }
+  },
+  "seconds": {
+    "rule_engine": 6.17,
+    "logistic_regression": 0.54,
+    "random_forest": 1.79,
+    "k_nearest_neighbours": 0.33
+  },
+  "decision": {
+    "keep": "rule_engine",
+    "reason": "No model beat the rules by 5.0 points on every test set. The best model (logistic_regression) is slightly better than the rules (worst-case margin +1.5 points), which is too small to give up explainable scores that need no training data. The rule engine stays."
+  },
+  "caveat": "Labels are synthetic (generated from each career's own profile), not real career outcomes."
+}
