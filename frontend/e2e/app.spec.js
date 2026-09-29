@@ -7,7 +7,7 @@ const ROUTES = [
   ["/careers", "Careers"],
   ["/roadmap", "Career roadmap"],
   ["/resources", "Exams, colleges and scholarships"],
-  ["/mentor", "AI Career Mentor"],
+  ["/mentor", "Log in"], // login required
   ["/login", "Log in"],
   ["/register", "Create your account"],
   ["/no-such-page", "Page not found"],

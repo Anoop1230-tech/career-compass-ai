@@ -181,3 +181,28 @@ test("exams, colleges and scholarships with filters", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 3, name: "AICTE Pragati Scholarship for Girl Students" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 3, name: "Prime Minister's Research Fellowship" })).toHaveCount(0);
 });
+
+test("mentor answers from the profile and remembers the conversation", async ({ page }) => {
+  await loginWithProfile(page);
+  await page.goto("/mentor");
+  const log = page.getByRole("list", { name: "Conversation" });
+  await page.getByLabel("Your question").fill("Can I become a data scientist?");
+  await page.getByRole("button", { name: "Send" }).click();
+  await expect(log.getByText(/direct route/)).toBeVisible();
+  await expect(log.getByRole("link", { name: "Full dream check" })).toBeVisible();
+
+  // Follow-up without naming the career
+  await page.getByLabel("Your question").fill("what skills should I learn first?");
+  await page.keyboard.press("Enter");
+  await expect(log.getByText(/For Data Scientist you are about \d+% ready/)).toBeVisible();
+
+  // Suggestion chip, then reload keeps history
+  await page.getByRole("button", { name: /^Roadmap for Data Scientist$/ }).click();
+  await expect(log.getByText("Your roadmap to Data Scientist:", { exact: false })).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole("list", { name: "Conversation" }).getByText("Can I become a data scientist?")).toBeVisible();
+
+  page.once("dialog", (d) => d.accept());
+  await page.getByRole("button", { name: "Clear conversation" }).click();
+  await expect(page.getByText(/Ask me anything/)).toBeVisible();
+});

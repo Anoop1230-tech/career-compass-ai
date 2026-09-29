@@ -2,13 +2,11 @@ import { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { PAGES } from "./navigation";
 // Home is the landing page: load it immediately so the first paint has content.
 import HomePage from "./pages/HomePage";
 
 // Lazy loading: other pages download only when first opened,
 // so the first visit stays small and fast.
-const ComingSoonPage = lazy(() => import("./pages/ComingSoonPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const AuthPage = lazy(() => import("./pages/AuthPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
@@ -25,6 +23,7 @@ const DreamCheckPage = lazy(() => import("./pages/DreamCheckPage"));
 const RoadmapPage = lazy(() => import("./pages/RoadmapPage"));
 const ExplorePage = lazy(() => import("./pages/ExplorePage"));
 const ResourcesPage = lazy(() => import("./pages/ResourcesPage"));
+const MentorPage = lazy(() => import("./pages/MentorPage"));
 
 export default function AppRoutes() {
   return (
@@ -44,16 +43,10 @@ export default function AppRoutes() {
         <Route path="/roadmap" element={<RoadmapPage />} />
         <Route path="/explore" element={<ExplorePage />} />
         <Route path="/resources" element={<ResourcesPage />} />
+        <Route path="/mentor" element={<ProtectedRoute><MentorPage /></ProtectedRoute>} />
         <Route path="/dream-check" element={<DreamCheckPage />} />
         <Route path="/skill-gap" element={<ProtectedRoute><SkillGapPage /></ProtectedRoute>} />
         <Route path="/for-you" element={<ProtectedRoute><RecommendationsPage /></ProtectedRoute>} />
-        {PAGES.map((page) => (
-          <Route
-            key={page.path}
-            path={page.path}
-            element={<ComingSoonPage title={page.title} description={page.description} phase={page.phase} />}
-          />
-        ))}
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

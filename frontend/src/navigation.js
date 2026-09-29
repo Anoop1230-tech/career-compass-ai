@@ -1,17 +1,4 @@
-// Single source of truth for pages: the header, the router and the
-// placeholder pages all read from this list.
-export const PAGES = [
-  {
-    path: "/mentor",
-    label: "Mentor",
-    inNav: true,
-    phase: 12,
-    title: "AI Career Mentor",
-    description:
-      "Ask career questions and get answers that use your profile and roadmap as context.",
-  },
-];
-
+// Single source of truth for the main menu: the header reads this list.
 export const NAV_ITEMS = [
   { path: "/for-you", label: "For You" },
   { path: "/careers", label: "Careers" },
@@ -19,5 +6,5 @@ export const NAV_ITEMS = [
   { path: "/assessments", label: "Assessments" },
   { path: "/roadmap", label: "Roadmap" },
   { path: "/resources", label: "Exams & Colleges" },
-  ...PAGES.filter((page) => page.inNav),
+  { path: "/mentor", label: "Mentor" },
 ];

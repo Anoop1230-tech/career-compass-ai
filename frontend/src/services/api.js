@@ -112,4 +112,11 @@ export const getResourceFilters = async () => (await api.get("/resources/filters
 export const getResources = async (kind, params, signal) =>
   (await api.get(`/resources/${kind}`, { params: clean(params), signal })).data;
 
+export const getMentorHistory = async () => (await api.get("/mentor/history")).data;
+export const sendMentorMessage = async (message) =>
+  (await api.post("/mentor/chat", { message }, { timeout: 30000 })).data;
+export const clearMentorHistory = async () => {
+  await api.delete("/mentor/history");
+};
+
 export default api;

@@ -1,7 +1,7 @@
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it } from "vitest";
-import { NAV_ITEMS, PAGES } from "./navigation";
+import { NAV_ITEMS } from "./navigation";
 import * as api from "./services/api";
 import { mockApi, renderApp as renderAt } from "./test/utils";
 
@@ -23,17 +23,13 @@ describe("App shell", () => {
     }
   });
 
-  it.each(PAGES.map((p) => [p.path, p.title]))("route %s renders its page", async (path, title) => {
-    renderAt(path);
-    expect(await screen.findByRole("heading", { level: 1, name: title })).toBeInTheDocument();
-  });
 
   it("navigates when a nav link is clicked", async () => {
     const user = userEvent.setup();
     renderAt("/");
     const nav = await screen.findByRole("navigation", { name: "Main" });
-    await user.click(within(nav).getByRole("link", { name: "Mentor" }));
-    expect(await screen.findByRole("heading", { level: 1, name: "AI Career Mentor" })).toBeInTheDocument();
+    await user.click(within(nav).getByRole("link", { name: "Careers" }));
+    expect(await screen.findByRole("heading", { level: 1, name: "Careers" })).toBeInTheDocument();
   });
 
   it("shows a 404 page for unknown routes", async () => {
