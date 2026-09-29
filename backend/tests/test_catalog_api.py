@@ -40,7 +40,7 @@ def test_skill_category_filter_and_limit(api):
 
 def test_career_list_search_filter_and_paging(api):
     all_careers = api.get("/api/catalog/careers").json()
-    assert all_careers["total"] == 55
+    assert all_careers["total"] == 59
     assert {"Technology", "Creative Arts", "Vocational"} <= set(all_careers["domains"])
     creative = api.get("/api/catalog/careers?domain=Creative+Arts&limit=50").json()
     assert creative["total"] == 18
@@ -59,7 +59,7 @@ def test_career_list_search_filter_and_paging(api):
     assert "Accountant" in {c["name"] for c in commerce["items"]}
 
     page = api.get("/api/catalog/careers?limit=10&offset=50").json()
-    assert page["total"] == 55 and len(page["items"]) == 5
+    assert page["total"] == 59 and len(page["items"]) == 9
 
 
 def test_no_results_is_empty_not_error(api):

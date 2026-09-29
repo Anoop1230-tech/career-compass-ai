@@ -136,3 +136,17 @@ def test_explore_api(api, make_user):
     client = make_user()
     client.put("/api/profile", json=valid_profile())
     assert client.get("/api/explore").json()["root"]["id"] == "EDU_BTECH_CSE"
+
+
+
+def test_school_teacher_leads_to_suitable_careers(catalog):
+    """A teacher's next steps are school and learning roles, not engineering jobs."""
+    kids = children(catalog, "career", "CAR_SCHOOL_TEACHER")
+    ids = {k["id"] for k in kids}
+    assert {"CAR_SCHOOL_PRINCIPAL", "CAR_SPECIAL_EDUCATOR", "CAR_SCHOOL_COUNSELLOR", "CAR_INSTRUCTIONAL_DESIGNER",
+            "CAR_CONTENT_WRITER", "CAR_CONTENT_CREATOR", "CAR_CIVIL_SERVICES", "CAR_FITNESS_TRAINER"} == ids
+    assert all(catalog.careers[i].domain != "Technology" for i in ids)
+    principal = next(k for k in kids if k["id"] == "CAR_SCHOOL_PRINCIPAL")
+    assert principal["edge"]["label"] == "Management" and principal["edge"]["experience"] == "8-15"
+    labels = [k["edge"]["label"] for k in kids]
+    assert labels.index("Switch") == 4 and set(labels[4:]) == {"Switch"}  # school roles first, then switches

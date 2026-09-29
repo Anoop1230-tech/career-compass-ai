@@ -17,13 +17,13 @@ test.afterEach(async ({}, testInfo) => {
 
 test("browse, search and filter careers", async ({ page }) => {
   await page.goto("/careers");
-  await expect(page.getByText("55 careers found")).toBeVisible();
+  await expect(page.getByText("59 careers found")).toBeVisible();
 
   // Grouped by field, all on one page, in a fixed order
   const main = page.getByRole("main");
   await expect(main.getByRole("heading", { level: 2 })).toHaveText([
-    "Technology 24", "Business 3", "Finance 2", "Government 3", "Education 2", "Creative Arts 18", "Vocational 3"]);
-  await expect(main.getByRole("heading", { level: 3 })).toHaveCount(55);
+    "Technology 24", "Business 3", "Finance 2", "Government 3", "Education 6", "Creative Arts 18", "Vocational 3"]);
+  await expect(main.getByRole("heading", { level: 3 })).toHaveCount(59);
   await page.getByRole("navigation", { name: "Jump to a category" }).getByRole("link", { name: /Creative Arts/ }).click();
   await expect(page).toHaveURL(/#field-creative-arts$/);
   await expect(page.getByRole("heading", { level: 2, name: /Creative Arts/ })).toBeInViewport();
@@ -74,7 +74,7 @@ test("every career page opens without errors", async ({ page, request, isMobile 
   test.skip(isMobile, "one pass is enough; layout is covered by other tests");
   test.setTimeout(150_000);
   const list = await (await request.get("/api/catalog/careers?limit=100")).json();
-  expect(list.total).toBe(55);
+  expect(list.total).toBe(59);
   for (const career of list.items) {
     await page.goto(`/careers/${career.career_id}`);
     await expect(page.getByRole("heading", { level: 1, name: career.name })).toBeVisible();

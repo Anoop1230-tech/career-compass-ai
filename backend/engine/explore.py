@@ -64,5 +64,6 @@ def children(catalog: Catalog, kind: str, node_id: str) -> list[dict]:
                                  "months": f"{t.estimated_months_min}–{t.estimated_months_max}"}
                 result.append(child)
     order = {"stage": 0, "career": 1, "exam": 2}
-    result.sort(key=lambda c: (order[c["type"]], c["title"]))
+    # Normal next roles (promotion, specialisation, management, lateral) before switches to other fields
+    result.sort(key=lambda c: (order[c["type"]], c.get("edge", {}).get("label") == "Switch", c["title"]))
     return result

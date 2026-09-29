@@ -162,7 +162,7 @@ def test_api_returns_ranked_explained_list(api, make_user):
     client = make_user()
     client.put("/api/profile", json=valid_profile())
     body = client.get("/api/recommendations?limit=5").json()
-    assert len(body["items"]) == 5 and body["total"] == 55
+    assert len(body["items"]) == 5 and body["total"] == 59
     scores = [i["score"] for i in body["items"]]
     assert scores == sorted(scores, reverse=True)
     assert body["stage"]["stage_id"] == "EDU_BTECH_CSE"
@@ -172,7 +172,7 @@ def test_api_returns_ranked_explained_list(api, make_user):
     assert len(first["components"]) == 6 and first["strengths"]
 
     one = client.get(f"/api/recommendations/{first['career_id']}").json()
-    assert one["rank"] == 1 and one["out_of"] == 55 and one["score"] == first["score"]
+    assert one["rank"] == 1 and one["out_of"] == 59 and one["score"] == first["score"]
     assert client.get("/api/recommendations/CAR_NOPE").status_code == 404
     assert client.get("/api/recommendations?limit=0").status_code == 422
 

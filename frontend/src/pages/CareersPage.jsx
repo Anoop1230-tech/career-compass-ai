@@ -11,7 +11,7 @@ const CATEGORIES = [
   { name: "Business", text: "Product, analysis, management and starting your own business." },
   { name: "Finance", text: "Accounts, audit and financial analysis." },
   { name: "Government", text: "Civil services, public sector and banking jobs through exams." },
-  { name: "Education", text: "Teaching in schools and colleges." },
+  { name: "Education", text: "Teaching, school leadership, special education, counselling and learning design." },
   { name: "Creative Arts", text: "Music, dance, design, writing, acting, comedy, film and media. No degree needed." },
   { name: "Vocational", text: "Hands-on skill careers: cooking, fitness and beauty. No degree needed." },
 ];

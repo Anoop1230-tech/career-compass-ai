@@ -325,3 +325,15 @@ Known limits: courses are described by type, not as a list of specific academies
 - 18.6 Tests: theme unit tests (saved value, Match device, picker); browser tests for axe scans of 8 pages in Dark and in High contrast, saving and restoring the theme, Match device, scroll reveal leaving nothing hidden, and reduced motion. An aptitude test now picks answers inside the page, not the theme radios in the menu
 
 Result: lint 0 warnings; 112 frontend unit tests, 109 browser tests passing (5 skipped by design).
+
+
+### Fix – suitable next steps for School Teacher (2026-09-30)
+
+A BA → School Teacher route used to lead to Data Analyst and then to Data Engineer and Data Scientist, which does not suit most teachers. Changes:
+
+- 4 new education careers (Education domain, O*NET sources): School Principal, Special Educator, School Counsellor, Instructional Designer; 8 new skills (lesson planning, classroom management, school administration, special education, counselling, child psychology, instructional design, e-learning tools); School Teacher gains lesson planning and classroom management
+- From School Teacher: Principal (management, 8–15 years), Special Educator and School Counsellor (specialisation), Instructional Designer (lateral); switches to Content Writer, Content Creator (online teaching), Civil Services (UPSC) and Fitness Trainer. The Data Analyst switch was removed
+- Entry paths from BA (and B.Com for Instructional Designer) with honest eligibility, e.g. RCI-recognised special education B.Ed, MA in counselling psychology
+- Career Tree lists normal next roles before switches; the mentor recognises principal, counsellor, special educator and instructional designer
+
+Result: validator 0 errors and 0 warnings (59 careers, 198 skills, 443 career-skill links, 244 education paths, 51 progressions, 27 switches); link check 97 OK, 0 failed; 293 backend, 112 frontend unit and 109 browser tests passing.

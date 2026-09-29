@@ -51,7 +51,8 @@ def test_career_chain(catalog):
 @pytest.mark.parametrize("to, kw, verdict", [
     ("CAR_SOFTWARE_ENGINEER", {"from_stage": "EDU_BTECH_CSE"}, "direct"),
     ("CAR_DATA_SCIENTIST", {"from_stage": "EDU_12_PCM"}, "achievable"),
-    ("CAR_DATA_ANALYST", {"from_career": "CAR_SCHOOL_TEACHER"}, "achievable"),
+    ("CAR_CONTENT_WRITER", {"from_career": "CAR_SCHOOL_TEACHER"}, "achievable"),
+    ("CAR_SCHOOL_PRINCIPAL", {"from_career": "CAR_SCHOOL_TEACHER"}, "direct"),
     ("CAR_ENGINEERING_MANAGER", {"from_career": "CAR_SOFTWARE_ENGINEER"}, "direct"),
     ("CAR_SOFTWARE_ENGINEER", {"from_stage": "EDU_12_PCB"}, "not_direct"),
     ("CAR_AI_RESEARCH_SCIENTIST", {"from_stage": "EDU_BCOM"}, "not_direct"),
@@ -71,8 +72,8 @@ def test_details_of_an_achievable_route(catalog):
     assert any("bachelor's" in b for b in r["blockers"])
     assert r["alternatives"] == []  # only offered when the dream is hard
 
-    switch = check(catalog, "CAR_DATA_ANALYST", from_career="CAR_SCHOOL_TEACHER")["switch"]
-    assert switch["months_min"] == 6 and switch["steps"] and "SQL" in switch["skills_missing"]
+    switch = check(catalog, "CAR_CONTENT_WRITER", from_career="CAR_SCHOOL_TEACHER")["switch"]
+    assert switch["months_min"] == 3 and switch["steps"] and "Storytelling" in switch["skills_missing"]
 
 
 def test_alternatives_for_hard_dreams(catalog):

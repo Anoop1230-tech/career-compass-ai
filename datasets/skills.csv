@@ -189,3 +189,11 @@ SKL_YOGA,Yoga,domain,Fitness,yoga|pranayama|asanas,Practising and teaching yoga 
 SKL_NUTRITION,Nutrition basics,domain,Fitness,diet|diet planning|nutrition,Food diet and healthy eating basics
 SKL_FIRST_AID,First aid and CPR,domain,Fitness,cpr|first aid,Responding safely to injuries and emergencies
 SKL_MAKEUP,Makeup artistry,domain,Beauty,makeup|bridal makeup|hair styling|beauty|makeup artist,Makeup and styling for events camera and stage
+SKL_LESSON_PLANNING,Lesson planning,domain,Education,lesson plans|curriculum planning|syllabus planning,Planning lessons activities and assessments for a class
+SKL_CLASSROOM_MGMT,Classroom management,soft,Education,classroom management|class discipline,Keeping a class engaged organised and safe
+SKL_SCHOOL_ADMIN,School administration,management,Education,school management|academic administration,Running admissions timetables staff and board compliance
+SKL_SPECIAL_EDUCATION,Special education,domain,Education,special needs education|inclusive education|iep|learning disabilities,Teaching children with disabilities and learning differences
+SKL_COUNSELLING,Counselling,domain,Psychology,counseling|guidance counselling|career counselling,Listening to and guiding students on personal study and career issues
+SKL_CHILD_PSYCHOLOGY,Child and adolescent psychology,domain,Psychology,child psychology|developmental psychology|adolescent psychology,How children and teenagers think feel and develop
+SKL_INSTRUCTIONAL_DESIGN,Instructional design,domain,Education,instructional design|e-learning design|learning design|addie,Designing courses and learning material that people can follow on their own
+SKL_ELEARNING_TOOLS,E-learning tools,technical,Education,articulate storyline|articulate 360|moodle|google classroom|learning management system,Authoring tools and learning platforms for online courses
