@@ -18,8 +18,8 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 10 | Roadmap Generator and Career Explorer | Stage-wise roadmap that skips what you know; interactive career tree | ✅ |
 | 11 | Exams, colleges and scholarships | Filterable lists with official source links and "last verified" dates | ✅ |
 | 12 | AI Career Mentor | Chat assistant that uses your profile and roadmap as context | ✅ |
-| 13 | ML evaluation | Compare ML models against the rule-based engine; keep ML only if it is genuinely better | ⬜ next |
-| 14 | Hardening and final testing | Full test run, accessibility and performance checks, error handling review | ⬜ |
+| 13 | ML evaluation | Compare ML models against the rule-based engine; keep ML only if it is genuinely better | ✅ |
+| 14 | Hardening and final testing | Full test run, accessibility and performance checks, error handling review | ⬜ next |
 | 15 | Deployment | PostgreSQL, production build, hosting, HTTPS | ⬜ |
 
 ---
@@ -217,3 +217,27 @@ Known limits: a starter list, not a full directory; courses and certifications d
 Result: 265 backend tests, 94 frontend unit tests, 88 browser tests passing; lint 0 warnings.
 
 Known limits: the offline mentor matches keywords, so unusual phrasing may get the "I'm not sure" answer with suggestions; English only.
+
+---
+
+## Phase 13 – ML evaluation – ✅ done
+
+- 13.1 Evaluation harness `python -m ml.evaluate` (backend): synthetic personas generated from each career's profile with random noise; 2,040 training personas, two test sets of 680 (held-out = same noise, shifted = more noise and misleading interest profiles)
+- 13.2 Compared the rule engine with three scikit-learn models (logistic regression, random forest, k-nearest neighbours) on top-1 accuracy, top-3 accuracy and mean reciprocal rank
+- 13.3 Decision rule fixed before running: ML replaces the rules only if it wins by 5+ points of top-3 accuracy on both test sets
+- 13.4 Tests: 4 backend (deterministic personas, metrics, decision rule, end-to-end run)
+
+| Model | Test set | Top-1 % | Top-3 % | MRR |
+|---|---|---|---|---|
+| rule_engine | held-out | 94.0 | 98.4 | 0.964 |
+| rule_engine | shifted | 78.8 | 92.2 | 0.861 |
+| logistic_regression | held-out | 95.7 | 99.9 | 0.977 |
+| logistic_regression | shifted | 81.6 | 95.0 | 0.886 |
+| random_forest | held-out | 97.8 | 99.9 | 0.988 |
+| random_forest | shifted | 81.0 | 94.9 | 0.882 |
+| k_nearest_neighbours | held-out | 71.8 | 86.6 | 0.802 |
+| k_nearest_neighbours | shifted | 48.1 | 72.2 | 0.625 |
+
+**Decision: keep the rule engine.** No model beat the rules by 5.0 points on every test set. The best model (logistic_regression) is slightly better than the rules (worst-case margin +1.5 points), which is too small to give up explainable scores that need no training data. The rule engine stays.
+
+Caveat: labels are synthetic, not real career outcomes, so these numbers only show the engine ranks sensibly. Collecting real, consented feedback ("did this recommendation fit you?") is needed before any model could be trusted.
