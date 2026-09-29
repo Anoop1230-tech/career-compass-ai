@@ -1,6 +1,7 @@
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import useScrollReveal from "../hooks/useScrollReveal";
 import ErrorBoundary from "./ErrorBoundary";
 import Footer from "./Footer";
 import Header from "./Header";
@@ -16,6 +17,8 @@ function PageLoader() {
 export default function Layout() {
   const { pathname } = useLocation();
   const { loggedOut, clearLoggedOut } = useAuth();
+  const mainRef = useRef(null);
+  useScrollReveal(mainRef, pathname);
 
   // Start each new page at the top
   useEffect(() => {
@@ -34,7 +37,7 @@ export default function Layout() {
       </a>
       <Header />
       <div className="app__body">
-        <main id="main" className="main" tabIndex={-1}>
+        <main id="main" className="main" tabIndex={-1} ref={mainRef}>
           {/* key={pathname}: a new page remounts, which resets a crashed page
               and replays the short entrance animation (.page-enter) */}
           <ErrorBoundary key={pathname}>

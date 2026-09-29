@@ -23,6 +23,7 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 15 | Deployment | PostgreSQL, production build, hosting, HTTPS | ✅ |
 | 16 | Guided dashboard and UI redesign | Dashboard with "what to do next", grouped sidebar navigation, new warm design, smooth transitions | ✅ |
 | 17 | Creative and skill-based careers | Professional courses (music, dance, design, writing, acting and comedy, film, culinary, fitness, beauty) and 21 careers that need no degree | ✅ |
+| 18 | Themes and motion | Light, Dark, High contrast and Match device themes; home illustration with day and night scenes; scroll reveal and hover animations | ✅ |
 
 ---
 
@@ -34,7 +35,8 @@ Updated in Phase 16 (UI redesign). The old "neutral grey + top bar" rules are re
 - Type: a classic serif for page and section headings, the system UI font for text. Both are already on the device, so nothing is downloaded.
 - App shell: a fixed sidebar on screens 1024px and wider; a top bar with a slide-in drawer and backdrop on smaller screens. The menu is grouped in the order people use it: Your journey (Dashboard, Next Steps, For You, Roadmap), Explore (Careers, Career Tree, Can I become…?), Prepare (Assessments, Exams & Colleges, Mentor). `src/navigation.js` is the single list the sidebar, home page and dashboard all read.
 - Guided flow: after saving a profile (or logging in with one) users land on the Dashboard, which shows their progress and one "Do this next" action.
-- Motion: short, soft transitions (page slide-in, card lift, drawer slide, staggered list entrance), all switched off when the user prefers reduced motion. Animations never change opacity of content, so contrast checks stay valid.
+- Motion: short, soft transitions (page slide-in, card lift, drawer slide, staggered list entrance, scroll reveal, hero cascade, illustration motion), all switched off when the user prefers reduced motion. Scroll reveal only hides blocks that start below the fold and removes its classes once shown, so content is never left hidden and contrast checks stay valid.
+- Themes: every colour is a CSS variable; Light, Dark and High contrast themes are set with `data-theme` on `<html>` (Match device follows the system settings). New colours must be added as variables in all themes, and every theme must pass the axe scans in `e2e/themes.spec.js`.
 - Visible focus outlines, keyboard accessible, WCAG 2.1 AA contrast (checked by axe-core), no sideways scrolling at any width.
 - Every page loads fast: routes are lazy-loaded, icons are inline SVG, no UI or icon libraries.
 
@@ -310,3 +312,16 @@ For students who want a career built on talent and practice, and for those who a
 Result: validator 0 errors, 0 warnings (29 stages, 55 careers, 190 skills, 419 career-skill links, 240 education paths); link check 92 OK, 7 warnings (unchanged older sites), 0 dead; 291 backend tests, 107 frontend unit tests, 97 browser tests passing; lint 0 warnings.
 
 Known limits: courses are described by type, not as a list of specific academies; salary is intentionally not shown; creative-career eligibility is general guidance marked "not yet verified".
+
+---
+
+## Phase 18 – Themes and motion – ✅ done
+
+- 18.1 All hard-coded colours in `index.css` replaced by variables (on-accent text, soft status colours, dark band colours, overlay, shadows, illustration colours)
+- 18.2 Themes: Light (warm paper), Dark (deep forest night, same green and terracotta accents), High contrast (black on white, 2px borders, underlined text links, strong focus ring) and Match device (follows the system dark mode and "more contrast" settings, and updates live)
+- 18.3 Theme picker in the sidebar and mobile menu: a labelled group of four radio buttons (arrow keys work), saved in `localStorage` (`cc-theme`). `public/theme-init.js` applies the saved theme before the first paint (no white flash); it is a separate file because the CSP blocks inline scripts. Theme changes crossfade
+- 18.4 Home illustration uses theme variables: day scene in Light, a night sky with a moon and twinkling stars in Dark
+- 18.5 Animations: hero text cascade and underline, sign boards swing in, waving flag, drifting clouds, road lane moving, student pointing, scroll reveal of sections and cards (`hooks/useScrollReveal.js`), shine on primary buttons, sliding active-menu marker, icon tiles bounce, progress bars fill. All off with reduced motion
+- 18.6 Tests: theme unit tests (saved value, Match device, picker); browser tests for axe scans of 8 pages in Dark and in High contrast, saving and restoring the theme, Match device, scroll reveal leaving nothing hidden, and reduced motion. An aptitude test now picks answers inside the page, not the theme radios in the menu
+
+Result: lint 0 warnings; 112 frontend unit tests, 109 browser tests passing (5 skipped by design).

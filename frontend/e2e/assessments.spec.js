@@ -63,9 +63,10 @@ test("aptitude: answers are hidden, progress survives reload, review after submi
   expect(body).not.toContain("explanation");
 
   // Answer two questions, then reload: they must still be there
-  await page.getByRole("radio").first().check({ force: true });
+  const answers = page.getByRole("main").getByRole("radio"); // not the theme picker in the menu
+  await answers.first().check({ force: true });
   await page.getByRole("button", { name: "Next" }).click();
-  await page.getByRole("radio").nth(1).check({ force: true });
+  await answers.nth(1).check({ force: true });
   await expect(page.getByText("2 answered")).toBeVisible();
   await page.reload();
   await expect(page.getByText("Question 2 of 40 · 2 answered")).toBeVisible();

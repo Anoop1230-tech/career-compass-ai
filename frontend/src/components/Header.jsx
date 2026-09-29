@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { NAV_GROUPS } from "../navigation";
 import Icon from "./Icon";
+import ThemePicker from "./ThemePicker";
 
 /**
  * App shell navigation.
@@ -97,6 +98,7 @@ export default function Header() {
         </div>
 
         <div className="nav__actions">
+          <ThemePicker />
           {status === "authenticated" ? (
             <div className="user-menu">
               <div className="user-menu__who">
