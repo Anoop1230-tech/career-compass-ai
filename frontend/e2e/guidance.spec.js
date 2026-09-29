@@ -157,3 +157,27 @@ test("explorer expands from class 10 to careers", async ({ page }) => {
   await btech.getByRole("button", { name: "Expand Software Engineer" }).click();
   await expect(page.getByRole("list", { name: "Options after Software Engineer" }).getByText("Backend Developer")).toBeVisible();
 });
+
+test("exams, colleges and scholarships with filters", async ({ page }) => {
+  await loginWithProfile(page);
+  await page.goto("/resources");
+  await expect(page.getByRole("heading", { level: 3, name: "GATE" })).toBeVisible();
+  await page.getByLabel("Only for my stage").click();
+  await expect(page.getByLabel("Only for my stage")).toBeChecked();
+  await expect(page).toHaveURL(/mine=1/);
+  await expect(page.getByRole("heading", { level: 3, name: "JEE Main" })).toHaveCount(0);
+  await expect(page.getByRole("heading", { level: 3, name: "GATE" })).toBeVisible();
+
+  await page.getByRole("button", { name: "Colleges" }).click();
+  await page.getByLabel("State").selectOption("Tamil Nadu");
+  await expect(page.getByRole("heading", { level: 3, name: /Tiruchirappalli/ })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 3, name: /Bombay/ })).toHaveCount(0);
+  await page.getByLabel("Search").fill("guindy");
+  await expect(page.getByText("1 result")).toBeVisible();
+
+  await page.getByRole("button", { name: "Scholarships" }).click();
+  await page.getByLabel("Only for my stage").click();
+  await expect(page.getByLabel("Only for my stage")).toBeChecked();
+  await expect(page.getByRole("heading", { level: 3, name: "AICTE Pragati Scholarship for Girl Students" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 3, name: "Prime Minister's Research Fellowship" })).toHaveCount(0);
+});

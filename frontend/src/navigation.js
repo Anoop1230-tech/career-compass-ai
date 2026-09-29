@@ -2,15 +2,6 @@
 // placeholder pages all read from this list.
 export const PAGES = [
   {
-    path: "/resources",
-    label: "Exams & Colleges",
-    inNav: true,
-    phase: 11,
-    title: "Exams, Colleges & Scholarships",
-    description:
-      "Filterable lists with official source links and the date each entry was last verified.",
-  },
-  {
     path: "/mentor",
     label: "Mentor",
     inNav: true,
@@ -27,5 +18,6 @@ export const NAV_ITEMS = [
   { path: "/next-steps", label: "Next Steps" },
   { path: "/assessments", label: "Assessments" },
   { path: "/roadmap", label: "Roadmap" },
+  { path: "/resources", label: "Exams & Colleges" },
   ...PAGES.filter((page) => page.inNav),
 ];

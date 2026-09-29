@@ -107,4 +107,9 @@ export const getExploreRoot = async (stage, signal) =>
 export const expandExplore = async (kind, id) =>
   (await api.get(`/explore/${kind}/${encodeURIComponent(id)}`)).data;
 
+const clean = (params) => Object.fromEntries(Object.entries(params).filter(([, v]) => v !== "" && v != null && v !== false));
+export const getResourceFilters = async () => (await api.get("/resources/filters")).data;
+export const getResources = async (kind, params, signal) =>
+  (await api.get(`/resources/${kind}`, { params: clean(params), signal })).data;
+
 export default api;

@@ -888,3 +888,12 @@ label.roadmap-item__title { cursor: pointer; }
 .tree-toggle--leaf { border-color: transparent; background: none; cursor: default; }
 .tree-badge--career { color: var(--color-accent); background: var(--color-accent-soft); border-color: #c9daf3; }
 .tree-badge--exam { color: var(--color-warning); background: #fdf8ec; border-color: #ecd9a6; }
+
+.resource-filters { grid-template-columns: 2fr 1fr 1fr auto; }
+.resource-mine { align-self: center; padding-top: var(--space-5); }
+@media (max-width: 860px) { .resource-filters { grid-template-columns: 1fr; } .resource-mine { padding-top: 0; } }
+.resource-card { display: flex; flex-direction: column; gap: var(--space-3); }
+.resource-card > p { margin: 0; }
+.option-card__foot { flex-wrap: wrap; }
+
+.resource-card .option-card__head { flex-direction: column-reverse; align-items: flex-start; gap: var(--space-2); }

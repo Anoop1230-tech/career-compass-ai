@@ -6,7 +6,7 @@ const ROUTES = [
   ["/explore", "Career explorer"],
   ["/careers", "Careers"],
   ["/roadmap", "Career roadmap"],
-  ["/resources", "Exams, Colleges & Scholarships"],
+  ["/resources", "Exams, colleges and scholarships"],
   ["/mentor", "AI Career Mentor"],
   ["/login", "Log in"],
   ["/register", "Create your account"],
