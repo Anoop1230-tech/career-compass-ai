@@ -113,7 +113,10 @@ export default function ProfilePage() {
             </p>
           </div>
           <div className="btn-row">
-            <Link to="/profile/edit" className="btn btn--primary">
+            <Link to="/dashboard" className="btn btn--primary">
+              Dashboard
+            </Link>
+            <Link to="/profile/edit" className="btn btn--secondary">
               Edit profile
             </Link>
             <button type="button" className="btn btn--secondary" onClick={() => {

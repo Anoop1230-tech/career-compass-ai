@@ -102,4 +102,15 @@ describe("Logged in", () => {
     await waitFor(() => expect(within(nav).getByRole("link", { name: "Log in" })).toBeInTheDocument());
     expect(screen.getByRole("heading", { level: 1, name: /where are you now/i })).toBeInTheDocument();
   });
+
+  it("logging out on a protected page goes home; protected pages then ask for login", async () => {
+    mockApi({ loggedIn: true });
+    const user = userEvent.setup();
+    renderApp("/mentor");
+    const nav = await screen.findByRole("navigation", { name: "Main" });
+    await user.click(await within(nav).findByRole("button", { name: "Log out" }));
+    expect(await screen.findByRole("heading", { level: 1, name: /where are you now/i })).toBeInTheDocument();
+    await user.click(within(nav).getByRole("link", { name: "Dashboard" }));
+    expect(await screen.findByRole("heading", { name: "Log in" })).toBeInTheDocument();
+  });
 });

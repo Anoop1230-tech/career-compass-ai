@@ -6,7 +6,7 @@ import { expect, test } from "@playwright/test";
 const PUBLIC_PAGES = ["/", "/careers", "/careers/CAR_DATA_SCIENTIST", "/next-steps?stage=EDU_12_PCM", "/explore",
   "/dream-check?to=CAR_DATA_SCIENTIST&from_stage=EDU_12_PCM", "/roadmap?career=CAR_DATA_ANALYST", "/resources",
   "/resources?tab=colleges", "/resources?tab=scholarships", "/login", "/register", "/no-such-page"];
-const PRIVATE_PAGES = ["/for-you", "/next-steps", "/skill-gap?career=CAR_DATA_SCIENTIST", "/roadmap?career=CAR_ML_ENGINEER",
+const PRIVATE_PAGES = ["/dashboard", "/for-you", "/next-steps", "/skill-gap?career=CAR_DATA_SCIENTIST", "/roadmap?career=CAR_ML_ENGINEER",
   "/assessments", "/assessments/interest", "/assessments/aptitude", "/mentor", "/profile", "/profile/edit"];
 
 async function scan(page, path) {

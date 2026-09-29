@@ -9,6 +9,7 @@ import HomePage from "./pages/HomePage";
 // so the first visit stays small and fast.
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const AuthPage = lazy(() => import("./pages/AuthPage"));
+const DashboardPage = lazy(() => import("./pages/DashboardPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const ProfileEditPage = lazy(() => import("./pages/ProfileEditPage"));
 const CareersPage = lazy(() => import("./pages/CareersPage"));
@@ -32,6 +33,7 @@ export default function AppRoutes() {
         <Route index element={<HomePage />} />
         <Route path="/login" element={<AuthPage mode="login" key="login" />} />
         <Route path="/register" element={<AuthPage mode="register" key="register" />} />
+        <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
         <Route path="/profile/edit" element={<ProtectedRoute><ProfileEditPage /></ProtectedRoute>} />
         <Route path="/careers" element={<CareersPage />} />

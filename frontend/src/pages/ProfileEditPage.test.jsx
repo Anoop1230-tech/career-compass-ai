@@ -88,8 +88,10 @@ describe("Profile form", () => {
       goals: ["job"],
     });
     // Saved -> summary page
-    expect(await screen.findByRole("heading", { level: 1, name: "Asha Verma" })).toBeInTheDocument();
-    expect(screen.getByText("Profile saved.")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { level: 1, name: "Welcome, Asha" })).toBeInTheDocument();
+    expect(screen.getByText("Profile saved. Here's what to do next.")).toBeInTheDocument();
+    // Profile is done, so the next recommended step is an assessment
+    expect(screen.getByRole("region", { name: "Recommended next step" })).toHaveTextContent("Take a short assessment");
   });
 
   it("server validation errors jump to the right step and highlight the field", async () => {
@@ -119,7 +121,7 @@ describe("Profile form", () => {
     expect(screen.getByLabelText(/Full name/)).toHaveValue("Asha Verma");
 
     await user.click(screen.getByRole("button", { name: "Save now" }));
-    expect(await screen.findByRole("heading", { level: 1, name: "Asha Verma" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { level: 1, name: "Welcome, Asha" })).toBeInTheDocument();
   });
 
   it("shows a retry screen when the profile cannot load", async () => {

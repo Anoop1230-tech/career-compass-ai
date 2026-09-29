@@ -1,7 +1,7 @@
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it } from "vitest";
-import { NAV_ITEMS } from "./navigation";
+import { NAV_GROUPS, NAV_ITEMS } from "./navigation";
 import * as api from "./services/api";
 import { mockApi, renderApp as renderAt } from "./test/utils";
 
@@ -21,6 +21,25 @@ describe("App shell", () => {
     for (const item of NAV_ITEMS) {
       expect(within(nav).getByRole("link", { name: item.label })).toBeInTheDocument();
     }
+  });
+
+  it("groups the menu into journey, explore and prepare sections", async () => {
+    renderAt("/");
+    const nav = await screen.findByRole("navigation", { name: "Main" });
+    expect(within(nav).getByRole("link", { name: "Home" })).toHaveAttribute("href", "/");
+    for (const group of NAV_GROUPS) {
+      const section = within(nav).getByRole("group", { name: group.label });
+      expect(within(section).getAllByRole("link").map((a) => a.getAttribute("href"))).toEqual(
+        group.items.map((item) => item.path),
+      );
+    }
+  });
+
+  it("home page lists every feature, grouped the same way as the menu", async () => {
+    renderAt("/");
+    const features = (await screen.findByRole("heading", { name: "Everything in one place" })).closest("section");
+    const hrefs = within(features).getAllByRole("link").map((a) => a.getAttribute("href"));
+    expect(hrefs).toEqual(NAV_ITEMS.map((item) => item.path));
   });
 
 

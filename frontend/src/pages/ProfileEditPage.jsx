@@ -124,7 +124,7 @@ export default function ProfileEditPage() {
       await api.saveProfile(toPayload(form, options));
       markProfileSaved(true);
       setDirty(false);
-      navigate("/profile", { replace: true, state: { saved: true } });
+      navigate("/dashboard", { replace: true, state: { profileJustSaved: true } });
     } catch (err) {
       if (api.isUnauthorized(err)) {
         navigate("/login", { state: { from: "/profile/edit" } });

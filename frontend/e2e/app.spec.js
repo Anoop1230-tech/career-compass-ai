@@ -8,6 +8,7 @@ const ROUTES = [
   ["/roadmap", "Career roadmap"],
   ["/resources", "Exams, colleges and scholarships"],
   ["/mentor", "Log in"], // login required
+  ["/dashboard", "Log in"], // login required
   ["/login", "Log in"],
   ["/register", "Create your account"],
   ["/no-such-page", "Page not found"],
@@ -124,44 +125,62 @@ test("backend down: app shows offline status and does not crash", async ({ page 
 
 
 
-test("header items never wrap onto two lines", async ({ page, isMobile }) => {
-  test.skip(isMobile, "width sweep is desktop only");
-  for (const width of [1440, 1366, 1280, 1101, 1024, 900, 768]) {
-    await page.setViewportSize({ width, height: 800 });
-    await page.goto("/");
-    const wrapped = await page.evaluate(() =>
-      [...document.querySelectorAll(".brand, .nav__link, .header .btn")]
-        .filter((el) => el.offsetParent !== null) // visible only
-        .filter((el) => {
-          const lineHeight = parseFloat(getComputedStyle(el).lineHeight) || 20;
-          return el.getBoundingClientRect().height > lineHeight * 1.8 + 20;
-        })
+// The app shell is a sidebar on wide screens and a top bar + drawer on narrow ones.
+// At every width: each visible shell item stays on one line and inside the shell,
+// and the page never scrolls sideways.
+async function checkShell(page, width) {
+  await page.setViewportSize({ width, height: 800 });
+  const result = await page.evaluate(() => {
+    const shell = document.querySelector(".header");
+    const box = shell.getBoundingClientRect();
+    const visible = (el) => el.checkVisibility({ checkVisibilityCSS: true }) && el.getBoundingClientRect().width > 0;
+    const items = [...shell.querySelectorAll(".brand, .nav__link, .btn, .menu-toggle")].filter(visible);
+    return {
+      wrapped: items
+        .filter((el) => el.getBoundingClientRect().height > (parseFloat(getComputedStyle(el).lineHeight) || 20) * 1.8 + 20)
         .map((el) => el.textContent.trim()),
-    );
-    expect(wrapped, `wrapped at ${width}px`).toEqual([]);
-    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
-    expect(overflow, `sideways scroll at ${width}px`).toBeLessThanOrEqual(0);
-  }
+      cutOff: items.filter((el) => el.getBoundingClientRect().right > Math.min(box.right, innerWidth) + 1)
+        .map((el) => el.textContent.trim() || el.className),
+      overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      sidebar: getComputedStyle(shell).position === "fixed",
+    };
+  });
+  expect(result.wrapped, `wrapped at ${width}px`).toEqual([]);
+  expect(result.cutOff, `cut off at ${width}px`).toEqual([]);
+  expect(result.overflow, `sideways scroll at ${width}px`).toBeLessThanOrEqual(0);
+  expect(result.sidebar, `sidebar at ${width}px`).toBe(width >= 1024);
+}
+
+const WIDTHS = [1920, 1440, 1366, 1280, 1024, 1023, 900, 768];
+
+test("app shell fits at every width (logged out)", async ({ page, isMobile }) => {
+  test.skip(isMobile, "width sweep is desktop only");
+  await page.goto("/");
+  await expect(page.getByRole("link", { name: "Get started", exact: true })).toBeAttached();
+  for (const width of WIDTHS) await checkShell(page, width);
 });
 
-test("logged-in header fits on one line at every width", async ({ page, isMobile }) => {
+test("app shell fits at every width (logged in, long email)", async ({ page, isMobile }) => {
   test.skip(isMobile, "width sweep is desktop only");
-  // Long email = widest possible header
   const email = `a_very_long_header_test_${Date.now()}_${Math.random().toString(36).slice(2, 7)}@example.com`;
   const registered = await page.request.post("/api/auth/register", { data: { email, password: "secret123" } });
   expect(registered.ok()).toBeTruthy();
   await page.goto("/careers");
   await expect(page.getByRole("button", { name: "Log out" })).toBeAttached();
-  for (const width of [1920, 1600, 1440, 1366, 1280, 1201, 1200, 1024, 768]) {
-    await page.setViewportSize({ width, height: 800 });
-    const header = await page.locator(".header__inner").evaluate((el) => ({
-      height: el.getBoundingClientRect().height,
-      overflow: el.scrollWidth - el.clientWidth,
-      right: Math.max(...[...el.querySelectorAll("a, button")].filter((n) => n.offsetParent !== null)
-        .map((n) => n.getBoundingClientRect().right)),
-    }));
-    expect(header.overflow, `header overflow at ${width}px`).toBeLessThanOrEqual(0);
-    expect(header.right, `header item cut off at ${width}px`).toBeLessThanOrEqual(width);
-    expect(header.height, `header height at ${width}px`).toBeLessThanOrEqual(66);
-  }
+  for (const width of WIDTHS) await checkShell(page, width);
+});
+
+test("mobile drawer opens over the page and closes with the backdrop", async ({ page, isMobile }) => {
+  test.skip(!isMobile, "drawer is the mobile menu");
+  await page.goto("/careers");
+  const nav = page.getByRole("navigation", { name: "Main" });
+  await expect(nav).toBeHidden();
+  await page.getByRole("button", { name: "Open menu" }).click();
+  await expect(nav).toBeVisible();
+  await expect(nav.getByRole("group", { name: "Your journey" })).toBeVisible();
+  // the drawer covers the left side; tap the dimmed area on the right
+  const { width } = page.viewportSize();
+  await page.mouse.click(width - 10, 400);
+  await expect(nav).toBeHidden();
+  await expect(page).toHaveURL(/\/careers$/);
 });

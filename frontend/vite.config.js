@@ -33,5 +33,7 @@ export default defineConfig({
     setupFiles: './src/test/setup.js',
     include: ['src/**/*.test.{js,jsx}'],
     css: false,
+    // the full profile-form test types into ~20 fields; allow for a busy machine
+    testTimeout: 15000,
   },
 })

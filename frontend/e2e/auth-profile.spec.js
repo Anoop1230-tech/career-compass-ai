@@ -70,9 +70,17 @@ test("full journey: register, build profile, reload, log out, log in", async ({ 
   await page.getByLabel(/Preferred work mode/).selectOption("hybrid");
   await page.getByRole("button", { name: "Save profile" }).click();
 
+  // Saving leads to the guided dashboard, which suggests the next step
+  await expect(page).toHaveURL(/\/dashboard$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Welcome, Asha" })).toBeVisible();
+  await expect(page.getByText("Profile saved. Here's what to do next.")).toBeVisible();
+  const next = page.getByRole("region", { name: "Recommended next step" });
+  await expect(next).toContainText("Take a short assessment");
+  await expect(next.getByRole("link", { name: /Start an assessment/ })).toHaveAttribute("href", "/assessments");
+
   // Summary
+  await page.goto("/profile");
   await expect(page.getByRole("heading", { level: 1, name: "Asha Verma" })).toBeVisible();
-  await expect(page.getByText("Profile saved.")).toBeVisible();
   await expect(page.getByText("Python · Advanced")).toBeVisible();
   await expect(page.getByRole("link", { name: "Movie recommender" })).toHaveAttribute(
     "href",
@@ -107,13 +115,16 @@ test("edit an existing profile", async ({ page }) => {
   await page.getByLabel(/Full name/).fill("Ravi Kumar");
   await page.getByLabel(/Where are you now/).selectOption("class_10");
   await page.getByRole("button", { name: "Save now" }).click();
-  await expect(page.getByRole("heading", { level: 1, name: "Ravi Kumar" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Welcome, Ravi" })).toBeVisible();
 
+  await page.goto("/profile");
   await page.getByRole("link", { name: "Edit profile" }).click();
   await expect(page.getByLabel(/Full name/)).toHaveValue("Ravi Kumar");
   await page.getByRole("button", { name: /2\. Education/ }).click();
   await page.getByLabel(/Stream/).selectOption("pcm");
   await page.getByRole("button", { name: "Save now" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Welcome, Ravi" })).toBeVisible();
+  await page.goto("/profile");
   await expect(page.getByRole("heading", { level: 1, name: "Ravi Kumar" })).toBeVisible();
   await expect(page.getByText("Science – PCM", { exact: true })).toBeVisible();
 });
@@ -166,6 +177,8 @@ test("delete profile keeps the account", async ({ page }) => {
   await page.getByLabel(/Full name/).fill("Temp User");
   await page.getByLabel(/Where are you now/).selectOption("job_seeker");
   await page.getByRole("button", { name: "Save now" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Welcome, Temp" })).toBeVisible();
+  await page.goto("/profile");
   await expect(page.getByRole("heading", { level: 1, name: "Temp User" })).toBeVisible();
 
   page.once("dialog", (dialog) => dialog.accept());

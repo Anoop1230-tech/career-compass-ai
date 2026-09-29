@@ -1,8 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { NAV_ITEMS } from "../navigation";
+import { NAV_GROUPS } from "../navigation";
+import Icon from "./Icon";
 
+/**
+ * App shell navigation.
+ * - Desktop (>= 1024px): a fixed sidebar with the brand, grouped links and a user card.
+ * - Mobile: a slim top bar; the same <nav> slides in as a drawer with a backdrop.
+ * One <nav aria-label="Main"> serves both, so keyboard and screen-reader users
+ * always find the menu in the same place.
+ */
 export default function Header() {
   const [open, setOpen] = useState(false);
   const { status, user, logout } = useAuth();
@@ -15,27 +23,35 @@ export default function Header() {
     await logout();
   };
 
-  // Close the mobile menu when any link inside it is clicked
+  // Close the drawer when any link inside it is clicked
   const closeOnLinkClick = (event) => {
     if (event.target.closest("a")) setOpen(false);
   };
 
-  // Close the mobile menu with the Escape key
+  // Close with Escape, and stop the page behind the drawer from scrolling
   useEffect(() => {
     if (!open) return undefined;
     const onKey = (event) => {
       if (event.key === "Escape") setOpen(false);
     };
     document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    document.body.classList.add("drawer-open");
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.classList.remove("drawer-open");
+    };
   }, [open]);
+
+  const initial = (user?.email || "?").charAt(0).toUpperCase();
 
   return (
     <header className="header">
-      <div className="container header__inner">
+      <div className="header__inner">
         <Link to="/" className="brand" aria-label="Career Compass AI home" onClick={() => setOpen(false)}>
-          <span className="brand__mark" aria-hidden="true">CC</span>
-          <span>Career Compass</span>
+          <span className="brand__mark" aria-hidden="true">
+            <Icon name="compass" size={18} strokeWidth={2} />
+          </span>
+          <span className="brand__name">Career Compass</span>
         </Link>
 
         <button
@@ -46,52 +62,77 @@ export default function Header() {
           aria-label={open ? "Close menu" : "Open menu"}
           onClick={() => setOpen((value) => !value)}
         >
-          <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
-            {open ? (
-              <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            ) : (
-              <path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            )}
-          </svg>
+          <Icon name={open ? "close" : "menu"} size={20} />
         </button>
+      </div>
 
-        <nav
-          id="main-nav"
-          aria-label="Main"
-          className={open ? "nav nav--open" : "nav"}
-          onClick={closeOnLinkClick}
-        >
-          {NAV_ITEMS.map((item) => (
-            <NavLink key={item.path} to={item.path} className="nav__link">
-              {item.label}
-            </NavLink>
+      {/* Backdrop behind the mobile drawer; clicking it closes the menu */}
+      <div
+        className={open ? "drawer-backdrop drawer-backdrop--open" : "drawer-backdrop"}
+        aria-hidden="true"
+        onClick={() => setOpen(false)}
+      />
+
+      <nav id="main-nav" aria-label="Main" className={open ? "nav nav--open" : "nav"} onClick={closeOnLinkClick}>
+        <div className="nav__scroll">
+          <NavLink to="/" end className="nav__link nav__link--home">
+            <Icon name="compass" />
+            <span>Home</span>
+          </NavLink>
+          {NAV_GROUPS.map((group) => (
+            <div key={group.label} className="nav__group" role="group" aria-label={group.label}>
+              <span className="nav__group-label" aria-hidden="true">
+                {group.label}
+              </span>
+              <div className="nav__group-links">
+                {group.items.map((item) => (
+                  <NavLink key={item.path} to={item.path} className="nav__link">
+                    <Icon name={item.icon} />
+                    <span>{item.label}</span>
+                  </NavLink>
+                ))}
+              </div>
+            </div>
           ))}
-          <div className="nav__actions">
-            {status === "authenticated" ? (
-              <div className="user-menu">
+        </div>
+
+        <div className="nav__actions">
+          {status === "authenticated" ? (
+            <div className="user-menu">
+              <div className="user-menu__who">
+                <span className="user-menu__avatar" aria-hidden="true">
+                  {initial}
+                </span>
                 <span className="user-menu__email" title={user.email}>
                   {user.email}
                 </span>
-                <NavLink to="/profile" end className="btn btn--secondary btn--small">
+              </div>
+              <div className="user-menu__buttons">
+                <NavLink to="/profile" className="btn btn--secondary btn--small">
+                  <Icon name="user" size={16} />
                   My profile
                 </NavLink>
                 <button type="button" className="btn btn--ghost btn--small" onClick={handleLogout}>
+                  <Icon name="logout" size={16} />
                   Log out
                 </button>
               </div>
-            ) : status === "anonymous" ? (
-              <div className="user-menu">
-                <NavLink to="/login" className="btn btn--ghost btn--small">
-                  Log in
-                </NavLink>
+            </div>
+          ) : status === "anonymous" ? (
+            <div className="user-menu">
+              <p className="user-menu__pitch">Save your profile to get personal guidance.</p>
+              <div className="user-menu__buttons">
                 <Link to="/register" className="btn btn--primary btn--small">
                   Get started
                 </Link>
+                <NavLink to="/login" className="btn btn--secondary btn--small">
+                  Log in
+                </NavLink>
               </div>
-            ) : null}
-          </div>
-        </nav>
-      </div>
+            </div>
+          ) : null}
+        </div>
+      </nav>
     </header>
   );
 }

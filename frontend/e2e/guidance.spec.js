@@ -115,7 +115,7 @@ test("skill gap from a career page", async ({ page }) => {
 test("dream career checker uses the profile and explains the verdict", async ({ page }) => {
   await loginWithProfile(page);
   await page.goto("/next-steps");
-  await page.getByRole("link", { name: "Can I become…?" }).click();
+  await page.getByRole("main").getByRole("link", { name: "Can I become…?" }).click();
   await page.getByLabel("Can I become").selectOption("CAR_DATA_SCIENTIST");
   await page.getByRole("button", { name: "Check" }).click();
   await expect(page.getByRole("heading", { level: 2, name: "Yes – this is a direct route" })).toBeVisible();

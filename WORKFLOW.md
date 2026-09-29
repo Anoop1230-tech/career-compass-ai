@@ -46,6 +46,11 @@ Personalized Career Guidance & Roadmap. A career navigation system that answers:
     Basic → Education → Skills → Experience → Interests → Goals
         │
         ▼
+[3b] Dashboard (opens right after saving the profile, and after every login)
+    Progress: profile → assessment → career matches → roadmap
+    One highlighted "Do this next" action + shortcuts to every feature
+        │
+        ▼
 [4] Assessments
     Interest test → Aptitude test → Personality test
         │

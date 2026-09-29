@@ -21,16 +21,21 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 13 | ML evaluation | Compare ML models against the rule-based engine; keep ML only if it is genuinely better | ✅ |
 | 14 | Hardening and final testing | Full test run, accessibility and performance checks, error handling review | ✅ |
 | 15 | Deployment | PostgreSQL, production build, hosting, HTTPS | ✅ |
+| 16 | Guided dashboard and UI redesign | Dashboard with "what to do next", grouped sidebar navigation, new warm design, smooth transitions | ✅ |
 
 ---
 
 ## Design rules (all phases)
 
-- Neutral palette: white, grays, near-black text, one solid accent color. No gradients, no neon/purple "AI" styling, no glow effects.
-- System font stack (no font download → faster first load).
-- Clear top navigation, visible focus outlines, keyboard accessible, works on mobile.
-- Subtle, short transitions only; disabled when the user prefers reduced motion.
-- Every page loads fast: routes are lazy-loaded, no heavy UI libraries.
+Updated in Phase 16 (UI redesign). The old "neutral grey + top bar" rules are replaced by:
+
+- Warm, calm palette that does not look like a typical "AI" product: sand neutrals (`#faf8f4` page, `#f3efe7` panels), ink-green primary (`#1f5c4a`) and a terracotta highlight (`#a94c22`). No purple, indigo, violet or neon, no gradients, no glow. Flat colour only (enforced by the "no gradients" browser test).
+- Type: a classic serif for page and section headings, the system UI font for text. Both are already on the device, so nothing is downloaded.
+- App shell: a fixed sidebar on screens 1024px and wider; a top bar with a slide-in drawer and backdrop on smaller screens. The menu is grouped in the order people use it: Your journey (Dashboard, Next Steps, For You, Roadmap), Explore (Careers, Career Tree, Can I become…?), Prepare (Assessments, Exams & Colleges, Mentor). `src/navigation.js` is the single list the sidebar, home page and dashboard all read.
+- Guided flow: after saving a profile (or logging in with one) users land on the Dashboard, which shows their progress and one "Do this next" action.
+- Motion: short, soft transitions (page slide-in, card lift, drawer slide, staggered list entrance), all switched off when the user prefers reduced motion. Animations never change opacity of content, so contrast checks stay valid.
+- Visible focus outlines, keyboard accessible, WCAG 2.1 AA contrast (checked by axe-core), no sideways scrolling at any width.
+- Every page loads fast: routes are lazy-loaded, icons are inline SVG, no UI or icon libraries.
 
 ## Quality rules (all phases)
 
@@ -271,3 +276,17 @@ Result: 276 backend tests, 94 frontend unit tests, 92 browser tests (incl. 4 acc
 Result: 281 backend tests, 94 frontend unit tests, 92 browser tests passing; lint 0 warnings; production-mode smoke test verified (health "connected" via migrations, `/` serves the app, SPA routes fall back to index, `/api/*` still 404s correctly).
 
 Known limits: HSTS/`Secure` cookies assume TLS is terminated by the platform or a reverse proxy in front of the app; the rate limiter and in-progress assessment answers are still per-server (Redis needed to run several servers); Docker image not built in CI here (Docker was unavailable in the dev environment), but the Compose and Render configs are validated as well-formed and the app runs in production mode directly.
+
+---
+
+## Phase 16 – Guided dashboard and UI redesign – ✅ done
+
+- 16.1 Dashboard (`/dashboard`): greets the user by first name, shows progress through four steps (profile → assessment → career matches → roadmap) with a progress bar, and one highlighted "Do this next" action; shortcuts to every Explore and Prepare feature
+- 16.2 Guidance after the profile: saving the profile opens the dashboard ("Profile saved. Here's what to do next."); logging in with a profile also opens it; the profile page links back to it
+- 16.3 Navigation grouped into Your journey / Explore / Prepare, with icons, in a sidebar (desktop) or slide-in drawer with backdrop (mobile); Escape, backdrop tap or choosing a link closes it
+- 16.4 New design system (full `index.css` rewrite): warm sand / ink-green / terracotta palette, serif headings, rounded cards with soft shadows, pill buttons, new home page (hero with journey preview, stage picker, how it works, features grouped like the menu, call-to-action band)
+- 16.5 Smooth motion: page slide-in on every route, card lift on hover, staggered list entrance, drawer slide; all off with reduced motion
+- 16.6 Fixes found by tests: answer choices could not be clicked after a hover effect covered the radio input (effect removed); logging out from the mobile menu on a protected page could land on the login page instead of home (fixed in the auth flow)
+- 16.7 Tests: 8 new dashboard unit tests, nav-group and home-feature unit tests, logout unit test; browser tests updated for the new shell (width sweep at 8 widths, mobile drawer test, dashboard in the accessibility scan and route checks)
+
+Result: 281 backend tests, 105 frontend unit tests, 95 browser tests (5 skipped by design: desktop-only or mobile-only) passing; lint 0 warnings; axe-core 0 violations including the dashboard; initial JavaScript 108 kB gzipped.

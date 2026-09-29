@@ -11,6 +11,8 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [status, setStatus] = useState("loading");
+  // true right after the user pressed "Log out" (protected pages then go home, not to /login)
+  const [loggedOut, setLoggedOut] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -36,6 +38,7 @@ export function AuthProvider({ children }) {
     const me = await api.loginUser(email, password);
     setUser(me);
     setStatus("authenticated");
+    setLoggedOut(false);
     return me;
   }, []);
 
@@ -43,6 +46,7 @@ export function AuthProvider({ children }) {
     const me = await api.registerUser(email, password);
     setUser(me);
     setStatus("authenticated");
+    setLoggedOut(false);
     return me;
   }, []);
 
@@ -53,6 +57,7 @@ export function AuthProvider({ children }) {
       // Even if the request fails, forget the user locally
       setUser(null);
       setStatus("anonymous");
+      setLoggedOut(true);
     }
   }, []);
 
@@ -60,9 +65,11 @@ export function AuthProvider({ children }) {
     setUser((current) => (current ? { ...current, has_profile: hasProfile } : current));
   }, []);
 
+  const clearLoggedOut = useCallback(() => setLoggedOut(false), []);
+
   const value = useMemo(
-    () => ({ user, status, login, register, logout, markProfileSaved }),
-    [user, status, login, register, logout, markProfileSaved],
+    () => ({ user, status, loggedOut, login, register, logout, markProfileSaved, clearLoggedOut }),
+    [user, status, loggedOut, login, register, logout, markProfileSaved, clearLoggedOut],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
