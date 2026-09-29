@@ -1,20 +1,23 @@
 import { Link } from "react-router-dom";
 
 const STAGES = [
-  { label: "Class 10", hint: "Choose a stream" },
-  { label: "Class 11–12", hint: "Courses and entrance exams" },
-  { label: "Diploma", hint: "Lateral entry or jobs" },
-  { label: "Undergraduate", hint: "Specialize, intern, prepare" },
-  { label: "Graduate", hint: "Job, higher studies or exams" },
-  { label: "Master's / PhD", hint: "Research, industry, teaching" },
-  { label: "Working professional", hint: "Grow or upskill" },
-  { label: "Career changer", hint: "Switch to a new field" },
+  { label: "Class 10", hint: "Choose a stream", to: "/next-steps?stage=EDU_CLASS_10" },
+  { label: "Class 11–12", hint: "Courses and entrance exams", to: "/next-steps?stage=EDU_12_PCM" },
+  { label: "Diploma", hint: "Lateral entry or jobs", to: "/next-steps?stage=EDU_DIPLOMA_CS" },
+  { label: "Undergraduate", hint: "Specialize, intern, prepare", to: "/next-steps?stage=EDU_BTECH_CSE" },
+  { label: "Graduate", hint: "Job, higher studies or exams", to: "/next-steps?stage=EDU_BCA" },
+  { label: "Master's / PhD", hint: "Research, industry, teaching", to: "/next-steps?stage=EDU_MTECH_CSE" },
+  { label: "Working professional", hint: "Grow or upskill", to: "/next-steps?stage=EDU_WORKING_TECH" },
+  { label: "Career changer", hint: "Switch to a new field", to: "/dream-check" },
 ];
 
 const FEATURES = [
+  { title: "Careers for you", text: "Ranked matches with the reasons behind every score.", to: "/for-you" },
   { title: "Next steps", text: "Realistic paths from your current stage, with eligibility, time and exams.", to: "/next-steps" },
-  { title: "Career directory", text: "Search careers and see the skills, exams and paths for each one.", to: "/careers" },
+  { title: "Can I become…?", text: "Check a dream career: route, time, blockers and closer options.", to: "/dream-check" },
   { title: "Skill gap and roadmap", text: "Compare your skills with a target career and get a stage-wise plan.", to: "/roadmap" },
+  { title: "Career explorer", text: "Open the career tree step by step, from school to promotions.", to: "/explore" },
+  { title: "Career directory", text: "Search careers and see the skills, exams and paths for each one.", to: "/careers" },
   { title: "Exams, colleges, scholarships", text: "Filtered lists linked to official sources.", to: "/resources" },
   { title: "Assessments", text: "Interest, aptitude and personality tests that sharpen your results.", to: "/assessments" },
   { title: "Career mentor", text: "Ask questions and get answers based on your own profile.", to: "/mentor" },
@@ -51,7 +54,7 @@ export default function HomePage() {
           <ul className="grid grid--compact" style={{ listStyle: "none", margin: 0, padding: 0 }}>
             {STAGES.map((stage) => (
               <li key={stage.label}>
-                <Link to="/next-steps" className="card card--link">
+                <Link to={stage.to} className="card card--link">
                   <h3>{stage.label}</h3>
                   <p className="muted">{stage.hint}</p>
                 </Link>
