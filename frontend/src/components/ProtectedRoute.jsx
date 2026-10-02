@@ -1,14 +1,16 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useI18n } from "../i18n";
 
 /** Shows its children only to logged-in users; others go to /login. */
 export default function ProtectedRoute({ children }) {
   const { status, loggedOut } = useAuth();
   const location = useLocation();
+  const { t } = useI18n();
 
   if (status === "loading") {
     return (
-      <div className="page-center" role="status" aria-label="Checking your session">
+      <div className="page-center" role="status" aria-label={t("auth.checkingSession")}>
         <div className="loader" />
       </div>
     );

@@ -1,17 +1,18 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { TextField } from "../components/FormFields";
+import { useI18n } from "../i18n";
 import { PASSWORD_HINT, passwordProblem } from "../profile/password";
 import { getErrorMessage, getFieldErrors, requestPasswordReset, confirmPasswordReset } from "../services/api";
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { EMAIL_PATTERN } from "./AuthPage";
 
 /** "Forgot password?": asks for the email and sends a reset link. */
 export function ForgotPasswordPage() {
+  const { t } = useI18n();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [formError, setFormError] = useState("");
-  const [sent, setSent] = useState("");
+  const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (event) => {
@@ -19,14 +20,14 @@ export function ForgotPasswordPage() {
     if (submitting) return;
     setFormError("");
     if (!EMAIL_PATTERN.test(email.trim())) {
-      setError("Enter a valid email address.");
+      setError("auth.emailInvalid");
       return;
     }
     setError("");
     setSubmitting(true);
     try {
-      const result = await requestPasswordReset(email.trim());
-      setSent(result.detail);
+      await requestPasswordReset(email.trim());
+      setSent(true); // the server's reply is the same for any email; show our translated version
     } catch (err) {
       setFormError(getErrorMessage(err));
     } finally {
@@ -37,26 +38,26 @@ export function ForgotPasswordPage() {
   return (
     <section className="auth">
       <div className="auth__card card">
-        <h1>Reset your password</h1>
+        <h1>{t("reset.forgot.title")}</h1>
         {sent ? (
           <>
-            <div className="notice" role="status">{sent}</div>
-            <p className="muted">The link works once and expires soon. Check your spam folder if you can't find it.</p>
+            <div className="notice" role="status">{t("reset.forgot.sent")}</div>
+            <p className="muted">{t("reset.forgot.sentHint")}</p>
           </>
         ) : (
           <>
-            <p className="muted">Enter the email you signed up with and we'll send you a link to choose a new password.</p>
+            <p className="muted">{t("reset.forgot.lead")}</p>
             {formError && <div className="notice notice--danger" role="alert">{formError}</div>}
             <form onSubmit={handleSubmit} noValidate className="form">
-              <TextField label="Email" type="email" autoComplete="email" required value={email} onChange={setEmail}
-                error={error} />
+              <TextField label={t("auth.email")} type="email" autoComplete="email" required value={email}
+                onChange={setEmail} error={error ? t(error) : undefined} />
               <button type="submit" className="btn btn--primary btn--block" disabled={submitting}>
-                {submitting ? "Please wait…" : "Send reset link"}
+                {submitting ? t("common.pleaseWait") : t("reset.forgot.submit")}
               </button>
             </form>
           </>
         )}
-        <p className="auth__switch"><Link to="/login">Back to log in</Link></p>
+        <p className="auth__switch"><Link to="/login">{t("reset.backToLogin")}</Link></p>
       </div>
     </section>
   );
@@ -64,12 +65,13 @@ export function ForgotPasswordPage() {
 
 /** Opened from the email link: /reset-password#token=… (the fragment never reaches any server log). */
 export function ResetPasswordPage() {
+  const { t } = useI18n();
   const location = useLocation();
   const navigate = useNavigate();
   const [token] = useState(() => new URLSearchParams(location.hash.replace(/^#/, "")).get("token") || "");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({}); // translation keys, or server text in .server
   const [formError, setFormError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
@@ -77,11 +79,9 @@ export function ResetPasswordPage() {
     return (
       <section className="auth">
         <div className="auth__card card">
-          <h1>Reset link missing</h1>
-          <div className="notice notice--danger" role="alert">
-            This page needs the link from your reset email. It may have been cut off when copying.
-          </div>
-          <p className="auth__switch"><Link to="/forgot-password">Request a new link</Link></p>
+          <h1>{t("reset.missing.title")}</h1>
+          <div className="notice notice--danger" role="alert">{t("reset.missing.text")}</div>
+          <p className="auth__switch"><Link to="/forgot-password">{t("reset.requestNew")}</Link></p>
         </div>
       </section>
     );
@@ -93,7 +93,7 @@ export function ResetPasswordPage() {
     const found = {};
     const problem = passwordProblem(password);
     if (problem) found.password = problem;
-    else if (confirm !== password) found.confirm = "The two passwords do not match.";
+    else if (confirm !== password) found.confirm = "password.mismatch";
     setErrors(found);
     setFormError("");
     if (Object.keys(found).length) return;
@@ -103,7 +103,7 @@ export function ResetPasswordPage() {
       navigate("/login", { replace: true, state: { passwordReset: true } });
     } catch (err) {
       const fields = getFieldErrors(err);
-      setErrors(fields.new_password ? { password: fields.new_password } : {});
+      setErrors(fields.new_password ? { server: fields.new_password } : {});
       setFormError(getErrorMessage(err));
       setSubmitting(false);
     }
@@ -112,20 +112,20 @@ export function ResetPasswordPage() {
   return (
     <section className="auth">
       <div className="auth__card card">
-        <h1>Choose a new password</h1>
-        <p className="muted">You'll be signed out on every device and can then log in with the new password.</p>
+        <h1>{t("reset.new.title")}</h1>
+        <p className="muted">{t("reset.new.lead")}</p>
         {formError && (
           <div className="notice notice--danger" role="alert">
-            {formError} <Link to="/forgot-password">Request a new link</Link>
+            {formError} <Link to="/forgot-password">{t("reset.requestNew")}</Link>
           </div>
         )}
         <form onSubmit={handleSubmit} noValidate className="form">
-          <TextField label="New password" type="password" autoComplete="new-password" required value={password}
-            onChange={setPassword} error={errors.password} hint={PASSWORD_HINT} />
-          <TextField label="Repeat new password" type="password" autoComplete="new-password" required value={confirm}
-            onChange={setConfirm} error={errors.confirm} />
+          <TextField label={t("password.new")} type="password" autoComplete="new-password" required value={password}
+            onChange={setPassword} error={errors.server || (errors.password && t(errors.password))} hint={t(PASSWORD_HINT)} />
+          <TextField label={t("password.repeat")} type="password" autoComplete="new-password" required value={confirm}
+            onChange={setConfirm} error={errors.confirm && t(errors.confirm)} />
           <button type="submit" className="btn btn--primary btn--block" disabled={submitting}>
-            {submitting ? "Please wait…" : "Save new password"}
+            {submitting ? t("common.pleaseWait") : t("password.save")}
           </button>
         </form>
       </div>

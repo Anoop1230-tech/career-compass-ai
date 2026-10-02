@@ -1,25 +1,21 @@
 import { useHealth } from "../hooks/useHealth";
-
-const LABELS = {
-  checking: "Checking server…",
-  online: "Server online",
-  offline: "Server offline",
-};
+import { useI18n } from "../i18n";
 
 export default function Footer() {
   const { status, error, retry } = useHealth();
+  const { t } = useI18n();
 
   return (
     <footer className="footer">
       <div className="container footer__inner">
-        <span>© {new Date().getFullYear()} Career Compass AI · Guidance, not guarantees.</span>
+        <span>{t("footer.tagline", { year: new Date().getFullYear() })}</span>
 
         <span className={`status status--${status}`} role="status" aria-live="polite">
           <span className="status__dot" aria-hidden="true" />
-          <span title={error || undefined}>{LABELS[status]}</span>
+          <span title={error || undefined}>{t(`footer.${status}`)}</span>
           {status === "offline" && (
             <button type="button" className="btn btn--secondary btn--small" onClick={retry}>
-              Retry
+              {t("footer.retry")}
             </button>
           )}
         </span>

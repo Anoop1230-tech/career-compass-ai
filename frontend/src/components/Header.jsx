@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { NAV_GROUPS } from "../navigation";
+import { useI18n } from "../i18n";
+import { NAV_GROUPS, navLabel } from "../navigation";
 import Icon from "./Icon";
+import LanguagePicker from "./LanguagePicker";
 import ThemePicker from "./ThemePicker";
 
 /**
@@ -15,6 +17,7 @@ import ThemePicker from "./ThemePicker";
 export default function Header() {
   const [open, setOpen] = useState(false);
   const { status, user, logout } = useAuth();
+  const { t } = useI18n();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -48,7 +51,7 @@ export default function Header() {
   return (
     <header className="header">
       <div className="header__inner">
-        <Link to="/" className="brand" aria-label="Career Compass AI home" onClick={() => setOpen(false)}>
+        <Link to="/" className="brand" aria-label={t("header.homeLink")} onClick={() => setOpen(false)}>
           <span className="brand__mark" aria-hidden="true">
             <Icon name="compass" size={18} strokeWidth={2} />
           </span>
@@ -60,7 +63,7 @@ export default function Header() {
           className="menu-toggle"
           aria-expanded={open}
           aria-controls="main-nav"
-          aria-label={open ? "Close menu" : "Open menu"}
+          aria-label={open ? t("header.closeMenu") : t("header.openMenu")}
           onClick={() => setOpen((value) => !value)}
         >
           <Icon name={open ? "close" : "menu"} size={20} />
@@ -74,22 +77,22 @@ export default function Header() {
         onClick={() => setOpen(false)}
       />
 
-      <nav id="main-nav" aria-label="Main" className={open ? "nav nav--open" : "nav"} onClick={closeOnLinkClick}>
+      <nav id="main-nav" aria-label={t("header.mainNav")} className={open ? "nav nav--open" : "nav"} onClick={closeOnLinkClick}>
         <div className="nav__scroll">
           <NavLink to="/" end className="nav__link nav__link--home">
             <Icon name="compass" />
-            <span>Home</span>
+            <span>{t("nav.home")}</span>
           </NavLink>
           {NAV_GROUPS.map((group) => (
-            <div key={group.label} className="nav__group" role="group" aria-label={group.label}>
+            <div key={group.key} className="nav__group" role="group" aria-label={navLabel(t, group)}>
               <span className="nav__group-label" aria-hidden="true">
-                {group.label}
+                {navLabel(t, group)}
               </span>
               <div className="nav__group-links">
                 {group.items.map((item) => (
                   <NavLink key={item.path} to={item.path} className="nav__link">
                     <Icon name={item.icon} />
-                    <span>{item.label}</span>
+                    <span>{navLabel(t, item)}</span>
                   </NavLink>
                 ))}
               </div>
@@ -98,7 +101,10 @@ export default function Header() {
         </div>
 
         <div className="nav__actions">
-          <ThemePicker />
+          <div className="nav__pickers">
+            <LanguagePicker />
+            <ThemePicker />
+          </div>
           {status === "authenticated" ? (
             <div className="user-menu">
               <div className="user-menu__who">
@@ -112,23 +118,23 @@ export default function Header() {
               <div className="user-menu__buttons">
                 <NavLink to="/profile" className="btn btn--secondary btn--small">
                   <Icon name="user" size={16} />
-                  My profile
+                  {t("header.myProfile")}
                 </NavLink>
                 <button type="button" className="btn btn--ghost btn--small" onClick={handleLogout}>
                   <Icon name="logout" size={16} />
-                  Log out
+                  {t("header.logout")}
                 </button>
               </div>
             </div>
           ) : status === "anonymous" ? (
             <div className="user-menu">
-              <p className="user-menu__pitch">Save your profile to get personal guidance.</p>
+              <p className="user-menu__pitch">{t("header.pitch")}</p>
               <div className="user-menu__buttons">
                 <Link to="/register" className="btn btn--primary btn--small">
-                  Get started
+                  {t("header.getStarted")}
                 </Link>
                 <NavLink to="/login" className="btn btn--secondary btn--small">
-                  Log in
+                  {t("header.login")}
                 </NavLink>
               </div>
             </div>

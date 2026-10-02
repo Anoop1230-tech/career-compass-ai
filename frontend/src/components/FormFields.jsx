@@ -2,13 +2,15 @@
 // Each input is linked to its label and error message, so screen readers
 // announce "Email, invalid: Enter a valid email address".
 import { useId } from "react";
+import { useI18n } from "../i18n";
 
 function FieldShell({ id, label, hint, error, required, children }) {
+  const { t } = useI18n();
   return (
     <div className={error ? "field field--error" : "field"}>
       <label htmlFor={id} className="field__label">
         {label}
-        {required ? <span aria-hidden="true"> *</span> : <span className="field__optional"> (optional)</span>}
+        {required ? <span aria-hidden="true"> *</span> : <span className="field__optional"> {t("common.optional")}</span>}
       </label>
       {children}
       {hint && !error && (
@@ -69,6 +71,7 @@ export function TextArea({ label, hint, error, required = false, value, onChange
 
 export function SelectField({ label, hint, error, required = false, value, onChange, options, placeholder }) {
   const id = useId();
+  const { t } = useI18n();
   return (
     <FieldShell id={id} label={label} hint={hint} error={error} required={required}>
       <select
@@ -80,7 +83,7 @@ export function SelectField({ label, hint, error, required = false, value, onCha
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy(id, hint, error)}
       >
-        <option value="">{placeholder || "Select…"}</option>
+        <option value="">{placeholder || t("common.select")}</option>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -129,11 +132,12 @@ export function ChipGroup({ legend, hint, error, options, values, onChange }) {
 /** 1–5 self-rating as a row of radio buttons. */
 export function RatingField({ legend, lowLabel, highLabel, value, onChange }) {
   const name = useId();
+  const { t } = useI18n();
   return (
     <fieldset className="field">
       <legend className="field__label">
         {legend}
-        <span className="field__optional"> (optional)</span>
+        <span className="field__optional"> {t("common.optional")}</span>
       </legend>
       <div className="rating">
         <span className="rating__end">{lowLabel}</span>
@@ -152,7 +156,7 @@ export function RatingField({ legend, lowLabel, highLabel, value, onChange }) {
         <span className="rating__end">{highLabel}</span>
         {value != null && (
           <button type="button" className="btn btn--ghost btn--small" onClick={() => onChange(null)}>
-            Clear
+            {t("common.clear")}
           </button>
         )}
       </div>

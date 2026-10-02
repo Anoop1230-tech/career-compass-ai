@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useI18n } from "../i18n";
 import { STEPS, stepForField, toFormState, toPayload, validateStep } from "../profile/profileForm";
 import {
   BasicStep,
@@ -30,6 +31,7 @@ function setIn(obj, path, value) {
 export default function ProfileEditPage() {
   const navigate = useNavigate();
   const { markProfileSaved } = useAuth();
+  const { t, tOptions } = useI18n();
   const headingRef = useRef(null);
 
   const [loadState, setLoadState] = useState({ status: "loading", error: "" });
@@ -99,7 +101,7 @@ export default function ProfileEditPage() {
   };
 
   const checkStep = (index) => {
-    const found = validateStep(STEPS[index].id, form);
+    const found = validateStep(STEPS[index].id, form, t);
     setErrors(found);
     return Object.keys(found).length === 0;
   };
@@ -114,7 +116,7 @@ export default function ProfileEditPage() {
     for (let i = 0; i < STEPS.length; i += 1) {
       if (!checkStep(i)) {
         goTo(i);
-        setFormError("Please fix the highlighted fields.");
+        setFormError(t("profile.fixFields"));
         return;
       }
     }
@@ -141,7 +143,7 @@ export default function ProfileEditPage() {
 
   if (loadState.status === "loading") {
     return (
-      <div className="page-center" role="status" aria-label="Loading your profile">
+      <div className="page-center" role="status" aria-label={t("profile.loading")}>
         <div className="loader" />
       </div>
     );
@@ -151,14 +153,14 @@ export default function ProfileEditPage() {
     return (
       <section className="page-center" role="alert">
         <div className="page-center__box">
-          <h1>Could not load your profile</h1>
+          <h1>{t("profile.loadError")}</h1>
           <p className="muted">{loadState.error}</p>
           <div className="btn-row">
             <button type="button" className="btn btn--primary" onClick={() => {
               setLoadState({ status: "loading", error: "" });
               setAttempt((n) => n + 1);
             }}>
-              Try again
+              {t("common.tryAgain")}
             </button>
           </div>
         </div>
@@ -174,19 +176,17 @@ export default function ProfileEditPage() {
       <div className="container" style={{ maxWidth: 860 }}>
         <div className="page__head">
           <div>
-            <h1>{isNew ? "Create your profile" : "Edit your profile"}</h1>
-            <p className="muted">
-              Step {step + 1} of {STEPS.length}. Only name and stage are required; everything else improves your results.
-            </p>
+            <h1>{isNew ? t("profile.create") : t("profile.edit")}</h1>
+            <p className="muted">{t("profile.stepOf", { n: step + 1, total: STEPS.length })}</p>
           </div>
           {!isNew && (
             <Link to="/profile" className="btn btn--ghost">
-              Cancel
+              {t("common.cancel")}
             </Link>
           )}
         </div>
 
-        <nav aria-label="Profile steps">
+        <nav aria-label={t("profile.stepsNav")}>
           <ol className="stepper">
             {STEPS.map((s, i) => (
               <li key={s.id}>
@@ -197,7 +197,7 @@ export default function ProfileEditPage() {
                   // Free navigation to earlier or visited steps; forward jumps validate the current step
                   onClick={() => (i <= step || visited.has(i) || checkStep(step) ? goTo(i) : undefined)}
                 >
-                  {i + 1}. {s.title}
+                  {i + 1}. {t(`profile.step.${s.id}`)}
                 </button>
               </li>
             ))}
@@ -219,21 +219,21 @@ export default function ProfileEditPage() {
           }}
         >
           <div ref={headingRef} tabIndex={-1} style={{ outline: "none" }}>
-            <StepComponent form={form} update={update} options={options} errors={errors} />
+            <StepComponent form={form} update={update} options={tOptions(options)} errors={errors} />
           </div>
 
           <div className="form-actions">
             <button type="button" className="btn btn--secondary" onClick={() => goTo(step - 1)} disabled={step === 0}>
-              Back
+              {t("profile.back")}
             </button>
             <div className="btn-row">
               {!isLast && (
                 <button type="button" className="btn btn--secondary" onClick={save} disabled={saving}>
-                  Save now
+                  {t("profile.saveNow")}
                 </button>
               )}
               <button type="submit" className="btn btn--primary" disabled={saving}>
-                {saving ? "Saving…" : isLast ? "Save profile" : "Continue"}
+                {saving ? t("common.saving") : isLast ? t("profile.save") : t("profile.continue")}
               </button>
             </div>
           </div>

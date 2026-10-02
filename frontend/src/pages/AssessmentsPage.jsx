@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useI18n } from "../i18n";
 import * as api from "../services/api";
 
 export default function AssessmentsPage() {
+  const { t } = useI18n();
   const [state, setState] = useState({ status: "loading" });
   const [attempt, setAttempt] = useState(0);
 
@@ -17,20 +19,24 @@ export default function AssessmentsPage() {
     };
   }, [attempt]);
 
+  // Test names and descriptions are translated by kind; the server's English text is the fallback
+  const text = (key, fallback) => {
+    const value = t(key);
+    return value === key ? fallback : value;
+  };
+
   return (
     <section className="page">
       <div className="container">
         <div className="page__head">
           <div>
-            <h1>Assessments</h1>
-            <p className="muted">
-              Three short tests that make your recommendations more personal. Take them in any order.
-            </p>
+            <h1>{t("nav.assessments")}</h1>
+            <p className="muted">{t("assess.lead")}</p>
           </div>
         </div>
 
         {state.status === "loading" && (
-          <div className="page-center" style={{ minHeight: 200 }} role="status" aria-label="Loading tests">
+          <div className="page-center" style={{ minHeight: 200 }} role="status" aria-label={t("assess.loadingTests")}>
             <div className="loader" />
           </div>
         )}
@@ -42,28 +48,29 @@ export default function AssessmentsPage() {
               setState({ status: "loading" });
               setAttempt((n) => n + 1);
             }}>
-              Try again
+              {t("common.tryAgain")}
             </button>
           </div>
         )}
 
         {state.status === "ready" && (
           <div className="grid">
-            {state.items.map((t) => (
-              <article key={t.kind} className="card assessment-card">
+            {state.items.map((x) => (
+              <article key={x.kind} className="card assessment-card">
                 <span className="badge">
-                  {t.completed_at ? "Completed" : t.in_progress ? "In progress" : `${t.question_count} questions`}
+                  {x.completed_at ? t("assess.completed") : x.in_progress ? t("assess.inProgress")
+                    : t("assess.questions", { n: x.question_count })}
                 </span>
-                <h2 className="career-card__title">{t.title}</h2>
-                <p className="muted">{t.description}</p>
-                <p className="small muted">About {t.minutes} minutes</p>
+                <h2 className="career-card__title">{text(`assess.kind.${x.kind}`, x.title)}</h2>
+                <p className="muted">{text(`assess.kind.${x.kind}.description`, x.description)}</p>
+                <p className="small muted">{t("assess.minutes", { n: x.minutes })}</p>
                 <div className="btn-row">
-                  <Link to={`/assessments/${t.kind}`} className="btn btn--primary btn--small">
-                    {t.in_progress ? "Continue" : t.completed_at ? "Retake" : "Start"}
+                  <Link to={`/assessments/${x.kind}`} className="btn btn--primary btn--small">
+                    {x.in_progress ? t("profile.continue") : x.completed_at ? t("assess.retake") : t("assess.start")}
                   </Link>
-                  {t.completed_at && (
-                    <Link to={`/assessments/${t.kind}/result`} className="btn btn--secondary btn--small">
-                      View result
+                  {x.completed_at && (
+                    <Link to={`/assessments/${x.kind}/result`} className="btn btn--secondary btn--small">
+                      {t("assess.viewResult")}
                     </Link>
                   )}
                 </div>
@@ -72,10 +79,7 @@ export default function AssessmentsPage() {
           </div>
         )}
 
-        <p className="notice small" style={{ marginTop: "var(--space-6)" }}>
-          These tests describe your preferences and a short quiz result. They are for self-reflection and career
-          guidance only, not a clinical or professional psychological assessment.
-        </p>
+        <p className="notice small" style={{ marginTop: "var(--space-6)" }}>{t("assess.disclaimer")}</p>
       </div>
     </section>
   );

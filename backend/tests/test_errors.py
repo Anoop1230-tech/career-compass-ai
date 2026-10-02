@@ -54,7 +54,7 @@ def test_unexpected_error_returns_500_without_leaking_details():
     app.dependency_overrides[get_db] = override_db_with(RuntimeError("secret internal detail"))
     response = client.get("/api/health")
     assert response.status_code == 500
-    assert response.json() == {"detail": "Something went wrong on the server."}
+    assert response.json() == {"detail": "Something went wrong on the server.", "code": "server.error"}
     assert "secret" not in response.text
 
 

@@ -2,13 +2,15 @@ import { Suspense, useEffect, useRef } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import useScrollReveal from "../hooks/useScrollReveal";
+import { useI18n } from "../i18n";
 import ErrorBoundary from "./ErrorBoundary";
 import Footer from "./Footer";
 import Header from "./Header";
 
 function PageLoader() {
+  const { t } = useI18n();
   return (
-    <div className="page-center" role="status" aria-label="Loading page">
+    <div className="page-center" role="status" aria-label={t("layout.loadingPage")}>
       <div className="loader" />
     </div>
   );
@@ -17,6 +19,7 @@ function PageLoader() {
 export default function Layout() {
   const { pathname } = useLocation();
   const { loggedOut, clearLoggedOut } = useAuth();
+  const { t } = useI18n();
   const mainRef = useRef(null);
   useScrollReveal(mainRef, pathname);
 
@@ -33,7 +36,7 @@ export default function Layout() {
   return (
     <div className="app">
       <a href="#main" className="skip-link">
-        Skip to content
+        {t("layout.skip")}
       </a>
       <Header />
       <div className="app__body">

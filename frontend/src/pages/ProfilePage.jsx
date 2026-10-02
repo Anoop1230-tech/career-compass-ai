@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useI18n } from "../i18n";
 import ChangePassword from "../components/ChangePassword";
 import { RATINGS } from "../profile/profileForm";
 import * as api from "../services/api";
@@ -32,6 +33,7 @@ function Tags({ items, empty }) {
 
 export default function ProfilePage() {
   const { user, logout, markProfileSaved } = useAuth();
+  const { t, tOptions } = useI18n();
   const location = useLocation();
   const navigate = useNavigate();
   const [state, setState] = useState({ status: "loading" });
@@ -55,7 +57,7 @@ export default function ProfilePage() {
 
   if (state.status === "loading") {
     return (
-      <div className="page-center" role="status" aria-label="Loading your profile">
+      <div className="page-center" role="status" aria-label={t("profile.loading")}>
         <div className="loader" />
       </div>
     );
@@ -66,26 +68,27 @@ export default function ProfilePage() {
     return (
       <section className="page-center" role="alert">
         <div className="page-center__box">
-          <h1>Could not load your profile</h1>
+          <h1>{t("profile.loadError")}</h1>
           <p className="muted">{state.error}</p>
           <button type="button" className="btn btn--primary" onClick={() => {
             setState({ status: "loading" });
             setAttempt((n) => n + 1);
           }}>
-            Try again
+            {t("common.tryAgain")}
           </button>
         </div>
       </section>
     );
   }
 
-  const { profile: p, options: o } = state;
+  const { profile: p } = state;
+  const o = tOptions(state.options);
   const edu = p.education;
   const exp = p.experience;
   const score = edu.score != null ? `${edu.score} (${labelFor(o.score_types, edu.score_type)})` : null;
 
   const handleDelete = async () => {
-    if (!window.confirm("Delete your profile? Your account stays, but all profile details are removed.")) return;
+    if (!window.confirm(t("profile.deleteConfirm"))) return;
     setDeleting(true);
     try {
       await api.deleteProfile();
@@ -102,7 +105,7 @@ export default function ProfilePage() {
       <div className="container">
         {location.state?.saved && (
           <div className="notice" role="status" style={{ marginBottom: "var(--space-5)" }}>
-            Profile saved.
+            {t("profile.saved")}
           </div>
         )}
         <div className="page__head">
@@ -115,44 +118,44 @@ export default function ProfilePage() {
           </div>
           <div className="btn-row">
             <Link to="/dashboard" className="btn btn--primary">
-              Dashboard
+              {t("nav.dashboard")}
             </Link>
             <Link to="/profile/edit" className="btn btn--secondary">
-              Edit profile
+              {t("profile.editButton")}
             </Link>
             <button type="button" className="btn btn--secondary" onClick={() => {
               navigate("/", { replace: true }); // leave the protected page first
               logout();
             }}>
-              Log out
+              {t("header.logout")}
             </button>
           </div>
         </div>
 
         <div className="summary">
           <article className="card">
-            <h2>Education</h2>
+            <h2>{t("profile.step.education")}</h2>
             <dl className="dl">
-              <Row term="Degree">{edu.degree}</Row>
-              <Row term="Branch">{edu.branch}</Row>
-              <Row term="Stream">{edu.stream ? labelFor(o.streams, edu.stream) : null}</Row>
-              <Row term="Institution">{edu.institution}</Row>
-              <Row term="Year of study">{edu.year_of_study}</Row>
-              <Row term="Graduation">{edu.graduation_year}</Row>
-              <Row term="Score">{score}</Row>
+              <Row term={t("profile.f.degree.short")}>{edu.degree}</Row>
+              <Row term={t("profile.f.branch.short")}>{edu.branch}</Row>
+              <Row term={t("profile.f.stream")}>{edu.stream ? labelFor(o.streams, edu.stream) : null}</Row>
+              <Row term={t("profile.f.institution.short")}>{edu.institution}</Row>
+              <Row term={t("profile.f.yearOfStudy.short")}>{edu.year_of_study}</Row>
+              <Row term={t("profile.f.graduation.short")}>{edu.graduation_year}</Row>
+              <Row term={t("profile.f.score.short")}>{score}</Row>
             </dl>
-            {!Object.values(edu).some((v) => v != null) && <p className="muted">No education details yet.</p>}
+            {!Object.values(edu).some((v) => v != null) && <p className="muted">{t("profile.none.education")}</p>}
           </article>
 
           <article className="card">
-            <h2>Skills</h2>
+            <h2>{t("profile.step.skills")}</h2>
             <Tags
               items={p.skills.map((s) => `${s.name} · ${labelFor(o.skill_levels, s.level)}`)}
-              empty="No skills added yet."
+              empty={t("profile.none.skills")}
             />
             {p.certifications.length > 0 && (
               <>
-                <h3 style={{ marginTop: "var(--space-4)", fontSize: "var(--text-base)" }}>Certifications</h3>
+                <h3 style={{ marginTop: "var(--space-4)", fontSize: "var(--text-base)" }}>{t("profile.certs.title")}</h3>
                 <ul className="plain-list">
                   {p.certifications.map((c, i) => (
                     <li key={i}>
@@ -167,16 +170,16 @@ export default function ProfilePage() {
           </article>
 
           <article className="card">
-            <h2>Experience</h2>
+            <h2>{t("profile.step.experience")}</h2>
             <dl className="dl">
-              <Row term="Current role">{exp.current_role}</Row>
-              <Row term="Total experience">{exp.total_years != null ? `${exp.total_years} years` : null}</Row>
-              <Row term="Internships">{exp.internships.length || null}</Row>
-              <Row term="Jobs">{exp.jobs.length || null}</Row>
+              <Row term={t("profile.f.currentRole")}>{exp.current_role}</Row>
+              <Row term={t("profile.f.totalExperience")}>{exp.total_years != null ? t("profile.years", { n: exp.total_years }) : null}</Row>
+              <Row term={t("profile.internships.title")}>{exp.internships.length || null}</Row>
+              <Row term={t("profile.jobs.title")}>{exp.jobs.length || null}</Row>
             </dl>
             {exp.projects.length > 0 ? (
               <>
-                <h3 style={{ marginTop: "var(--space-4)", fontSize: "var(--text-base)" }}>Projects</h3>
+                <h3 style={{ marginTop: "var(--space-4)", fontSize: "var(--text-base)" }}>{t("profile.projects.title")}</h3>
                 <ul className="plain-list">
                   {exp.projects.map((pr, i) => (
                     <li key={i}>
@@ -194,27 +197,27 @@ export default function ProfilePage() {
               </>
             ) : (
               !exp.current_role && !exp.internships.length && !exp.jobs.length && (
-                <p className="muted">No experience or projects added yet.</p>
+                <p className="muted">{t("profile.none.experience")}</p>
               )
             )}
           </article>
 
           <article className="card">
-            <h2>Interests and goals</h2>
-            <Tags items={p.interests.map((v) => labelFor(o.interests, v))} empty="No interests selected." />
+            <h2>{t("profile.step.interestsLong")}</h2>
+            <Tags items={p.interests.map((v) => labelFor(o.interests, v))} empty={t("profile.none.interests")} />
             <div style={{ marginTop: "var(--space-4)" }}>
-              <Tags items={p.goals.map((v) => labelFor(o.goals, v))} empty="No goals selected." />
+              <Tags items={p.goals.map((v) => labelFor(o.goals, v))} empty={t("profile.none.goals")} />
             </div>
           </article>
 
           <article className="card">
-            <h2>Preferences</h2>
+            <h2>{t("profile.step.preferences")}</h2>
             <dl className="dl">
-              <Row term="Work mode">{labelFor(o.work_modes, p.preferences.work_mode)}</Row>
-              <Row term="Locations">{p.preferences.preferred_locations.join(", ") || null}</Row>
-              <Row term="Relocation">{p.preferences.open_to_relocation ? "Open" : "Not open"}</Row>
+              <Row term={t("profile.f.workMode.short")}>{labelFor(o.work_modes, p.preferences.work_mode)}</Row>
+              <Row term={t("profile.f.locations.short")}>{p.preferences.preferred_locations.join(", ") || null}</Row>
+              <Row term={t("profile.f.relocation")}>{p.preferences.open_to_relocation ? t("profile.relocation.open") : t("profile.relocation.closed")}</Row>
               {RATINGS.map((r) => (
-                <Row key={r.key} term={r.label}>
+                <Row key={r.key} term={t(`profile.rating.${r.key}`)}>
                   {p.preferences[r.key] != null ? `${p.preferences[r.key]} / 5` : null}
                 </Row>
               ))}
@@ -224,7 +227,7 @@ export default function ProfilePage() {
 
         {p.bio && (
           <article className="card" style={{ marginTop: "var(--space-4)" }}>
-            <h2 style={{ fontSize: "var(--text-lg)" }}>About me</h2>
+            <h2 style={{ fontSize: "var(--text-lg)" }}>{t("profile.f.bio")}</h2>
             <p style={{ whiteSpace: "pre-wrap" }}>{p.bio}</p>
           </article>
         )}
@@ -233,7 +236,7 @@ export default function ProfilePage() {
 
         <div style={{ marginTop: "var(--space-6)" }}>
           <button type="button" className="btn btn--danger btn--small" onClick={handleDelete} disabled={deleting}>
-            {deleting ? "Deleting…" : "Delete profile"}
+            {deleting ? t("profile.deleting") : t("profile.delete")}
           </button>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { MemoryRouter } from "react-router-dom";
 import { vi } from "vitest";
 import AppRoutes from "../AppRoutes";
 import { AuthProvider } from "../context/AuthContext";
+import { LanguageProvider } from "../i18n";
 import * as api from "../services/api";
 
 export const OPTIONS = {
@@ -46,12 +47,14 @@ export function mockApi({ loggedIn = false, user = USER, profile = null } = {}) 
   vi.spyOn(api, "getMyRoadmap").mockRejectedValue(httpError(404, { detail: "No target" }));
 }
 
-export function renderApp(path = "/") {
+export function renderApp(path = "/", { lang = "en" } = {}) {
   return render(
     <MemoryRouter initialEntries={[path]}>
-      <AuthProvider>
-        <AppRoutes />
-      </AuthProvider>
+      <LanguageProvider initial={lang}>
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
+      </LanguageProvider>
     </MemoryRouter>,
   );
 }

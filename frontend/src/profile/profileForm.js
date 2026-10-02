@@ -1,22 +1,27 @@
 // Converts between the API profile shape and the form's editable state.
 // Form inputs hold strings; the API wants numbers, nulls and clean lists.
+// Titles and labels are translation keys (i18n/*.js "profile.*").
+import { translate } from "../i18n/core";
 
 export const STEPS = [
-  { id: "basic", title: "About you", fields: ["full_name", "age", "location", "current_stage", "bio"] },
-  { id: "education", title: "Education", fields: ["education"] },
-  { id: "skills", title: "Skills", fields: ["skills", "certifications"] },
-  { id: "experience", title: "Experience", fields: ["experience"] },
-  { id: "interests", title: "Interests & goals", fields: ["interests", "goals"] },
-  { id: "preferences", title: "Preferences", fields: ["preferences"] },
+  { id: "basic", fields: ["full_name", "age", "location", "current_stage", "bio"] },
+  { id: "education", fields: ["education"] },
+  { id: "skills", fields: ["skills", "certifications"] },
+  { id: "experience", fields: ["experience"] },
+  { id: "interests", fields: ["interests", "goals"] },
+  { id: "preferences", fields: ["preferences"] },
 ];
 
+// Rating labels: profile.rating.<key>, profile.rating.<key>.low, profile.rating.<key>.high
 export const RATINGS = [
-  { key: "risk_tolerance", label: "Comfort with risk", low: "Prefer safe", high: "Enjoy risk" },
-  { key: "leadership", label: "Leading people", low: "Rarely", high: "Often" },
-  { key: "creativity", label: "Creative work", low: "Low", high: "High" },
-  { key: "team_orientation", label: "Working in a team", low: "Prefer solo", high: "Prefer teams" },
-  { key: "research_orientation", label: "Research and deep study", low: "Low", high: "High" },
+  { key: "risk_tolerance" },
+  { key: "leadership" },
+  { key: "creativity" },
+  { key: "team_orientation" },
+  { key: "research_orientation" },
 ];
+
+const english = (key, vars) => translate("en", key, vars);
 
 /** Which education fields apply to a stage. */
 export function stageKind(stage, options) {
@@ -172,29 +177,29 @@ export function toPayload(form, options) {
   };
 }
 
-/** Checks done in the browser before saving; the API checks everything again. */
-export function validateStep(stepId, form) {
+/** Checks done in the browser before saving; the API checks everything again. `t` gives the message language. */
+export function validateStep(stepId, form, t = english) {
   const errors = {};
   if (stepId === "basic") {
-    if (form.full_name.trim().length < 2) errors.full_name = "Enter your name (at least 2 characters).";
-    if (!form.current_stage) errors.current_stage = "Choose the stage closest to you.";
+    if (form.full_name.trim().length < 2) errors.full_name = t("profile.err.name");
+    if (!form.current_stage) errors.current_stage = t("profile.err.stage");
     const age = str(form.age).trim();
-    if (age && (!/^\d+$/.test(age) || +age < 10 || +age > 100)) errors.age = "Age must be between 10 and 100.";
+    if (age && (!/^\d+$/.test(age) || +age < 10 || +age > 100)) errors.age = t("profile.err.age");
   }
   if (stepId === "education") {
     const { score, score_type } = form.education;
     const s = str(score).trim();
     if (s) {
       const limits = { percentage: 100, cgpa_10: 10, cgpa_4: 4, grade: 100 };
-      if (!score_type) errors["education.score_type"] = "Choose how your score is measured.";
+      if (!score_type) errors["education.score_type"] = t("profile.err.scoreType");
       else if (!Number.isFinite(+s) || +s < 0 || +s > limits[score_type])
-        errors["education.score"] = `Enter a number from 0 to ${limits[score_type]}.`;
+        errors["education.score"] = t("profile.err.scoreRange", { max: limits[score_type] });
     }
   }
   if (stepId === "experience") {
     form.experience.projects.forEach((p, i) => {
       if (p.link.trim() && !/^https?:\/\/\S+\.\S+/.test(p.link.trim()))
-        errors[`experience.projects.${i}.link`] = "Enter a full link starting with https://";
+        errors[`experience.projects.${i}.link`] = t("profile.err.link");
     });
   }
   return errors;

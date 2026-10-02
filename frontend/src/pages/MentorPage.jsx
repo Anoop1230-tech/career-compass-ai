@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ErrorNotice, Loading } from "../components/Status";
 import useRequest from "../hooks/useRequest";
+import { useI18n } from "../i18n";
 import * as api from "../services/api";
 
 /** Renders mentor text: paragraphs and "- " bullet lists, as plain text (no HTML injection). */
@@ -21,10 +22,11 @@ function MessageText({ text }) {
 }
 
 function Action({ action }) {
+  const { t } = useI18n();
   if (action.link.startsWith("https://")) {
     return (
       <a className="btn btn--secondary btn--small" href={action.link} target="_blank" rel="noopener noreferrer">
-        {action.label}<span className="visually-hidden"> (opens in new tab)</span>
+        {action.label}<span className="visually-hidden"> {t("common.newTab")}</span>
       </a>
     );
   }
@@ -32,6 +34,7 @@ function Action({ action }) {
 }
 
 export default function MentorPage() {
+  const { t } = useI18n();
   const history = useRequest(() => api.getMentorHistory(), []);
   const [messages, setMessages] = useState(null);
   const [draft, setDraft] = useState("");
@@ -72,7 +75,7 @@ export default function MentorPage() {
   };
 
   const clear = async () => {
-    if (!window.confirm("Delete your whole conversation with the mentor?")) return;
+    if (!window.confirm(t("mentor.confirmClear"))) return;
     try {
       await api.clearMentorHistory();
       setMessages([]);
@@ -86,28 +89,28 @@ export default function MentorPage() {
       <div className="container chat-page">
         <div className="page__head">
           <div>
-            <h1>Career mentor</h1>
-            <p className="muted">Ask about next steps, careers, skills, exams and scholarships. Answers use your profile and our data.</p>
+            <h1>{t("mentor.title")}</h1>
+            <p className="muted">{t("mentor.lead")}</p>
           </div>
           {list.length > 0 && (
-            <button type="button" className="btn btn--ghost btn--small" onClick={clear}>Clear conversation</button>
+            <button type="button" className="btn btn--ghost btn--small" onClick={clear}>{t("mentor.clear")}</button>
           )}
         </div>
 
-        {history.status === "loading" && <Loading label="Loading conversation" />}
+        {history.status === "loading" && <Loading label={t("mentor.loading")} />}
         {history.status === "error" && <ErrorNotice message={history.error} onRetry={history.reload} />}
 
         {history.status === "ready" && (
           <div className="chat card">
-            <ol className="chat__log" aria-live="polite" aria-label="Conversation">
+            <ol className="chat__log" aria-live="polite" aria-label={t("mentor.conversation")}>
               {list.length === 0 && (
                 <li className="chat__empty muted">
-                  Hi! Ask me anything about your career. For example: “Can I become a data scientist?”
+                  {t("mentor.empty")}
                 </li>
               )}
               {list.map((m) => (
                 <li key={m.id} className={`chat-msg chat-msg--${m.role}`}>
-                  <span className="visually-hidden">{m.role === "user" ? "You said:" : "Mentor:"}</span>
+                  <span className="visually-hidden">{m.role === "user" ? t("mentor.youSaid") : t("mentor.mentorSaid")}</span>
                   <div className="chat-msg__bubble">
                     {m.role === "mentor" ? <MessageText text={m.content} /> : <p>{m.content}</p>}
                     {m.actions?.length > 0 && (
@@ -118,14 +121,14 @@ export default function MentorPage() {
               ))}
               {sending && (
                 <li className="chat-msg chat-msg--mentor" role="status">
-                  <div className="chat-msg__bubble muted">Thinking…</div>
+                  <div className="chat-msg__bubble muted">{t("mentor.thinking")}</div>
                 </li>
               )}
               <li ref={endRef} aria-hidden="true" />
             </ol>
 
             {suggestions.length > 0 && (
-              <div className="chat__suggestions" role="group" aria-label="Suggested questions">
+              <div className="chat__suggestions" role="group" aria-label={t("mentor.suggested")}>
                 {suggestions.map((s) => (
                   <button key={s} type="button" className="tab" disabled={sending} onClick={() => send(s)}>{s}</button>
                 ))}
@@ -134,17 +137,16 @@ export default function MentorPage() {
             {error && <p className="text-danger small" role="alert" style={{ margin: "0 var(--space-4)" }}>{error}</p>}
 
             <form className="chat__form" onSubmit={(e) => { e.preventDefault(); send(draft); }}>
-              <label htmlFor="mentor-input" className="visually-hidden">Your question</label>
+              <label htmlFor="mentor-input" className="visually-hidden">{t("mentor.yourQuestion")}</label>
               <input id="mentor-input" ref={inputRef} className="input" value={draft} maxLength={500}
-                placeholder="Type your question" autoComplete="off" onChange={(e) => setDraft(e.target.value)} />
-              <button type="submit" className="btn btn--primary" disabled={sending || !draft.trim()}>Send</button>
+                placeholder={t("mentor.placeholder")} autoComplete="off" onChange={(e) => setDraft(e.target.value)} />
+              <button type="submit" className="btn btn--primary" disabled={sending || !draft.trim()}>{t("mentor.send")}</button>
             </form>
           </div>
         )}
         <p className="small muted" style={{ marginTop: "var(--space-4)" }}>
-          The mentor gives guidance from our datasets, not professional advice. It never guesses salaries or cut-offs;
-          check official websites before deciding.
-          {history.data?.llm_enabled && " Answers are phrased by a language model using only these facts."}
+          {t("mentor.disclaimer")}
+          {history.data?.llm_enabled && ` ${t("mentor.llm")}`}
         </p>
       </div>
     </section>

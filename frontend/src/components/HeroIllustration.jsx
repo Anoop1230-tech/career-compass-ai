@@ -1,3 +1,4 @@
+import { useI18n } from "../i18n";
 /**
  * Original hero illustration: a student at a signpost choosing a direction, with a winding road
  * into the hills. Matches the headline "Where are you now, and where do you want to go?".
@@ -20,6 +21,7 @@ const STARS = [[60, 40, 2], [130, 70, 1.6], [210, 34, 2.2], [250, 96, 1.4], [470
   [300, 150, 1.4], [480, 40, 1.6], [190, 120, 1.2]];
 
 function Board({ label, y, right, fill, text, index }) {
+  const { t } = useI18n();
   const x0 = 150; // post centre
   const points = right
     ? `${x0 - 6},${y} ${x0 + 124},${y} ${x0 + 140},${y + 16} ${x0 + 124},${y + 32} ${x0 - 6},${y + 32}`
@@ -30,7 +32,7 @@ function Board({ label, y, right, fill, text, index }) {
         strokeLinejoin="round" />
       <text x={right ? x0 + 62 : x0 - 62} y={y + 21.5} textAnchor="middle" fill={text}
         fontFamily="system-ui, 'Segoe UI', Roboto, Arial, sans-serif" fontSize="14.5" fontWeight="700">
-        {label}
+        {t(`home.hero.board.${index}`)}
       </text>
     </g>
   );
@@ -58,9 +60,10 @@ function Cloud({ x, y, s = 1, slow = false }) {
 }
 
 export default function HeroIllustration() {
+  const { t } = useI18n();
   return (
     <svg className="hero-art__svg" viewBox="0 0 520 460" role="img"
-      aria-label="A student at a signpost choosing between career paths: Technology, Creative Arts, Government and Business">
+      aria-label={t("home.hero.alt")}>
       <defs>
         <clipPath id="hero-frame"><rect width="520" height="460" rx="28" /></clipPath>
       </defs>

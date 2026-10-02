@@ -2,38 +2,27 @@ import { useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ErrorNotice, Loading, Meter, OfficialLink, VerifiedBadge } from "../components/Status";
 import { useAuth } from "../context/AuthContext";
+import { useI18n } from "../i18n";
 import useRequest from "../hooks/useRequest";
 import * as api from "../services/api";
 
-const LEVEL_LABELS = {
-  school: "School", course: "Professional course", diploma: "Diploma", ug: "Bachelor's", pg: "Master's",
-  doctoral: "Doctorate", professional: "Working",
-};
-const GROUPS = [
-  { key: "education", label: "Study further" },
-  { key: "course", label: "Professional courses",
-    hint: "Open to everyone at any stage – school, college, master's, a job, or not studying. Music, dance, design, writing, acting and comedy, film, cooking, fitness and beauty. No degree needed." },
-  { key: "career", label: "Start a career" },
-  { key: "exam", label: "Exams" },
-  { key: "switches", label: "Switch paths" },
-];
+// Texts: next.level.<level>, next.group.<key> (+ .hint) in i18n/*.js
+const GROUPS = [{ key: "education" }, { key: "course", hint: true }, { key: "career" }, { key: "exam" }, { key: "switches" }];
 
-function years(value) {
+function years(t, value) {
   if (value == null) return null;
-  return value === 1 ? "1 year" : `${value} years`;
+  return value === 1 ? t("next.oneYear") : t("next.years", { n: value });
 }
 
 /** Professional courses are open at every stage, so they are shown even before a stage is chosen. */
 function OpenCourses({ stages }) {
+  const { t } = useI18n();
   const courses = stages.filter((s) => s.level === "course");
   if (!courses.length) return null;
   return (
     <section className="detail-block" aria-labelledby="open-courses">
-      <h2 id="open-courses" className="group-title">Professional courses – open to everyone</h2>
-      <p className="muted small">
-        Whatever you are doing now (school, college, a job, or not studying), you can start one of these. No degree
-        needed. Open one to see the careers it leads to.
-      </p>
+      <h2 id="open-courses" className="group-title">{t("next.openCourses")}</h2>
+      <p className="muted small">{t("next.openCourses.text")}</p>
       <ul className="stage-grid">
         {courses.map((c) => (
           <li key={c.stage_id}>
@@ -51,6 +40,7 @@ function OpenCourses({ stages }) {
 }
 
 function OptionCard({ option }) {
+  const { t } = useI18n();
   const titleId = `opt-${option.path_id}`;
   return (
     <article className="card option-card" aria-labelledby={titleId}>
@@ -58,22 +48,22 @@ function OptionCard({ option }) {
         <h3 id={titleId} className="option-card__title">
           {option.kind === "career" ? <Link to={`/careers/${option.target_id}`}>{option.title}</Link> : option.title}
         </h3>
-        {option.duration_years != null && <span className="badge">{years(option.duration_years)}</span>}
+        {option.duration_years != null && <span className="badge">{years(t, option.duration_years)}</span>}
       </div>
       {option.summary && <p className="muted small">{option.summary}</p>}
 
       {option.reasons.length > 0 && (
         <p className="small option-card__why">
-          <strong>Fits you because</strong> {option.reasons.join("; ")}.
+          <strong>{t("next.fitsBecause")}</strong> {option.reasons.join("; ")}.
         </p>
       )}
 
       <dl className="dl small">
-        <dt>Eligibility</dt>
+        <dt>{t("next.eligibility")}</dt>
         <dd>{option.eligibility}</dd>
         {option.exams.length > 0 && (
           <>
-            <dt>Exams</dt>
+            <dt>{t("next.group.exam")}</dt>
             <dd>
               {option.exams.map((e, i) => (
                 <span key={e.exam_id}>
@@ -87,7 +77,7 @@ function OptionCard({ option }) {
         )}
         {option.opens && option.opens.careers.length > 0 && (
           <>
-            <dt>Leads to</dt>
+            <dt>{t("next.leadsTo")}</dt>
             <dd>{option.opens.careers.map((c) => c.name).join(", ")}</dd>
           </>
         )}
@@ -96,13 +86,13 @@ function OptionCard({ option }) {
       {option.skills && (
         <div className="option-card__skills">
           <div className="score-list__head small">
-            <span>Skills you already have</span>
+            <span>{t("next.skillsHave")}</span>
             <span className="muted">{Math.round(option.skills.coverage)}%</span>
           </div>
-          <Meter value={option.skills.coverage} label={`Skills you have for ${option.title}`} />
+          <Meter value={option.skills.coverage} label={t("next.skillsHaveFor", { title: option.title })} />
           {option.skills.missing_core.length > 0 && (
             <p className="muted small" style={{ marginTop: "var(--space-2)" }}>
-              Core skills to learn: {option.skills.missing_core.join(", ")}
+              {t("next.coreToLearn", { list: option.skills.missing_core.join(", ") })}
             </p>
           )}
         </div>
@@ -116,32 +106,33 @@ function OptionCard({ option }) {
       )}
 
       <p className="next-action small">
-        <strong>Next action:</strong> {option.next_action}
+        <strong>{t("next.nextAction")}</strong> {option.next_action}
       </p>
       <div className="option-card__foot small muted">
         <VerifiedBadge verified={option.verified} date={option.last_verified} />
-        {option.source_url && <OfficialLink href={option.source_url}>Source</OfficialLink>}
+        {option.source_url && <OfficialLink href={option.source_url}>{t("common.source")}</OfficialLink>}
       </div>
     </article>
   );
 }
 
 function SwitchCard({ item }) {
+  const { t } = useI18n();
   return (
     <article className="card option-card">
       <div className="option-card__head">
         <h3 className="option-card__title"><Link to={`/careers/${item.career_id}`}>{item.title}</Link></h3>
-        <span className="badge">{item.difficulty} effort</span>
+        <span className="badge">{t(`next.effort.${item.difficulty}`)}</span>
       </div>
       {item.months_min != null && (
-        <p className="muted small">About {item.months_min}–{item.months_max} months of part-time preparation</p>
+        <p className="muted small">{t("next.months", { min: item.months_min, max: item.months_max })}</p>
       )}
       <ol className="plain-list small">
         {item.steps.map((s) => <li key={s}>{s}</li>)}
       </ol>
       {item.skills_missing.length > 0 && (
         <p className="small" style={{ marginTop: "var(--space-3)" }}>
-          <strong>Skills still needed:</strong> {item.skills_missing.join(", ")}
+          <strong>{t("next.skillsNeeded")}</strong> {item.skills_missing.join(", ")}
         </p>
       )}
       {item.notes && <p className="muted small">{item.notes}</p>}
@@ -150,20 +141,21 @@ function SwitchCard({ item }) {
 }
 
 function StagePicker({ stages, value, onChange }) {
+  const { t } = useI18n();
   const grouped = useMemo(() => {
     const map = new Map();
     for (const s of stages) {
-      const key = LEVEL_LABELS[s.level] || s.level;
+      const key = t(`next.level.${s.level}`);
       if (!map.has(key)) map.set(key, []);
       map.get(key).push(s);
     }
     return [...map.entries()];
-  }, [stages]);
+  }, [stages, t]);
   return (
     <div className="field" style={{ marginBottom: 0 }}>
-      <label className="field__label" htmlFor="stage-select">Where are you now?</label>
+      <label className="field__label" htmlFor="stage-select">{t("profile.f.stage")}</label>
       <select id="stage-select" className="input" value={value || ""} onChange={(e) => onChange(e.target.value)}>
-        <option value="" disabled>Choose your current stage</option>
+        <option value="" disabled>{t("profile.f.stage.placeholder")}</option>
         {grouped.map(([label, items]) => (
           <optgroup key={label} label={label}>
             {items.map((s) => <option key={s.stage_id} value={s.stage_id}>{s.name}</option>)}
@@ -179,6 +171,7 @@ export default function NextStepsPage() {
   const [params, setParams] = useSearchParams();
   const chosen = params.get("stage") || undefined;
   const [tab, setTab] = useState("all");
+  const { t } = useI18n();
 
   const stages = useRequest(() => api.getStages(), []);
   // Wait until we know who is logged in, so the page loads once, not twice
@@ -202,12 +195,12 @@ export default function NextStepsPage() {
       <div className="container">
         <div className="page__head">
           <div>
-            <h1>Next steps</h1>
-            <p className="muted">Realistic options from where you are now, with eligibility, time, exams and one action to take.</p>
+            <h1>{t("next.title")}</h1>
+            <p className="muted">{t("next.lead")}</p>
           </div>
           <div className="btn-row">
-            <Link to="/explore" className="btn btn--secondary">Explore as a tree</Link>
-            <Link to="/dream-check" className="btn btn--secondary">Can I become…?</Link>
+            <Link to="/explore" className="btn btn--secondary">{t("next.asTree")}</Link>
+            <Link to="/dream-check" className="btn btn--secondary">{t("nav.dreamCheck")}</Link>
           </div>
         </div>
 
@@ -229,30 +222,30 @@ export default function NextStepsPage() {
               {ctx.source === "profile" && ctx.stage_note && <p>{ctx.stage_note}</p>}
               {ctx.source === "query" && ctx.profile_stage_id && ctx.profile_stage_id !== chosen && (
                 <p>
-                  Exploring another stage.{" "}
-                  <button type="button" className="link-button" onClick={() => setParams({})}>Back to my stage</button>
+                  {t("next.otherStage")}{" "}
+                  <button type="button" className="link-button" onClick={() => setParams({})}>{t("next.backToMine")}</button>
                 </p>
               )}
               {!ctx.logged_in && (
-                <p><Link to="/login">Log in</Link> to start from your profile and see options ranked for you.</p>
+                <p><Link to="/login">{t("header.login")}</Link> {t("next.loginHint")}</p>
               )}
               {ctx.logged_in && !ctx.has_profile && (
-                <p><Link to="/profile/edit">Create your profile</Link> to rank these options for you.</p>
+                <p><Link to="/profile/edit">{t("profile.create")}</Link> {t("next.profileHint")}</p>
               )}
               {ctx.has_profile && !ctx.stage_exact && ctx.source === "profile" && (
-                <p><Link to="/profile/edit">Update your education details</Link> for a closer match.</p>
+                <p><Link to="/profile/edit">{t("next.updateEducation")}</Link> {t("next.closerMatch")}</p>
               )}
             </div>
           )}
         </div>
 
-        {steps.status === "loading" && <Loading label="Loading next steps" />}
+        {steps.status === "loading" && <Loading label={t("next.loading")} />}
         {steps.status === "error" && <ErrorNotice message={steps.error} onRetry={steps.reload} />}
 
         {steps.status === "ready" && !result && (
           <>
             <div className="notice" style={{ marginTop: "var(--space-5)" }}>
-              <p style={{ margin: 0 }}>Choose your current stage above to see what you can do next.</p>
+              <p style={{ margin: 0 }}>{t("next.chooseStage")}</p>
             </div>
             {stages.status === "ready" && <OpenCourses stages={stages.data} />}
           </>
@@ -266,15 +259,15 @@ export default function NextStepsPage() {
             </div>
 
             {result.counts.options === 0 && result.switches.length === 0 ? (
-              <p className="notice">No next steps are recorded for this stage yet.</p>
+              <p className="notice">{t("next.none")}</p>
             ) : (
-              <div className="tabs" role="group" aria-label="Filter options">
+              <div className="tabs" role="group" aria-label={t("next.filter")}>
                 <button type="button" className="tab" aria-pressed={tab === "all"} onClick={() => setTab("all")}>
-                  All
+                  {t("common.all")}
                 </button>
                 {GROUPS.filter((g) => counts[g.key] > 0).map((g) => (
                   <button key={g.key} type="button" className="tab" aria-pressed={tab === g.key} onClick={() => setTab(g.key)}>
-                    {g.label} <span className="tab__count">{counts[g.key]}</span>
+                    {t(`next.group.${g.key}`)} <span className="tab__count">{counts[g.key]}</span>
                   </button>
                 ))}
               </div>
@@ -282,8 +275,8 @@ export default function NextStepsPage() {
 
             {visible.map((g) => (
               <section key={g.key} className="detail-block" aria-labelledby={`group-${g.key}`}>
-                <h2 id={`group-${g.key}`} className="group-title">{g.label}</h2>
-                {g.hint && <p className="muted small" style={{ marginTop: "calc(var(--space-2) * -1)" }}>{g.hint}</p>}
+                <h2 id={`group-${g.key}`} className="group-title">{t(`next.group.${g.key}`)}</h2>
+                {g.hint && <p className="muted small" style={{ marginTop: "calc(var(--space-2) * -1)" }}>{t(`next.group.${g.key}.hint`)}</p>}
                 <div className="option-grid">
                   {g.key === "switches"
                     ? result.switches.map((s) => <SwitchCard key={s.transition_id} item={s} />)
@@ -294,7 +287,7 @@ export default function NextStepsPage() {
 
             {result.other_exams.length > 0 && (tab === "all" || tab === "exam") && (
               <section className="detail-block" aria-labelledby="other-exams">
-                <h2 id="other-exams" className="group-title">Other exams open at this stage</h2>
+                <h2 id="other-exams" className="group-title">{t("next.otherExams")}</h2>
                 <ul className="plain-list small">
                   {result.other_exams.map((e) => (
                     <li key={e.exam_id}>
@@ -306,11 +299,7 @@ export default function NextStepsPage() {
               </section>
             )}
 
-            <p className="notice small" style={{ marginTop: "var(--space-6)" }}>
-              Eligibility, exam dates and rules change every year. Entries marked “Not yet verified” come from official
-              sources but have not been re-checked for the current year. Always confirm on the official website before
-              applying.
-            </p>
+            <p className="notice small" style={{ marginTop: "var(--space-6)" }}>{t("next.disclaimer")}</p>
           </>
         )}
       </div>

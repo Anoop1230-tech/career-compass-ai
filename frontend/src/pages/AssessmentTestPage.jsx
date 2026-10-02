@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { KIND_LABELS, LIKERT, clearProgress, loadProgress, saveProgress, scaleLabel } from "../assessments/assessmentUtils";
+import { clearProgress, kindLabel, likertLabels, loadProgress, saveProgress, scaleLabel } from "../assessments/assessmentUtils";
+import { useI18n } from "../i18n";
 import { startRequests } from "../assessments/startRequests";
 import * as api from "../services/api";
 
@@ -10,6 +11,7 @@ export default function AssessmentTestPage() {
   const { kind } = useParams();
   const navigate = useNavigate();
   const headingRef = useRef(null);
+  const { t } = useI18n();
 
   const [test, setTest] = useState(null);
   const [loadError, setLoadError] = useState("");
@@ -64,8 +66,8 @@ export default function AssessmentTestPage() {
     return (
       <section className="page-center">
         <div className="page-center__box">
-          <h1>Test not found</h1>
-          <Link to="/assessments" className="btn btn--primary">See all tests</Link>
+          <h1>{t("assess.notFound")}</h1>
+          <Link to="/assessments" className="btn btn--primary">{t("assess.seeAll")}</Link>
         </div>
       </section>
     );
@@ -75,13 +77,13 @@ export default function AssessmentTestPage() {
     return (
       <section className="page-center" role="alert">
         <div className="page-center__box">
-          <h1>Could not start the test</h1>
+          <h1>{t("assess.startError")}</h1>
           <p className="muted">{loadError}</p>
           <button type="button" className="btn btn--primary" onClick={() => {
             setLoadError("");
             setAttempt((n) => n + 1);
           }}>
-            Try again
+            {t("common.tryAgain")}
           </button>
         </div>
       </section>
@@ -90,7 +92,7 @@ export default function AssessmentTestPage() {
 
   if (!test) {
     return (
-      <div className="page-center" role="status" aria-label="Loading test">
+      <div className="page-center" role="status" aria-label={t("assess.loadingTest")}>
         <div className="loader" />
       </div>
     );
@@ -117,12 +119,12 @@ export default function AssessmentTestPage() {
   const submit = async () => {
     if (submitting) return;
     if (!canSubmit) {
-      setSubmitError(`Please answer all questions. ${unanswered.length} left.`);
+      setSubmitError(t("assess.answerAll", { n: unanswered.length }));
       setIndex(questions.indexOf(unanswered[0]));
       return;
     }
     if (isAptitude && unanswered.length > 0 &&
-        !window.confirm(`${unanswered.length} question(s) are unanswered and will count as wrong. Submit anyway?`)) {
+        !window.confirm(t("assess.confirmUnanswered", { n: unanswered.length }))) {
       return;
     }
     setSubmitting(true);
@@ -148,25 +150,25 @@ export default function AssessmentTestPage() {
   return (
     <section className="page">
       <div className="container" style={{ maxWidth: 760 }}>
-        <nav aria-label="Breadcrumb" className="breadcrumb">
-          <Link to="/assessments">Assessments</Link> <span aria-hidden="true">/</span> <span>{KIND_LABELS[kind]}</span>
+        <nav aria-label={t("common.breadcrumb")} className="breadcrumb">
+          <Link to="/assessments">{t("nav.assessments")}</Link> <span aria-hidden="true">/</span> <span>{kindLabel(t, kind)}</span>
         </nav>
 
         <div className="progress" aria-hidden="true">
           <div className="progress__bar" style={{ width: `${(answeredCount / total) * 100}%` }} />
         </div>
         <p className="small muted" aria-live="polite">
-          Question {index + 1} of {total} · {answeredCount} answered
+          {t("assess.progress", { n: index + 1, total, answered: answeredCount })}
         </p>
 
         <div className="card question-card">
-          {isAptitude && <span className="badge">{scaleLabel(question.category)}</span>}
+          {isAptitude && <span className="badge">{scaleLabel(t, question.category)}</span>}
           <h1 ref={headingRef} tabIndex={-1} className="question-card__text">
             {question.text}
           </h1>
 
           <fieldset className="field">
-            <legend className="visually-hidden">Your answer</legend>
+            <legend className="visually-hidden">{t("assess.yourAnswer")}</legend>
             <div className={isAptitude ? "choices" : "likert"}>
               {isAptitude
                 ? question.options.map((o) => (
@@ -176,7 +178,7 @@ export default function AssessmentTestPage() {
                       <span><strong>{o.key.toUpperCase()}.</strong> {o.text}</span>
                     </label>
                   ))
-                : LIKERT[test.scale].map((label, i) => (
+                : likertLabels(t, test.scale).map((label, i) => (
                     <label key={label} className="choice">
                       <input type="radio" name={question.question_id} checked={current === i + 1}
                         onChange={() => choose(i + 1)} />
@@ -193,7 +195,7 @@ export default function AssessmentTestPage() {
                 return next;
               });
             }}>
-              Clear answer
+              {t("assess.clearAnswer")}
             </button>
           )}
         </div>
@@ -207,32 +209,32 @@ export default function AssessmentTestPage() {
         <div className="form-actions">
           <button type="button" className="btn btn--secondary" disabled={index === 0}
             onClick={() => setIndex((i) => i - 1)}>
-            Back
+            {t("profile.back")}
           </button>
           <div className="btn-row">
             {!isLast && (
               <button type="button" className="btn btn--secondary" onClick={() => setIndex((i) => i + 1)}>
-                {isAptitude && current === undefined ? "Skip" : "Next"}
+                {isAptitude && current === undefined ? t("assess.skip") : t("assess.next")}
               </button>
             )}
             {(isLast || answeredCount === total) && (
               <button type="button" className="btn btn--primary" onClick={submit} disabled={submitting}>
-                {submitting ? "Submitting…" : "Submit"}
+                {submitting ? t("assess.submitting") : t("assess.submit")}
               </button>
             )}
           </div>
         </div>
 
         <p className="small muted" style={{ marginTop: "var(--space-5)" }}>
-          Your answers are saved on this device as you go, so you can come back later.{" "}
+          {t("assess.savedOnDevice")}{" "}
           <button type="button" className="link-button" onClick={() => {
-            if (!window.confirm("Start this test again from the beginning?")) return;
+            if (!window.confirm(t("assess.confirmRestart"))) return;
             clearProgress(kind, test.attempt_id);
             setTest(null);
             restartRef.current = true;
             setAttempt((n) => n + 1);
           }}>
-            Start over
+            {t("assess.startOver")}
           </button>
         </p>
       </div>

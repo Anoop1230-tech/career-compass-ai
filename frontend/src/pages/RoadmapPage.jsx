@@ -3,15 +3,17 @@ import { Link, useSearchParams } from "react-router-dom";
 import { ErrorNotice, Loading, Meter, OfficialLink } from "../components/Status";
 import { useAuth } from "../context/AuthContext";
 import useRequest from "../hooks/useRequest";
+import { useI18n } from "../i18n";
 import * as api from "../services/api";
 
-function duration(weeks) {
+function duration(t, weeks) {
   if (!weeks) return null;
-  if (weeks >= 52) return `about ${Math.round((weeks / 52) * 10) / 10} years`;
-  return weeks === 1 ? "1 week" : `${weeks} weeks`;
+  if (weeks >= 52) return t("road.aboutYears", { n: Math.round((weeks / 52) * 10) / 10 });
+  return weeks === 1 ? t("gap.oneWeek") : t("gap.weeks", { n: weeks });
 }
 
 function CareerChooser({ onPick, loggedIn }) {
+  const { t } = useI18n();
   const careers = useRequest((signal) => api.getCareers({ limit: 100 }, signal), []);
   const recs = useRequest(
     (signal) => (loggedIn ? api.getRecommendations({ limit: 3 }, signal).catch(() => null) : Promise.resolve(null)),
@@ -20,15 +22,15 @@ function CareerChooser({ onPick, loggedIn }) {
   return (
     <div className="toolbar">
       <div className="field" style={{ marginBottom: 0 }}>
-        <label className="field__label" htmlFor="roadmap-career">Target career</label>
+        <label className="field__label" htmlFor="roadmap-career">{t("gap.target")}</label>
         <select id="roadmap-career" className="input" defaultValue="" onChange={(e) => onPick(e.target.value)}>
-          <option value="" disabled>Choose a career</option>
+          <option value="" disabled>{t("gap.chooseCareer")}</option>
           {careers.data?.items.map((c) => <option key={c.career_id} value={c.career_id}>{c.name}</option>)}
         </select>
       </div>
       {recs.data?.items?.length > 0 && (
         <div className="small">
-          <p className="muted" style={{ margin: "0 0 var(--space-2)" }}>Your top matches:</p>
+          <p className="muted" style={{ margin: "0 0 var(--space-2)" }}>{t("gap.topMatches")}</p>
           <div className="btn-row">
             {recs.data.items.map((i) => (
               <button key={i.career_id} type="button" className="btn btn--secondary btn--small" onClick={() => onPick(i.career_id)}>
@@ -51,16 +53,17 @@ function withSkill(roadmap, skillId, done) {
   };
 }
 
-const COST_LABEL = { free: "Free", freemium: "Free to learn", paid: "Paid" };
+// Cost labels: road.cost.<free|freemium|paid> in i18n/*.js
 
 function Courses({ courses, skillName }) {
+  const { t } = useI18n();
   if (!courses?.length) return null;
   return (
-    <ul className="roadmap-courses small" aria-label={`Courses for ${skillName}`}>
+    <ul className="roadmap-courses small" aria-label={t("road.coursesFor", { name: skillName })}>
       {courses.map((c) => (
         <li key={c.course_id}>
           <OfficialLink href={c.url}>{c.name}</OfficialLink>
-          <span className="muted"> · {c.provider} · {COST_LABEL[c.cost_type] || c.cost_type}</span>
+          <span className="muted"> · {c.provider} · {["free", "freemium", "paid"].includes(c.cost_type) ? t(`road.cost.${c.cost_type}`) : c.cost_type}</span>
         </li>
       ))}
     </ul>
@@ -68,6 +71,7 @@ function Courses({ courses, skillName }) {
 }
 
 function StageItem({ item, canTick, busy, onToggle }) {
+  const { t } = useI18n();
   if (item.kind === "skill") {
     const id = `skill-${item.skill_id}`;
     return (
@@ -77,10 +81,10 @@ function StageItem({ item, canTick, busy, onToggle }) {
         ) : <span className="roadmap-item__dot" aria-hidden="true" />}
         <div>
           <label htmlFor={canTick ? id : undefined} className="roadmap-item__title">
-            {item.name}{item.is_mandatory && <span className="badge" style={{ marginLeft: 6 }}>core</span>}
+            {item.name}{item.is_mandatory && <span className="badge" style={{ marginLeft: 6 }}>{t("road.core")}</span>}
           </label>
           <p className="muted small">
-            {item.from_level === "none" ? "Start" : `From ${item.from_level}`} → {item.to_level} · {duration(item.weeks)}
+            {item.from_level === "none" ? t("road.start") : t("road.from", { level: t(`gap.level.${item.from_level}`) })} → {t(`gap.level.${item.to_level}`)} · {duration(t, item.weeks)}
             {item.description ? ` · ${item.description}` : ""}
           </p>
           {!item.done && <Courses courses={item.courses} skillName={item.name} />}
@@ -92,10 +96,10 @@ function StageItem({ item, canTick, busy, onToggle }) {
     <li className="roadmap-item">
       <span className="roadmap-item__dot" aria-hidden="true" />
       <div>
-        <p className="roadmap-item__title">{item.title}{item.years ? ` · ${item.years} years` : ""}</p>
+        <p className="roadmap-item__title">{item.title}{item.years ? ` · ${t("next.years", { n: item.years })}` : ""}</p>
         {item.detail && <p className="muted small">{item.detail}</p>}
         {item.certifications?.length > 0 && (
-          <ul className="roadmap-courses small" aria-label="Certifications">
+          <ul className="roadmap-courses small" aria-label={t("road.certifications")}>
             {item.certifications.map((c) => (
               <li key={c.certification_id}>
                 <OfficialLink href={c.url}>{c.name}</OfficialLink>
@@ -119,6 +123,7 @@ function StageItem({ item, canTick, busy, onToggle }) {
 
 export default function RoadmapPage() {
   const { status: authStatus } = useAuth();
+  const { t } = useI18n();
   const loggedIn = authStatus === "authenticated";
   const [params, setParams] = useSearchParams();
   const career = params.get("career");
@@ -157,24 +162,24 @@ export default function RoadmapPage() {
       <div className="container">
         <div className="page__head">
           <div>
-            <h1>{r ? `Roadmap: ${r.career.name}` : "Career roadmap"}</h1>
-            <p className="muted">A stage-by-stage plan that skips what you already know.</p>
+            <h1>{r ? t("road.titleFor", { name: r.career.name }) : t("road.title")}</h1>
+            <p className="muted">{t("road.lead")}</p>
           </div>
           {r && (
             <div className="btn-row">
               {r.logged_in && !r.is_target && (
                 <button type="button" className="btn btn--primary" disabled={busy}
-                  onClick={() => act(() => api.setRoadmapTarget(r.career.career_id))}>Set as my target</button>
+                  onClick={() => act(() => api.setRoadmapTarget(r.career.career_id))}>{t("road.setTarget")}</button>
               )}
-              {r.is_target && <span className="badge badge--ok">Your target career</span>}
+              {r.is_target && <span className="badge badge--ok">{t("road.isTarget")}</span>}
               <button type="button" className="btn btn--secondary" onClick={() => setParams({ choose: "1" })}>
-                Change career
+                {t("road.change")}
               </button>
             </div>
           )}
         </div>
 
-        {req.status === "loading" && <Loading label="Loading roadmap" />}
+        {req.status === "loading" && <Loading label={t("road.loading")} />}
         {req.status === "error" && <ErrorNotice message={req.error} onRetry={req.reload} />}
         {actionError && <ErrorNotice message={actionError} />}
 
@@ -183,7 +188,7 @@ export default function RoadmapPage() {
             <CareerChooser loggedIn={loggedIn} onPick={(id) => setParams({ career: id })} />
             {!loggedIn && (
               <p className="notice" style={{ marginTop: "var(--space-5)" }}>
-                <Link to="/login">Log in</Link> to get a roadmap that skips the skills you already have and to track progress.
+                <Link to="/login">{t("header.login")}</Link> {t("road.loginHint")}
               </p>
             )}
           </>
@@ -193,18 +198,18 @@ export default function RoadmapPage() {
           <>
             <div className="gap-summary">
               <div className="card summary-card">
-                <p className="muted small">Skills learned</p>
+                <p className="muted small">{t("road.learned")}</p>
                 <p className="summary-card__big">{r.progress.done} / {r.progress.total}</p>
-                <Meter value={r.progress.percent} label="Roadmap progress" />
+                <Meter value={r.progress.percent} label={t("road.progress")} />
               </div>
               <div className="card summary-card">
-                <p className="muted small">Rough time left (skills and projects)</p>
-                <p className="summary-card__big">{duration(r.total_weeks) || "Done"}</p>
-                <p className="muted small">at about {r.hours_per_week} hours a week{r.study_years ? `, plus ${r.study_years} years of study` : ""}</p>
+                <p className="muted small">{t("road.timeLeft")}</p>
+                <p className="summary-card__big">{duration(t, r.total_weeks) || t("road.done")}</p>
+                <p className="muted small">{t("gap.hoursPerWeek", { n: r.hours_per_week })}{r.study_years ? t("road.plusStudy", { n: r.study_years }) : ""}</p>
               </div>
               {r.stage && (
                 <div className="card summary-card">
-                  <p className="muted small">Starting from</p>
+                  <p className="muted small">{t("road.startingFrom")}</p>
                   <p className="summary-card__big summary-card__big--text">{r.stage.name}</p>
                 </div>
               )}
@@ -212,8 +217,8 @@ export default function RoadmapPage() {
 
             {!r.personalised && (
               <p className="notice">
-                {r.logged_in ? <><Link to="/profile/edit">Add your profile</Link> so the roadmap can skip what you know.</>
-                  : <><Link to="/login">Log in</Link> to personalise this roadmap and tick off skills.</>}
+                {r.logged_in ? <><Link to="/profile/edit">{t("road.addProfile")}</Link> {t("road.addProfileHint")}</>
+                  : <><Link to="/login">{t("header.login")}</Link> {t("road.loginTick")}</>}
               </p>
             )}
 
@@ -224,7 +229,7 @@ export default function RoadmapPage() {
                     <span className="roadmap-stage__num" aria-hidden="true">{s.order}</span>
                     <div>
                       <h2 id={`stage-${s.key}`}>{s.title}</h2>
-                      <p className="muted small">{s.summary}{duration(s.weeks) ? ` · ${duration(s.weeks)}` : ""}</p>
+                      <p className="muted small">{s.summary}{duration(t, s.weeks) ? ` · ${duration(t, s.weeks)}` : ""}</p>
                     </div>
                   </div>
                   <ul className="roadmap-items">
@@ -242,11 +247,10 @@ export default function RoadmapPage() {
             </ol>
 
             {r.skipped.length > 0 && (
-              <p className="small muted">Skipped because you already have them: {r.skipped.map((s) => `${s.name} (${s.level})`).join(", ")}.</p>
+              <p className="small muted">{t("road.skipped", { list: r.skipped.map((s) => `${s.name} (${t(`gap.level.${s.level}`)})`).join(", ") })}</p>
             )}
             <p className="notice small">
-              Time estimates are rough planning numbers. Ticking a skill here tracks your roadmap; to change the level
-              used everywhere else, update the skill in <Link to="/profile/edit">your profile</Link>.
+              {t("road.disclaimer")} <Link to="/profile/edit">{t("road.yourProfile")}</Link>.
             </p>
           </>
         )}

@@ -1,20 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { useI18n } from "../i18n";
 import * as api from "../services/api";
 
 // All careers fit on one page (the catalog is small), grouped by field
 const LIMIT = 100;
 
 // Field order and a one-line explanation for each section; unknown fields are added at the end
-const CATEGORIES = [
-  { name: "Technology", text: "Software, data, AI, cloud, security and electronics." },
-  { name: "Business", text: "Product, analysis, management and starting your own business." },
-  { name: "Finance", text: "Accounts, audit and financial analysis." },
-  { name: "Government", text: "Civil services, public sector and banking jobs through exams." },
-  { name: "Education", text: "Teaching, school leadership, special education, counselling and learning design." },
-  { name: "Creative Arts", text: "Music, dance, design, writing, acting, comedy, film and media. No degree needed." },
-  { name: "Vocational", text: "Hands-on skill careers: cooking, fitness and beauty. No degree needed." },
-];
+// One-line texts: careers.cat.<name> in i18n/*.js
+const CATEGORIES = ["Technology", "Business", "Finance", "Government", "Education", "Creative Arts", "Vocational"]
+  .map((name) => ({ name, text: true }));
 
 const slug = (name) => `field-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
 
@@ -27,7 +22,7 @@ function groupByField(items) {
   }
   const known = CATEGORIES.filter((cat) => byField.has(cat.name));
   const extra = [...byField.keys()].filter((d) => !CATEGORIES.some((cat) => cat.name === d)).sort()
-    .map((name) => ({ name, text: "" }));
+    .map((name) => ({ name, text: false }));
   return [...known, ...extra].map((cat) => ({
     ...cat,
     careers: byField.get(cat.name).sort((a, b) =>
@@ -48,6 +43,8 @@ function useDebounced(value, delay = 250) {
 export default function CareersPage() {
   // Filters live in the URL: shareable links, and Back/Forward work
   const [params, setParams] = useSearchParams();
+  const { t, tOr } = useI18n();
+  const domainName = (d) => tOr(`domain.${d}`, d);
   const q = params.get("q") || "";
   const domain = params.get("domain") || "";
   const stage = params.get("stage") || "";
@@ -96,37 +93,37 @@ export default function CareersPage() {
       <div className="container">
         <div className="page__head">
           <div>
-            <h1>Careers</h1>
-            <p className="muted">Browse careers, the skills they need, and how people get there.</p>
+            <h1>{t("nav.careers")}</h1>
+            <p className="muted">{t("careers.lead")}</p>
           </div>
         </div>
 
         <form className="filters" role="search" onSubmit={(e) => e.preventDefault()}>
           <div className="field">
-            <label htmlFor="career-search" className="field__label">Search</label>
+            <label htmlFor="career-search" className="field__label">{t("careers.search")}</label>
             <input
               id="career-search"
               type="search"
               className="input"
-              placeholder="e.g. data, security, teacher"
+              placeholder={t("careers.search.placeholder")}
               value={text}
               maxLength={60}
               onChange={(e) => setText(e.target.value)}
             />
           </div>
           <div className="field">
-            <label htmlFor="career-domain" className="field__label">Field</label>
+            <label htmlFor="career-domain" className="field__label">{t("careers.field")}</label>
             <select id="career-domain" className="input" value={domain} onChange={(e) => update({ domain: e.target.value })}>
-              <option value="">All fields</option>
+              <option value="">{t("careers.allFields")}</option>
               {(data?.domains || (domain ? [domain] : [])).map((d) => (
-                <option key={d} value={d}>{d}</option>
+                <option key={d} value={d}>{domainName(d)}</option>
               ))}
             </select>
           </div>
           <div className="field">
-            <label htmlFor="career-stage" className="field__label">Common after</label>
+            <label htmlFor="career-stage" className="field__label">{t("careers.commonAfter")}</label>
             <select id="career-stage" className="input" value={stage} onChange={(e) => update({ stage: e.target.value })}>
-              <option value="">Any education</option>
+              <option value="">{t("careers.anyEducation")}</option>
               {stages.map((s) => (
                 <option key={s.stage_id} value={s.stage_id}>{s.name}</option>
               ))}
@@ -137,17 +134,17 @@ export default function CareersPage() {
               setText("");
               setParams(new URLSearchParams(), { replace: true });
             }}>
-              Clear filters
+              {t("careers.clearFilters")}
             </button>
           )}
         </form>
 
         <p className="muted" role="status" aria-live="polite" style={{ margin: "var(--space-4) 0" }}>
-          {state.status === "ready" && `${data.total} ${data.total === 1 ? "career" : "careers"} found`}
+          {state.status === "ready" && (data.total === 1 ? t("careers.foundOne") : t("careers.found", { n: data.total }))}
         </p>
 
         {state.status === "loading" && (
-          <div className="page-center" style={{ minHeight: 200 }} role="status" aria-label="Loading careers">
+          <div className="page-center" style={{ minHeight: 200 }} role="status" aria-label={t("careers.loading")}>
             <div className="loader" />
           </div>
         )}
@@ -159,22 +156,22 @@ export default function CareersPage() {
               setState({ status: "loading", data: null, error: "" });
               setAttempt((n) => n + 1);
             }}>
-              Try again
+              {t("common.tryAgain")}
             </button>
           </div>
         )}
 
         {state.status === "ready" && data.total === 0 && (
           <div className="notice">
-            No careers match these filters. Try a shorter search word or clear the filters.
+            {t("careers.none")}
           </div>
         )}
 
         {state.status === "ready" && fields.length > 1 && (
-          <nav className="field-jump" aria-label="Jump to a category">
+          <nav className="field-jump" aria-label={t("careers.jump")}>
             {fields.map((f) => (
               <a key={f.name} href={`#${slug(f.name)}`} className="field-jump__link">
-                {f.name} <span className="field-jump__count">{f.careers.length}</span>
+                {domainName(f.name)} <span className="field-jump__count">{f.careers.length}</span>
               </a>
             ))}
           </nav>
@@ -183,17 +180,17 @@ export default function CareersPage() {
         {state.status === "ready" && fields.map((f) => (
           <section key={f.name} className="career-field" aria-labelledby={slug(f.name)}>
             <div className="career-field__head">
-              <h2 id={slug(f.name)}>{f.name} <span className="muted career-field__count">{f.careers.length}</span></h2>
-              {f.text && <p className="muted">{f.text}</p>}
+              <h2 id={slug(f.name)}>{domainName(f.name)} <span className="muted career-field__count">{f.careers.length}</span></h2>
+              {f.text && <p className="muted">{t(`careers.cat.${f.name}`)}</p>}
             </div>
             <ul className="grid" style={{ listStyle: "none", margin: 0, padding: 0 }}>
               {f.careers.map((c) => (
                 <li key={c.career_id}>
                   <Link to={`/careers/${c.career_id}`} className="card card--link career-card">
-                    <span className="badge">{c.sub_domain || c.domain}</span>
+                    <span className="badge">{c.sub_domain || domainName(c.domain)}</span>
                     <h3 className="career-card__title">{c.name}</h3>
                     <p className="muted">{c.description}</p>
-                    <span className="card__arrow">View details →</span>
+                    <span className="card__arrow">{t("careers.viewDetails")}</span>
                   </Link>
                 </li>
               ))}

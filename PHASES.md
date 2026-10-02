@@ -25,6 +25,17 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 17 | Creative and skill-based careers | Professional courses (music, dance, design, writing, acting and comedy, film, culinary, fitness, beauty) and 21 careers that need no degree | ✅ |
 | 18 | Themes and motion | Light, Dark, High contrast and Match device themes; home illustration with day and night scenes; scroll reveal and hover animations | ✅ |
 | 19 | Security, learning links and feedback | Proxy-aware and per-account login limits, logout everywhere, change/reset password, course and certification links on roadmaps, "does this fit you?" feedback, smaller production image | ✅ |
+| 20 | Language system | English and Hindi for every screen, language switcher, saved preference | ✅ |
+| 21 | More careers | Healthcare, law, armed forces, agriculture and skilled trades (ITI) with stages, exams and routes | ⬜ |
+| 22 | Career comparison | Compare 2–3 careers: skills, education, years, exams, fit | ⬜ |
+| 23 | Project ideas | 2–3 project briefs per career with checklists in the roadmap | ⬜ |
+| 24 | Printable report | One-page summary (profile, matches, roadmap) saved as PDF from the browser | ⬜ |
+| 25 | Salary ranges | Sourced ranges by experience and city tier, never guessed | ⬜ |
+| 26 | College predictor | Likely / borderline / unlikely colleges from published closing ranks | ⬜ |
+| 27 | Exam reminders | Follow exams, email reminders, calendar file, "coming up" on the dashboard | ⬜ |
+| 28 | Résumé upload | Read skills from a PDF résumé; user confirms before saving | ⬜ |
+| 29 | Hindi content | Careers, exams, skills and the mentor in Hindi (fallback to English) | ⬜ |
+| 30 | Feedback-tuned weights | Propose scoring-weight changes from real "does this fit you?" answers | ⬜ |
 
 ---
 
@@ -356,3 +367,13 @@ Result: validator 0 errors and 0 warnings (59 careers, 198 skills, 443 career-sk
 Result: 352 backend tests, 121 frontend unit tests, 115 browser tests (5 skipped by design) passing; lint 0 warnings; validator 0 errors, 0 warnings; production build OK (initial JavaScript 112 kB gzipped). New course/certification links: 0 dead, 7 sites block automated checks (open in a browser to confirm).
 
 Known limits: the Docker image was not built (Docker is not installed on the development machine); the rate limiter is still in memory per server (Redis needed for several servers); password reset needs SMTP configured in production; feedback numbers mean little until there are at least 30 answers.
+
+## Phase 20 - Language system - ✅ done
+- 20.1 Tiny translation system without a library (`frontend/src/i18n`): `en.js` and `hi.js` dictionaries, `useI18n()` with `t(key, vars)`, `tOr(key, fallback)` and `tOptions()`; fallback order Hindi → English → key. The choice is saved in `localStorage` (`cc-lang`) and sets `<html lang>`. Language picker (EN / हि) next to the theme picker. A unit test fails if `hi.js` misses a key or a `{placeholder}` that `en.js` has
+- 20.2–20.5 Every screen translated: home, login/register, password reset, profile form and choice lists, dashboard, assessments, Next Steps, For You (including "does this fit you?"), skill gap, "Can I become…?", roadmap, career tree, careers list and detail, exams/colleges/scholarships, mentor, 404, the crash screen, loading and "verified" labels, and the home illustration's signposts
+- 20.5 Server messages: errors carry a stable `code` (and `params`) next to the English `detail` (`backend/services/messages.py`, 30 codes plus pydantic validation types); the frontend shows the code in the chosen language and falls back to the server text for anything unknown. A backend test fails if a code has no frontend text
+- 20.6 Hindi typography: Devanagari fonts first (Nirmala UI, Noto Sans Devanagari, Mangal), taller lines (body 1.75, headings 1.45) and no negative letter-spacing. Fixed a 2 px sideways scroll on For You at 320 px (grid column could not shrink). Browser tests in Hindi: axe scans on 23 pages, phone widths 320/360/412 px, line-height and clipping checks, switching language and keeping it after reload, a server error shown in Hindi
+
+Result: 360 backend tests, 134 frontend unit tests, 124 browser tests (6 skipped by design) passing; lint 0 warnings; production build OK.
+
+Known limits: the Hindi text is a first draft and needs review by a native speaker. Content that comes from the datasets (career names and descriptions, eligibility, reasons, mentor answers) is still English – that is Phase 29. An error already on screen keeps its language until the page reloads it.

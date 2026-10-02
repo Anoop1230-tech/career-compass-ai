@@ -8,11 +8,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from config import settings
 from catalog.seed import auto_seed
 from database import SessionLocal, init_db, migrate
 from services.frontend import mount_frontend
+from services.messages import message_code, validation_code
 from services.security import SecurityHeadersMiddleware
 from routes import (
     assessments, auth, catalog, explore, health, mentor, next_steps, profile, recommendations, resources, roadmap,
@@ -65,14 +67,24 @@ def _field_name(loc: tuple) -> str:
 @app.exception_handler(RequestValidationError)
 async def validation_error_handler(request: Request, exc: RequestValidationError):
     """422 with one readable sentence (`detail`) plus per-field errors for forms."""
-    errors = [
-        {"field": _field_name(err.get("loc", ())), "message": err.get("msg", "Invalid value").removeprefix("Value error, ")}
-        for err in exc.errors()
-    ]
+    errors = []
+    for err in exc.errors():
+        message = err.get("msg", "Invalid value").removeprefix("Value error, ")
+        errors.append({"field": _field_name(err.get("loc", ())), "message": message, **validation_code(err, message)})
     first = errors[0] if errors else {"field": "request", "message": "Invalid request"}
     return JSONResponse(
         status_code=422,
         content={"detail": f"{first['field']}: {first['message']}", "errors": errors},
+    )
+
+
+@app.exception_handler(StarletteHTTPException)
+async def http_error_handler(request: Request, exc: StarletteHTTPException):
+    """Same JSON as FastAPI's default, plus a message code the frontend can translate."""
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail, **message_code(exc.detail)},
+        headers=getattr(exc, "headers", None),
     )
 
 
@@ -81,7 +93,7 @@ async def database_error_handler(request: Request, exc: SQLAlchemyError):
     logger.exception("Database error on %s", request.url.path)
     return JSONResponse(
         status_code=503,
-        content={"detail": "The database is unavailable. Please try again shortly."},
+        content={"detail": "The database is unavailable. Please try again shortly.", "code": "server.db_unavailable"},
     )
 
 
@@ -91,7 +103,7 @@ async def unhandled_error_handler(request: Request, exc: Exception):
     logger.exception("Unhandled error on %s", request.url.path)
     return JSONResponse(
         status_code=500,
-        content={"detail": "Something went wrong on the server."},
+        content={"detail": "Something went wrong on the server.", "code": "server.error"},
     )
 
 

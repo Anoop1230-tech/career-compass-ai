@@ -1,44 +1,17 @@
-// Labels and helpers shared by the assessment pages.
+// Labels and helpers shared by the assessment pages. Texts live in i18n/*.js:
+//   assess.kind.<kind>  (test names)   assess.scale.<key>  (RIASEC, traits, aptitude categories)
+//   assess.likert.<scale>.<1-5>        (answer choices)
 
-export const KIND_LABELS = {
-  interest: "Interest profile",
-  personality: "Personality and work style",
-  aptitude: "Aptitude quiz",
+export const LIKERT_SIZE = 5;
+
+/** Label for a score scale; unknown keys fall back to readable text. */
+export const scaleLabel = (t, key) => {
+  const label = t(`assess.scale.${key}`);
+  return label === `assess.scale.${key}` ? key.replaceAll("_", " ") : label;
 };
-
-export const SCALE_LABELS = {
-  // RIASEC
-  R: "Realistic – hands-on, tools, machines",
-  I: "Investigative – analysing, researching",
-  A: "Artistic – creating, designing",
-  S: "Social – helping, teaching",
-  E: "Enterprising – leading, persuading",
-  C: "Conventional – organising, detail",
-  // Personality
-  extraversion: "Extraversion",
-  agreeableness: "Agreeableness",
-  conscientiousness: "Conscientiousness",
-  emotional_stability: "Emotional stability",
-  openness: "Openness to ideas",
-  leadership: "Leadership",
-  risk_tolerance: "Comfort with risk",
-  team_orientation: "Team orientation",
-  creativity: "Creativity",
-  research_orientation: "Research orientation",
-  // Aptitude
-  numerical: "Numerical",
-  logical: "Logical",
-  verbal: "Verbal",
-  spatial: "Spatial",
-  problem_solving: "Problem solving",
-};
-
-export const LIKERT = {
-  like: ["Strongly dislike", "Dislike", "Not sure", "Like", "Strongly like"],
-  agree: ["Strongly disagree", "Disagree", "Neutral", "Agree", "Strongly agree"],
-};
-
-export const scaleLabel = (key) => SCALE_LABELS[key] || key.replaceAll("_", " ");
+export const kindLabel = (t, kind) => t(`assess.kind.${kind}`);
+export const likertLabels = (t, scale) =>
+  Array.from({ length: LIKERT_SIZE }, (_, i) => t(`assess.likert.${scale}.${i + 1}`));
 
 // Answers are kept in the browser while the test is in progress,
 // so a refresh or accidental tab close does not lose them.

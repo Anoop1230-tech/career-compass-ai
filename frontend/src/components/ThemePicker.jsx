@@ -1,3 +1,4 @@
+import { useI18n } from "../i18n";
 import { THEMES, useTheme } from "../theme";
 import Icon from "./Icon";
 
@@ -7,19 +8,21 @@ import Icon from "./Icon";
  */
 export default function ThemePicker() {
   const [choice, choose] = useTheme();
-  const current = THEMES.find((t) => t.value === choice);
+  const { t } = useI18n();
+  const label = (theme) => t(`theme.${theme.value}`);
+  const current = THEMES.find((theme) => theme.value === choice);
 
   return (
     <fieldset className="theme-picker">
       <legend className="theme-picker__legend">
-        Theme <span className="theme-picker__current">{current.label}</span>
+        {t("theme.label")} <span className="theme-picker__current">{label(current)}</span>
       </legend>
       <div className="theme-picker__options">
-        {THEMES.map((t) => (
-          <label key={t.value} className="theme-picker__option" title={t.label}>
-            <input type="radio" name="theme" value={t.value} checked={choice === t.value}
-              onChange={() => choose(t.value)} aria-label={t.label} />
-            <span aria-hidden="true"><Icon name={t.icon} size={17} /></span>
+        {THEMES.map((theme) => (
+          <label key={theme.value} className="theme-picker__option" title={label(theme)}>
+            <input type="radio" name="theme" value={theme.value} checked={choice === theme.value}
+              onChange={() => choose(theme.value)} aria-label={label(theme)} />
+            <span aria-hidden="true"><Icon name={theme.icon} size={17} /></span>
           </label>
         ))}
       </div>

@@ -2,19 +2,21 @@ import { useState } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { TextField } from "../components/FormFields";
 import { useAuth } from "../context/AuthContext";
+import { useI18n } from "../i18n";
 import { getErrorMessage, getFieldErrors } from "../services/api";
 import { PASSWORD_HINT, passwordProblem } from "../profile/password";
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/** Returns translation keys per field. */
 function validate(mode, email, password) {
   const errors = {};
-  if (!EMAIL_PATTERN.test(email.trim())) errors.email = "Enter a valid email address.";
+  if (!EMAIL_PATTERN.test(email.trim())) errors.email = "auth.emailInvalid";
   if (mode === "register") {
     const problem = passwordProblem(password);
     if (problem) errors.password = problem;
   } else if (!password) {
-    errors.password = "Enter your password.";
+    errors.password = "auth.passwordMissing";
   }
   return errors;
 }
@@ -23,13 +25,15 @@ function validate(mode, email, password) {
 export default function AuthPage({ mode }) {
   const isRegister = mode === "register";
   const { status, user, login, register } = useAuth();
+  const { t } = useI18n();
   const navigate = useNavigate();
   const location = useLocation();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({}); // local: translation keys; from the server: ready text
+  const [local, setLocal] = useState(true);
   const [formError, setFormError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
@@ -38,11 +42,14 @@ export default function AuthPage({ mode }) {
     return <Navigate to={user?.has_profile ? "/dashboard" : "/profile/edit"} replace />;
   }
 
+  const fieldError = (name) => (errors[name] ? (local ? t(errors[name]) : errors[name]) : undefined);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (submitting) return; // ignore double clicks
     const found = validate(mode, email, password);
     setErrors(found);
+    setLocal(true);
     setFormError("");
     if (Object.keys(found).length) return;
 
@@ -53,6 +60,7 @@ export default function AuthPage({ mode }) {
       navigate(from && from !== "/login" ? from : me.has_profile ? "/dashboard" : "/profile/edit", { replace: true });
     } catch (error) {
       setErrors(getFieldErrors(error));
+      setLocal(false);
       setFormError(getErrorMessage(error));
       setSubmitting(false);
     }
@@ -61,17 +69,11 @@ export default function AuthPage({ mode }) {
   return (
     <section className="auth">
       <div className="auth__card card">
-        <h1>{isRegister ? "Create your account" : "Log in"}</h1>
-        <p className="muted">
-          {isRegister
-            ? "Save your profile and get guidance based on where you are now."
-            : "Welcome back. Continue where you left off."}
-        </p>
+        <h1>{isRegister ? t("auth.register.title") : t("auth.login.title")}</h1>
+        <p className="muted">{isRegister ? t("auth.register.lead") : t("auth.login.lead")}</p>
 
         {location.state?.passwordReset && !formError && (
-          <div className="notice" role="status">
-            Your password was changed. Log in with your new password.
-          </div>
+          <div className="notice" role="status">{t("auth.passwordChanged")}</div>
         )}
         {formError && (
           <div className="notice notice--danger" role="alert">
@@ -81,47 +83,47 @@ export default function AuthPage({ mode }) {
 
         <form onSubmit={handleSubmit} noValidate className="form">
           <TextField
-            label="Email"
+            label={t("auth.email")}
             type="email"
             autoComplete="email"
             required
             value={email}
             onChange={setEmail}
-            error={errors.email}
+            error={fieldError("email")}
           />
           <TextField
-            label="Password"
+            label={t("auth.password")}
             type={showPassword ? "text" : "password"}
             autoComplete={isRegister ? "new-password" : "current-password"}
             required
             value={password}
             onChange={setPassword}
-            error={errors.password}
-            hint={isRegister ? PASSWORD_HINT : undefined}
+            error={fieldError("password")}
+            hint={isRegister ? t(PASSWORD_HINT) : undefined}
           />
           <label className="checkbox">
             <input type="checkbox" checked={showPassword} onChange={(e) => setShowPassword(e.target.checked)} />
-            <span>Show password</span>
+            <span>{t("auth.showPassword")}</span>
           </label>
           {!isRegister && (
             <p className="auth__forgot">
-              <Link to="/forgot-password">Forgot password?</Link>
+              <Link to="/forgot-password">{t("auth.forgot")}</Link>
             </p>
           )}
 
           <button type="submit" className="btn btn--primary btn--block" disabled={submitting}>
-            {submitting ? "Please wait…" : isRegister ? "Create account" : "Log in"}
+            {submitting ? t("common.pleaseWait") : isRegister ? t("auth.register.submit") : t("auth.login.submit")}
           </button>
         </form>
 
         <p className="auth__switch">
           {isRegister ? (
             <>
-              Already have an account? <Link to="/login">Log in</Link>
+              {t("auth.haveAccount")} <Link to="/login">{t("auth.login.submit")}</Link>
             </>
           ) : (
             <>
-              New here? <Link to="/register">Create an account</Link>
+              {t("auth.newHere")} <Link to="/register">{t("auth.createAccount")}</Link>
             </>
           )}
         </p>

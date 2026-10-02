@@ -3,22 +3,21 @@ import { Link, useSearchParams } from "react-router-dom";
 import { ErrorNotice, Loading, OfficialLink } from "../components/Status";
 import { useAuth } from "../context/AuthContext";
 import useRequest from "../hooks/useRequest";
+import { useI18n } from "../i18n";
 import * as api from "../services/api";
 
-const TYPE_LABEL = { stage: "Study", career: "Career", exam: "Exam" };
-
-function duration(years) {
-  if (years < 1) return `${Math.round(years * 12)} months`;
-  return years === 1 ? "1 year" : `${years} years`;
+function duration(t, years) {
+  if (years < 1) return t("dream.months", { n: Math.round(years * 12) });
+  return years === 1 ? t("next.oneYear") : t("next.years", { n: years });
 }
 
-function edgeText(edge) {
+function edgeText(t, edge) {
   if (!edge) return null;
   const parts = [];
-  if (edge.years) parts.push(duration(edge.years));
-  if (edge.experience) parts.push(`after ${edge.experience} years`);
-  if (edge.months) parts.push(`${edge.months} months`);
-  if (edge.exams?.length) parts.push(`via ${edge.exams.join(" / ")}`);
+  if (edge.years) parts.push(duration(t, edge.years));
+  if (edge.experience) parts.push(t("tree.afterYears", { n: edge.experience }));
+  if (edge.months) parts.push(t("dream.months", { n: edge.months }));
+  if (edge.exams?.length) parts.push(t("tree.via", { list: edge.exams.join(" / ") }));
   return parts.join(" · ");
 }
 
@@ -41,26 +40,27 @@ function TreeList({ nodes, depth, label, keyPrefix }) {
 }
 
 function CourseGroup({ courses, depth }) {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const short = courses.map((c) => ({ ...c, title: c.title.replace(COURSE_PREFIX, "") }));
   return (
     <li className="tree-node tree-node--group">
       <div className="tree-node__row">
         <button type="button" className="tree-toggle" aria-expanded={open}
-          aria-label={`${open ? "Collapse" : "Expand"} Professional courses`} onClick={() => setOpen(!open)}>
+          aria-label={t(open ? "tree.collapse" : "tree.expand", { name: t("next.group.course") })} onClick={() => setOpen(!open)}>
           <span aria-hidden="true">{open ? "−" : "+"}</span>
         </button>
         <div className="tree-node__body">
-          <span className="badge tree-badge tree-badge--group">Courses</span>{" "}
-          <span className="tree-node__title">Professional courses</span>
+          <span className="badge tree-badge tree-badge--group">{t("tree.courses")}</span>{" "}
+          <span className="tree-node__title">{t("next.group.course")}</span>
           <span className="tree-node__meta muted small">
-            {courses.length} courses · music, dance, design, writing, acting, film, cooking and more · no degree needed
+            {t("tree.coursesMeta", { n: courses.length })}
           </span>
         </div>
       </div>
       {open && (
         <div className="tree-node__children">
-          <ul className="tree" aria-label="Professional courses">
+          <ul className="tree" aria-label={t("next.group.course")}>
             {short.map((c) => <TreeNode key={`course-${c.id}`} node={c} depth={depth + 1} />)}
           </ul>
         </div>
@@ -70,6 +70,7 @@ function CourseGroup({ courses, depth }) {
 }
 
 function TreeNode({ node, depth }) {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const [state, setState] = useState({ status: "idle", children: [] });
 
@@ -86,7 +87,7 @@ function TreeNode({ node, depth }) {
     }
   };
 
-  const extra = edgeText(node.edge);
+  const extra = edgeText(t, node.edge);
   const title = node.type === "career" ? <Link to={`/careers/${node.id}`}>{node.title}</Link>
     : node.type === "exam" ? <OfficialLink href={node.url}>{node.title}</OfficialLink> : node.title;
 
@@ -95,23 +96,23 @@ function TreeNode({ node, depth }) {
       <div className="tree-node__row">
         {node.has_children ? (
           <button type="button" className="tree-toggle" aria-expanded={open}
-            aria-label={`${open ? "Collapse" : "Expand"} ${node.title}`} onClick={toggle}>
+            aria-label={t(open ? "tree.collapse" : "tree.expand", { name: node.title })} onClick={toggle}>
             <span aria-hidden="true">{open ? "−" : "+"}</span>
           </button>
         ) : <span className="tree-toggle tree-toggle--leaf" aria-hidden="true" />}
         <div className="tree-node__body">
-          <span className={`badge tree-badge tree-badge--${node.type}`}>{node.edge?.label || TYPE_LABEL[node.type]}</span>{" "}
+          <span className={`badge tree-badge tree-badge--${node.type}`}>{node.edge?.label || t(`tree.type.${node.type}`)}</span>{" "}
           <span className="tree-node__title">{title}</span>
           {extra && <span className="tree-node__meta muted small">{extra}</span>}
         </div>
       </div>
       {open && (
         <div className="tree-node__children">
-          {state.status === "loading" && <p className="muted small" role="status">Loading…</p>}
+          {state.status === "loading" && <p className="muted small" role="status">{t("tree.loadingShort")}</p>}
           {state.status === "error" && <p className="text-danger small" role="alert">{state.error}</p>}
-          {state.status === "ready" && state.children.length === 0 && <p className="muted small">Nothing further recorded.</p>}
+          {state.status === "ready" && state.children.length === 0 && <p className="muted small">{t("tree.nothing")}</p>}
           {state.children.length > 0 && (
-            <TreeList nodes={state.children} depth={depth + 1} label={`Options after ${node.title}`} keyPrefix={node.id} />
+            <TreeList nodes={state.children} depth={depth + 1} label={t("tree.optionsAfter", { name: node.title })} keyPrefix={node.id} />
           )}
         </div>
       )}
@@ -121,6 +122,7 @@ function TreeNode({ node, depth }) {
 
 export default function ExplorePage() {
   const { status: authStatus } = useAuth();
+  const { t } = useI18n();
   const [params, setParams] = useSearchParams();
   const stage = params.get("stage") || undefined;
   const stages = useRequest(() => api.getStages(), []);
@@ -134,32 +136,32 @@ export default function ExplorePage() {
       <div className="container">
         <div className="page__head">
           <div>
-            <h1>Career explorer</h1>
-            <p className="muted">Open any step to see where it leads: further study, careers, exams, promotions and switches.</p>
+            <h1>{t("tree.title")}</h1>
+            <p className="muted">{t("tree.lead")}</p>
           </div>
         </div>
         {stages.status === "ready" && root.data && (
           <div className="toolbar">
             <div className="field" style={{ marginBottom: 0 }}>
-              <label className="field__label" htmlFor="explore-stage">Start from</label>
+              <label className="field__label" htmlFor="explore-stage">{t("tree.startFrom")}</label>
               <select id="explore-stage" className="input" value={root.data.root.id}
                 onChange={(e) => setParams({ stage: e.target.value })}>
                 {stages.data.map((s) => <option key={s.stage_id} value={s.stage_id}>{s.name}</option>)}
               </select>
             </div>
             <p className="small muted" style={{ margin: 0 }}>
-              {root.data.source === "profile" ? "Starting from your profile." : "Tip: log in to start from your own stage."}
+              {root.data.source === "profile" ? t("tree.fromProfile") : t("tree.loginTip")}
             </p>
           </div>
         )}
 
-        {root.status === "loading" && <Loading label="Loading explorer" />}
+        {root.status === "loading" && <Loading label={t("tree.loading")} />}
         {root.status === "error" && <ErrorNotice message={root.error} onRetry={root.reload} />}
         {root.status === "ready" && (
           <div className="card tree-card">
             <h2 className="tree-root">{root.data.root.title}</h2>
             {root.data.root.subtitle && <p className="muted small">{root.data.root.subtitle}</p>}
-            <TreeList nodes={root.data.root.children} depth={1} label={`Options after ${root.data.root.title}`}
+            <TreeList nodes={root.data.root.children} depth={1} label={t("tree.optionsAfter", { name: root.data.root.title })}
               keyPrefix={root.data.root.id} />
           </div>
         )}

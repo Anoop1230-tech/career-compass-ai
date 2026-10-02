@@ -1,4 +1,24 @@
 import { Component } from "react";
+import { useI18n } from "../i18n";
+
+// A function component so the message can use the chosen language
+function CrashNotice() {
+  const { t } = useI18n();
+  return (
+    <section className="page-center" role="alert">
+      <div className="page-center__box">
+        <h1>{t("crash.title")}</h1>
+        <p className="muted">{t("crash.text")}</p>
+        <div className="btn-row">
+          <button type="button" className="btn btn--primary" onClick={() => window.location.reload()}>
+            {t("crash.reload")}
+          </button>
+          <a href="/" className="btn btn--secondary">{t("crash.home")}</a>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 /**
  * Catches render errors in the page below it so one broken page
@@ -20,21 +40,6 @@ export default class ErrorBoundary extends Component {
   render() {
     if (!this.state.hasError) return this.props.children;
 
-    return (
-      <section className="page-center" role="alert">
-        <div className="page-center__box">
-          <h1>Something went wrong</h1>
-          <p className="muted">This page hit an unexpected error. Your data is safe.</p>
-          <div className="btn-row">
-            <button type="button" className="btn btn--primary" onClick={() => window.location.reload()}>
-              Reload page
-            </button>
-            <a href="/" className="btn btn--secondary">
-              Go home
-            </a>
-          </div>
-        </div>
-      </section>
-    );
+    return <CrashNotice />;
   }
 }

@@ -2,40 +2,65 @@ import { Link } from "react-router-dom";
 import HeroIllustration from "../components/HeroIllustration";
 import Icon from "../components/Icon";
 import { useAuth } from "../context/AuthContext";
-import { NAV_GROUPS } from "../navigation";
+import { useI18n } from "../i18n";
+import { NAV_GROUPS, navLabel, navText } from "../navigation";
 
+// Texts for these lists live in i18n/*.js under home.stage.<key> / home.creative.<key> / home.journey.<key>
 const STAGES = [
-  { label: "Class 10", hint: "Choose a stream", to: "/next-steps?stage=EDU_CLASS_10", icon: "book" },
-  { label: "Class 11–12", hint: "Courses and entrance exams", to: "/next-steps?stage=EDU_12_PCM", icon: "clipboard" },
-  { label: "Diploma", hint: "Lateral entry or jobs", to: "/next-steps?stage=EDU_DIPLOMA_CS", icon: "steps" },
-  { label: "Undergraduate", hint: "Specialise, intern, prepare", to: "/next-steps?stage=EDU_BTECH_CSE", icon: "school" },
-  { label: "Graduate", hint: "Job, higher studies or exams", to: "/next-steps?stage=EDU_BCA", icon: "briefcase" },
-  { label: "Master's / PhD", hint: "Research, industry, teaching", to: "/next-steps?stage=EDU_MTECH_CSE", icon: "spark" },
-  { label: "Working professional", hint: "Grow or upskill", to: "/next-steps?stage=EDU_WORKING_TECH", icon: "star" },
-  { label: "Career changer", hint: "Switch to a new field", to: "/dream-check", icon: "target" },
+  { key: "class10", to: "/next-steps?stage=EDU_CLASS_10", icon: "book" },
+  { key: "class12", to: "/next-steps?stage=EDU_12_PCM", icon: "clipboard" },
+  { key: "diploma", to: "/next-steps?stage=EDU_DIPLOMA_CS", icon: "steps" },
+  { key: "ug", to: "/next-steps?stage=EDU_BTECH_CSE", icon: "school" },
+  { key: "graduate", to: "/next-steps?stage=EDU_BCA", icon: "briefcase" },
+  { key: "pg", to: "/next-steps?stage=EDU_MTECH_CSE", icon: "spark" },
+  { key: "working", to: "/next-steps?stage=EDU_WORKING_TECH", icon: "star" },
+  { key: "changer", to: "/dream-check", icon: "target" },
 ];
 
 // Careers that need talent, practice and a portfolio rather than a degree
 const CREATIVE = [
-  { label: "Music & singing", hint: "Singer, composer, sound engineer", to: "/careers?q=Music", icon: "music" },
-  { label: "Dance", hint: "Dancer, choreographer", to: "/careers?q=Dance", icon: "dance" },
-  { label: "Design", hint: "Graphic, fashion, interior, animation", to: "/careers?domain=Creative+Arts&q=Design", icon: "palette" },
-  { label: "Writing & poetry", hint: "Poet, lyricist, content and script writer", to: "/careers?q=Writing", icon: "pen" },
-  { label: "Acting & comedy", hint: "Actor, stand-up comedian, anchor, RJ", to: "/careers?q=Performing+Arts", icon: "mic" },
-  { label: "Film, photo & video", hint: "Photographer, editor, filmmaker, creator", to: "/careers?q=Film+and+Media", icon: "camera" },
-  { label: "Cooking, fitness & beauty", hint: "Chef, fitness and yoga trainer, makeup artist", to: "/careers?domain=Vocational", icon: "heart" },
+  { key: "music", to: "/careers?q=Music", icon: "music" },
+  { key: "dance", to: "/careers?q=Dance", icon: "dance" },
+  { key: "design", to: "/careers?domain=Creative+Arts&q=Design", icon: "palette" },
+  { key: "writing", to: "/careers?q=Writing", icon: "pen" },
+  { key: "acting", to: "/careers?q=Performing+Arts", icon: "mic" },
+  { key: "film", to: "/careers?q=Film+and+Media", icon: "camera" },
+  { key: "vocational", to: "/careers?domain=Vocational", icon: "heart" },
 ];
 
 // The four-step journey, shown in "How it works"
 const JOURNEY = [
-  { icon: "user", title: "Build your profile", text: "Education, skills, interests and goals." },
-  { icon: "clipboard", title: "Take short assessments", text: "Optional tests that sharpen your results." },
-  { icon: "star", title: "Compare your matches", text: "Ranked careers with the reasons behind each." },
-  { icon: "map", title: "Follow your roadmap", text: "Clear stages that skip what you already know." },
+  { key: "profile", icon: "user" },
+  { key: "tests", icon: "clipboard" },
+  { key: "matches", icon: "star" },
+  { key: "roadmap", icon: "map" },
 ];
+
+function CardGrid({ items, prefix, warm, t, extra }) {
+  return (
+    <ul className="stage-grid">
+      {items.map((item) => (
+        <li key={item.key}>
+          <Link to={item.to} className="stage-card">
+            <span className={warm ? "icon-tile icon-tile--warm" : "icon-tile"}>
+              <Icon name={item.icon} />
+            </span>
+            <span>
+              <strong>{t(`${prefix}.${item.key}`)}</strong>
+              <span className="muted">{t(`${prefix}.${item.key}.hint`)}</span>
+            </span>
+            <Icon name="arrow" size={18} className="icon stage-card__go" />
+          </Link>
+        </li>
+      ))}
+      {extra}
+    </ul>
+  );
+}
 
 export default function HomePage() {
   const { status } = useAuth();
+  const { t } = useI18n();
   const loggedIn = status === "authenticated";
 
   return (
@@ -45,43 +70,30 @@ export default function HomePage() {
           <div>
             <p className="hero__eyebrow">
               <Icon name="compass" size={16} />
-              Career guidance for every stage
+              {t("home.eyebrow")}
             </p>
             <h1>
-              Where are you now, and where do you <em>want to go?</em>
+              {t("home.title.start")} <em>{t("home.title.end")}</em>
             </h1>
-            <p className="hero__lead">
-              Tell us about your education, skills and goals. Career Compass maps realistic next steps, explains
-              every suggestion, and shows exactly what to learn next.
-            </p>
+            <p className="hero__lead">{t("home.lead")}</p>
             <div className="btn-row">
               <Link to="/next-steps" className="btn btn--primary">
-                Find my next step
+                {t("home.findNext")}
                 <Icon name="arrow" size={18} className="icon icon-arrow" />
               </Link>
               {loggedIn ? (
-                <Link to="/dashboard" className="btn btn--secondary">
-                  Go to my dashboard
-                </Link>
+                <Link to="/dashboard" className="btn btn--secondary">{t("home.goDashboard")}</Link>
               ) : (
-                <Link to="/register" className="btn btn--secondary">
-                  Create a free profile
-                </Link>
+                <Link to="/register" className="btn btn--secondary">{t("home.createProfile")}</Link>
               )}
             </div>
             <ul className="hero__trust">
-              <li>
-                <Icon name="check" size={16} />
-                Free to use
-              </li>
-              <li>
-                <Icon name="check" size={16} />
-                Explore without signing up
-              </li>
-              <li>
-                <Icon name="check" size={16} />
-                Links to official sources
-              </li>
+              {["free", "noSignup", "official"].map((key) => (
+                <li key={key}>
+                  <Icon name="check" size={16} />
+                  {t(`home.trust.${key}`)}
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -94,80 +106,47 @@ export default function HomePage() {
       <section className="section section--surface" aria-labelledby="stages-title">
         <div className="container">
           <div className="section__intro">
-            <h2 id="stages-title">Start from where you are</h2>
-            <p className="muted">School, college or work. Pick the stage closest to you to see your options.</p>
+            <h2 id="stages-title">{t("home.stages.title")}</h2>
+            <p className="muted">{t("home.stages.text")}</p>
           </div>
-          <ul className="stage-grid">
-            {STAGES.map((stage) => (
-              <li key={stage.label}>
-                <Link to={stage.to} className="stage-card">
-                  <span className="icon-tile">
-                    <Icon name={stage.icon} />
-                  </span>
-                  <span>
-                    <strong>{stage.label}</strong>
-                    <span className="muted">{stage.hint}</span>
-                  </span>
-                  <Icon name="arrow" size={18} className="icon stage-card__go" />
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <CardGrid items={STAGES} prefix="home.stage" t={t} />
         </div>
       </section>
 
       <section className="section" aria-labelledby="creative-title">
         <div className="container">
           <div className="section__intro">
-            <h2 id="creative-title">Careers beyond a degree</h2>
-            <p className="muted">
-              Talent and practice count more than marks here, and these courses are open to everyone: school students,
-              college and master's students, working people, and anyone who is not studying right now. Every option shows
-              the skills to learn and how people get in.
-            </p>
+            <h2 id="creative-title">{t("home.creative.title")}</h2>
+            <p className="muted">{t("home.creative.text")}</p>
           </div>
-          <ul className="stage-grid">
-            {CREATIVE.map((area) => (
-              <li key={area.label}>
-                <Link to={area.to} className="stage-card">
-                  <span className="icon-tile icon-tile--warm">
-                    <Icon name={area.icon} />
-                  </span>
-                  <span>
-                    <strong>{area.label}</strong>
-                    <span className="muted">{area.hint}</span>
-                  </span>
-                  <Icon name="arrow" size={18} className="icon stage-card__go" />
-                </Link>
-              </li>
-            ))}
+          <CardGrid items={CREATIVE} prefix="home.creative" warm t={t} extra={
             <li>
               <Link to="/next-steps" className="stage-card">
                 <span className="icon-tile">
                   <Icon name="steps" />
                 </span>
                 <span>
-                  <strong>All professional courses</strong>
-                  <span className="muted">Open to everyone, at any stage of life</span>
+                  <strong>{t("home.creative.all")}</strong>
+                  <span className="muted">{t("home.creative.all.hint")}</span>
                 </span>
                 <Icon name="arrow" size={18} className="icon stage-card__go" />
               </Link>
             </li>
-          </ul>
+          } />
         </div>
       </section>
 
       <section className="section section--surface" aria-labelledby="how-title">
         <div className="container">
           <div className="section__intro">
-            <h2 id="how-title">How it works</h2>
-            <p className="muted">Four steps. Each one makes the next more personal, and you can stop at any time.</p>
+            <h2 id="how-title">{t("home.how.title")}</h2>
+            <p className="muted">{t("home.how.text")}</p>
           </div>
           <ol className="steps">
             {JOURNEY.map((step) => (
-              <li key={step.title}>
-                <h3>{step.title}</h3>
-                <p className="muted">{step.text}</p>
+              <li key={step.key}>
+                <h3>{t(`home.journey.${step.key}`)}</h3>
+                <p className="muted">{t(`home.journey.${step.key}.text`)}</p>
               </li>
             ))}
           </ol>
@@ -177,15 +156,15 @@ export default function HomePage() {
       <section className="section" aria-labelledby="features-title">
         <div className="container">
           <div className="section__intro">
-            <h2 id="features-title">Everything in one place</h2>
-            <p className="muted">Grouped the way you will use it: your own journey first, then explore, then prepare.</p>
+            <h2 id="features-title">{t("home.features.title")}</h2>
+            <p className="muted">{t("home.features.text")}</p>
           </div>
           <div className="feature-groups">
             {NAV_GROUPS.map((group, g) => (
-              <article key={group.label} className="card feature-group">
+              <article key={group.key} className="card feature-group">
                 <div className="feature-group__head">
-                  <h3>{group.label}</h3>
-                  <p className="muted">{group.hint}</p>
+                  <h3>{navLabel(t, group)}</h3>
+                  <p className="muted">{navText(t, group)}</p>
                 </div>
                 <ul className="feature-list">
                   {group.items.map((item) => (
@@ -195,8 +174,8 @@ export default function HomePage() {
                           <Icon name={item.icon} size={18} />
                         </span>
                         <span>
-                          <strong>{item.label}</strong>
-                          <span className="muted">{item.text}</span>
+                          <strong>{navLabel(t, item)}</strong>
+                          <span className="muted">{navText(t, item)}</span>
                         </span>
                       </Link>
                     </li>
@@ -212,22 +191,17 @@ export default function HomePage() {
         <div className="container">
           <div className="cta-band">
             <div>
-              <h2 id="cta-title">Ready to map your path?</h2>
-              <p>It takes about five minutes to build a profile. Every page after that is tailored to you.</p>
+              <h2 id="cta-title">{t("home.cta.title")}</h2>
+              <p>{t("home.cta.text")}</p>
             </div>
             <div className="btn-row">
               <Link to={loggedIn ? "/dashboard" : "/register"} className="btn btn--primary">
-                {loggedIn ? "Open my dashboard" : "Get started free"}
+                {loggedIn ? t("home.cta.dashboard") : t("home.cta.start")}
               </Link>
-              <Link to="/careers" className="btn btn--secondary">
-                Browse careers
-              </Link>
+              <Link to="/careers" className="btn btn--secondary">{t("home.cta.browse")}</Link>
             </div>
           </div>
-          <p className="notice small" style={{ marginTop: "var(--space-6)" }}>
-            Recommendations are guidance based on the information you give, not guaranteed outcomes. Always confirm
-            eligibility and dates on the official website before applying.
-          </p>
+          <p className="notice small" style={{ marginTop: "var(--space-6)" }}>{t("home.disclaimer")}</p>
         </div>
       </section>
     </>
