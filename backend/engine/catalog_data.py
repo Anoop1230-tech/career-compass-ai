@@ -20,6 +20,7 @@ from catalog.models import (
     Course,
     EducationPath,
     Exam,
+    ExamDate,
     ProjectIdea,
     Skill,
     Stage,
@@ -35,6 +36,7 @@ class Catalog:
     skills: dict[str, Skill] = field(default_factory=dict)
     careers: dict[str, Career] = field(default_factory=dict)
     exams: dict[str, Exam] = field(default_factory=dict)
+    exam_dates: dict[str, list[ExamDate]] = field(default_factory=dict)  # exam_id -> official dates, by start
     career_skills: dict[str, list[CareerSkill]] = field(default_factory=dict)  # career_id -> links
     education_paths: list[EducationPath] = field(default_factory=list)
     career_paths: list[CareerPath] = field(default_factory=list)
@@ -97,6 +99,8 @@ def _load(db: Session) -> Catalog:
     cat.skills = {s.skill_id: s for s in db.scalars(select(Skill))}
     cat.careers = {c.career_id: c for c in db.scalars(select(Career))}
     cat.exams = {e.exam_id: e for e in db.scalars(select(Exam))}
+    for d in db.scalars(select(ExamDate).order_by(ExamDate.start_date, ExamDate.date_id)):
+        cat.exam_dates.setdefault(d.exam_id, []).append(d)
     for link in db.scalars(select(CareerSkill)):
         cat.career_skills.setdefault(link.career_id, []).append(link)
     for links in cat.career_skills.values():

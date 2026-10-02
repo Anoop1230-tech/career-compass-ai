@@ -292,6 +292,19 @@ SPECS: dict[str, FileSpec] = {
             dates=("as_of", "last_verified"),
             urls=("source_url",),
         ),
+        # Exact dates published by the exam organiser (only where officially announced)
+        FileSpec(
+            "exam_dates.csv",
+            ("date_id", "exam_id", "event", "start_date", "end_date", "source_url", "last_verified"),
+            id_column="date_id",
+            id_prefix="ED_",
+            required=("date_id", "exam_id", "event", "start_date", "end_date", "source_url", "last_verified"),
+            enums={"event": {"registration_opens", "registration_closes", "late_registration_closes", "admit_card",
+                              "exam", "result"}},
+            foreign_keys={"exam_id": "entrance_exams.csv"},
+            dates=("last_verified",),  # start/end may be in the future; format checked in validator.check_logic
+            urls=("source_url",),
+        ),
         # Published opening/closing ranks (JoSAA archive) for the college predictor
         FileSpec(
             "closing_ranks.csv",

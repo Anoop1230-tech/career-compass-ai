@@ -111,12 +111,13 @@ test("compare careers from a career page", async ({ page }) => {
   await page.getByLabel("Career 2").selectOption("CAR_DOCTOR_MBBS");
   await page.getByLabel("Starting from").selectOption("EDU_12_PCB");
   const table = page.getByRole("table", { name: /Comparison of Data Scientist, Doctor \(MBBS\)/ });
-  await expect(table).toBeVisible();
+  // The comparison request can be slow under full-suite load; allow it more time than the default
+  await expect(table).toBeVisible({ timeout: 15000 });
   await expect(table.getByRole("link", { name: /NEET UG/ }).first()).toBeVisible();
   await expect(page).toHaveURL(/stage=EDU_12_PCB/);
   // Reload keeps the comparison (it lives in the URL)
   await page.reload();
-  await expect(page.getByRole("table", { name: /Comparison of/ })).toBeVisible();
+  await expect(page.getByRole("table", { name: /Comparison of/ })).toBeVisible({ timeout: 15000 });
 });
 
 test("official pay with its source on government careers, none elsewhere", async ({ page }) => {

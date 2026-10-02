@@ -308,6 +308,20 @@ class SalaryRange(Base):
     last_verified: Mapped[date] = mapped_column(Date)
 
 
+class ExamDate(Base):
+    """An exact date published by the exam organiser (registration, admit card, exam, result)."""
+
+    __tablename__ = "exam_dates"
+
+    date_id: Mapped[str] = mapped_column(String(20), primary_key=True)
+    exam_id: Mapped[str] = mapped_column(ForeignKey("exams.exam_id"), index=True)
+    event: Mapped[str] = mapped_column(String(30))
+    start_date: Mapped[date] = mapped_column(Date)
+    end_date: Mapped[date] = mapped_column(Date)
+    source_url: Mapped[str] = mapped_column(String(300))
+    last_verified: Mapped[date] = mapped_column(Date)
+
+
 class ClosingRank(Base):
     """Published opening and closing rank of one programme, seat type and gender in one counselling round."""
 

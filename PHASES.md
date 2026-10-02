@@ -32,7 +32,7 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 24 | Printable report | One-page summary (profile, matches, roadmap) saved as PDF from the browser | ✅ |
 | 25 | Salary ranges | Sourced ranges by experience and city tier, never guessed | ✅ (official government pay only) |
 | 26 | College predictor | Likely / borderline / unlikely colleges from published closing ranks | ✅ |
-| 27 | Exam reminders | Follow exams, email reminders, calendar file, "coming up" on the dashboard | ⬜ |
+| 27 | Exam reminders | Follow exams, email reminders, calendar file, "coming up" on the dashboard | ✅ |
 | 28 | Résumé upload | Read skills from a PDF résumé; user confirms before saving | ⬜ |
 | 29 | Hindi content | Careers, exams, skills and the mentor in Hindi (fallback to English) | ⬜ |
 | 30 | Feedback-tuned weights | Propose scoring-weight changes from real "does this fit you?" answers | ⬜ |
@@ -435,3 +435,14 @@ Known limits: the 8th Central Pay Commission has been set up with 1 January 2026
 Result: validator 0 errors, 0 warnings; 394 backend tests, 143 frontend unit tests, 136 browser tests passing; lint 0 warnings; build OK.
 
 Known limits: one year and one round only; only three programmes; no state counselling, private colleges or home-state quota; the 85%/110% bands are simple rules, not a statistical model. Refreshing the data means re-reading the JoSAA archive for the new year.
+
+## Phase 27 - Exam reminders - ✅ done
+- 27.1 Data: `datasets/exam_dates.csv` holds exact dates only where the organiser has published them, each with its source. Today that is GATE 2027 (registration close 5 Oct, late close 12 Oct, admit card 4 Jan, exam 6–21 Feb, result 19 Mar), read from gate2027.iitm.ac.in/important_dates. The validator requires the source to be on the exam's own official site. CAT 2026's date was only found in news reports, so it is not included. Other exams use their usual month from `typical_month` and are labelled "not confirmed"
+- 27.2 Follow exams: table `exam_follows` (migration `0008`, also `exam_dates`); `GET /api/reminders`, `PUT /api/reminders/{exam}` (`{email}`), `DELETE /api/reminders/{exam}`, `GET /api/reminders/calendar.ics` (all-day events, RFC 5545 line folding). Login required
+- 27.3 Email job: `python -m services.reminders [--dry-run]`, run daily. It emails events starting within 14 days, only for exams with email on, and never sends the same event twice. Uses the existing SMTP settings; in development the email is written to the log
+- 27.4 UI: Follow / Following buttons on exam cards (Exams & Colleges), and a "Coming up" section on the dashboard with dates, email on/off, unfollow and the calendar download. English and Hindi
+- 27.5 Tests: 8 backend, 2 unit, 1 browser. The Phase 22 compare browser test now waits up to 15 s for the table, because it failed under full-suite load
+
+Result: validator 0 errors; 402 backend tests, 145 frontend unit tests, 138 browser tests passing; lint 0 warnings; build OK.
+
+Known limits: exact dates exist for GATE only; other exams show the usual month. The email job needs a scheduler (cron or Task Scheduler) in production.

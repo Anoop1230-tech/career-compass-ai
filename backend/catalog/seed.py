@@ -37,6 +37,7 @@ from catalog.models import (
     PersonalityQuestion,
     ProjectIdea,
     SalaryRange,
+    ExamDate,
     ClosingRank,
     Scholarship,
     Skill,
@@ -50,7 +51,7 @@ logger = logging.getLogger("career_compass.seed")
 
 # Delete children before parents (foreign keys)
 DELETE_ORDER = [
-    SalaryRange, ClosingRank, CareerSkill, EducationPath, CareerPath, CareerTransition, Exam, Career, Skill, Stage,
+    SalaryRange, ClosingRank, ExamDate, CareerSkill, EducationPath, CareerPath, CareerTransition, Exam, Career, Skill, Stage,
     InterestQuestion, PersonalityQuestion, AptitudeQuestion, College, Scholarship, University,
     Course, Certification, ProjectIdea,
 ]
@@ -224,6 +225,11 @@ def build_objects(tables: dict[str, list[dict[str, str]]]) -> list:
             monthly_max=integer(r["monthly_max"]), range_note=r["range_note"], includes_note=r["includes_note"],
             source_name=r["source_name"], source_url=r["source_url"], as_of=day(r["as_of"]),
             last_verified=day(r["last_verified"]),
+        ))
+    for r in tables["exam_dates.csv"]:
+        objects.append(ExamDate(
+            date_id=r["date_id"], exam_id=r["exam_id"], event=r["event"], start_date=day(r["start_date"]),
+            end_date=day(r["end_date"]), source_url=r["source_url"], last_verified=day(r["last_verified"]),
         ))
     for r in tables["closing_ranks.csv"]:
         objects.append(ClosingRank(

@@ -118,6 +118,11 @@ export const getSkillGap = async (careerId, signal) =>
 export const checkTransition = async (params, signal) =>
   (await api.get("/transitions/check", { params, signal })).data;
 export const predictColleges = async (params, signal) => (await api.get("/predictor", { params, signal })).data;
+export const getReminders = async () => (await api.get("/reminders")).data;
+export const followExam = async (examId, email = true) =>
+  (await api.put(`/reminders/${encodeURIComponent(examId)}`, { email })).data;
+export const unfollowExam = async (examId) => { await api.delete(`/reminders/${encodeURIComponent(examId)}`); };
+export const CALENDAR_URL = `${api.defaults.baseURL}/reminders/calendar.ics`;
 export const getReport = async (signal) => (await api.get("/report", { signal })).data;
 export const compareCareers = async (ids, stage, signal) =>
   (await api.get("/compare", { params: { ids: ids.join(","), ...(stage ? { stage } : {}) }, signal })).data;

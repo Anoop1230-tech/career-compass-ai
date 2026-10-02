@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import ComingUp from "../components/ComingUp";
 import Icon from "../components/Icon";
 import { useAuth } from "../context/AuthContext";
 import { useI18n } from "../i18n";
@@ -40,6 +41,14 @@ export default function DashboardPage() {
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
   const [attempt, setAttempt] = useState(0);
+  const [reminders, setReminders] = useState(null);
+
+  // Optional extra: a failure here hides the section instead of breaking the dashboard
+  useEffect(() => {
+    let active = true;
+    api.getReminders().then((r) => active && setReminders(r)).catch(() => active && setReminders(null));
+    return () => { active = false; };
+  }, [user?.id]);
 
   useEffect(() => {
     let active = true;
@@ -150,6 +159,8 @@ export default function DashboardPage() {
             </>
           )}
         </div>
+
+        <ComingUp data={reminders} onChange={setReminders} />
 
         <div className="dash-grid" style={{ marginTop: "var(--space-6)" }}>
           <div>

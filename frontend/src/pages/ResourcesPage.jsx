@@ -24,8 +24,9 @@ function Checked({ date }) {
   return <span className="muted small">{t("res.lastChecked", { date })}</span>;
 }
 
-function ExamCard({ e }) {
+function ExamCard({ e, follow }) {
   const { t, tOr } = useI18n();
+  const following = follow?.ids.has(e.exam_id);
   return (
     <article className="card resource-card" aria-labelledby={`r-${e.exam_id}`}>
       <div className="option-card__head">
@@ -43,6 +44,12 @@ function ExamCard({ e }) {
         <VerifiedBadge verified={e.verified} date={e.last_verified} />
         <OfficialLink href={e.official_url}>{t("res.official")}</OfficialLink>
         <Checked date={e.last_verified} />
+        {follow && (
+          <button type="button" className={following ? "btn btn--secondary btn--small" : "btn btn--primary btn--small"}
+            aria-pressed={following} onClick={() => follow.toggle(e.exam_id, following)}>
+            {following ? t("rem.followingBtn") : t("rem.follow")}<span className="visually-hidden"> {e.name}</span>
+          </button>
+        )}
       </div>
     </article>
   );
@@ -108,6 +115,26 @@ export default function ResourcesPage() {
   const [search, setSearch] = useState(get("q"));
   const q = useDebounced(search);
   const filters = useRequest(() => api.getResourceFilters(), []);
+  // Followed exams (signed-in users only): drives the Follow buttons on exam cards
+  const [followed, setFollowed] = useState(null);
+  useEffect(() => {
+    if (authStatus !== "authenticated") return undefined;
+    let active = true;
+    api.getReminders().then((r) => active && setFollowed(new Set(r.exams.map((x) => x.exam_id))))
+      .catch(() => active && setFollowed(null));
+    return () => { active = false; };
+  }, [authStatus]);
+  const follow = authStatus === "authenticated" && followed && {
+    ids: followed,
+    toggle: async (id, on) => {
+      if (on) await api.unfollowExam(id);
+      else await api.followExam(id);
+      const next = new Set(followed);
+      if (on) next.delete(id);
+      else next.add(id);
+      setFollowed(next);
+    },
+  };
 
   const set = (updates) => {
     const next = new URLSearchParams(params);
@@ -220,7 +247,7 @@ export default function ResourcesPage() {
               <p className="notice">{t("res.none")}</p>
             ) : (
               <div className="option-grid">
-                {list.data.items.map((item) => <Card key={item[idKey]} {...{ [tab === "exams" ? "e" : tab === "colleges" ? "c" : "s"]: item }} />)}
+                {list.data.items.map((item) => <Card key={item[idKey]} follow={follow || null} {...{ [tab === "exams" ? "e" : tab === "colleges" ? "c" : "s"]: item }} />)}
               </div>
             )}
           </>

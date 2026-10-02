@@ -155,3 +155,18 @@ class RecommendationFeedback(Base):
     rank: Mapped[int | None] = mapped_column(Integer, nullable=True)
     confidence: Mapped[int | None] = mapped_column(Integer, nullable=True)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
+
+class ExamFollow(Base):
+    """An exam the user follows: shown under "Coming up", in their calendar file and (if email is on) emailed.
+
+    `reminded` holds the keys of events already emailed, so the reminder job never sends one twice."""
+
+    __tablename__ = "exam_follows"
+    __table_args__ = (UniqueConstraint("user_id", "exam_id", name="uq_follow_user_exam"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    exam_id: Mapped[str] = mapped_column(String(40))
+    email: Mapped[bool] = mapped_column(Boolean, default=True)
+    reminded: Mapped[list] = mapped_column(JSON, default=list)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)

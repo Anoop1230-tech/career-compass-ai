@@ -11,6 +11,7 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
+from urllib.parse import urlparse
 
 from catalog.schema import DATASETS_DIR, ID_COLUMNS, PLANNED_FILES, SPECS, FileSpec
 
@@ -248,6 +249,20 @@ def check_logic(tables: dict[str, list[dict[str, str]]], report: Report) -> None
         o, c = row.get("opening_rank", ""), row.get("closing_rank", "")
         if o.isdigit() and c.isdigit() and int(c) < int(o):
             report.error("closing_ranks.csv", line, "closing_rank is below opening_rank")
+
+    # Exact exam dates: end on/after start, and only from the exam's own official site
+    exam_hosts = {r["exam_id"]: urlparse(r.get("official_url", "")).hostname or "" for r in tables.get("entrance_exams.csv", [])}
+    for line, row in enumerate(tables.get("exam_dates.csv", []), start=2):
+        try:
+            start, end = date.fromisoformat(row.get("start_date", "")), date.fromisoformat(row.get("end_date", ""))
+        except ValueError:
+            report.error("exam_dates.csv", line, "start_date and end_date must be YYYY-MM-DD")
+        else:
+            if end < start:
+                report.error("exam_dates.csv", line, "end_date is before start_date")
+        host = urlparse(row.get("source_url", "")).hostname or ""
+        if row.get("exam_id") in exam_hosts and host != exam_hosts[row["exam_id"]]:
+            report.error("exam_dates.csv", line, f"source_url must be on the exam's official site ({exam_hosts[row['exam_id']]})")
 
     # Reliability: unverified exam info must link to the official source
     for line, row in enumerate(tables.get("entrance_exams.csv", []), start=2):

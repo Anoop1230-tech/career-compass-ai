@@ -270,3 +270,23 @@ test("report: one page with the profile and matches, printed without menus", asy
     expect(pdf.subarray(0, 4).toString()).toBe("%PDF");
   }
 });
+
+test("follow GATE from the exams list, see its dates on the dashboard, download the calendar", async ({ page }) => {
+  await loginWithProfile(page);
+  await page.goto("/resources?tab=exams&q=GATE");
+  await page.getByRole("button", { name: "Follow GATE" }).click();
+  await expect(page.getByRole("button", { name: "Following GATE" })).toHaveAttribute("aria-pressed", "true");
+
+  await page.goto("/dashboard");
+  const section = page.getByRole("region", { name: "Coming up" });
+  await expect(section.getByText(/GATE: Exam/)).toBeVisible();
+  await expect(section.getByRole("checkbox", { name: "Email me reminders for GATE" })).toBeChecked();
+  const [download] = await Promise.all([
+    page.waitForEvent("download"),
+    section.getByRole("link", { name: "Download calendar (.ics)" }).click(),
+  ]);
+  expect(download.suggestedFilename()).toBe("exam-dates.ics");
+
+  await section.getByRole("button", { name: "Unfollow GATE" }).click();
+  await expect(section.getByText(/Follow exams to see their dates/)).toBeVisible();
+});
