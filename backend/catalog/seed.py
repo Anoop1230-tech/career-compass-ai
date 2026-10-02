@@ -37,6 +37,7 @@ from catalog.models import (
     PersonalityQuestion,
     ProjectIdea,
     SalaryRange,
+    ClosingRank,
     Scholarship,
     Skill,
     Stage,
@@ -49,7 +50,7 @@ logger = logging.getLogger("career_compass.seed")
 
 # Delete children before parents (foreign keys)
 DELETE_ORDER = [
-    SalaryRange, CareerSkill, EducationPath, CareerPath, CareerTransition, Exam, Career, Skill, Stage,
+    SalaryRange, ClosingRank, CareerSkill, EducationPath, CareerPath, CareerTransition, Exam, Career, Skill, Stage,
     InterestQuestion, PersonalityQuestion, AptitudeQuestion, College, Scholarship, University,
     Course, Certification, ProjectIdea,
 ]
@@ -223,6 +224,13 @@ def build_objects(tables: dict[str, list[dict[str, str]]]) -> list:
             monthly_max=integer(r["monthly_max"]), range_note=r["range_note"], includes_note=r["includes_note"],
             source_name=r["source_name"], source_url=r["source_url"], as_of=day(r["as_of"]),
             last_verified=day(r["last_verified"]),
+        ))
+    for r in tables["closing_ranks.csv"]:
+        objects.append(ClosingRank(
+            rank_id=r["rank_id"], year=integer(r["year"]), round=integer(r["round"]), institute_name=r["institute_name"],
+            institute_type=r["institute_type"], exam_id=r["exam_id"], stage_id=r["stage_id"], program_name=r["program_name"],
+            quota=r["quota"], seat_type=r["seat_type"], gender=r["gender"], opening_rank=integer(r["opening_rank"]),
+            closing_rank=integer(r["closing_rank"]), source_url=r["source_url"], last_verified=day(r["last_verified"]),
         ))
     for r in tables["project_ideas.csv"]:
         objects.append(ProjectIdea(

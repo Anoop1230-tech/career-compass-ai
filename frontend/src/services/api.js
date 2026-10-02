@@ -117,6 +117,7 @@ export const getSkillGap = async (careerId, signal) =>
   (await api.get(`/skill-gap/${encodeURIComponent(careerId)}`, { signal })).data;
 export const checkTransition = async (params, signal) =>
   (await api.get("/transitions/check", { params, signal })).data;
+export const predictColleges = async (params, signal) => (await api.get("/predictor", { params, signal })).data;
 export const getReport = async (signal) => (await api.get("/report", { signal })).data;
 export const compareCareers = async (ids, stage, signal) =>
   (await api.get("/compare", { params: { ids: ids.join(","), ...(stage ? { stage } : {}) }, signal })).data;

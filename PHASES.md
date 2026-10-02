@@ -31,7 +31,7 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 23 | Project ideas | 2–3 project briefs per career with checklists in the roadmap | ✅ |
 | 24 | Printable report | One-page summary (profile, matches, roadmap) saved as PDF from the browser | ✅ |
 | 25 | Salary ranges | Sourced ranges by experience and city tier, never guessed | ✅ (official government pay only) |
-| 26 | College predictor | Likely / borderline / unlikely colleges from published closing ranks | ⬜ |
+| 26 | College predictor | Likely / borderline / unlikely colleges from published closing ranks | ✅ |
 | 27 | Exam reminders | Follow exams, email reminders, calendar file, "coming up" on the dashboard | ⬜ |
 | 28 | Résumé upload | Read skills from a PDF résumé; user confirms before saving | ⬜ |
 | 29 | Hindi content | Careers, exams, skills and the mentor in Hindi (fallback to English) | ⬜ |
@@ -425,3 +425,13 @@ Known limits: "one page" depends on how much the user has filled in; long report
 Result: validator 0 errors, 0 warnings; 387 backend tests, 141 frontend unit tests, 134 browser tests passing (one browser test failed once in the full run and passed on rerun; one unit test timed out once under load and passed on rerun); lint 0 warnings; build OK.
 
 Known limits: the 8th Central Pay Commission has been set up with 1 January 2026 as the reference date but no new matrix is notified, so 7th CPC figures are shown with a note to check the latest notification. Adding more roles needs an official source per row.
+
+## Phase 26 - College predictor - ✅ done
+- 26.1 Data: `datasets/closing_ranks.csv` – 2,136 rows read from the official JoSAA opening/closing rank archive (2025, final round 6): B.Tech Computer Science, Electronics and Communication and Mechanical at 110 IITs, NITs, IIITs and other central institutes, for OPEN, EWS, OBC-NCL, SC and ST seats, gender-neutral and female-only pools, all-India (AI) and other-state (OS) quotas. Home-state quotas are left out because they depend on domicile. Validator checks the enums and that closing ≥ opening; table `closing_ranks` (migration `0007`)
+- 26.2 `GET /api/predictor?exam=&rank=&seat_type=&female=&program=&include_unlikely=` (visitors too): JEE Advanced ranks are matched to IITs, JEE Main to the rest. Per programme the most generous pool the candidate can use is compared with the rank: likely ≤ 85% of last year's closing rank, borderline ≤ 110%, otherwise unlikely (hidden unless asked). Category seats use category ranks, as JoSAA publishes them
+- 26.3 College Predictor page (`/college-predictor`, in the Prepare menu): exam, seat type, rank (label switches to "category rank"), programme, female-only seats, show unlikely; results table with last year's closing rank and a chance badge, the source year/round with an official link, and a plain-language disclaimer. Inputs live in the URL. English and Hindi
+- 26.4 Tests: 7 backend (bands, top IIT rank, ordering, female pool, category rank, bad input), 2 unit, 1 browser; the page is in the accessibility and Hindi scans
+
+Result: validator 0 errors, 0 warnings; 394 backend tests, 143 frontend unit tests, 136 browser tests passing; lint 0 warnings; build OK.
+
+Known limits: one year and one round only; only three programmes; no state counselling, private colleges or home-state quota; the 85%/110% bands are simple rules, not a statistical model. Refreshing the data means re-reading the JoSAA archive for the new year.

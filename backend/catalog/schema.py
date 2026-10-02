@@ -292,6 +292,23 @@ SPECS: dict[str, FileSpec] = {
             dates=("as_of", "last_verified"),
             urls=("source_url",),
         ),
+        # Published opening/closing ranks (JoSAA archive) for the college predictor
+        FileSpec(
+            "closing_ranks.csv",
+            ("rank_id", "year", "round", "institute_name", "institute_type", "exam_id", "stage_id", "program_name",
+             "quota", "seat_type", "gender", "opening_rank", "closing_rank", "source_url", "last_verified"),
+            id_column="rank_id",
+            id_prefix="CR_",
+            required=("rank_id", "year", "round", "institute_name", "institute_type", "exam_id", "stage_id",
+                      "program_name", "quota", "seat_type", "gender", "opening_rank", "closing_rank", "source_url",
+                      "last_verified"),
+            enums={"institute_type": {"iit", "nit", "iiit", "gfti"}, "quota": {"AI", "OS"},
+                   "seat_type": {"OPEN", "EWS", "OBC-NCL", "SC", "ST"}, "gender": {"neutral", "female"}},
+            foreign_keys={"exam_id": "entrance_exams.csv", "stage_id": "education_stages.csv"},
+            int_ranges={"year": (2016, 2100), "round": (1, 10), "opening_rank": (1, 2000000), "closing_rank": (1, 2000000)},
+            dates=("last_verified",),
+            urls=("source_url",),
+        ),
     ]
 }
 # Header-only files kept for a possible later use. Only their header is checked.

@@ -23,6 +23,7 @@ const SkillGapPage = lazy(() => import("./pages/SkillGapPage"));
 const DreamCheckPage = lazy(() => import("./pages/DreamCheckPage"));
 const ComparePage = lazy(() => import("./pages/ComparePage"));
 const ReportPage = lazy(() => import("./pages/ReportPage"));
+const PredictorPage = lazy(() => import("./pages/PredictorPage"));
 const RoadmapPage = lazy(() => import("./pages/RoadmapPage"));
 const ExplorePage = lazy(() => import("./pages/ExplorePage"));
 const ResourcesPage = lazy(() => import("./pages/ResourcesPage"));
@@ -54,6 +55,7 @@ export default function AppRoutes() {
         <Route path="/mentor" element={<ProtectedRoute><MentorPage /></ProtectedRoute>} />
         <Route path="/dream-check" element={<DreamCheckPage />} />
         <Route path="/compare" element={<ComparePage />} />
+        <Route path="/college-predictor" element={<PredictorPage />} />
         <Route path="/report" element={<ProtectedRoute><ReportPage /></ProtectedRoute>} />
         <Route path="/skill-gap" element={<ProtectedRoute><SkillGapPage /></ProtectedRoute>} />
         <Route path="/for-you" element={<ProtectedRoute><RecommendationsPage /></ProtectedRoute>} />

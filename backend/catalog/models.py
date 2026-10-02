@@ -308,6 +308,28 @@ class SalaryRange(Base):
     last_verified: Mapped[date] = mapped_column(Date)
 
 
+class ClosingRank(Base):
+    """Published opening and closing rank of one programme, seat type and gender in one counselling round."""
+
+    __tablename__ = "closing_ranks"
+
+    rank_id: Mapped[str] = mapped_column(String(20), primary_key=True)
+    year: Mapped[int] = mapped_column(Integer)
+    round: Mapped[int] = mapped_column(Integer)
+    institute_name: Mapped[str] = mapped_column(String(200))
+    institute_type: Mapped[str] = mapped_column(String(10))
+    exam_id: Mapped[str] = mapped_column(String(40), index=True)
+    stage_id: Mapped[str] = mapped_column(String(40), index=True)
+    program_name: Mapped[str] = mapped_column(String(200))
+    quota: Mapped[str] = mapped_column(String(5))
+    seat_type: Mapped[str] = mapped_column(String(10))
+    gender: Mapped[str] = mapped_column(String(10))
+    opening_rank: Mapped[int] = mapped_column(Integer)
+    closing_rank: Mapped[int] = mapped_column(Integer)
+    source_url: Mapped[str] = mapped_column(String(300))
+    last_verified: Mapped[date] = mapped_column(Date)
+
+
 class ProjectIdea(Base):
     """A portfolio project brief with a step checklist, linked to one or more careers."""
 

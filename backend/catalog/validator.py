@@ -244,6 +244,11 @@ def check_logic(tables: dict[str, list[dict[str, str]]], report: Report) -> None
         if host and not (host.endswith(".gov.in") or host.endswith(".nic.in")):
             report.error("salary_ranges.csv", line, f"source must be an official .gov.in or .nic.in site (got {host})")
 
+    for line, row in enumerate(tables.get("closing_ranks.csv", []), start=2):
+        o, c = row.get("opening_rank", ""), row.get("closing_rank", "")
+        if o.isdigit() and c.isdigit() and int(c) < int(o):
+            report.error("closing_ranks.csv", line, "closing_rank is below opening_rank")
+
     # Reliability: unverified exam info must link to the official source
     for line, row in enumerate(tables.get("entrance_exams.csv", []), start=2):
         if row.get("verified") == "false" and not row.get("official_url"):

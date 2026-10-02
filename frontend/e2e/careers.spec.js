@@ -127,3 +127,16 @@ test("official pay with its source on government careers, none elsewhere", async
   await page.goto("/careers/CAR_DATA_SCIENTIST");
   await expect(page.getByText(/No official pay figures are recorded for this career/)).toBeVisible();
 });
+
+test("college predictor: a top JEE Advanced rank lists IIT Bombay CSE as likely", async ({ page }) => {
+  await page.goto("/college-predictor");
+  await page.getByLabel("Exam").selectOption("EXM_JEE_ADVANCED");
+  await page.getByLabel("Your rank (common rank list)").fill("40");
+  await page.getByLabel("Programme").selectOption("EDU_BTECH_CSE");
+  await page.getByRole("button", { name: "Show colleges" }).click();
+  const row = page.getByRole("row", { name: /Indian Institute of Technology Bombay/ });
+  await expect(row).toContainText("Likely");
+  await expect(page).toHaveURL(/rank=40/);
+  await page.reload();
+  await expect(page.getByRole("row", { name: /Indian Institute of Technology Bombay/ })).toBeVisible();
+});
