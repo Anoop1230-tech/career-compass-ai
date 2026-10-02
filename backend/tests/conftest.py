@@ -17,8 +17,9 @@ from fastapi.testclient import TestClient  # noqa: E402
 
 from app import app  # noqa: E402
 from database import Base, engine, init_db  # noqa: E402
+from routes.auth import reset_limiter  # noqa: E402
 from routes.mentor import mentor_limiter  # noqa: E402
-from services.rate_limit import auth_limiter  # noqa: E402
+from services.rate_limit import account_limiter, auth_limiter  # noqa: E402
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -37,6 +38,8 @@ def clean_database():
         for table in reversed(Base.metadata.sorted_tables):  # children before parents
             connection.execute(table.delete())
     auth_limiter.reset()
+    account_limiter.reset()
+    reset_limiter.reset()
     mentor_limiter.reset()
 
 

@@ -51,6 +51,22 @@ function withSkill(roadmap, skillId, done) {
   };
 }
 
+const COST_LABEL = { free: "Free", freemium: "Free to learn", paid: "Paid" };
+
+function Courses({ courses, skillName }) {
+  if (!courses?.length) return null;
+  return (
+    <ul className="roadmap-courses small" aria-label={`Courses for ${skillName}`}>
+      {courses.map((c) => (
+        <li key={c.course_id}>
+          <OfficialLink href={c.url}>{c.name}</OfficialLink>
+          <span className="muted"> · {c.provider} · {COST_LABEL[c.cost_type] || c.cost_type}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function StageItem({ item, canTick, busy, onToggle }) {
   if (item.kind === "skill") {
     const id = `skill-${item.skill_id}`;
@@ -67,6 +83,7 @@ function StageItem({ item, canTick, busy, onToggle }) {
             {item.from_level === "none" ? "Start" : `From ${item.from_level}`} → {item.to_level} · {duration(item.weeks)}
             {item.description ? ` · ${item.description}` : ""}
           </p>
+          {!item.done && <Courses courses={item.courses} skillName={item.name} />}
         </div>
       </li>
     );
@@ -77,6 +94,16 @@ function StageItem({ item, canTick, busy, onToggle }) {
       <div>
         <p className="roadmap-item__title">{item.title}{item.years ? ` · ${item.years} years` : ""}</p>
         {item.detail && <p className="muted small">{item.detail}</p>}
+        {item.certifications?.length > 0 && (
+          <ul className="roadmap-courses small" aria-label="Certifications">
+            {item.certifications.map((c) => (
+              <li key={c.certification_id}>
+                <OfficialLink href={c.url}>{c.name}</OfficialLink>
+                <span className="muted"> · {c.issuing_body} · {c.level}</span>
+              </li>
+            ))}
+          </ul>
+        )}
         {item.exams?.length > 0 && (
           <p className="small">
             {item.exams.map((e, i) => (

@@ -173,6 +173,10 @@ scholarships ──► education_stages (who is eligible)
 
 ### 4.8 career_roadmaps.csv (one row per stage)
 
+Not used today: roadmaps are generated from the skill mapping, education paths and courses
+(`engine/roadmap.py`), so they stay consistent when a career's skills change. The file is kept with
+its header in case hand-written stages are wanted later; only the header is validated.
+
 | Field | Type | Required | Description |
 |---|---|---|---|
 | roadmap_id | string | yes | `RM_001` |
@@ -194,12 +198,12 @@ scholarships ──► education_stages (who is eligible)
 | provider | string | yes | "NPTEL", "IIT Madras" |
 | platform | string | no | "SWAYAM", "Coursera" |
 | url | url | yes | |
-| skill_ids | ids | yes | |
+| skill_ids | ids | yes | Courses are listed under these skills on roadmaps (best 2 per skill: nearest level, then free first) |
 | level | enum | yes | `beginner`, `intermediate`, `advanced` |
-| cost_type | enum | yes | `free`, `paid`, `freemium` |
-| duration_hours | number | no | |
-| language | string | no | |
-| certificate_available | bool | no | |
+| cost_type | enum | yes | `free`, `freemium` (free to learn, paid certificate or extras), `paid` |
+| duration_hours | number | no | Left empty unless the provider states it |
+| language | string | yes | |
+| certificate_available | bool | no | Empty = not known |
 | last_verified | date | yes | |
 
 ### 4.10 certifications.csv
@@ -210,12 +214,12 @@ scholarships ──► education_stages (who is eligible)
 | certification_name | string | yes | |
 | issuing_body | string | yes | "AWS", "Google", "Microsoft" |
 | url | url | yes | Official page |
-| related_career_ids | ids | yes | |
-| skill_ids | ids | no | |
-| level | enum | yes | `foundational`, `associate`, `professional`, `specialty` |
+| related_career_ids | ids | yes | Shown in the "Get in" step of these careers' roadmaps (up to 3, entry level first) |
+| skill_ids | ids | yes | |
+| level | enum | yes | `foundation`, `associate`, `professional` |
 | prerequisites | text | no | |
-| cost_note | text | no | |
-| validity_years | number | no | |
+| cost_note | text | yes | No fee amounts; point to the official page |
+| validity_years | int (1–10) | no | |
 | last_verified | date | yes | |
 
 ### 4.11 entrance_exams.csv

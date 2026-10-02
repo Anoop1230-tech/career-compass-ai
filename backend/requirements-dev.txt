@@ -1,0 +1,34 @@
+# Development, tests and the offline ML evaluation (python -m ml.evaluate).
+# Not installed in the production image.
+-r requirements.txt
+
+# Tests
+pytest==8.3.4
+iniconfig==2.3.0
+pluggy==1.6.0
+packaging==26.3
+
+# Auto-reload for `uvicorn --reload` and uvicorn extras used locally
+watchfiles==1.3.0
+websockets==17.1
+PyYAML==6.0.3
+
+# Data / ML evaluation (ml/evaluate.py)
+numpy==2.2.1
+pandas==2.2.3
+python-dateutil==2.9.0.post0
+pytz==2026.4
+six==1.17.0
+scikit-learn==1.6.0
+scipy==1.17.1
+joblib==1.6.0
+threadpoolctl==3.7.0
+cloudpickle==3.1.2
+matplotlib==3.10.0
+contourpy==1.3.3
+cycler==0.12.1
+fonttools==4.66.0
+kiwisolver==1.5.1
+pillow==12.3.0
+pyparsing==3.3.3
+seaborn==0.13.2

@@ -6,7 +6,10 @@ import { httpError, mockApi, renderApp } from "../test/utils";
 
 const skill = (over) => ({
   kind: "skill", skill_id: "SKL_ML", name: "Machine learning", from_level: "none", to_level: "advanced",
-  weeks: 16, is_mandatory: true, done: false, description: "Models", ...over,
+  weeks: 16, is_mandatory: true, done: false, description: "Models",
+  courses: [{ course_id: "CRS_GOOGLE_ML_CRASH", name: "Machine Learning Crash Course", provider: "Google",
+    url: "https://developers.google.com/machine-learning/crash-course", level: "beginner", cost_type: "free" }],
+  ...over,
 });
 
 const ROADMAP = {
@@ -15,7 +18,10 @@ const ROADMAP = {
   stages: [
     { key: "core", order: 1, title: "Core skills", summary: "Most expected", weeks: 16, items: [skill()] },
     { key: "apply", order: 2, title: "Get in", summary: "Offers", weeks: 4, items: [
-      { kind: "exam", title: "Prepare for the exam", detail: "Check dates", exams: [{ exam_id: "EXM_GATE", name: "GATE", official_url: "https://gate2027.iitm.ac.in/" }] }] },
+      { kind: "exam", title: "Prepare for the exam", detail: "Check dates", exams: [{ exam_id: "EXM_GATE", name: "GATE", official_url: "https://gate2027.iitm.ac.in/" }] },
+      { kind: "certifications", title: "Consider a recognised certification", detail: "Optional", certifications: [
+        { certification_id: "CRT_AWS_CCP", name: "AWS Certified Cloud Practitioner", issuing_body: "Amazon Web Services",
+          url: "https://aws.amazon.com/certification/certified-cloud-practitioner/", level: "foundation", cost_note: "Paid" }] }] },
   ],
   skipped: [{ name: "Python", level: "advanced" }],
   progress: { done: 0, total: 1, percent: 0 }, total_weeks: 20, study_years: 0, hours_per_week: 8,
@@ -42,11 +48,20 @@ describe("Roadmap page", () => {
     expect(screen.getByRole("link", { name: /GATE/ })).toHaveAttribute("href", "https://gate2027.iitm.ac.in/");
     expect(screen.getByText(/Python \(advanced\)/)).toBeInTheDocument();
     expect(screen.getByText("0 / 1")).toBeInTheDocument();
+    // Learning links: a course per skill, certifications under "Get in"
+    const courses = screen.getByRole("list", { name: "Courses for Machine learning" });
+    expect(within(courses).getByRole("link", { name: /Machine Learning Crash Course/ }))
+      .toHaveAttribute("href", "https://developers.google.com/machine-learning/crash-course");
+    expect(within(courses).getByText(/Google · Free/)).toBeInTheDocument();
+    expect(within(screen.getByRole("list", { name: "Certifications" }))
+      .getByRole("link", { name: /AWS Certified Cloud Practitioner/ })).toHaveAttribute("target", "_blank");
 
     await userEvent.click(screen.getByRole("checkbox", { name: /Machine learning/ }));
     expect(api.markRoadmapSkill).toHaveBeenCalledWith("CAR_ML_ENGINEER", "SKL_ML", true);
     expect(await screen.findByText("1 / 1")).toBeInTheDocument();
     expect(screen.getByRole("checkbox", { name: /Machine learning/ })).toBeChecked();
+    // Learned skills no longer list courses
+    expect(screen.queryByRole("list", { name: "Courses for Machine learning" })).not.toBeInTheDocument();
 
     await userEvent.click(screen.getByRole("button", { name: "Set as my target" }));
     expect(await screen.findByText("Your target career")).toBeInTheDocument();

@@ -2,6 +2,7 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, status
+from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel, ConfigDict, StringConstraints
 from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
@@ -41,8 +42,20 @@ def history(user: User = Depends(get_current_user), db: Session = Depends(get_db
 
 
 @router.post("/chat")
-def chat(body: ChatIn, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+async def chat(body: ChatIn, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    """Database work runs in the threadpool (the session is synchronous); the optional
+    language-model call is awaited, so a slow provider does not block other requests."""
     mentor_limiter.check(f"user:{user.id}")
+    reply, summary = await run_in_threadpool(_draft, body, user, db)
+    text, source = reply.text, "local"
+    if summary is not None:
+        rewritten = await llm.rephrase(body.message, reply.text, summary)
+        if rewritten:
+            text, source = rewritten, "llm"
+    return await run_in_threadpool(_save, body, user, db, reply, text, source)
+
+
+def _draft(body: ChatIn, user: User, db: Session):
     catalog = get_catalog(db)
     if catalog.is_empty:
         raise REFERENCE_DATA_MISSING
@@ -57,14 +70,14 @@ def chat(body: ChatIn, user: User = Depends(get_current_user), db: Session = Dep
     reply = answer(catalog, ctx, body.message, db, remembered_career=remembered,
                    target_career=target.career_id if target else None,
                    done_skills=set(target.completed_skill_ids or []) if target else set())
-    text, source = reply.text, "local"
+    summary = None
     if llm.configured():
         summary = (f"stage: {catalog.stage_name(ctx.stage.stage_id) if ctx.stage.stage_id else 'unknown'}; "
                    f"goals: {', '.join(ctx.goals) or 'none'}; interests: {', '.join(ctx.interests) or 'none'}")
-        rewritten = llm.rephrase(body.message, reply.text, summary)
-        if rewritten:
-            text, source = rewritten, "llm"
+    return reply, summary
 
+
+def _save(body: ChatIn, user: User, db: Session, reply, text: str, source: str) -> dict:
     user_msg = MentorMessage(user_id=user.id, role="user", content=body.message, meta={})
     meta = {**reply.as_dict(), "source": source}
     meta.pop("text")

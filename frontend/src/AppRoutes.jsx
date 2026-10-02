@@ -25,6 +25,8 @@ const RoadmapPage = lazy(() => import("./pages/RoadmapPage"));
 const ExplorePage = lazy(() => import("./pages/ExplorePage"));
 const ResourcesPage = lazy(() => import("./pages/ResourcesPage"));
 const MentorPage = lazy(() => import("./pages/MentorPage"));
+const ForgotPasswordPage = lazy(() => import("./pages/PasswordResetPages").then((m) => ({ default: m.ForgotPasswordPage })));
+const ResetPasswordPage = lazy(() => import("./pages/PasswordResetPages").then((m) => ({ default: m.ResetPasswordPage })));
 
 export default function AppRoutes() {
   return (
@@ -33,6 +35,8 @@ export default function AppRoutes() {
         <Route index element={<HomePage />} />
         <Route path="/login" element={<AuthPage mode="login" key="login" />} />
         <Route path="/register" element={<AuthPage mode="register" key="register" />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
         <Route path="/profile/edit" element={<ProtectedRoute><ProfileEditPage /></ProtectedRoute>} />

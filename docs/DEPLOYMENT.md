@@ -66,6 +66,11 @@ docker run -p 8000:8000 \
 The image runs as a non-root user and reads `$PORT` (defaults to 8000), so it
 works on hosts that assign a port (Cloud Run, Railway, Fly.io, Render, ECS, …).
 
+It installs only `backend/requirements.txt` (the server's runtime packages, about
+80 MB). Tests, pandas, scikit-learn and plotting libraries are in
+`backend/requirements-dev.txt` and are not part of the image; `backend/tests/`,
+`backend/ml/` and `frontend/e2e/` are excluded by `.dockerignore`.
+
 ### Option B — Local production-like stack (Docker Compose)
 
 Brings up the app plus a PostgreSQL container:
@@ -94,10 +99,22 @@ Once traffic is HTTPS, the app's production settings do the rest: HSTS tells
 browsers to stay on HTTPS, and the `Secure` cookie flag stops the session cookie
 from ever being sent over plain HTTP.
 
+### Real client IP (rate limits)
+
+Behind a proxy every request reaches the app from the proxy's address, so the
+login rate limit would treat all visitors as one. Set `TRUSTED_PROXY_HOPS` to the
+number of proxies that append to `X-Forwarded-For` (Render, Heroku or a single
+Nginx/Caddy: `1`; `render.yaml` already sets it). Leave it at `0` when the app is
+reached directly; never set it higher than the real number, or clients can fake
+their IP. Failed logins are also limited per account (`ACCOUNT_RATE_LIMIT`
+failures per `ACCOUNT_RATE_WINDOW_SECONDS`, from any IP).
+
 ## Production checklist
 
 - [ ] `ENVIRONMENT=production`
 - [ ] `DATABASE_URL` points at PostgreSQL
 - [ ] `SECRET_KEY` is a fresh long random value (not `change-me`)
 - [ ] Served over HTTPS (managed platform or reverse proxy)
+- [ ] `TRUSTED_PROXY_HOPS` matches the number of proxies in front of the app
+- [ ] `APP_BASE_URL` is the public https address and `SMTP_*` is set, so password reset emails are sent
 - [ ] `/api/health` returns `{"status": "ok"}` and reports the database connected

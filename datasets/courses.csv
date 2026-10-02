@@ -1,1 +1,93 @@
 course_id,course_name,provider,platform,url,skill_ids,level,cost_type,duration_hours,language,certificate_available,last_verified
+CRS_CS50X,CS50x: Introduction to Computer Science,Harvard University,CS50,https://cs50.harvard.edu/x/,SKL_C|SKL_PYTHON|SKL_SQL|SKL_DSA|SKL_ALGORITHMS|SKL_HTML|SKL_PROBLEM_SOLVING,beginner,free,,English,true,2026-10-02
+CRS_CS50P,CS50's Introduction to Programming with Python,Harvard University,CS50,https://cs50.harvard.edu/python/,SKL_PYTHON|SKL_OOP,beginner,free,,English,true,2026-10-02
+CRS_CS50SQL,CS50's Introduction to Databases with SQL,Harvard University,CS50,https://cs50.harvard.edu/sql/,SKL_SQL|SKL_DB_DESIGN|SKL_DBMS,beginner,free,,English,true,2026-10-02
+CRS_CS50W,CS50's Web Programming with Python and JavaScript,Harvard University,CS50,https://cs50.harvard.edu/web/,SKL_DJANGO|SKL_JAVASCRIPT|SKL_HTML|SKL_CSS|SKL_GIT|SKL_REST_API,intermediate,free,,English,true,2026-10-02
+CRS_CS50AI,CS50's Introduction to Artificial Intelligence with Python,Harvard University,CS50,https://cs50.harvard.edu/ai/,SKL_ML|SKL_DL|SKL_NLP|SKL_OPTIMIZATION,intermediate,free,,English,true,2026-10-02
+CRS_CS50CYBER,CS50's Introduction to Cybersecurity,Harvard University,CS50,https://cs50.harvard.edu/cybersecurity/,SKL_NETWORK_SECURITY|SKL_CRYPTOGRAPHY|SKL_WEB_SECURITY,beginner,free,,English,true,2026-10-02
+CRS_PY4E,Python for Everybody,University of Michigan (Dr. Charles Severance),py4e.com,https://www.py4e.com/,SKL_PYTHON,beginner,free,,English,false,2026-10-02
+CRS_MOOC_JAVA,Java Programming MOOC,University of Helsinki,mooc.fi,https://java-programming.mooc.fi/,SKL_JAVA|SKL_OOP,beginner,free,,English,,2026-10-02
+CRS_LEARNCPP,Learn C++,LearnCpp.com,LearnCpp.com,https://www.learncpp.com/,SKL_CPP|SKL_OOP,beginner,free,,English,false,2026-10-02
+CRS_CSHARP_DOCS,C# documentation and tutorials,Microsoft,Microsoft Learn,https://learn.microsoft.com/en-us/dotnet/csharp/,SKL_CSHARP,beginner,free,,English,false,2026-10-02
+CRS_GO_TOUR,A Tour of Go,The Go Authors,go.dev,https://go.dev/tour/,SKL_GO,beginner,free,,English,false,2026-10-02
+CRS_KOTLIN_DOCS,Kotlin: Get started,JetBrains,kotlinlang.org,https://kotlinlang.org/docs/getting-started.html,SKL_KOTLIN,beginner,free,,English,false,2026-10-02
+CRS_ANDROID_COMPOSE,Android Basics with Compose,Google,Android Developers,https://developer.android.com/courses/android-basics-compose/course,SKL_ANDROID|SKL_KOTLIN,beginner,free,,English,false,2026-10-02
+CRS_SWIFTUI,SwiftUI Tutorials,Apple,Apple Developer,https://developer.apple.com/tutorials/swiftui,SKL_SWIFT|SKL_IOS,beginner,free,,English,false,2026-10-02
+CRS_FLUTTER_DOCS,Flutter documentation and codelabs,Google,flutter.dev,https://docs.flutter.dev/,SKL_FLUTTER|SKL_DART,beginner,free,,English,false,2026-10-02
+CRS_REACT_NATIVE_DOCS,React Native: Getting started,Meta,reactnative.dev,https://reactnative.dev/docs/getting-started,SKL_REACT_NATIVE,intermediate,free,,English,false,2026-10-02
+CRS_MDN_WEB,MDN Learn web development,Mozilla,MDN Web Docs,https://developer.mozilla.org/en-US/docs/Learn_web_development,SKL_HTML|SKL_CSS|SKL_JAVASCRIPT|SKL_ACCESSIBILITY,beginner,free,,English,false,2026-10-02
+CRS_FREECODECAMP,freeCodeCamp curriculum (web development certifications),freeCodeCamp,freeCodeCamp,https://www.freecodecamp.org/learn,SKL_HTML|SKL_CSS|SKL_JAVASCRIPT|SKL_REACT|SKL_NODEJS,beginner,free,,English,true,2026-10-02
+CRS_ODIN,The Odin Project (Full Stack JavaScript),The Odin Project,The Odin Project,https://www.theodinproject.com/,SKL_JAVASCRIPT|SKL_NODEJS|SKL_EXPRESS|SKL_REACT|SKL_GIT,beginner,free,,English,false,2026-10-02
+CRS_REACT_LEARN,React: Learn,Meta,react.dev,https://react.dev/learn,SKL_REACT,intermediate,free,,English,false,2026-10-02
+CRS_NEXTJS_LEARN,Next.js Learn,Vercel,nextjs.org,https://nextjs.org/learn,SKL_NEXTJS|SKL_REACT,intermediate,free,,English,false,2026-10-02
+CRS_TS_HANDBOOK,The TypeScript Handbook,Microsoft,typescriptlang.org,https://www.typescriptlang.org/docs/handbook/intro.html,SKL_TYPESCRIPT,intermediate,free,,English,false,2026-10-02
+CRS_NODE_LEARN,Learn Node.js,OpenJS Foundation,nodejs.org,https://nodejs.org/en/learn,SKL_NODEJS,intermediate,free,,English,false,2026-10-02
+CRS_FASTAPI_TUTORIAL,FastAPI Tutorial - User Guide,FastAPI,fastapi.tiangolo.com,https://fastapi.tiangolo.com/tutorial/,SKL_FASTAPI|SKL_REST_API,intermediate,free,,English,false,2026-10-02
+CRS_DJANGO_TUTORIAL,Writing your first Django app,Django Software Foundation,djangoproject.com,https://docs.djangoproject.com/en/stable/intro/tutorial01/,SKL_DJANGO,intermediate,free,,English,false,2026-10-02
+CRS_SPRING_GUIDES,Spring guides,Broadcom (Spring),spring.io,https://spring.io/guides,SKL_SPRING_BOOT|SKL_JAVA,intermediate,free,,English,false,2026-10-02
+CRS_MISSING_SEMESTER,The Missing Semester of Your CS Education,MIT,missing.csail.mit.edu,https://missing.csail.mit.edu/,SKL_BASH|SKL_GIT|SKL_LINUX,beginner,free,,English,false,2026-10-02
+CRS_PRO_GIT,Pro Git (book),Scott Chacon and Ben Straub,git-scm.com,https://git-scm.com/book/en/v2,SKL_GIT,beginner,free,,English,false,2026-10-02
+CRS_MIT_ALGORITHMS,6.006 Introduction to Algorithms,MIT,MIT OpenCourseWare,https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/,SKL_DSA|SKL_ALGORITHMS,intermediate,free,,English,false,2026-10-02
+CRS_MIT_MATH_CS,6.042J Mathematics for Computer Science,MIT,MIT OpenCourseWare,https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/,SKL_DISCRETE_MATH|SKL_PROBABILITY,intermediate,free,,English,false,2026-10-02
+CRS_MIT_LINEAR_ALGEBRA,18.06 Linear Algebra,MIT,MIT OpenCourseWare,https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/,SKL_LINEAR_ALGEBRA,intermediate,free,,English,false,2026-10-02
+CRS_OSTEP,Operating Systems: Three Easy Pieces (book),University of Wisconsin-Madison,pages.cs.wisc.edu,https://pages.cs.wisc.edu/~remzi/OSTEP/,SKL_OS,intermediate,free,,English,false,2026-10-02
+CRS_NPTEL,NPTEL courses by IIT and IISc faculty,NPTEL (IITs and IISc),NPTEL / SWAYAM,https://nptel.ac.in/courses,SKL_OS|SKL_NETWORKS|SKL_DBMS|SKL_COMPUTER_ARCH|SKL_COMPILERS|SKL_DIGITAL_ELECTRONICS|SKL_SIGNAL_PROCESSING|SKL_VLSI|SKL_MANUAL_TESTING,intermediate,freemium,,English,true,2026-10-02
+CRS_GOOGLE_TECH_WRITING,Technical Writing courses,Google,Google for Developers,https://developers.google.com/tech-writing,SKL_TECH_WRITING,beginner,free,,English,false,2026-10-02
+CRS_GOOGLE_IT_SUPPORT,Google IT Support Professional Certificate,Google,Coursera,https://www.coursera.org/professional-certificates/google-it-support,SKL_TROUBLESHOOTING|SKL_NETWORKS|SKL_LINUX|SKL_ITIL,beginner,paid,,English,true,2026-10-02
+CRS_ISTQB_SYLLABUS,ISTQB Foundation Level syllabus and sample exams,ISTQB,istqb.org,https://www.istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/,SKL_MANUAL_TESTING,beginner,free,,English,false,2026-10-02
+CRS_CANVA_DESIGN_SCHOOL,Canva Design School,Canva,Canva,https://www.canva.com/designschool/,SKL_GRAPHIC_DESIGN|SKL_SOCIAL_MEDIA,beginner,free,,English,false,2026-10-02
+CRS_PIXAR_IN_A_BOX,Pixar in a Box,Khan Academy and Pixar Animation Studios,Khan Academy,https://www.khanacademy.org/computing/pixar,SKL_ANIMATION|SKL_STORYTELLING,beginner,free,,English,false,2026-10-02
+CRS_SYSTEM_DESIGN_PRIMER,The System Design Primer,Donne Martin (open source),GitHub,https://github.com/donnemartin/system-design-primer,SKL_SYSTEM_DESIGN|SKL_DESIGN_PATTERNS,advanced,free,,English,false,2026-10-02
+CRS_KHAN_STATS,Statistics and probability,Khan Academy,Khan Academy,https://www.khanacademy.org/math/statistics-probability,SKL_STATISTICS|SKL_PROBABILITY|SKL_HYPOTHESIS_TESTING|SKL_REGRESSION,beginner,free,,English,false,2026-10-02
+CRS_KHAN_CALCULUS,Calculus 1,Khan Academy,Khan Academy,https://www.khanacademy.org/math/calculus-1,SKL_CALCULUS,beginner,free,,English,false,2026-10-02
+CRS_KHAN_FINANCE,Economics and finance,Khan Academy,Khan Academy,https://www.khanacademy.org/economics-finance-domain,SKL_FINANCIAL_ANALYSIS|SKL_ACCOUNTING,beginner,free,,English,false,2026-10-02
+CRS_DOCKER_GET_STARTED,Docker: Get started,Docker,docs.docker.com,https://docs.docker.com/get-started/,SKL_DOCKER,beginner,free,,English,false,2026-10-02
+CRS_K8S_BASICS,Learn Kubernetes Basics,Kubernetes (CNCF),kubernetes.io,https://kubernetes.io/docs/tutorials/kubernetes-basics/,SKL_KUBERNETES,intermediate,free,,English,false,2026-10-02
+CRS_TERRAFORM_TUTORIALS,Terraform tutorials,HashiCorp,HashiCorp Developer,https://developer.hashicorp.com/terraform/tutorials,SKL_TERRAFORM,intermediate,free,,English,false,2026-10-02
+CRS_AWS_SKILL_BUILDER,AWS Skill Builder,Amazon Web Services,AWS Skill Builder,https://skillbuilder.aws/,SKL_AWS,beginner,freemium,,English,true,2026-10-02
+CRS_MS_LEARN_AZURE,Microsoft Learn: Azure training,Microsoft,Microsoft Learn,https://learn.microsoft.com/en-us/training/azure/,SKL_AZURE,beginner,free,,English,false,2026-10-02
+CRS_GCP_SKILLS_BOOST,Google Cloud Skills Boost,Google Cloud,Google Cloud Skills Boost,https://www.cloudskillsboost.google/,SKL_GCP,beginner,freemium,,English,true,2026-10-02
+CRS_POSTGRES_TUTORIAL,PostgreSQL Tutorial (official documentation),PostgreSQL Global Development Group,postgresql.org,https://www.postgresql.org/docs/current/tutorial.html,SKL_POSTGRESQL|SKL_SQL,beginner,free,,English,false,2026-10-02
+CRS_MONGODB_UNIVERSITY,MongoDB University,MongoDB,MongoDB University,https://learn.mongodb.com/,SKL_MONGODB,beginner,free,,English,true,2026-10-02
+CRS_KAGGLE_LEARN,Kaggle Learn micro-courses,Kaggle (Google),Kaggle,https://www.kaggle.com/learn,SKL_PANDAS|SKL_ML|SKL_DATA_VIZ|SKL_DATA_CLEANING|SKL_FEATURE_ENG|SKL_SQL,beginner,free,,English,true,2026-10-02
+CRS_PANDAS_DOCS,pandas: Getting started,pandas project (NumFOCUS),pandas.pydata.org,https://pandas.pydata.org/docs/getting_started/index.html,SKL_PANDAS,beginner,free,,English,false,2026-10-02
+CRS_NUMPY_LEARN,NumPy: Learn,NumPy project (NumFOCUS),numpy.org,https://numpy.org/learn/,SKL_NUMPY,beginner,free,,English,false,2026-10-02
+CRS_SKLEARN_TUTORIAL,scikit-learn: Getting started and user guide,scikit-learn project,scikit-learn.org,https://scikit-learn.org/stable/getting_started.html,SKL_SKLEARN|SKL_MODEL_EVAL,intermediate,free,,English,false,2026-10-02
+CRS_R4DS,R for Data Science (2nd edition),Hadley Wickham and others,r4ds.hadley.nz,https://r4ds.hadley.nz/,SKL_R|SKL_DATA_VIZ|SKL_DATA_CLEANING,beginner,free,,English,false,2026-10-02
+CRS_GOOGLE_DATA_ANALYTICS,Google Data Analytics Professional Certificate,Google,Coursera,https://www.coursera.org/professional-certificates/google-data-analytics,SKL_EXCEL|SKL_SQL|SKL_TABLEAU|SKL_R|SKL_DATA_CLEANING|SKL_DATA_VIZ,beginner,paid,,English,true,2026-10-02
+CRS_POWER_BI_DOCS,Power BI documentation and guided learning,Microsoft,Microsoft Learn,https://learn.microsoft.com/en-us/power-bi/,SKL_POWER_BI,beginner,free,,English,false,2026-10-02
+CRS_EXCEL_HELP,Excel help and learning,Microsoft,Microsoft Support,https://support.microsoft.com/en-us/excel,SKL_EXCEL,beginner,free,,English,false,2026-10-02
+CRS_ANDREW_NG_ML,Machine Learning Specialization,DeepLearning.AI and Stanford University,Coursera,https://www.coursera.org/specializations/machine-learning-introduction,SKL_ML|SKL_REGRESSION|SKL_MODEL_EVAL,beginner,freemium,,English,true,2026-10-02
+CRS_GOOGLE_ML_CRASH,Machine Learning Crash Course,Google,Google for Developers,https://developers.google.com/machine-learning/crash-course,SKL_ML|SKL_FEATURE_ENG|SKL_MODEL_EVAL,beginner,free,,English,false,2026-10-02
+CRS_DL_SPECIALIZATION,Deep Learning Specialization,DeepLearning.AI,Coursera,https://www.coursera.org/specializations/deep-learning,SKL_DL|SKL_TENSORFLOW|SKL_CV|SKL_NLP,intermediate,freemium,,English,true,2026-10-02
+CRS_FASTAI,Practical Deep Learning for Coders,fast.ai,fast.ai,https://course.fast.ai/,SKL_DL|SKL_PYTORCH|SKL_CV|SKL_NLP,intermediate,free,,English,false,2026-10-02
+CRS_PYTORCH_TUTORIALS,PyTorch tutorials,PyTorch Foundation,pytorch.org,https://pytorch.org/tutorials/,SKL_PYTORCH,intermediate,free,,English,false,2026-10-02
+CRS_TENSORFLOW_TUTORIALS,TensorFlow tutorials,Google,tensorflow.org,https://www.tensorflow.org/tutorials,SKL_TENSORFLOW,intermediate,free,,English,false,2026-10-02
+CRS_CS231N,CS231n: Deep Learning for Computer Vision,Stanford University,cs231n.stanford.edu,https://cs231n.stanford.edu/,SKL_CV|SKL_DL,advanced,free,,English,false,2026-10-02
+CRS_CS224N,CS224N: Natural Language Processing with Deep Learning,Stanford University,web.stanford.edu,https://web.stanford.edu/class/cs224n/,SKL_NLP|SKL_LLM,advanced,free,,English,false,2026-10-02
+CRS_HF_LEARN,Hugging Face Learn (LLM and NLP courses),Hugging Face,huggingface.co,https://huggingface.co/learn,SKL_LLM|SKL_NLP|SKL_GENAI,intermediate,free,,English,false,2026-10-02
+CRS_DLAI_SHORT,DeepLearning.AI short courses (generative AI),DeepLearning.AI,deeplearning.ai,https://www.deeplearning.ai/short-courses/,SKL_PROMPT_ENG|SKL_GENAI|SKL_LLM,beginner,free,,English,false,2026-10-02
+CRS_MADE_WITH_ML,Made With ML (MLOps),Goku Mohandas,madewithml.com,https://madewithml.com/,SKL_MLOPS|SKL_CICD,advanced,free,,English,false,2026-10-02
+CRS_SPINNING_UP,Spinning Up in Deep RL,OpenAI,spinningup.openai.com,https://spinningup.openai.com/,SKL_RL,advanced,free,,English,false,2026-10-02
+CRS_DE_ZOOMCAMP,Data Engineering Zoomcamp,DataTalksClub,GitHub,https://github.com/DataTalksClub/data-engineering-zoomcamp,SKL_ETL|SKL_SPARK|SKL_KAFKA|SKL_AIRFLOW|SKL_DATA_WAREHOUSE|SKL_DOCKER,intermediate,free,,English,true,2026-10-02
+CRS_PORTSWIGGER,Web Security Academy,PortSwigger,PortSwigger,https://portswigger.net/web-security,SKL_WEB_SECURITY|SKL_PENTEST,intermediate,free,,English,false,2026-10-02
+CRS_OWASP_TOP10,OWASP Top Ten,OWASP Foundation,owasp.org,https://owasp.org/www-project-top-ten/,SKL_WEB_SECURITY|SKL_THREAT_MODELING,beginner,free,,English,false,2026-10-02
+CRS_TRYHACKME,TryHackMe learning paths,TryHackMe,TryHackMe,https://tryhackme.com/,SKL_ETHICAL_HACKING|SKL_PENTEST|SKL_NETWORK_SECURITY|SKL_SIEM|SKL_INCIDENT_RESPONSE,beginner,freemium,,English,true,2026-10-02
+CRS_NETACAD,Cisco Networking Academy (networking and cybersecurity courses),Cisco,Cisco Networking Academy,https://www.netacad.com/,SKL_NETWORKS|SKL_NETWORK_SECURITY,beginner,free,,English,true,2026-10-02
+CRS_CRYPTO_BONEH,Cryptography I,Stanford University (Dan Boneh),Coursera,https://www.coursera.org/learn/crypto,SKL_CRYPTOGRAPHY,intermediate,freemium,,English,true,2026-10-02
+CRS_WAI_FOUNDATIONS,Digital Accessibility Foundations,W3C Web Accessibility Initiative,W3C WAI,https://www.w3.org/WAI/courses/foundations-course/,SKL_ACCESSIBILITY,beginner,free,,English,false,2026-10-02
+CRS_GOOGLE_UX,Google UX Design Professional Certificate,Google,Coursera,https://www.coursera.org/professional-certificates/google-ux-design,SKL_UX_RESEARCH|SKL_WIREFRAMING|SKL_FIGMA|SKL_UI_DESIGN,beginner,paid,,English,true,2026-10-02
+CRS_PLAYWRIGHT_DOCS,Playwright documentation,Microsoft,playwright.dev,https://playwright.dev/docs/intro,SKL_TEST_AUTOMATION|SKL_API_TESTING,intermediate,free,,English,false,2026-10-02
+CRS_SELENIUM_DOCS,Selenium documentation,Selenium project,selenium.dev,https://www.selenium.dev/documentation/,SKL_TEST_AUTOMATION,intermediate,free,,English,false,2026-10-02
+CRS_POSTMAN_ACADEMY,Postman Academy,Postman,Postman Academy,https://academy.postman.com/,SKL_API_TESTING|SKL_REST_API,beginner,free,,English,true,2026-10-02
+CRS_K6_DOCS,Grafana k6 documentation,Grafana Labs,grafana.com,https://grafana.com/docs/k6/latest/,SKL_PERF_TESTING,intermediate,free,,English,false,2026-10-02
+CRS_ARDUINO_LEARN,Arduino Docs: Learn,Arduino,docs.arduino.cc,https://docs.arduino.cc/learn/,SKL_MICROCONTROLLERS|SKL_EMBEDDED_C|SKL_IOT,beginner,free,,English,false,2026-10-02
+CRS_UNITY_LEARN,Unity Learn,Unity Technologies,Unity Learn,https://learn.unity.com/,SKL_UNITY|SKL_GAME_DEV|SKL_CSHARP,beginner,free,,English,false,2026-10-02
+CRS_SCRUM_GUIDE,The Scrum Guide,Ken Schwaber and Jeff Sutherland,scrumguides.org,https://scrumguides.org/,SKL_AGILE,beginner,free,,English,false,2026-10-02
+CRS_GOOGLE_PM,Google Project Management Professional Certificate,Google,Coursera,https://www.coursera.org/professional-certificates/google-project-management,SKL_PROJECT_MGMT|SKL_AGILE|SKL_STAKEHOLDER_MGMT|SKL_RISK_MGMT,beginner,paid,,English,true,2026-10-02
+CRS_SWAYAM,SWAYAM (Government of India online courses),Ministry of Education,SWAYAM,https://swayam.gov.in/,SKL_TEACHING|SKL_LESSON_PLANNING|SKL_INSTRUCTIONAL_DESIGN|SKL_RESEARCH_METHODS,beginner,freemium,,English and Indian languages,true,2026-10-02
+CRS_SKILL_INDIA_DIGITAL,Skill India Digital Hub courses,Ministry of Skill Development and Entrepreneurship,Skill India Digital Hub,https://www.skillindiadigital.gov.in/,SKL_COOKING|SKL_FOOD_SAFETY|SKL_MAKEUP|SKL_FITNESS_TRAINING|SKL_ENTREPRENEURSHIP,beginner,free,,English and Indian languages,true,2026-10-02
+CRS_MUSICTHEORY_NET,musictheory.net lessons,musictheory.net,musictheory.net,https://www.musictheory.net/lessons,SKL_MUSIC_THEORY,beginner,free,,English,false,2026-10-02
+CRS_GOOGLE_SEO,SEO Starter Guide,Google,Google Search Central,https://developers.google.com/search/docs/fundamentals/seo-starter-guide,SKL_COPYWRITING,beginner,free,,English,false,2026-10-02
+CRS_DAVINCI_TRAINING,DaVinci Resolve training,Blackmagic Design,blackmagicdesign.com,https://www.blackmagicdesign.com/products/davinciresolve/training,SKL_VIDEO_EDITING,beginner,free,,English,true,2026-10-02
+CRS_BLENDER_TUTORIALS,Blender tutorials,Blender Foundation,blender.org,https://www.blender.org/support/tutorials/,SKL_ANIMATION|SKL_VFX,beginner,free,,English,false,2026-10-02

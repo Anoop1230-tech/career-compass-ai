@@ -16,6 +16,8 @@ from catalog.models import (
     CareerSkill,
     CareerTransition,
     CatalogMeta,
+    Certification,
+    Course,
     EducationPath,
     Exam,
     Skill,
@@ -23,6 +25,7 @@ from catalog.models import (
 )
 
 LEVEL_ORDER = ["school", "course", "diploma", "ug", "pg", "doctoral", "professional"]
+LEARN_LEVELS = ["beginner", "intermediate", "advanced"]
 
 
 @dataclass
@@ -36,6 +39,21 @@ class Catalog:
     career_paths: list[CareerPath] = field(default_factory=list)
     transitions: list[CareerTransition] = field(default_factory=list)
     skill_lookup: dict[str, str] = field(default_factory=dict)  # casefolded name/alias -> skill_id
+    courses: dict[str, Course] = field(default_factory=dict)
+    courses_by_skill: dict[str, list[Course]] = field(default_factory=dict)  # skill_id -> courses
+    certifications_by_career: dict[str, list[Certification]] = field(default_factory=dict)
+
+    def courses_for(self, skill_id: str, level: str | None = None, limit: int = 2) -> list[Course]:
+        """Best courses for a skill: the level nearest to the one needed first, then free
+        before paid, then courses focused on fewer skills (more depth on this one)."""
+        wanted = LEARN_LEVELS.index(level) if level in LEARN_LEVELS else 0
+        cost = {"free": 0, "freemium": 1, "paid": 2}
+        ranked = sorted(
+            self.courses_by_skill.get(skill_id, []),
+            key=lambda c: (abs(LEARN_LEVELS.index(c.level) - wanted) if c.level in LEARN_LEVELS else 3,
+                           cost.get(c.cost_type, 3), len(c.skill_ids), c.course_id),
+        )
+        return ranked[:limit]
 
     @property
     def is_empty(self) -> bool:
@@ -86,6 +104,16 @@ def _load(db: Session) -> Catalog:
     for skill in cat.skills.values():
         for label in [skill.name, *skill.aliases]:
             cat.skill_lookup.setdefault(normalize(label), skill.skill_id)
+    for course in db.scalars(select(Course).order_by(Course.course_id)):
+        cat.courses[course.course_id] = course
+        for skill_id in course.skill_ids:
+            cat.courses_by_skill.setdefault(skill_id, []).append(course)
+    level_rank = {"foundation": 0, "associate": 1, "professional": 2}
+    for cert in db.scalars(select(Certification).order_by(Certification.certification_id)):
+        for career_id in cert.related_career_ids:
+            cat.certifications_by_career.setdefault(career_id, []).append(cert)
+    for certs in cat.certifications_by_career.values():
+        certs.sort(key=lambda c: (level_rank.get(c.level, 3), c.certification_id))
     # Detach from the session so the cached objects are plain read-only data
     db.expunge_all()
     return cat

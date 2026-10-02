@@ -33,6 +33,9 @@ export default defineConfig({
     setupFiles: './src/test/setup.js',
     include: ['src/**/*.test.{js,jsx}'],
     css: false,
+    // vmThreads: one jsdom per worker instead of one per test file, with each file
+    // still isolated in its own VM context
+    pool: 'vmThreads',
     // the full profile-form test types into ~20 fields; allow for a busy machine
     testTimeout: 15000,
   },

@@ -24,6 +24,7 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 16 | Guided dashboard and UI redesign | Dashboard with "what to do next", grouped sidebar navigation, new warm design, smooth transitions | ✅ |
 | 17 | Creative and skill-based careers | Professional courses (music, dance, design, writing, acting and comedy, film, culinary, fitness, beauty) and 21 careers that need no degree | ✅ |
 | 18 | Themes and motion | Light, Dark, High contrast and Match device themes; home illustration with day and night scenes; scroll reveal and hover animations | ✅ |
+| 19 | Security, learning links and feedback | Proxy-aware and per-account login limits, logout everywhere, change/reset password, course and certification links on roadmaps, "does this fit you?" feedback, smaller production image | ✅ |
 
 ---
 
@@ -337,3 +338,21 @@ A BA → School Teacher route used to lead to Data Analyst and then to Data Engi
 - Career Tree lists normal next roles before switches; the mentor recognises principal, counsellor, special educator and instructional designer
 
 Result: validator 0 errors and 0 warnings (59 careers, 198 skills, 443 career-skill links, 244 education paths, 51 progressions, 27 switches); link check 97 OK, 0 failed; 293 backend, 112 frontend unit and 109 browser tests passing.
+
+
+
+---
+
+## Phase 19 – Security, learning links and feedback – ✅ done
+
+- 19.1 Rate limits behind proxies: the client IP comes from `X-Forwarded-For` only for `TRUSTED_PROXY_HOPS` trusted proxies (Render: 1), so visitors no longer share one limit and cannot fake their IP. New per-account limit: 5 failed logins in 15 minutes pauses that account from any IP (same reply for unknown emails); a successful login or password reset clears it
+- 19.2 Sessions: every token carries the user's `token_version`; logout, password change and reset increase it, so copied or old tokens stop working immediately on every device (migration `0002`)
+- 19.3 Change password on the profile page (current password required, guesses count as failed logins; this device stays logged in). "Forgot password?": neutral reply for any email, one-time link valid 30 minutes, only a SHA-256 hash stored, link in the URL fragment so it never reaches server logs, 3 requests per email per hour; SMTP via `SMTP_*`, or printed in the log in development
+- 19.4 Learning resources: `courses.csv` (92 courses, mostly free: CS50, MIT OCW, NPTEL, SWAYAM, Kaggle, freeCodeCamp, official docs…) and `certifications.csv` (24: AWS, Azure, Google Cloud, CKA, Security+, ISC2 CC, OSCP, PL-300, ISTQB, PMP, CFA, CA, CTET, RCI, FoSTaC…) with validator rules, tables (migration `0003`) and seeding. Each roadmap skill shows up to 2 courses (nearest level, free first); the "Get in" stage lists up to 3 certifications. No fees are stated; every entry links to the official page. `career_roadmaps.csv` stays header-only on purpose (roadmaps are generated)
+- 19.5 "Does this fit you?" on every recommendation: yes / not for me + optional fixed reason (no free text), private per user, deleted with the account, saved with the score, rank and confidence shown (migration `0004`). `python -m ml.feedback` reports the share of "fits" per rank band – the real-data check Phase 13 asked for
+- 19.6 Smaller production image: `requirements.txt` holds only the 34 runtime packages (81 MB instead of 450 MB); tests and pandas/scikit-learn/plotting are in `requirements-dev.txt`; tests, ML and e2e folders are excluded from the image. A clean runtime-only install ran migrations 0001–0003 and served the API in production mode
+- 19.7 Mentor: the optional language-model call is async, so a slow provider no longer blocks a server worker (tested). Vitest uses `vmThreads` (about 13 s instead of 17 s)
+
+Result: 352 backend tests, 121 frontend unit tests, 115 browser tests (5 skipped by design) passing; lint 0 warnings; validator 0 errors, 0 warnings; production build OK (initial JavaScript 112 kB gzipped). New course/certification links: 0 dead, 7 sites block automated checks (open in a browser to confirm).
+
+Known limits: the Docker image was not built (Docker is not installed on the development machine); the rate limiter is still in memory per server (Redis needed for several servers); password reset needs SMTP configured in production; feedback numbers mean little until there are at least 30 answers.

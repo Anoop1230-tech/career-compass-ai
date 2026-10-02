@@ -145,19 +145,50 @@ def test_llm_is_used_when_configured_and_falls_back(api, make_user, monkeypatch)
         def json(self):
             return {"choices": [{"message": {"content": "Friendly rewrite."}}]}
 
-    def fake_post(url, headers, json, timeout):
+    async def fake_post(url, headers, json, timeout):
         sent.update(json)
         return Ok()
 
-    monkeypatch.setattr(llm.httpx, "post", fake_post)
+    monkeypatch.setattr(llm, "_post", fake_post)
     reply = client.post("/api/mentor/chat", json={"message": "What should I do next?"}).json()["reply"]
     assert reply["content"] == "Friendly rewrite." and reply["source"] == "llm"
     prompt = sent["messages"][1]["content"]
     assert "user@example.com" not in prompt and "DRAFT" in prompt  # no email sent
 
-    def broken(*a, **kw):
+    async def broken(*a, **kw):
         raise llm.httpx.ConnectError("down")
 
-    monkeypatch.setattr(llm.httpx, "post", broken)
+    monkeypatch.setattr(llm, "_post", broken)
     reply = client.post("/api/mentor/chat", json={"message": "What should I do next?"}).json()["reply"]
     assert reply["source"] == "local" and "B.Tech" in reply["content"]
+
+
+
+def test_slow_llm_does_not_block_other_requests(api, make_user, monkeypatch):
+    """While the mentor waits for the language model, the server keeps answering."""
+    import asyncio
+    import threading
+    import time
+
+    client = make_user()
+    client.put("/api/profile", json=valid_profile())
+    for k in ("LLM_API_URL", "LLM_API_KEY", "LLM_MODEL"):
+        monkeypatch.setenv(k, "https://llm.invalid/v1" if k == "LLM_API_URL" else "x")
+    started = threading.Event()
+
+    async def slow_post(*a, **kw):
+        started.set()
+        await asyncio.sleep(1.5)
+        raise llm.httpx.ConnectError("timeout")
+
+    monkeypatch.setattr(llm, "_post", slow_post)
+    result = {}
+    worker = threading.Thread(target=lambda: result.update(
+        r=client.post("/api/mentor/chat", json={"message": "What should I do next?"})))
+    worker.start()
+    assert started.wait(10)
+    t0 = time.monotonic()
+    assert client.get("/api/health").status_code == 200
+    assert time.monotonic() - t0 < 1.0  # answered while the LLM call was still waiting
+    worker.join(10)
+    assert result["r"].json()["reply"]["source"] == "local"

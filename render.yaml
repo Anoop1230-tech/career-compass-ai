@@ -29,3 +29,17 @@ services:
       # Generated once by Render and kept secret; login tokens are signed with it
       - key: SECRET_KEY
         generateValue: true
+      # Render's load balancer adds one X-Forwarded-For entry (real visitor IP for rate limits)
+      - key: TRUSTED_PROXY_HOPS
+        value: "1"
+      # Password reset emails: set these in the Render dashboard (kept out of the repo)
+      - key: APP_BASE_URL
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: SMTP_FROM
+        sync: false

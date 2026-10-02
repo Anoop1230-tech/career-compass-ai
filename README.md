@@ -21,7 +21,7 @@ Personalized career guidance and roadmap platform: "Given my current education, 
 # Backend
 cd backend
 python -m venv venv
-.\venv\Scripts\python.exe -m pip install -r requirements.txt
+.\venv\Scripts\python.exe -m pip install -r requirements-dev.txt   # runtime + tests + ML evaluation
 copy .env.example .env
 cd ..
 
@@ -75,7 +75,9 @@ Loading is safe: invalid data changes nothing, the load is all-or-nothing, and u
 - Passwords are hashed with Argon2; the plain password is never stored.
 - Login uses a signed token in an httpOnly, SameSite=Lax cookie (JavaScript cannot read it).
 - `backend/.env` must contain a long random `SECRET_KEY` (see `.env.example`). The app refuses to start in production without one.
-- Login/register are rate limited (10 attempts per minute per IP by default).
+- Login/register are rate limited (10 attempts per minute per IP by default; behind a proxy set `TRUSTED_PROXY_HOPS` so the real visitor IP is used). After 5 failed logins in 15 minutes an account is paused, from any IP.
+- Logging out, changing or resetting the password signs the account out on every device (old tokens stop working at once).
+- "Forgot password?" emails a one-time link valid for 30 minutes (only a hash is stored). Without `SMTP_HOST`, development prints the link in the server log.
 - Tests use their own temporary databases; browser tests use ports 8001/5174, so your dev data and running servers are never touched.
 
 ## API endpoints
@@ -85,8 +87,11 @@ Loading is safe: invalid data changes nothing, the load is all-or-nothing, and u
 | GET | /api/health | no | Server and database status |
 | POST | /api/auth/register | no | Create account (logs in) |
 | POST | /api/auth/login | no | Log in |
-| POST | /api/auth/logout | no | Log out |
+| POST | /api/auth/logout | no | Log out (on every device) |
 | GET | /api/auth/me | yes | Current user |
+| POST | /api/auth/change-password | yes | Change password (other devices are signed out) |
+| POST | /api/auth/password-reset/request | no | Email a reset link (same answer for any email) |
+| POST | /api/auth/password-reset/confirm | no | Set a new password with the emailed token |
 | GET | /api/profile/options | no | Choice lists for the profile form |
 | GET / PUT / DELETE | /api/profile | yes | Read, save, delete your profile |
 | GET | /api/catalog/stages?level= | no | Education and career stages |
@@ -102,10 +107,12 @@ Loading is safe: invalid data changes nothing, the load is all-or-nothing, and u
 | GET | /api/assessments/{kind}/result | yes | Latest result of one test (aptitude includes answer review) |
 | GET | /api/recommendations?domain=&limit= | yes | Ranked, explained career matches |
 | GET | /api/recommendations/{career_id} | yes | Fit score and rank for one career |
+| PUT / DELETE | /api/recommendations/{career_id}/feedback | yes | Save or remove "does this fit you?" (`fits` / `not_for_me` + optional reason) |
+| GET | /api/recommendations/feedback | yes | Your own feedback answers |
 | GET | /api/skill-gap/{career_id} | yes | Prioritised skill gap for a target career |
 | GET | /api/transitions/check?to=&from_stage=&from_career= | optional | Dream career check: route, verdict, blockers |
 | GET | /api/roadmap | yes | Roadmap for your target career |
-| GET | /api/roadmap/{career_id} | optional | Stage-by-stage roadmap (personalised when logged in) |
+| GET | /api/roadmap/{career_id} | optional | Stage-by-stage roadmap with course links per skill and certifications (personalised when logged in) |
 | PUT | /api/roadmap/{career_id}/target | yes | Set your target career |
 | PUT | /api/roadmap/{career_id}/skills/{skill_id} | yes | Mark a roadmap skill as learned or not |
 | GET | /api/explore?stage= | optional | Career tree root |

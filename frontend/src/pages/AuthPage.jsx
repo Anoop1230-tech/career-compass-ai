@@ -3,6 +3,7 @@ import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { TextField } from "../components/FormFields";
 import { useAuth } from "../context/AuthContext";
 import { getErrorMessage, getFieldErrors } from "../services/api";
+import { PASSWORD_HINT, passwordProblem } from "../profile/password";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -10,9 +11,8 @@ function validate(mode, email, password) {
   const errors = {};
   if (!EMAIL_PATTERN.test(email.trim())) errors.email = "Enter a valid email address.";
   if (mode === "register") {
-    if (password.length < 8) errors.password = "Use at least 8 characters.";
-    else if (!/[A-Za-z]/.test(password) || !/\d/.test(password))
-      errors.password = "Include at least one letter and one number.";
+    const problem = passwordProblem(password);
+    if (problem) errors.password = problem;
   } else if (!password) {
     errors.password = "Enter your password.";
   }
@@ -68,6 +68,11 @@ export default function AuthPage({ mode }) {
             : "Welcome back. Continue where you left off."}
         </p>
 
+        {location.state?.passwordReset && !formError && (
+          <div className="notice" role="status">
+            Your password was changed. Log in with your new password.
+          </div>
+        )}
         {formError && (
           <div className="notice notice--danger" role="alert">
             {formError}
@@ -92,12 +97,17 @@ export default function AuthPage({ mode }) {
             value={password}
             onChange={setPassword}
             error={errors.password}
-            hint={isRegister ? "At least 8 characters, with a letter and a number." : undefined}
+            hint={isRegister ? PASSWORD_HINT : undefined}
           />
           <label className="checkbox">
             <input type="checkbox" checked={showPassword} onChange={(e) => setShowPassword(e.target.checked)} />
             <span>Show password</span>
           </label>
+          {!isRegister && (
+            <p className="auth__forgot">
+              <Link to="/forgot-password">Forgot password?</Link>
+            </p>
+          )}
 
           <button type="submit" className="btn btn--primary btn--block" disabled={submitting}>
             {submitting ? "Please wait…" : isRegister ? "Create account" : "Log in"}

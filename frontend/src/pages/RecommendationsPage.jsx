@@ -27,6 +27,75 @@ export function FitBreakdown({ item }) {
   );
 }
 
+const REASONS = [
+  { value: "not_interested", label: "Not interested in this work" },
+  { value: "too_hard_to_reach", label: "Too hard to reach from where I am" },
+  { value: "skills_mismatch", label: "Doesn't match my skills" },
+  { value: "pay_or_lifestyle", label: "Pay or lifestyle doesn't suit me" },
+  { value: "other", label: "Something else" },
+];
+
+/** "Does this fit you?" – saved per career; used to check the engine against real answers. */
+function Feedback({ item }) {
+  const [value, setValue] = useState(item.feedback);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const name = `fb-${item.career_id}`;
+
+  const save = async (verdict, reason) => {
+    const previous = value;
+    setValue({ verdict, reason: reason || null }); // show at once; roll back on error
+    setBusy(true);
+    setError("");
+    try {
+      const saved = await api.saveRecommendationFeedback(item.career_id, verdict, reason);
+      setValue(saved.feedback);
+    } catch (err) {
+      setValue(previous);
+      setError(api.getErrorMessage(err));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const clear = async () => {
+    const previous = value;
+    setValue(null);
+    setError("");
+    try {
+      await api.deleteRecommendationFeedback(item.career_id);
+    } catch (err) {
+      setValue(previous);
+      setError(api.getErrorMessage(err));
+    }
+  };
+
+  return (
+    <fieldset className="rec-feedback small" disabled={busy}>
+      <legend>Does {item.name} fit you?</legend>
+      <div className="btn-row">
+        <button type="button" className={`btn btn--small ${value?.verdict === "fits" ? "btn--primary" : "btn--secondary"}`}
+          aria-pressed={value?.verdict === "fits"} onClick={() => save("fits")}>Yes, it fits</button>
+        <button type="button" className={`btn btn--small ${value?.verdict === "not_for_me" ? "btn--primary" : "btn--secondary"}`}
+          aria-pressed={value?.verdict === "not_for_me"} onClick={() => save("not_for_me", value?.reason)}>Not for me</button>
+        {value && <button type="button" className="link-button small" onClick={clear}>Remove answer</button>}
+      </div>
+      {value?.verdict === "not_for_me" && (
+        <div className="field" style={{ margin: "var(--space-3) 0 0" }}>
+          <label className="field__label" htmlFor={`${name}-reason`}>Main reason <span className="field__optional">(optional)</span></label>
+          <select id={`${name}-reason`} className="input" value={value.reason || ""}
+            onChange={(e) => save("not_for_me", e.target.value || undefined)}>
+            <option value="">Choose a reason</option>
+            {REASONS.map((r) => <option key={r.value} value={r.value}>{r.label}</option>)}
+          </select>
+        </div>
+      )}
+      {value && !error && <p className="muted small" role="status" style={{ margin: "var(--space-2) 0 0" }}>Thanks, your answer is saved.</p>}
+      {error && <p className="field__error" role="alert">{error}</p>}
+    </fieldset>
+  );
+}
+
 function RecommendationCard({ item, rank }) {
   const [open, setOpen] = useState(false);
   const id = `rec-${item.career_id}`;
@@ -69,6 +138,7 @@ function RecommendationCard({ item, rank }) {
         </button>
       </div>
       {open && <div id={`${id}-why`}><FitBreakdown item={item} /></div>}
+      <Feedback item={item} />
     </article>
   );
 }
@@ -149,7 +219,8 @@ export default function RecommendationsPage() {
               Scores combine six signals with fixed weights (interest {data.weights.interest}%, skills{" "}
               {data.weights.skills}%, education {data.weights.education}%, aptitude {data.weights.aptitude}%, work
               style {data.weights.personality}%, interests and goals {data.weights.preferences}%). Missing signals are
-              left out and the others count more. This is guidance, not a prediction of success.
+              left out and the others count more. This is guidance, not a prediction of success. Your "does it fit
+              you?" answers are private to your account and are only used to check how well these scores work.
             </p>
           </>
         )}

@@ -233,13 +233,43 @@ SPECS: dict[str, FileSpec] = {
             dates=("last_verified",),
             urls=("official_url",),
         ),
+        FileSpec(
+            "courses.csv",
+            ("course_id", "course_name", "provider", "platform", "url", "skill_ids", "level", "cost_type",
+             "duration_hours", "language", "certificate_available", "last_verified"),
+            id_column="course_id",
+            id_prefix="CRS_",
+            required=("course_id", "course_name", "provider", "url", "skill_ids", "level", "cost_type", "language",
+                      "last_verified"),
+            # freemium = free to learn, paid for a certificate or extra content
+            enums={"level": PROFICIENCY, "cost_type": {"free", "freemium", "paid"}},
+            foreign_keys={"skill_ids": "skills.csv"},
+            numbers=("duration_hours",),
+            booleans=("certificate_available",),
+            dates=("last_verified",),
+            urls=("url",),
+        ),
+        FileSpec(
+            "certifications.csv",
+            ("certification_id", "certification_name", "issuing_body", "url", "related_career_ids", "skill_ids",
+             "level", "prerequisites", "cost_note", "validity_years", "last_verified"),
+            id_column="certification_id",
+            id_prefix="CRT_",
+            required=("certification_id", "certification_name", "issuing_body", "url", "related_career_ids",
+                      "skill_ids", "level", "cost_note", "last_verified"),
+            enums={"level": {"foundation", "associate", "professional"}},
+            foreign_keys={"related_career_ids": "careers.csv", "skill_ids": "skills.csv"},
+            int_ranges={"validity_years": (1, 10)},
+            dates=("last_verified",),
+            urls=("url",),
+        ),
     ]
 }
-# Header-only files still being filled in later phases. Only their header is checked.
+# Header-only files kept for a possible later use. Only their header is checked.
+# career_roadmaps.csv: roadmaps are generated from the skill mapping, education paths
+# and courses (engine/roadmap.py), so hand-written stages are not needed today.
 PLANNED_FILES: dict[str, str] = {
     "career_roadmaps.csv": "roadmap_id",
-    "courses.csv": "course_id",
-    "certifications.csv": "certification_id",
 }
 
 # Which ID column each file exposes for foreign keys

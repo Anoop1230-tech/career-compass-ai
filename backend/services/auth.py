@@ -43,10 +43,11 @@ def authenticate(db: Session, email: str, password: str) -> User | None:
     return user if verify_password(password, user.password_hash) else None
 
 
-def create_access_token(user_id: int) -> str:
+def create_access_token(user_id: int, token_version: int = 0) -> str:
     now = datetime.now(timezone.utc)
     payload = {
         "sub": str(user_id),
+        "ver": token_version,
         "iat": now,
         "exp": now + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
         "type": "access",
@@ -54,7 +55,8 @@ def create_access_token(user_id: int) -> str:
     return jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
 
 
-def decode_access_token(token: str) -> int | None:
+def decode_access_token(token: str) -> tuple[int, int] | None:
+    """Returns (user_id, token_version) for a valid token, else None."""
     try:
         payload = jwt.decode(
             token,
@@ -64,9 +66,17 @@ def decode_access_token(token: str) -> int | None:
         )
         if payload.get("type") != "access":
             return None
-        return int(payload["sub"])
+        version = payload.get("ver", 0)
+        if not isinstance(version, int) or isinstance(version, bool):
+            return None
+        return int(payload["sub"]), version
     except (jwt.PyJWTError, ValueError, TypeError):
         return None
+
+
+def revoke_sessions(user: User) -> None:
+    """Invalidate every login token issued to this user so far (caller commits)."""
+    user.token_version = (user.token_version or 0) + 1
 
 
 NOT_LOGGED_IN = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Please log in to continue.")
@@ -84,7 +94,11 @@ def get_optional_user(request: Request, db: Session = Depends(get_db)) -> User |
     """Like get_current_user, but returns None for visitors instead of 401
     (for pages that work without login and get better when logged in)."""
     token = request.cookies.get(settings.AUTH_COOKIE_NAME)
-    user_id = decode_access_token(token) if token else None
-    if user_id is None:
+    decoded = decode_access_token(token) if token else None
+    if decoded is None:
         return None
-    return db.get(User, user_id)  # None if the account was deleted after the token was issued
+    user_id, version = decoded
+    user = db.get(User, user_id)  # None if the account was deleted after the token was issued
+    if user is None or (user.token_version or 0) != version:
+        return None  # logged out, password changed or reset since this token was issued
+    return user

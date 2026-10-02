@@ -1,7 +1,7 @@
 """Database tables (SQLAlchemy 2.0 ORM models)."""
 from datetime import datetime, timezone
 
-from sqlalchemy import JSON, Boolean, DateTime, ForeignKey, Integer, String, Text, UniqueConstraint
+from sqlalchemy import JSON, Boolean, DateTime, Float, ForeignKey, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database import Base
@@ -19,11 +19,28 @@ class User(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(String(254), unique=True, index=True)
     password_hash: Mapped[str] = mapped_column(String(255))
+    # Part of every login token. Increased on logout, password change and reset,
+    # which makes every token issued before that moment invalid.
+    token_version: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
     profile: Mapped["Profile"] = relationship(
         back_populates="user", uselist=False, cascade="all, delete-orphan"
     )
+
+
+class PasswordResetToken(Base):
+    """One-time password reset link. Only a SHA-256 hash of the token is stored,
+    so a database leak does not give anyone working reset links."""
+
+    __tablename__ = "password_reset_tokens"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    token_hash: Mapped[str] = mapped_column(String(64), unique=True)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    used_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
 
 class Profile(Base):
@@ -115,3 +132,24 @@ class MentorMessage(Base):
     content: Mapped[str] = mapped_column(Text)
     meta: Mapped[dict] = mapped_column(JSON, default=dict)  # intent, actions, suggestions, career_id, source
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+
+class RecommendationFeedback(Base):
+    """A user's answer to "did this recommendation fit you?" for one career.
+
+    Saved with a snapshot of the score and rank shown at that moment, so the
+    rule engine can later be compared against real answers (see ml/evaluate.py).
+    One answer per user and career (changing it overwrites); deleted with the account."""
+
+    __tablename__ = "recommendation_feedback"
+    __table_args__ = (UniqueConstraint("user_id", "career_id", name="uq_feedback_user_career"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    career_id: Mapped[str] = mapped_column(String(40), index=True)
+    verdict: Mapped[str] = mapped_column(String(20))  # fits | not_for_me
+    reason: Mapped[str | None] = mapped_column(String(30), nullable=True)
+    score: Mapped[float | None] = mapped_column(Float, nullable=True)
+    rank: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    confidence: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)

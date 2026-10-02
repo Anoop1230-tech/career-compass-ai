@@ -41,7 +41,12 @@ def test_fresh_database_gets_every_table(tmp_path):
 
 def test_old_database_is_stamped_not_recreated(tmp_path):
     db = tmp_path / "old.db"
-    run(db, "from database import init_db; init_db()")  # how databases were created before Phase 15
+    # Databases from before Phase 15 were built by create_all with the 0001 schema:
+    # reproduce that by applying 0001 and removing Alembic's bookkeeping table.
+    run(db, "from alembic.config import main; main(argv=['upgrade', '0001'])")
+    run(db, "from database import engine; from sqlalchemy import text\n"
+            "with engine.begin() as c: c.execute(text('DROP TABLE alembic_version'))")
     assert "alembic_version" not in tables(db)
     assert run(db, "from database import migrate; print(migrate())") == "stamped+upgraded"
-    assert "alembic_version" in tables(db)
+    assert tables(db) == set(Base.metadata.tables) | {"alembic_version"}
+    run(db, "from alembic.config import main; main(argv=['check'])")

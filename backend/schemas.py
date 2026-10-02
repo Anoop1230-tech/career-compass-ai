@@ -45,9 +45,18 @@ def _check_choice_list(values: list[str], allowed: set[str], field: str) -> list
 
 
 # ---------------------------------------------------------------- auth
+def _check_password_strength(value: str) -> str:
+    if not any(c.isalpha() for c in value) or not any(c.isdigit() for c in value):
+        raise ValueError("Password must contain at least one letter and one number")
+    return value
+
+
+NewPassword = Annotated[str, Field(min_length=8, max_length=128)]
+
+
 class RegisterRequest(StrictModel):
     email: EmailStr
-    password: str = Field(min_length=8, max_length=128)
+    password: NewPassword
 
     @field_validator("email")
     @classmethod
@@ -57,9 +66,36 @@ class RegisterRequest(StrictModel):
     @field_validator("password")
     @classmethod
     def password_strength(cls, value: str) -> str:
-        if not any(c.isalpha() for c in value) or not any(c.isdigit() for c in value):
-            raise ValueError("Password must contain at least one letter and one number")
-        return value
+        return _check_password_strength(value)
+
+
+class ChangePasswordRequest(StrictModel):
+    current_password: str = Field(min_length=1, max_length=128)
+    new_password: NewPassword
+
+    @field_validator("new_password")
+    @classmethod
+    def password_strength(cls, value: str) -> str:
+        return _check_password_strength(value)
+
+
+class PasswordResetRequest(StrictModel):
+    email: EmailStr
+
+    @field_validator("email")
+    @classmethod
+    def normalize_email(cls, value: str) -> str:
+        return value.strip().lower()
+
+
+class PasswordResetConfirm(StrictModel):
+    token: str = Field(min_length=20, max_length=200)
+    new_password: NewPassword
+
+    @field_validator("new_password")
+    @classmethod
+    def password_strength(cls, value: str) -> str:
+        return _check_password_strength(value)
 
 
 class LoginRequest(StrictModel):

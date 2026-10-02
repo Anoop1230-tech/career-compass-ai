@@ -28,8 +28,30 @@ class Settings:
     AUTH_RATE_LIMIT: int = int(os.getenv("AUTH_RATE_LIMIT", "10"))
     AUTH_RATE_WINDOW_SECONDS: int = int(os.getenv("AUTH_RATE_WINDOW_SECONDS", "60"))
 
+    # Failed logins per account (email), from any IP, before that account is paused
+    ACCOUNT_RATE_LIMIT: int = int(os.getenv("ACCOUNT_RATE_LIMIT", "5"))
+    ACCOUNT_RATE_WINDOW_SECONDS: int = int(os.getenv("ACCOUNT_RATE_WINDOW_SECONDS", "900"))
+
+    # Number of reverse proxies in front of the app that append to X-Forwarded-For.
+    # 0 = use the direct connection address (local dev). Render/Heroku/one Nginx = 1.
+    TRUSTED_PROXY_HOPS: int = int(os.getenv("TRUSTED_PROXY_HOPS", "0"))
+
     # Mentor chat messages per user per minute
     MENTOR_RATE_LIMIT: int = int(os.getenv("MENTOR_RATE_LIMIT", "30"))
+
+    # Public address of the website, used in password reset emails
+    APP_BASE_URL: str = os.getenv("APP_BASE_URL", "http://localhost:5173").rstrip("/")
+    PASSWORD_RESET_MINUTES: int = int(os.getenv("PASSWORD_RESET_MINUTES", "30"))
+    # Reset emails per address per hour (stops using the form to spam someone)
+    PASSWORD_RESET_RATE_LIMIT: int = int(os.getenv("PASSWORD_RESET_RATE_LIMIT", "3"))
+
+    # Outgoing email (password reset). Without SMTP_HOST, development logs the link instead.
+    SMTP_HOST: str = os.getenv("SMTP_HOST", "")
+    SMTP_PORT: int = int(os.getenv("SMTP_PORT", "587"))
+    SMTP_USER: str = os.getenv("SMTP_USER", "")
+    SMTP_PASSWORD: str = os.getenv("SMTP_PASSWORD", "")
+    SMTP_FROM: str = os.getenv("SMTP_FROM", "Career Compass AI <no-reply@localhost>")
+    SMTP_STARTTLS: bool = os.getenv("SMTP_STARTTLS", "true").lower() == "true"
 
     # Serve the built frontend (frontend/dist) from this server. On by default in production.
     SERVE_FRONTEND: bool = os.getenv("SERVE_FRONTEND", "").lower() == "true" or (

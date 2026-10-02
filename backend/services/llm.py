@@ -29,12 +29,19 @@ def configured() -> bool:
     return all(os.getenv(k) for k in ("LLM_API_URL", "LLM_API_KEY", "LLM_MODEL"))
 
 
-def rephrase(question: str, draft: str, profile_summary: str, timeout: float = 15.0) -> str | None:
+async def _post(url: str, headers: dict, json: dict, timeout: float) -> httpx.Response:
+    """The only network call (tests replace it). Async, so waiting for the provider
+    never holds a server worker thread."""
+    async with httpx.AsyncClient(timeout=timeout) as client:
+        return await client.post(url, headers=headers, json=json)
+
+
+async def rephrase(question: str, draft: str, profile_summary: str, timeout: float = 15.0) -> str | None:
     """Returns the rewritten text, or None to keep the draft."""
     if not configured():
         return None
     try:
-        response = httpx.post(
+        response = await _post(
             os.environ["LLM_API_URL"],
             headers={"Authorization": f"Bearer {os.environ['LLM_API_KEY']}"},
             json={

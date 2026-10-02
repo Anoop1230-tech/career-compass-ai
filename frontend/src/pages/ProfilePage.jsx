@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import ChangePassword from "../components/ChangePassword";
 import { RATINGS } from "../profile/profileForm";
 import * as api from "../services/api";
 
@@ -227,6 +228,8 @@ export default function ProfilePage() {
             <p style={{ whiteSpace: "pre-wrap" }}>{p.bio}</p>
           </article>
         )}
+
+        <ChangePassword />
 
         <div style={{ marginTop: "var(--space-6)" }}>
           <button type="button" className="btn btn--danger btn--small" onClick={handleDelete} disabled={deleting}>

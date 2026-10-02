@@ -22,7 +22,8 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /app
 
-# Python dependencies (psycopg-binary ships its own libs, so no system build tools needed)
+# Runtime Python dependencies only (tests, pandas/scikit-learn etc. live in requirements-dev.txt).
+# psycopg-binary ships its own libs, so no system build tools are needed.
 COPY backend/requirements.txt ./backend/requirements.txt
 RUN pip install --no-cache-dir -r backend/requirements.txt
 

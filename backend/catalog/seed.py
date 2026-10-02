@@ -28,7 +28,9 @@ from catalog.models import (
     CareerSkill,
     CareerTransition,
     CatalogMeta,
+    Certification,
     College,
+    Course,
     EducationPath,
     Exam,
     InterestQuestion,
@@ -47,6 +49,7 @@ logger = logging.getLogger("career_compass.seed")
 DELETE_ORDER = [
     CareerSkill, EducationPath, CareerPath, CareerTransition, Exam, Career, Skill, Stage,
     InterestQuestion, PersonalityQuestion, AptitudeQuestion, College, Scholarship, University,
+    Course, Certification,
 ]
 
 
@@ -195,6 +198,21 @@ def build_objects(tables: dict[str, list[dict[str, str]]]) -> list:
             state_restriction=text(r["state_restriction"]), amount_note=text(r["amount_note"]),
             application_window_note=text(r["application_window_note"]), official_url=r["official_url"],
             verified=boolean(r["verified"]), last_verified=day(r["last_verified"]),
+        ))
+    for r in tables["courses.csv"]:
+        objects.append(Course(
+            course_id=r["course_id"], name=r["course_name"], provider=r["provider"], platform=text(r["platform"]),
+            url=r["url"], skill_ids=split_ids(r["skill_ids"]), level=r["level"], cost_type=r["cost_type"],
+            duration_hours=number(r["duration_hours"]), language=r["language"],
+            certificate_available=boolean(r["certificate_available"]) if r["certificate_available"] else None,
+            last_verified=day(r["last_verified"]),
+        ))
+    for r in tables["certifications.csv"]:
+        objects.append(Certification(
+            certification_id=r["certification_id"], name=r["certification_name"], issuing_body=r["issuing_body"],
+            url=r["url"], related_career_ids=split_ids(r["related_career_ids"]), skill_ids=split_ids(r["skill_ids"]),
+            level=r["level"], prerequisites=text(r["prerequisites"]), cost_note=r["cost_note"],
+            validity_years=integer(r["validity_years"]), last_verified=day(r["last_verified"]),
         ))
     return objects
 

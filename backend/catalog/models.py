@@ -247,3 +247,41 @@ class Scholarship(Base):
     official_url: Mapped[str] = mapped_column(String(300))
     verified: Mapped[bool] = mapped_column(Boolean)
     last_verified: Mapped[date] = mapped_column(Date)
+
+
+# ---------------------------------------------------------------- learning resources
+class Course(Base):
+    """A course or tutorial that teaches one or more skills (linked from roadmap steps)."""
+
+    __tablename__ = "courses"
+
+    course_id: Mapped[str] = mapped_column(String(40), primary_key=True)
+    name: Mapped[str] = mapped_column(String(200), index=True)
+    provider: Mapped[str] = mapped_column(String(200))
+    platform: Mapped[str | None] = mapped_column(String(100))
+    url: Mapped[str] = mapped_column(String(300))
+    skill_ids: Mapped[list] = mapped_column(JSON, default=list)
+    level: Mapped[str] = mapped_column(String(20))
+    cost_type: Mapped[str] = mapped_column(String(20))  # free | freemium | paid
+    duration_hours: Mapped[float | None] = mapped_column(Float)
+    language: Mapped[str] = mapped_column(String(60))
+    certificate_available: Mapped[bool | None] = mapped_column(Boolean)
+    last_verified: Mapped[date] = mapped_column(Date)
+
+
+class Certification(Base):
+    """An industry or professional certification relevant to some careers."""
+
+    __tablename__ = "certifications"
+
+    certification_id: Mapped[str] = mapped_column(String(40), primary_key=True)
+    name: Mapped[str] = mapped_column(String(200), index=True)
+    issuing_body: Mapped[str] = mapped_column(String(200))
+    url: Mapped[str] = mapped_column(String(300))
+    related_career_ids: Mapped[list] = mapped_column(JSON, default=list)
+    skill_ids: Mapped[list] = mapped_column(JSON, default=list)
+    level: Mapped[str] = mapped_column(String(20))  # foundation | associate | professional
+    prerequisites: Mapped[str | None] = mapped_column(Text)
+    cost_note: Mapped[str] = mapped_column(Text)
+    validity_years: Mapped[int | None] = mapped_column(Integer)
+    last_verified: Mapped[date] = mapped_column(Date)

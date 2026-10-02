@@ -5,6 +5,11 @@
 backend/venv/
 backend/*.db
 backend/*.sqlite3
+# Development-only code (the server never imports these)
+backend/tests/
+backend/ml/
+backend/requirements-dev.txt
+frontend/e2e/
 
 # Secrets and env files (the image gets config from environment variables)
 **/.env

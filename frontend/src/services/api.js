@@ -54,6 +54,13 @@ export const logoutUser = async () => {
   await api.post("/auth/logout");
 };
 export const getCurrentUser = async () => (await api.get("/auth/me")).data;
+export const changePassword = async (currentPassword, newPassword) =>
+  (await api.post("/auth/change-password", { current_password: currentPassword, new_password: newPassword })).data;
+export const requestPasswordReset = async (email) =>
+  (await api.post("/auth/password-reset/request", { email })).data;
+export const confirmPasswordReset = async (token, newPassword) => {
+  await api.post("/auth/password-reset/confirm", { token, new_password: newPassword });
+};
 
 // ---- profile
 export const getProfileOptions = async () => (await api.get("/profile/options")).data;
@@ -90,6 +97,11 @@ export const getRecommendations = async ({ domain, limit = 10 } = {}, signal) =>
   (await api.get("/recommendations", { params: { domain: domain || undefined, limit }, signal })).data;
 export const getCareerFit = async (careerId, signal) =>
   (await api.get(`/recommendations/${encodeURIComponent(careerId)}`, { signal })).data;
+export const saveRecommendationFeedback = async (careerId, verdict, reason) =>
+  (await api.put(`/recommendations/${encodeURIComponent(careerId)}/feedback`, reason ? { verdict, reason } : { verdict })).data;
+export const deleteRecommendationFeedback = async (careerId) => {
+  await api.delete(`/recommendations/${encodeURIComponent(careerId)}/feedback`);
+};
 export const getSkillGap = async (careerId, signal) =>
   (await api.get(`/skill-gap/${encodeURIComponent(careerId)}`, { signal })).data;
 export const checkTransition = async (params, signal) =>

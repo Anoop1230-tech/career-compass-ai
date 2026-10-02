@@ -24,10 +24,18 @@ class UnknownCareer(LookupError):
     pass
 
 
-def _skill(i: dict, done: set[str]) -> dict:
+def _course(c) -> dict:
+    return {"course_id": c.course_id, "name": c.name, "provider": c.provider, "url": c.url, "level": c.level,
+            "cost_type": c.cost_type, "certificate_available": c.certificate_available}
+
+
+def _skill(i: dict, done: set[str], catalog: Catalog) -> dict:
+    # Start level for a new skill is "beginner"; otherwise aim at the level still to reach
+    level = "beginner" if i["current_level"] == "none" else i["required_level"]
     return {"skill_id": i["skill_id"], "name": i["name"], "from_level": i["current_level"], "to_level": i["required_level"],
             "weeks": i["weeks"], "is_mandatory": i["is_mandatory"], "done": i["skill_id"] in done,
-            "description": i["description"]}
+            "description": i["description"],
+            "courses": [_course(c) for c in catalog.courses_for(i["skill_id"], level)]}
 
 
 def build_roadmap(catalog: Catalog, ctx: UserContext, career_id: str, done: set[str] | None = None) -> dict:
@@ -66,7 +74,7 @@ def build_roadmap(catalog: Catalog, ctx: UserContext, career_id: str, done: set[
             stages.append({
                 "key": key, "title": title, "summary": summary,
                 "weeks": sum(i["weeks"] for i in pending(items)),
-                "items": [{"kind": "skill", **_skill(i, done)} for i in items],
+                "items": [{"kind": "skill", **_skill(i, done, catalog)} for i in items],
             })
 
     project_skills = [i["name"] for i in (core or foundations or helpful)][:4] or \
@@ -93,6 +101,14 @@ def build_roadmap(catalog: Catalog, ctx: UserContext, career_id: str, done: set[
                                   "typical_month": exam.typical_month})
     get_in = [{"kind": "task", "title": "Apply for internships or entry roles",
                "detail": f"Target {career.name} or closely related roles; tailor your CV to the skills above."}]
+    certs = catalog.certifications_by_career.get(career_id, [])
+    if certs:
+        get_in.insert(0, {
+            "kind": "certifications", "title": "Consider a recognised certification",
+            "detail": "Optional for most roles, but it can help you get shortlisted. Check fees and rules on the official page.",
+            "certifications": [{"certification_id": c.certification_id, "name": c.name, "issuing_body": c.issuing_body,
+                                "url": c.url, "level": c.level, "cost_note": c.cost_note} for c in certs[:3]],
+        })
     if exams:
         get_in.insert(0, {"kind": "exam", "title": "Prepare for the entrance or recruitment exam",
                           "detail": "Check the official dates and syllabus early.", "exams": exams})

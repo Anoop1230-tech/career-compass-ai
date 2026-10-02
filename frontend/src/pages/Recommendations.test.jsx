@@ -49,6 +49,44 @@ describe("Recommendations page", () => {
     expect(api.getRecommendations).toHaveBeenLastCalledWith({ domain: "Finance", limit: 15 }, expect.anything());
   });
 
+  it("saves 'does it fit you?' answers with an optional reason", async () => {
+    mockApi({ loggedIn: true });
+    vi.spyOn(api, "getRecommendations").mockResolvedValue({ ...DATA, items: [{ ...DATA.items[0], feedback: null }] });
+    vi.spyOn(api, "saveRecommendationFeedback").mockImplementation(async (id, verdict, reason) =>
+      ({ career_id: id, feedback: { verdict, reason: reason || null } }));
+    vi.spyOn(api, "deleteRecommendationFeedback").mockResolvedValue();
+    const user = userEvent.setup();
+    renderApp("/for-you");
+
+    const yes = await screen.findByRole("button", { name: "Yes, it fits" });
+    expect(yes).toHaveAttribute("aria-pressed", "false");
+    await user.click(yes);
+    expect(api.saveRecommendationFeedback).toHaveBeenCalledWith("CAR_DATA_SCIENTIST", "fits", undefined);
+    expect(await screen.findByText("Thanks, your answer is saved.")).toBeInTheDocument();
+    expect(yes).toHaveAttribute("aria-pressed", "true");
+
+    await user.click(screen.getByRole("button", { name: "Not for me" }));
+    await user.selectOptions(screen.getByLabelText(/Main reason/), "too_hard_to_reach");
+    expect(api.saveRecommendationFeedback).toHaveBeenLastCalledWith("CAR_DATA_SCIENTIST", "not_for_me", "too_hard_to_reach");
+
+    await user.click(screen.getByRole("button", { name: "Remove answer" }));
+    expect(api.deleteRecommendationFeedback).toHaveBeenCalledWith("CAR_DATA_SCIENTIST");
+    expect(screen.getByRole("button", { name: "Not for me" })).toHaveAttribute("aria-pressed", "false");
+  });
+
+  it("shows a saved answer and rolls back when saving fails", async () => {
+    mockApi({ loggedIn: true });
+    vi.spyOn(api, "getRecommendations").mockResolvedValue({
+      ...DATA, items: [{ ...DATA.items[0], feedback: { verdict: "fits", reason: null } }] });
+    vi.spyOn(api, "saveRecommendationFeedback").mockRejectedValue(httpError(503, { detail: "The database is unavailable." }));
+    const user = userEvent.setup();
+    renderApp("/for-you");
+    expect(await screen.findByRole("button", { name: "Yes, it fits" })).toHaveAttribute("aria-pressed", "true");
+    await user.click(screen.getByRole("button", { name: "Not for me" }));
+    expect(await screen.findByText("The database is unavailable.")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Yes, it fits" })).toHaveAttribute("aria-pressed", "true");
+  });
+
   it("asks for a profile when there is none", async () => {
     mockApi({ loggedIn: true });
     vi.spyOn(api, "getRecommendations").mockRejectedValue(httpError(404, { detail: "Create your profile first" }));
