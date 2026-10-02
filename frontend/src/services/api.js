@@ -127,6 +127,8 @@ export const setRoadmapTarget = async (careerId) =>
   (await api.put(`/roadmap/${encodeURIComponent(careerId)}/target`)).data;
 export const markRoadmapSkill = async (careerId, skillId, done) =>
   (await api.put(`/roadmap/${encodeURIComponent(careerId)}/skills/${encodeURIComponent(skillId)}`, { done })).data;
+export const markProjectStep = async (careerId, projectId, index, done) =>
+  (await api.put(`/roadmap/${encodeURIComponent(careerId)}/projects/${encodeURIComponent(projectId)}/steps/${index}`, { done })).data;
 export const getExploreRoot = async (stage, signal) =>
   (await api.get("/explore", { params: stage ? { stage } : {}, signal })).data;
 export const expandExplore = async (kind, id) =>

@@ -20,6 +20,7 @@ from catalog.models import (
     Course,
     EducationPath,
     Exam,
+    ProjectIdea,
     Skill,
     Stage,
 )
@@ -42,6 +43,8 @@ class Catalog:
     courses: dict[str, Course] = field(default_factory=dict)
     courses_by_skill: dict[str, list[Course]] = field(default_factory=dict)  # skill_id -> courses
     certifications_by_career: dict[str, list[Certification]] = field(default_factory=dict)
+    projects_by_career: dict[str, list[ProjectIdea]] = field(default_factory=dict)
+    projects: dict[str, ProjectIdea] = field(default_factory=dict)
 
     def courses_for(self, skill_id: str, level: str | None = None, limit: int = 2) -> list[Course]:
         """Best courses for a skill: the level nearest to the one needed first, then free
@@ -114,6 +117,13 @@ def _load(db: Session) -> Catalog:
             cat.certifications_by_career.setdefault(career_id, []).append(cert)
     for certs in cat.certifications_by_career.values():
         certs.sort(key=lambda c: (level_rank.get(c.level, 3), c.certification_id))
+    level_order = {"beginner": 0, "intermediate": 1, "advanced": 2}
+    for project in db.scalars(select(ProjectIdea).order_by(ProjectIdea.project_id)):
+        cat.projects[project.project_id] = project
+        for career_id in project.career_ids:
+            cat.projects_by_career.setdefault(career_id, []).append(project)
+    for projects in cat.projects_by_career.values():
+        projects.sort(key=lambda p: (level_order.get(p.level, 3), p.project_id))
     # Detach from the session so the cached objects are plain read-only data
     db.expunge_all()
     return cat

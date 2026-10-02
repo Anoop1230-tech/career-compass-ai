@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from database import get_db
 from engine.catalog_data import get_catalog
 from engine.context import build_context
-from engine.roadmap import UnknownCareer, build_roadmap
+from engine.roadmap import MAX_PROJECTS, UnknownCareer, build_roadmap, step_key
 from models import RoadmapProgress, User
 from routes.next_steps import REFERENCE_DATA_MISSING
 from services.auth import get_current_user, get_optional_user
@@ -34,7 +34,8 @@ def _roadmap(db: Session, user: User | None, career_id: str) -> dict:
     ctx = build_context(db, catalog, user.id if user else None)
     row = _progress(db, user.id, career_id) if user else None
     try:
-        result = build_roadmap(catalog, ctx, career_id, set(row.completed_skill_ids) if row else set())
+        result = build_roadmap(catalog, ctx, career_id, set(row.completed_skill_ids) if row else set(),
+                               set(row.completed_project_steps or []) if row else set())
     except UnknownCareer:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Career not found.") from None
     result["is_target"] = bool(row and row.is_target)
@@ -66,7 +67,8 @@ def get_roadmap(career_id: str, user: User | None = Depends(get_optional_user), 
 def set_target(career_id: str, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     _catalog_career(db, career_id)
     db.execute(update(RoadmapProgress).where(RoadmapProgress.user_id == user.id).values(is_target=False))
-    row = _progress(db, user.id, career_id) or RoadmapProgress(user_id=user.id, career_id=career_id, completed_skill_ids=[])
+    row = _progress(db, user.id, career_id) or RoadmapProgress(user_id=user.id, career_id=career_id, completed_skill_ids=[],
+                                                                     completed_project_steps=[])
     row.is_target = True
     db.add(row)
     db.commit()
@@ -79,10 +81,30 @@ def mark_skill(career_id: str, skill_id: str, body: SkillDone, user: User = Depe
     catalog = _catalog_career(db, career_id)
     if skill_id not in {l.skill_id for l in catalog.career_skills.get(career_id, [])}:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "This skill is not part of this roadmap.")
-    row = _progress(db, user.id, career_id) or RoadmapProgress(user_id=user.id, career_id=career_id, completed_skill_ids=[])
+    row = _progress(db, user.id, career_id) or RoadmapProgress(user_id=user.id, career_id=career_id, completed_skill_ids=[],
+                                                                     completed_project_steps=[])
     done = set(row.completed_skill_ids or [])
     done.add(skill_id) if body.done else done.discard(skill_id)
     row.completed_skill_ids = sorted(done)  # new list object so SQLAlchemy saves the JSON change
+    db.add(row)
+    db.commit()
+    return _roadmap(db, user, career_id)
+
+
+@router.put("/{career_id}/projects/{project_id}/steps/{index}")
+def mark_project_step(career_id: str, project_id: str, index: int, body: SkillDone,
+                      user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    catalog = _catalog_career(db, career_id)
+    shown = catalog.projects_by_career.get(career_id, [])[:MAX_PROJECTS]
+    project = next((p for p in shown if p.project_id == project_id), None)
+    if project is None or not 0 <= index < len(project.steps):
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "This project step is not part of this roadmap.")
+    row = _progress(db, user.id, career_id) or RoadmapProgress(user_id=user.id, career_id=career_id, completed_skill_ids=[],
+                                                                     completed_project_steps=[])
+    done = set(row.completed_project_steps or [])
+    key = step_key(project_id, index)
+    done.add(key) if body.done else done.discard(key)
+    row.completed_project_steps = sorted(done)
     db.add(row)
     db.commit()
     return _roadmap(db, user, career_id)

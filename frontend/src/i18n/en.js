@@ -900,4 +900,13 @@ export default {
   "compare.loginHint": "to see how well each career matches your profile and skills.",
   "compare.disclaimer": "Study times add up the usual course lengths and leave out exam preparation and job search. Eligibility and exam rules change; confirm on the official websites.",
   "err.compare.count": "Choose 2 or 3 different careers to compare.",
+
+  // Roadmap projects (Phase 23)
+  "road.projectsDone": "Projects finished",
+  "road.project.hours": "about {n} hours",
+  "road.project.skills": "Shows: {list}",
+  "road.project.checklist": "Checklist for {name}",
+  "road.project.deliverable": "You will have:",
+  "road.project.progress": "{done} of {total} steps done",
+  "err.roadmap.step_not_in_roadmap": "This project step is not part of this roadmap.",
 };

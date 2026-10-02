@@ -900,4 +900,13 @@ export default {
   "compare.loginHint": "करें ताकि दिखे कि हर करियर आपकी प्रोफ़ाइल और कौशल से कितना मेल खाता है।",
   "compare.disclaimer": "पढ़ाई का समय आम कोर्स की अवधि जोड़कर बना है; इसमें परीक्षा की तैयारी और नौकरी ढूँढने का समय शामिल नहीं। योग्यता और परीक्षा के नियम बदलते हैं; आधिकारिक वेबसाइटों पर पुष्टि करें।",
   "err.compare.count": "तुलना के लिए 2 या 3 अलग करियर चुनें।",
+
+  // Roadmap projects (Phase 23)
+  "road.projectsDone": "पूरे हुए प्रोजेक्ट",
+  "road.project.hours": "करीब {n} घंटे",
+  "road.project.skills": "दिखाता है: {list}",
+  "road.project.checklist": "{name} की चेकलिस्ट",
+  "road.project.deliverable": "आपके पास होगा:",
+  "road.project.progress": "{total} में से {done} कदम पूरे",
+  "err.roadmap.step_not_in_roadmap": "यह प्रोजेक्ट कदम इस रोडमैप का हिस्सा नहीं है।",
 };

@@ -117,6 +117,8 @@ class RoadmapProgress(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
     career_id: Mapped[str] = mapped_column(String(40))
     completed_skill_ids: Mapped[list] = mapped_column(JSON, default=list)
+    # Project checklist ticks as "PRJ_ID:step_index" strings
+    completed_project_steps: Mapped[list] = mapped_column(JSON, default=list)
     is_target: Mapped[bool] = mapped_column(Boolean, default=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
 

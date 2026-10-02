@@ -285,3 +285,19 @@ class Certification(Base):
     cost_note: Mapped[str] = mapped_column(Text)
     validity_years: Mapped[int | None] = mapped_column(Integer)
     last_verified: Mapped[date] = mapped_column(Date)
+
+
+class ProjectIdea(Base):
+    """A portfolio project brief with a step checklist, linked to one or more careers."""
+
+    __tablename__ = "project_ideas"
+
+    project_id: Mapped[str] = mapped_column(String(40), primary_key=True)
+    title: Mapped[str] = mapped_column(String(200))
+    career_ids: Mapped[list] = mapped_column(JSON, default=list)
+    level: Mapped[str] = mapped_column(String(20))
+    summary: Mapped[str] = mapped_column(Text)
+    skill_ids: Mapped[list] = mapped_column(JSON, default=list)
+    steps: Mapped[list] = mapped_column(JSON, default=list)
+    deliverable: Mapped[str] = mapped_column(Text)
+    estimated_hours: Mapped[int] = mapped_column(Integer)

@@ -70,6 +70,58 @@ function Courses({ courses, skillName }) {
   );
 }
 
+function withStep(roadmap, projectId, index, done) {
+  return {
+    ...roadmap,
+    stages: roadmap.stages.map((s) => ({
+      ...s,
+      items: s.items.map((i) => {
+        if (i.project_id !== projectId) return i;
+        const steps = i.steps.map((st) => (st.index === index ? { ...st, done } : st));
+        return { ...i, steps, steps_done: steps.filter((st) => st.done).length };
+      }),
+    })),
+  };
+}
+
+/** A project brief: what to build, which skills it shows, and a checklist you can tick when logged in. */
+function ProjectItem({ item, canTick, busy, onStep }) {
+  const { t } = useI18n();
+  const finished = item.steps_done === item.steps.length;
+  return (
+    <li className={`roadmap-item roadmap-project${finished ? " roadmap-item--done" : ""}`}>
+      <span className="roadmap-item__dot" aria-hidden="true" />
+      <div>
+        <h3 className="roadmap-item__title roadmap-project__title">
+          {item.title}{" "}
+          <span className="badge">{t(`gap.level.${item.level}`)}</span>{" "}
+          <span className="muted small">{t("road.project.hours", { n: item.hours })}</span>
+        </h3>
+        <p className="small">{item.summary}</p>
+        <p className="muted small">{t("road.project.skills", { list: item.skills.join(", ") })}</p>
+        <ol className="project-steps small" aria-label={t("road.project.checklist", { name: item.title })}>
+          {item.steps.map((s) => {
+            const id = `step-${item.project_id}-${s.index}`;
+            return (
+              <li key={s.index} className={s.done ? "project-step project-step--done" : "project-step"}>
+                {canTick ? (
+                  <>
+                    <input id={id} type="checkbox" checked={s.done} disabled={busy}
+                      onChange={(e) => onStep(item.project_id, s.index, e.target.checked)} />
+                    <label htmlFor={id}>{s.text}</label>
+                  </>
+                ) : <span>{s.text}</span>}
+              </li>
+            );
+          })}
+        </ol>
+        <p className="small"><strong>{t("road.project.deliverable")}</strong> {item.deliverable}
+          {canTick && <span className="muted"> · {t("road.project.progress", { done: item.steps_done, total: item.steps.length })}</span>}</p>
+      </div>
+    </li>
+  );
+}
+
 function StageItem({ item, canTick, busy, onToggle }) {
   const { t } = useI18n();
   if (item.kind === "skill") {
@@ -202,6 +254,12 @@ export default function RoadmapPage() {
                 <p className="summary-card__big">{r.progress.done} / {r.progress.total}</p>
                 <Meter value={r.progress.percent} label={t("road.progress")} />
               </div>
+              {r.projects_progress?.total > 0 && (
+                <div className="card summary-card">
+                  <p className="muted small">{t("road.projectsDone")}</p>
+                  <p className="summary-card__big">{r.projects_progress.done} / {r.projects_progress.total}</p>
+                </div>
+              )}
               <div className="card summary-card">
                 <p className="muted small">{t("road.timeLeft")}</p>
                 <p className="summary-card__big">{duration(t, r.total_weeks) || t("road.done")}</p>
@@ -233,14 +291,20 @@ export default function RoadmapPage() {
                     </div>
                   </div>
                   <ul className="roadmap-items">
-                    {s.items.map((item, i) => (
+                    {s.items.map((item, i) => (item.kind === "project" ? (
+                      <ProjectItem key={item.project_id} item={item} canTick={r.logged_in} busy={busy}
+                        onStep={(projectId, index, done) => {
+                          setUpdated({ base: req.data, value: withStep(r, projectId, index, done) });
+                          act(() => api.markProjectStep(r.career.career_id, projectId, index, done), r);
+                        }} />
+                    ) : (
                       <StageItem key={item.skill_id || `${s.key}-${i}`} item={item} canTick={r.logged_in} busy={busy}
                         onToggle={(skillId, done) => {
                           // Show the tick immediately; the server response then replaces it
                           setUpdated({ base: req.data, value: withSkill(r, skillId, done) });
                           act(() => api.markRoadmapSkill(r.career.career_id, skillId, done), r);
                         }} />
-                    ))}
+                    )))}
                   </ul>
                 </li>
               ))}

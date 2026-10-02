@@ -28,7 +28,7 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 20 | Language system | English and Hindi for every screen, language switcher, saved preference | ✅ |
 | 21 | More careers | Healthcare, law, armed forces, agriculture and skilled trades (ITI) with stages, exams and routes | ✅ |
 | 22 | Career comparison | Compare 2–3 careers: skills, education, years, exams, fit | ✅ |
-| 23 | Project ideas | 2–3 project briefs per career with checklists in the roadmap | ⬜ |
+| 23 | Project ideas | 2–3 project briefs per career with checklists in the roadmap | ✅ |
 | 24 | Printable report | One-page summary (profile, matches, roadmap) saved as PDF from the browser | ⬜ |
 | 25 | Salary ranges | Sourced ranges by experience and city tier, never guessed | ⬜ |
 | 26 | College predictor | Likely / borderline / unlikely colleges from published closing ranks | ⬜ |
@@ -396,3 +396,12 @@ Known limits: eligibility for nursing, pharmacy and agriculture admission varies
 Result: 373 backend tests, 137 frontend unit tests, 128 browser tests passing; lint 0 warnings; build OK.
 
 Known limits: study years add up recorded course lengths only (no exam preparation or job search time); careers reached only through work experience show "no direct route" from a study stage.
+
+## Phase 23 - Project ideas - ✅ done
+- 23.1 `datasets/project_ideas.csv`: 108 project briefs, each with a title, level, summary, skills it shows, a 3–8 step checklist, what you end up with and rough hours. Related careers share briefs, so every one of the 79 careers has 2–4 (the validator fails if any career has fewer than 2). Healthcare, law and defence briefs are supervised study, outreach or preparation work (case presentations, awareness camps, moot courts, fitness logs), never unsupervised practice
+- 23.2 The roadmap's "Prove it" stage now lists up to 3 briefs (easiest first) instead of a generic "build 2–3 projects" line; its time comes from the briefs' hours at the roadmap's hours per week. Logged-in users tick checklist steps (`PUT /api/roadmap/{career}/projects/{project}/steps/{index}`), saved per career in `roadmap_progress.completed_project_steps` (migration `0005` also adds the `project_ideas` table); a "Projects finished" card shows progress
+- 23.3 Tests: 5 backend (every career has 2–3 briefs on its roadmap, ordering, ticking and unticking, bad steps, visitors), 1 unit, 1 browser (tick, reload, still ticked)
+
+Result: 378 backend tests, 138 frontend unit tests, 130 browser tests passing; validator 0 errors, 0 warnings; lint 0 warnings; build OK.
+
+Known limits: project texts are English only until Phase 29. Ticking project steps does not change skill levels; skills are still updated in the profile or ticked separately.

@@ -1612,3 +1612,11 @@ label.roadmap-item__title { cursor: pointer; }
   .compare-table td[data-label] { display: block; }
   .compare-table td[data-label]::before { display: block; font-size: var(--text-sm); }
 }
+
+/* Project briefs in the roadmap: a numbered checklist */
+.roadmap-project__title { font-size: var(--text-base); margin: 0 0 var(--space-1); }
+.project-steps { margin: var(--space-2) 0; padding-left: 0; list-style: none; display: grid; gap: var(--space-2); }
+.project-step { display: flex; gap: var(--space-2); align-items: flex-start; }
+.project-step input { margin-top: 0.3em; flex: none; width: 1.1rem; height: 1.1rem; }
+.project-step > span::before { content: "•"; margin-right: var(--space-2); color: var(--color-muted); }
+.project-step--done label { color: var(--color-muted); text-decoration: line-through; }

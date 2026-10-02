@@ -29,6 +29,7 @@ MESSAGE_CODES = {
     "Not found.": "not_found",
     "You have not chosen a target career yet.": "roadmap.no_target",
     "This skill is not part of this roadmap.": "roadmap.skill_not_in_roadmap",
+    "This project step is not part of this roadmap.": "roadmap.step_not_in_roadmap",
     "Tell us where you are now: choose a stage or a current career.": "dream.from_required",
     "Choose 2 or 3 different careers to compare.": "compare.count",
     "Reference data is not loaded yet. Run: python -m catalog.seed": "data.not_loaded",

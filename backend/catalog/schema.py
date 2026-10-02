@@ -263,6 +263,19 @@ SPECS: dict[str, FileSpec] = {
             dates=("last_verified",),
             urls=("url",),
         ),
+        # Project briefs shown in the roadmap's "Prove it" stage; steps are pipe-separated checklist items
+        FileSpec(
+            "project_ideas.csv",
+            ("project_id", "project_title", "career_ids", "level", "summary", "skill_ids", "steps", "deliverable",
+             "estimated_hours"),
+            id_column="project_id",
+            id_prefix="PRJ_",
+            required=("project_id", "project_title", "career_ids", "level", "summary", "skill_ids", "steps",
+                      "deliverable", "estimated_hours"),
+            enums={"level": PROFICIENCY},
+            foreign_keys={"career_ids": "careers.csv", "skill_ids": "skills.csv"},
+            int_ranges={"estimated_hours": (1, 200)},
+        ),
     ]
 }
 # Header-only files kept for a possible later use. Only their header is checked.

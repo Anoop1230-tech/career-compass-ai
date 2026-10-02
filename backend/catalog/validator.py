@@ -222,6 +222,19 @@ def check_logic(tables: dict[str, list[dict[str, str]]], report: Report) -> None
             report.error("education_paths.csv", None, f"stage '{sid}' is missing professional courses: "
                          + ", ".join(sorted(courses - offered[sid])))
 
+    # Every career gets at least two project briefs with a usable checklist
+    projects: dict[str, int] = defaultdict(int)
+    for line, row in enumerate(tables.get("project_ideas.csv", []), start=2):
+        steps = split_ids(row.get("steps", ""))
+        if not 3 <= len(steps) <= 8:
+            report.error("project_ideas.csv", line, f"needs 3 to 8 steps (has {len(steps)})")
+        for cid in split_ids(row.get("career_ids", "")):
+            projects[cid] += 1
+    if "project_ideas.csv" in tables:
+        for row in careers:
+            if projects[row.get("career_id", "")] < 2:
+                report.error("project_ideas.csv", None, f"career '{row.get('career_id')}' has fewer than 2 projects")
+
     # Reliability: unverified exam info must link to the official source
     for line, row in enumerate(tables.get("entrance_exams.csv", []), start=2):
         if row.get("verified") == "false" and not row.get("official_url"):

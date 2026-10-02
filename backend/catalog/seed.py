@@ -35,6 +35,7 @@ from catalog.models import (
     Exam,
     InterestQuestion,
     PersonalityQuestion,
+    ProjectIdea,
     Scholarship,
     Skill,
     Stage,
@@ -49,7 +50,7 @@ logger = logging.getLogger("career_compass.seed")
 DELETE_ORDER = [
     CareerSkill, EducationPath, CareerPath, CareerTransition, Exam, Career, Skill, Stage,
     InterestQuestion, PersonalityQuestion, AptitudeQuestion, College, Scholarship, University,
-    Course, Certification,
+    Course, Certification, ProjectIdea,
 ]
 
 
@@ -213,6 +214,12 @@ def build_objects(tables: dict[str, list[dict[str, str]]]) -> list:
             url=r["url"], related_career_ids=split_ids(r["related_career_ids"]), skill_ids=split_ids(r["skill_ids"]),
             level=r["level"], prerequisites=text(r["prerequisites"]), cost_note=r["cost_note"],
             validity_years=integer(r["validity_years"]), last_verified=day(r["last_verified"]),
+        ))
+    for r in tables["project_ideas.csv"]:
+        objects.append(ProjectIdea(
+            project_id=r["project_id"], title=r["project_title"], career_ids=split_ids(r["career_ids"]),
+            level=r["level"], summary=r["summary"], skill_ids=split_ids(r["skill_ids"]), steps=split_ids(r["steps"]),
+            deliverable=r["deliverable"], estimated_hours=integer(r["estimated_hours"]),
         ))
     return objects
 

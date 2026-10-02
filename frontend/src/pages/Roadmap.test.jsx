@@ -67,6 +67,29 @@ describe("Roadmap page", () => {
     expect(await screen.findByText("Your target career")).toBeInTheDocument();
   });
 
+  it("shows project briefs with a checklist you can tick", async () => {
+    mockApi({ loggedIn: true });
+    const project = (done) => ({
+      kind: "project", project_id: "PRJ_ML_SERVICE", title: "Deploy a model as a service", summary: "Serve a model",
+      level: "advanced", hours: 35, deliverable: "Running service", skills: ["MLOps", "Docker"],
+      steps: [{ index: 0, text: "Train a small model", done }, { index: 1, text: "Wrap it in an API", done: false }],
+      steps_done: done ? 1 : 0,
+    });
+    const withProject = (done) => ({ ...ROADMAP, projects_progress: { done: 0, total: 1 },
+      stages: [...ROADMAP.stages, { key: "projects", order: 3, title: "Prove it", summary: "Evidence", weeks: 5,
+        items: [project(done), { kind: "task", title: "Publish your work", detail: "Online" }] }] });
+    vi.spyOn(api, "getRoadmap").mockResolvedValue(withProject(false));
+    vi.spyOn(api, "markProjectStep").mockResolvedValue(withProject(true));
+    renderApp("/roadmap?career=CAR_ML_ENGINEER");
+
+    expect(await screen.findByRole("heading", { level: 3, name: /Deploy a model as a service/ })).toBeInTheDocument();
+    expect(screen.getByText("Shows: MLOps, Docker")).toBeInTheDocument();
+    expect(screen.getByText("Projects finished")).toBeInTheDocument();
+    const list = screen.getByRole("list", { name: "Checklist for Deploy a model as a service" });
+    await userEvent.click(within(list).getByRole("checkbox", { name: "Train a small model" }));
+    expect(api.markProjectStep).toHaveBeenCalledWith("CAR_ML_ENGINEER", "PRJ_ML_SERVICE", 0, true);
+    expect(await screen.findByText(/1 of 2 steps done/)).toBeInTheDocument();
+  });
   it("opens the saved target when no career is given, else offers a chooser", async () => {
     mockApi({ loggedIn: true });
     vi.spyOn(api, "getMyRoadmap").mockRejectedValue(httpError(404, { detail: "No target" }));

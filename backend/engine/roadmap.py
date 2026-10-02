@@ -10,13 +10,16 @@ Stages (empty ones are left out):
   5. Get in           – exams, internships and applications
 Skills you have (profile level, or marked done on the roadmap) are listed
 as skipped, so the plan only contains real work."""
+import math
+
 from engine.catalog_data import Catalog
 from engine.context import UserContext
 from engine.skill_gap import skill_gap
 from engine.transitions import education_route
 
 FOUNDATION_CATEGORIES = {"math", "programming"}
-PROJECT_WEEKS = 6
+PROJECT_WEEKS = 6  # fallback when a career has no project briefs
+MAX_PROJECTS = 3
 APPLY_WEEKS = 4
 
 
@@ -38,11 +41,25 @@ def _skill(i: dict, done: set[str], catalog: Catalog) -> dict:
             "courses": [_course(c) for c in catalog.courses_for(i["skill_id"], level)]}
 
 
-def build_roadmap(catalog: Catalog, ctx: UserContext, career_id: str, done: set[str] | None = None) -> dict:
+def step_key(project_id: str, index: int) -> str:
+    return f"{project_id}:{index}"
+
+
+def _project(p, done_steps: set[str], catalog: Catalog) -> dict:
+    steps = [{"index": i, "text": text, "done": step_key(p.project_id, i) in done_steps} for i, text in enumerate(p.steps)]
+    return {"kind": "project", "project_id": p.project_id, "title": p.title, "summary": p.summary, "level": p.level,
+            "hours": p.estimated_hours, "deliverable": p.deliverable,
+            "skills": [catalog.skill_name(s) for s in p.skill_ids], "steps": steps,
+            "steps_done": sum(1 for s in steps if s["done"])}
+
+
+def build_roadmap(catalog: Catalog, ctx: UserContext, career_id: str, done: set[str] | None = None,
+                  done_steps: set[str] | None = None) -> dict:
     career = catalog.careers.get(career_id)
     if career is None:
         raise UnknownCareer(career_id)
     done = set(done or ())
+    done_steps = set(done_steps or ())
     gap = skill_gap(catalog, ctx, career_id)
     gaps = gap["learn_first"] + gap["learn_next"]
 
@@ -77,20 +94,19 @@ def build_roadmap(catalog: Catalog, ctx: UserContext, career_id: str, done: set[
                 "items": [{"kind": "skill", **_skill(i, done, catalog)} for i in items],
             })
 
-    project_skills = [i["name"] for i in (core or foundations or helpful)][:4] or \
-        [catalog.skill_name(l.skill_id) for l in catalog.career_skills.get(career_id, [])][:4]
+    # Project briefs from the dataset (up to 3, easiest first), each with a tickable checklist
+    projects = catalog.projects_by_career.get(career_id, [])[:MAX_PROJECTS]
+    project_items = [_project(p, done_steps, catalog) for p in projects]
+    remaining_hours = sum(i["hours"] for i in project_items if i["steps_done"] < len(i["steps"]))
+    project_items.append({"kind": "task", "title": "Publish your work",
+                          "detail": "Put code, recordings or case studies online (e.g. GitHub or a portfolio page) "
+                                    "with a short write-up of each."})
     stages.append({
         "key": "projects", "title": "Prove it",
         "summary": "Employers look for evidence. Build work you can show and explain.",
-        "weeks": PROJECT_WEEKS,
-        "items": [
-            {"kind": "task", "title": "Build 2–3 projects on real problems",
-             "detail": "Use " + ", ".join(project_skills) + "." if project_skills else "Use the skills above."},
-            {"kind": "task", "title": "Publish your work",
-             "detail": "Put code or case studies online (e.g. GitHub or a portfolio page) with a short write-up of each."},
-        ],
+        "weeks": math.ceil(remaining_hours / gap["estimate"]["hours_per_week"]) if projects else PROJECT_WEEKS,
+        "items": project_items,
     })
-
     exams = []
     for path in catalog.paths_to_career(career_id):
         if not ctx.stage.stage_id or path.from_stage_id == ctx.stage.stage_id:
@@ -127,6 +143,8 @@ def build_roadmap(catalog: Catalog, ctx: UserContext, career_id: str, done: set[
         "skipped": [{"name": i["name"], "level": i["current_level"]} for i in gap["have"]],
         "progress": {"done": skill_done, "total": skill_total,
                      "percent": round(skill_done / skill_total * 100) if skill_total else 100},
+        "projects_progress": {"done": sum(1 for i in project_items if i["kind"] == "project" and i["steps_done"] == len(i["steps"])),
+                              "total": len(projects)},
         "total_weeks": sum(s["weeks"] for s in stages if s["key"] != "study"),
         "study_years": sum((i["years"] or 0) for s in stages if s["key"] == "study" for i in s["items"]),
         "hours_per_week": gap["estimate"]["hours_per_week"],

@@ -241,3 +241,16 @@ test("mentor answers from the profile and remembers the conversation", async ({ 
   await page.getByRole("button", { name: "Clear conversation" }).click();
   await expect(page.getByText(/Ask me anything/)).toBeVisible();
 });
+
+test("roadmap projects: tick a checklist step and it is remembered", async ({ page }) => {
+  await loginWithProfile(page);
+  await page.goto("/roadmap?career=CAR_BACKEND_DEVELOPER");
+  const list = page.getByRole("list", { name: "Checklist for Task manager with a REST API" });
+  await expect(list).toBeVisible();
+  const step = list.getByRole("checkbox", { name: "Design the tables for users and tasks" });
+  await step.check();
+  await expect(page.getByText(/1 of 5 steps done/)).toBeVisible();
+  await page.reload();
+  await expect(page.getByRole("list", { name: "Checklist for Task manager with a REST API" })
+    .getByRole("checkbox", { name: "Design the tables for users and tasks" })).toBeChecked();
+});
