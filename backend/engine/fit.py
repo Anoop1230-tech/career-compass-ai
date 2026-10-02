@@ -11,18 +11,21 @@ PROFICIENCY_VALUE = {"beginner": 1, "intermediate": 2, "advanced": 3}
 # Profile interest -> career domains / sub-domains it points to
 INTEREST_DOMAINS: dict[str, set[str]] = {
     "technology": {"Technology"},
-    "engineering": {"Technology", "Government"},
+    "engineering": {"Technology", "Government", "Skilled Trades"},
     "business": {"Business"},
     "finance": {"Finance"},
     "government": {"Government"},
     "education": {"Education"},
-    "research": {"AI/ML", "Higher Education", "Data"},
-    "science": {"AI/ML", "Data", "Higher Education"},
+    "research": {"AI/ML", "Higher Education", "Data", "Agricultural Research"},
+    "science": {"AI/ML", "Data", "Higher Education", "Healthcare", "Agricultural Research"},
+    "healthcare": {"Healthcare"},
+    "law": {"Law"},
+    "agriculture": {"Agriculture"},
     "design": {"Design"},
     "arts": {"Design", "Creative Arts"},
     "media": {"Design", "Product", "Film and Media", "Writing", "Performing Arts"},
-    "social_work": {"Education", "Administration"},
-    "defence": {"Government"},
+    "social_work": {"Education", "Administration", "Nursing"},
+    "defence": {"Defence"},
     "music": {"Music"},
     "dance": {"Dance"},
     "writing": {"Writing"},
@@ -32,7 +35,7 @@ INTEREST_DOMAINS: dict[str, set[str]] = {
     "cooking": {"Culinary"},
     "hospitality": {"Culinary"},
     "fitness": {"Fitness"},
-    "sports": {"Fitness"},
+    "sports": {"Fitness", "Defence"},
 }
 
 # Profile goal -> which kind of next step or career it favours
@@ -50,7 +53,10 @@ GOAL_LABELS = {
     "work_life_balance": "you want work-life balance",
 }
 
-RESEARCH_CAREERS = {"CAR_AI_RESEARCH_SCIENTIST", "CAR_ASSISTANT_PROFESSOR", "CAR_DATA_SCIENTIST"}
+RESEARCH_CAREERS = {"CAR_AI_RESEARCH_SCIENTIST", "CAR_ASSISTANT_PROFESSOR", "CAR_DATA_SCIENTIST", "CAR_AGRI_SCIENTIST"}
+# Government jobs outside the Government and Defence fields
+GOVERNMENT_CAREERS = {"CAR_JUDGE"}
+ENTREPRENEUR_CAREERS = {"CAR_TECH_ENTREPRENEUR", "CAR_AGRI_ENTREPRENEUR"}
 LEADERSHIP_CAREERS = {"CAR_ENGINEERING_MANAGER", "CAR_PRODUCT_MANAGER", "CAR_SOLUTIONS_ARCHITECT",
                       "CAR_TECH_ENTREPRENEUR", "CAR_CIVIL_SERVICES"}
 
@@ -68,11 +74,11 @@ def interest_matches(ctx: UserContext, career: Career) -> list[str]:
 def goal_matches_career(ctx: UserContext, career: Career) -> list[str]:
     goals = set(ctx.goals)
     hits = []
-    if "government_career" in goals and career.domain == "Government":
+    if "government_career" in goals and (career.domain in ("Government", "Defence") or career.career_id in GOVERNMENT_CAREERS):
         hits.append("government_career")
     if "research" in goals and career.career_id in RESEARCH_CAREERS:
         hits.append("research")
-    if "entrepreneurship" in goals and career.career_id == "CAR_TECH_ENTREPRENEUR":
+    if "entrepreneurship" in goals and career.career_id in ENTREPRENEUR_CAREERS:
         hits.append("entrepreneurship")
     if "leadership" in goals and career.career_id in LEADERSHIP_CAREERS:
         hits.append("leadership")

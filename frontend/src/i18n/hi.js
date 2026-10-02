@@ -622,6 +622,11 @@ export default {
   "domain.Education": "शिक्षा",
   "domain.Creative Arts": "रचनात्मक कला",
   "domain.Vocational": "व्यावसायिक हुनर",
+  "domain.Healthcare": "स्वास्थ्य सेवा",
+  "domain.Law": "क़ानून",
+  "domain.Defence": "रक्षा सेवाएँ",
+  "domain.Agriculture": "कृषि",
+  "domain.Skilled Trades": "तकनीकी ट्रेड (ITI)",
 
   "careers.lead": "करियर देखें, उनके लिए ज़रूरी कौशल, और लोग वहाँ तक कैसे पहुँचते हैं।",
   "careers.search": "खोजें",
@@ -644,6 +649,11 @@ export default {
   "careers.cat.Education": "पढ़ाना, स्कूल नेतृत्व, विशेष शिक्षा, काउंसलिंग और लर्निंग डिज़ाइन।",
   "careers.cat.Creative Arts": "संगीत, नृत्य, डिज़ाइन, लेखन, अभिनय, कॉमेडी, फ़िल्म और मीडिया। डिग्री की ज़रूरत नहीं।",
   "careers.cat.Vocational": "हाथ के हुनर वाले करियर: खाना बनाना, फ़िटनेस और ब्यूटी। डिग्री की ज़रूरत नहीं।",
+  "careers.cat.Healthcare": "डॉक्टर, नर्स, फ़ार्मासिस्ट और लैब टेक्नोलॉजिस्ट।",
+  "careers.cat.Law": "वकील, कॉरपोरेट वकील, जज और लीगल एनालिस्ट।",
+  "careers.cat.Defence": "थल सेना, नौसेना और वायु सेना में अफ़सर, पायलट और सैनिक।",
+  "careers.cat.Agriculture": "फ़सलें, शोध और खेती का कारोबार।",
+  "careers.cat.Skilled Trades": "ITI ट्रेड: इलेक्ट्रीशियन, फ़िटर, वेल्डर, मैकेनिक और प्लंबर। 10वीं के बाद नौकरी के लिए तैयार।",
 
   "detail.loading": "करियर लोड हो रहा है",
   "detail.notFound": "करियर नहीं मिला",

@@ -26,7 +26,7 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 18 | Themes and motion | Light, Dark, High contrast and Match device themes; home illustration with day and night scenes; scroll reveal and hover animations | ✅ |
 | 19 | Security, learning links and feedback | Proxy-aware and per-account login limits, logout everywhere, change/reset password, course and certification links on roadmaps, "does this fit you?" feedback, smaller production image | ✅ |
 | 20 | Language system | English and Hindi for every screen, language switcher, saved preference | ✅ |
-| 21 | More careers | Healthcare, law, armed forces, agriculture and skilled trades (ITI) with stages, exams and routes | ⬜ |
+| 21 | More careers | Healthcare, law, armed forces, agriculture and skilled trades (ITI) with stages, exams and routes | ✅ |
 | 22 | Career comparison | Compare 2–3 careers: skills, education, years, exams, fit | ⬜ |
 | 23 | Project ideas | 2–3 project briefs per career with checklists in the roadmap | ⬜ |
 | 24 | Printable report | One-page summary (profile, matches, roadmap) saved as PDF from the browser | ⬜ |
@@ -377,3 +377,13 @@ Known limits: the Docker image was not built (Docker is not installed on the dev
 Result: 360 backend tests, 134 frontend unit tests, 124 browser tests (6 skipped by design) passing; lint 0 warnings; production build OK.
 
 Known limits: the Hindi text is a first draft and needs review by a native speaker. Content that comes from the datasets (career names and descriptions, eligibility, reasons, mentor answers) is still English – that is Phase 29. An error already on screen keeps its language until the page reloads it.
+
+## Phase 21 - More careers - ✅ done
+- 21.1 Data: 20 careers in five new fields – Healthcare (doctor, specialist doctor, nurse, pharmacist, medical lab technologist), Law (advocate, corporate lawyer, civil judge, legal analyst), Defence (armed forces officer, Air Force pilot, Agniveer), Agriculture (agriculture officer, agricultural scientist, agri-business entrepreneur) and Skilled Trades (electrician, fitter/machinist, welder, motor vehicle mechanic, plumber)
+- 21.2 8 new stages (MBBS, MD/MS, B.Sc Nursing, B.Pharm, 5-year and 3-year LLB, B.Sc Agriculture, ITI), 8 exams (NEET PG, GPAT, AILET, AIBE, NDA, CDS, AFCAT, Agniveer) with official links, 23 skills, 105 career–skill links, 169 education paths (each new stage also offers every professional course), 10 career moves and 3 switch plans. Every entry is marked "not yet verified" with eligibility worded as "check the current notice"; no fees, salaries or cut-offs
+- 21.3 Engine: interests healthcare, law, agriculture and defence now point at their fields; "government career" also matches Defence and judges; "start a business" matches the agri-business career; the mentor recognises doctor, nurse, lawyer, judge, army, pilot, Agniveer, electrician, ITI, LLB and more
+- 21.4 Careers page groups the 12 fields in a fixed order with one-line descriptions in English and Hindi
+
+Result: validator 0 errors, 0 warnings; 366 backend tests, 134 frontend unit tests, 126 browser tests passing; lint 0 warnings; build OK.
+
+Known limits: eligibility for nursing, pharmacy and agriculture admission varies by state and college, so it is summarised, not exact. Judicial service rules (practice years, age) differ by state. ITI-to-diploma lateral entry is left out because the only diploma stage is Computer Engineering.

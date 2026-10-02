@@ -28,3 +28,11 @@ EDU_COURSE_WRITING,"Professional course – Writing (poetry, lyrics, scripts, co
 EDU_COURSE_PERFORMING,"Professional course – Acting, stand-up comedy and anchoring",course,,1,"Theatre and acting workshops, comedy open-mic practice, anchoring and voice training"
 EDU_COURSE_MEDIA,"Professional course – Photography, film and video",course,,1,"Photography, filmmaking, video editing and content-creation courses"
 EDU_COURSE_VOCATIONAL,"Professional course – Culinary, fitness and beauty",course,,1,"Job-oriented courses for chefs, fitness and yoga trainers, and makeup artists"
+EDU_MBBS,MBBS (medicine),ug,Medicine,5.5,Bachelor of Medicine and Bachelor of Surgery: 4.5 years of study plus a 1-year compulsory internship
+EDU_MD_MS,MD / MS (medical specialisation),pg,Medicine,3,"Postgraduate medical degree after MBBS, for example MD Medicine or MS Surgery"
+EDU_BSC_NURSING,B.Sc Nursing,ug,Nursing,4,Four-year nursing degree with hospital training
+EDU_BPHARM,B.Pharm,ug,Pharmacy,4,"Bachelor of Pharmacy: medicines, how they work and how they are made"
+EDU_LLB_5YR,Integrated law degree (BA LLB / BBA LLB),ug,Law,5,Five-year law degree straight after Class 12
+EDU_LLB_3YR,"LLB (3 years, after graduation)",ug,Law,3,Three-year law degree for graduates of any subject
+EDU_BSC_AGRI,B.Sc Agriculture,ug,Agriculture,4,"Four-year degree in crops, soil, plant protection and farm management"
+EDU_ITI,"ITI – Trade certificate (electrician, fitter, welder, mechanic…)",diploma,Skilled trades,2,"Industrial Training Institute courses of 1–2 years after Class 10, leading to a National Trade Certificate"

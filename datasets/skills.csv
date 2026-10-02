@@ -197,3 +197,26 @@ SKL_COUNSELLING,Counselling,domain,Psychology,counseling|guidance counselling|ca
 SKL_CHILD_PSYCHOLOGY,Child and adolescent psychology,domain,Psychology,child psychology|developmental psychology|adolescent psychology,How children and teenagers think feel and develop
 SKL_INSTRUCTIONAL_DESIGN,Instructional design,domain,Education,instructional design|e-learning design|learning design|addie,Designing courses and learning material that people can follow on their own
 SKL_ELEARNING_TOOLS,E-learning tools,technical,Education,articulate storyline|articulate 360|moodle|google classroom|learning management system,Authoring tools and learning platforms for online courses
+SKL_ANATOMY,Human anatomy and physiology,domain,Healthcare,anatomy|physiology,How the human body is built and how it works
+SKL_CLINICAL_DIAGNOSIS,Clinical diagnosis,domain,Healthcare,diagnosis,Examining patients and working out what is wrong
+SKL_PATIENT_CARE,Patient care,domain,Healthcare,nursing care,Looking after patients safely and with respect
+SKL_PHARMACOLOGY,Pharmacology,domain,Healthcare,drug knowledge,"How medicines act, their doses and side effects"
+SKL_LAB_TECHNIQUES,Clinical laboratory techniques,technical,Healthcare,lab testing|pathology lab,Collecting samples and running blood and other tests accurately
+SKL_LEGAL_RESEARCH,Legal research,domain,Law,case law research,"Finding and reading laws, rules and court judgments"
+SKL_LEGAL_DRAFTING,Legal drafting,domain,Law,drafting,"Writing contracts, notices, petitions and other legal documents"
+SKL_ADVOCACY,Courtroom advocacy,domain,Law,litigation|arguing cases,Presenting and arguing a case before a court
+SKL_CONTRACT_LAW,Contract and corporate law,domain,Law,corporate law,"Law of contracts, companies and commercial deals"
+SKL_PHYSICAL_ENDURANCE,Physical fitness and endurance,soft,Defence,physical fitness|stamina,"Running, strength and stamina to meet service fitness tests"
+SKL_DECISION_MAKING,Decision making under pressure,soft,Defence,decision making,Making sound decisions quickly when stakes are high
+SKL_AVIATION_BASICS,Aviation basics,domain,Defence,flying|aeronautics,"Principles of flight, navigation and aircraft systems"
+SKL_AGRONOMY,Agronomy (crop science),domain,Agriculture,crop science|crop production,"Growing crops well: seeds, sowing, water, nutrients and harvest"
+SKL_SOIL_SCIENCE,Soil science,domain,Agriculture,soil health,"Soil types, testing and fertility"
+SKL_PLANT_PROTECTION,Plant protection,domain,Agriculture,pest management|ipm,Managing pests and crop diseases safely
+SKL_FARM_MANAGEMENT,Farm management,management,Agriculture,agribusiness,"Planning, costs, labour and selling produce"
+SKL_ELECTRICAL_WIRING,Electrical wiring,technical,Skilled trades,house wiring|electrical installation,"Installing and repairing wiring, switchboards and fittings safely"
+SKL_WORKSHOP_SAFETY,Workshop safety,technical,Skilled trades,safety practices,Safe use of tools and machines; protective equipment
+SKL_TECH_DRAWING,Reading technical drawings,technical,Skilled trades,blueprint reading|engineering drawing,"Understanding engineering drawings, symbols and measurements"
+SKL_MACHINING,Machining and fitting,technical,Skilled trades,lathe|fitting,"Cutting, shaping and fitting metal parts with hand tools and machines"
+SKL_WELDING,Welding,technical,Skilled trades,arc welding|gas welding,"Joining metal using arc, gas and other welding methods"
+SKL_VEHICLE_REPAIR,Motor vehicle repair,technical,Skilled trades,auto repair|car mechanic,"Diagnosing and repairing engines, brakes and vehicle electrics"
+SKL_PLUMBING,Plumbing,technical,Skilled trades,pipe fitting,Installing and repairing water supply and drainage pipes

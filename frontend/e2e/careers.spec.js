@@ -17,13 +17,14 @@ test.afterEach(async ({}, testInfo) => {
 
 test("browse, search and filter careers", async ({ page }) => {
   await page.goto("/careers");
-  await expect(page.getByText("59 careers found")).toBeVisible();
+  await expect(page.getByText("79 careers found")).toBeVisible();
 
   // Grouped by field, all on one page, in a fixed order
   const main = page.getByRole("main");
   await expect(main.getByRole("heading", { level: 2 })).toHaveText([
-    "Technology 24", "Business 3", "Finance 2", "Government 3", "Education 6", "Creative Arts 18", "Vocational 3"]);
-  await expect(main.getByRole("heading", { level: 3 })).toHaveCount(59);
+    "Technology 24", "Healthcare 5", "Law 4", "Business 3", "Finance 2", "Government 3", "Defence 3", "Education 6",
+    "Agriculture 3", "Creative Arts 18", "Vocational 3", "Skilled Trades 5"]);
+  await expect(main.getByRole("heading", { level: 3 })).toHaveCount(79);
   await page.getByRole("navigation", { name: "Jump to a category" }).getByRole("link", { name: /Creative Arts/ }).click();
   await expect(page).toHaveURL(/#field-creative-arts$/);
   await expect(page.getByRole("heading", { level: 2, name: /Creative Arts/ })).toBeInViewport();
@@ -74,7 +75,7 @@ test("every career page opens without errors", async ({ page, request, isMobile 
   test.skip(isMobile, "one pass is enough; layout is covered by other tests");
   test.setTimeout(150_000);
   const list = await (await request.get("/api/catalog/careers?limit=100")).json();
-  expect(list.total).toBe(59);
+  expect(list.total).toBe(79);
   for (const career of list.items) {
     await page.goto(`/careers/${career.career_id}`);
     await expect(page.getByRole("heading", { level: 1, name: career.name })).toBeVisible();
@@ -92,4 +93,14 @@ test("careers pages have no sideways scrolling or gradients", async ({ page }) =
     );
     expect(gradients, path).toBe(0);
   }
+});
+
+test("new fields: a PCB student sees MBBS and the doctor page shows the NEET route", async ({ page }) => {
+  await page.goto("/next-steps?stage=EDU_12_PCB");
+  await expect(page.getByRole("heading", { name: /MBBS/ }).first()).toBeVisible();
+  await page.goto("/careers/CAR_DOCTOR_MBBS");
+  await expect(page.getByRole("heading", { level: 1, name: "Doctor (MBBS)" })).toBeVisible();
+  await expect(page.getByText(/From MBBS/).first()).toBeVisible();
+  await page.goto("/careers?domain=Skilled%20Trades");
+  await expect(page.getByText("5 careers found")).toBeVisible();
 });

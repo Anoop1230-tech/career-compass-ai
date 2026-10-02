@@ -58,6 +58,15 @@ CAREER_ALIASES = {
     "director": "CAR_FILMMAKER", "youtuber": "CAR_CONTENT_CREATOR", "influencer": "CAR_CONTENT_CREATOR",
     "chef": "CAR_CHEF", "cook": "CAR_CHEF", "gym trainer": "CAR_FITNESS_TRAINER", "yoga teacher": "CAR_FITNESS_TRAINER",
     "yoga instructor": "CAR_FITNESS_TRAINER", "fitness trainer": "CAR_FITNESS_TRAINER", "makeup artist": "CAR_MAKEUP_ARTIST",
+    "doctor": "CAR_DOCTOR_MBBS", "mbbs": "CAR_DOCTOR_MBBS", "physician": "CAR_DOCTOR_MBBS", "surgeon": "CAR_SPECIALIST_DOCTOR",
+    "specialist": "CAR_SPECIALIST_DOCTOR", "nurse": "CAR_NURSE", "nursing": "CAR_NURSE", "pharmacist": "CAR_PHARMACIST",
+    "lab technician": "CAR_MEDICAL_LAB_TECH", "lawyer": "CAR_LAWYER", "advocate": "CAR_LAWYER", "corporate lawyer": "CAR_CORPORATE_LAWYER",
+    "judge": "CAR_JUDGE", "paralegal": "CAR_LEGAL_ANALYST", "army officer": "CAR_ARMED_FORCES_OFFICER",
+    "navy officer": "CAR_ARMED_FORCES_OFFICER", "army": "CAR_ARMED_FORCES_OFFICER", "nda": "CAR_ARMED_FORCES_OFFICER",
+    "pilot": "CAR_AIR_FORCE_PILOT", "fighter pilot": "CAR_AIR_FORCE_PILOT", "soldier": "CAR_SOLDIER", "agniveer": "CAR_SOLDIER",
+    "agriculture officer": "CAR_AGRI_OFFICER", "agronomist": "CAR_AGRI_OFFICER", "farmer": "CAR_AGRI_ENTREPRENEUR",
+    "agricultural scientist": "CAR_AGRI_SCIENTIST", "electrician": "CAR_ELECTRICIAN", "fitter": "CAR_FITTER_MACHINIST",
+    "machinist": "CAR_FITTER_MACHINIST", "welder": "CAR_WELDER", "mechanic": "CAR_AUTO_MECHANIC", "plumber": "CAR_PLUMBER",
 }
 STAGE_ALIASES = {
     "class 10": "EDU_CLASS_10", "10th": "EDU_CLASS_10", "pcm": "EDU_12_PCM", "pcb": "EDU_12_PCB",
@@ -67,7 +76,9 @@ STAGE_ALIASES = {
     "ece": "EDU_BTECH_ECE", "mechanical": "EDU_BTECH_MECH", "bca": "EDU_BCA",
     "bsc cs": "EDU_BSC_CS", "bsc": "EDU_BSC_MATH_STATS", "b sc": "EDU_BSC_MATH_STATS", "bcom": "EDU_BCOM",
     "b com": "EDU_BCOM", "ba": "EDU_BA", "mtech": "EDU_MTECH_CSE", "m tech": "EDU_MTECH_CSE", "mca": "EDU_MCA",
-    "mba": "EDU_MBA", "phd": "EDU_PHD_CS",
+    "mba": "EDU_MBA", "phd": "EDU_PHD_CS", "iti": "EDU_ITI", "llb": "EDU_LLB_3YR", "ba llb": "EDU_LLB_5YR",
+    "b pharm": "EDU_BPHARM", "bpharm": "EDU_BPHARM", "bsc nursing": "EDU_BSC_NURSING", "bsc agriculture": "EDU_BSC_AGRI",
+    "md": "EDU_MD_MS", "ms surgery": "EDU_MD_MS",
 }
 SUGGESTIONS_DEFAULT = ["What should I do next?", "Which careers suit me?", "What skills should I learn first?",
                        "Which scholarships can I apply for?"]

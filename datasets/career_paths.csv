@@ -50,3 +50,13 @@ CP_048,CAR_SCHOOL_TEACHER,CAR_SCHOOL_PRINCIPAL,management,8-15,SKL_TEAM_LEADERSH
 CP_049,CAR_SCHOOL_TEACHER,CAR_SPECIAL_EDUCATOR,specialization,0-2,SKL_SPECIAL_EDUCATION|SKL_CHILD_PSYCHOLOGY,Needs a special education B.Ed or diploma recognised by the RCI
 CP_050,CAR_SCHOOL_TEACHER,CAR_SCHOOL_COUNSELLOR,specialization,2-5,SKL_COUNSELLING|SKL_CHILD_PSYCHOLOGY,Needs an MA or PG diploma in counselling psychology
 CP_051,CAR_SCHOOL_TEACHER,CAR_INSTRUCTIONAL_DESIGNER,lateral,2-5,SKL_INSTRUCTIONAL_DESIGN|SKL_ELEARNING_TOOLS,Classroom experience is a strength; build a portfolio of online lessons
+CP_052,CAR_DOCTOR_MBBS,CAR_SPECIALIST_DOCTOR,specialization,1-3,SKL_CLINICAL_DIAGNOSIS,Through NEET PG and a 3-year MD or MS
+CP_053,CAR_LAWYER,CAR_CORPORATE_LAWYER,specialization,1-3,SKL_CONTRACT_LAW|SKL_LEGAL_DRAFTING,Move to a firm or in-house team
+CP_054,CAR_LAWYER,CAR_JUDGE,lateral,0-7,SKL_LEGAL_RESEARCH,Civil Judge exams; District Judge direct entry usually needs about 7 years of practice
+CP_055,CAR_LEGAL_ANALYST,CAR_LAWYER,lateral,1-3,SKL_ADVOCACY,Enrol with the Bar Council and start practice
+CP_056,CAR_AGRI_OFFICER,CAR_AGRI_SCIENTIST,specialization,2-5,SKL_RESEARCH_METHODS,"M.Sc and PhD, then the ASRB exam"
+CP_057,CAR_AGRI_OFFICER,CAR_AGRI_ENTREPRENEUR,lateral,2-5,SKL_FARM_MANAGEMENT|SKL_ENTREPRENEURSHIP,Use field knowledge to start your own venture
+CP_058,CAR_NURSE,CAR_MEDICAL_LAB_TECH,lateral,0-2,SKL_LAB_TECHNIQUES,A short MLT course
+CP_059,CAR_SOLDIER,CAR_ARMED_FORCES_OFFICER,promotion,2-6,SKL_TEAM_LEADERSHIP,Serving personnel can apply for officer entries such as the Army Cadet College; rules apply
+CP_060,CAR_ELECTRICIAN,CAR_AUTO_MECHANIC,lateral,0-2,SKL_VEHICLE_REPAIR,Electric vehicles need electrical skills
+CP_061,CAR_FITTER_MACHINIST,CAR_WELDER,lateral,0-1,SKL_WELDING,Fabrication shops value both skills

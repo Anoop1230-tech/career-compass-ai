@@ -622,6 +622,11 @@ export default {
   "domain.Education": "Education",
   "domain.Creative Arts": "Creative Arts",
   "domain.Vocational": "Vocational",
+  "domain.Healthcare": "Healthcare",
+  "domain.Law": "Law",
+  "domain.Defence": "Defence",
+  "domain.Agriculture": "Agriculture",
+  "domain.Skilled Trades": "Skilled Trades",
 
   "careers.lead": "Browse careers, the skills they need, and how people get there.",
   "careers.search": "Search",
@@ -644,6 +649,11 @@ export default {
   "careers.cat.Education": "Teaching, school leadership, special education, counselling and learning design.",
   "careers.cat.Creative Arts": "Music, dance, design, writing, acting, comedy, film and media. No degree needed.",
   "careers.cat.Vocational": "Hands-on skill careers: cooking, fitness and beauty. No degree needed.",
+  "careers.cat.Healthcare": "Doctors, nurses, pharmacists and lab technologists.",
+  "careers.cat.Law": "Advocates, corporate lawyers, judges and legal analysts.",
+  "careers.cat.Defence": "Officers, pilots and soldiers in the Army, Navy and Air Force.",
+  "careers.cat.Agriculture": "Crops, research and farm businesses.",
+  "careers.cat.Skilled Trades": "ITI trades: electrician, fitter, welder, mechanic and plumber. Job-ready after Class 10.",
 
   "detail.loading": "Loading career",
   "detail.notFound": "Career not found",
