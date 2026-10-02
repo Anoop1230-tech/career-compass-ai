@@ -9,7 +9,7 @@ const PUBLIC_PAGES = ["/", "/careers", "/careers/CAR_DATA_SCIENTIST", "/next-ste
   "/dream-check?to=CAR_DATA_SCIENTIST&from_stage=EDU_12_PCM", "/roadmap?career=CAR_DATA_ANALYST", "/resources",
   "/resources?tab=colleges", "/compare?ids=CAR_DATA_SCIENTIST,CAR_DOCTOR_MBBS&stage=EDU_12_PCB", "/college-predictor?exam=EXM_JEE_MAIN&rank=12000&seat=OPEN", "/login", "/register", "/forgot-password", "/no-such-page"];
 const PRIVATE_PAGES = ["/dashboard", "/for-you", "/next-steps", "/skill-gap?career=CAR_DATA_SCIENTIST",
-  "/roadmap?career=CAR_ML_ENGINEER", "/assessments", "/assessments/interest", "/mentor", "/profile", "/profile/edit", "/report"];
+  "/roadmap?career=CAR_ML_ENGINEER", "/assessments", "/assessments/interest", "/mentor", "/profile", "/profile/edit", "/profile/resume", "/report"];
 
 async function signUp(page) {
   const email = `hi_${Date.now()}_${Math.random().toString(36).slice(2, 7)}@example.com`;
@@ -80,7 +80,7 @@ test("Hindi pages fit narrow phones and Devanagari has room to breathe", async (
   for (const width of [320, 360, 412]) {
     await page.setViewportSize({ width, height: 800 });
     for (const path of ["/", "/careers", "/next-steps", "/for-you", "/skill-gap?career=CAR_DATA_SCIENTIST",
-      "/roadmap?career=CAR_ML_ENGINEER", "/resources", "/assessments", "/profile/edit", "/mentor", "/compare?ids=CAR_SOFTWARE_ENGINEER,CAR_LAWYER,CAR_NURSE"]) {
+      "/roadmap?career=CAR_ML_ENGINEER", "/resources", "/assessments", "/profile/edit", "/profile/resume", "/mentor", "/compare?ids=CAR_SOFTWARE_ENGINEER,CAR_LAWYER,CAR_NURSE"]) {
       problems.push(...(await layoutProblems(page, path)).map((p) => `${width}px ${p}`));
     }
   }

@@ -290,3 +290,32 @@ test("follow GATE from the exams list, see its dates on the dashboard, download 
   await section.getByRole("button", { name: "Unfollow GATE" }).click();
   await expect(section.getByText(/Follow exams to see their dates/)).toBeVisible();
 });
+
+// A minimal one-page PDF with real (extractable) Helvetica text
+function makePdf(lines) {
+  const ops = `BT /F1 11 Tf 72 720 Td 14 TL ${lines.map((l) => `(${l}) '`).join(" ")} ET`;
+  const objs = ["<< /Type /Catalog /Pages 2 0 R >>", "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+    "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>",
+    `<< /Length ${ops.length} >>\nstream\n${ops}\nendstream`, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>"];
+  let out = "%PDF-1.4\n";
+  const offsets = objs.map((body, i) => { const at = out.length; out += `${i + 1} 0 obj\n${body}\nendobj\n`; return at; });
+  const xref = out.length;
+  out += `xref\n0 ${objs.length + 1}\n0000000000 65535 f \n${offsets.map((o) => `${String(o).padStart(10, "0")} 00000 n \n`).join("")}`;
+  out += `trailer\n<< /Size ${objs.length + 1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`;
+  return Buffer.from(out, "latin1");
+}
+
+test("résumé upload: skills are read from a PDF and only added after confirming", async ({ page }) => {
+  await loginWithProfile(page);
+  await page.goto("/profile/resume");
+  await page.getByLabel("Résumé (PDF)").setInputFiles({ name: "cv.pdf", mimeType: "application/pdf",
+    buffer: makePdf(["Data analyst", "Skills: SQL, Excel and Tableau"]) });
+  await page.getByRole("button", { name: "Read skills" }).click();
+  await expect(page.getByText(/skills found on 1 pages/)).toBeVisible();
+  const before = await (await page.request.get("/api/profile")).json();
+  expect(before.skills.some((s) => s.name === "Tableau")).toBe(false);
+  await page.getByRole("button", { name: /Add \d+ skills to my profile/ }).click();
+  await expect(page.getByText(/skills added to your profile/)).toBeVisible();
+  const after = await (await page.request.get("/api/profile")).json();
+  expect(after.skills.some((s) => s.name === "Tableau")).toBe(true);
+});

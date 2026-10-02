@@ -3,6 +3,8 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
 
+from services.messages import message_code
+
 # The frontend is plain React (no inline scripts, no external fonts/CDNs), so
 # a strict policy works. Inline styles are used for a few small layout values.
 CSP = (
@@ -14,6 +16,8 @@ CSP = (
 DOCS_PATHS = ("/docs", "/redoc", "/openapi.json")
 
 MAX_BODY_BYTES = 256 * 1024  # largest real request (a full profile) is a few KB
+# Upload endpoints that need more (each still enforces its own limit while reading)
+UPLOAD_LIMITS = {"/api/resume/skills": 2 * 1024 * 1024 + 1024}
 
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
@@ -23,8 +27,10 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next) -> Response:
         length = request.headers.get("content-length")
-        if length and length.isdigit() and int(length) > MAX_BODY_BYTES:
-            return JSONResponse({"detail": "Request is too large."}, status_code=413)
+        limit = UPLOAD_LIMITS.get(request.url.path, MAX_BODY_BYTES)
+        if length and length.isdigit() and int(length) > limit:
+            detail = "The file is larger than 2 MB." if request.url.path in UPLOAD_LIMITS else "Request is too large."
+            return JSONResponse({"detail": detail, **message_code(detail)}, status_code=413)
         response = await call_next(request)
         h = response.headers
         h.setdefault("X-Content-Type-Options", "nosniff")

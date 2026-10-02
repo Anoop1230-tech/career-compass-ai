@@ -7,7 +7,7 @@ const PUBLIC_PAGES = ["/", "/careers", "/careers/CAR_DATA_SCIENTIST", "/next-ste
   "/dream-check?to=CAR_DATA_SCIENTIST&from_stage=EDU_12_PCM", "/roadmap?career=CAR_DATA_ANALYST", "/resources",
   "/resources?tab=colleges", "/resources?tab=scholarships", "/compare?ids=CAR_DATA_SCIENTIST,CAR_DOCTOR_MBBS&stage=EDU_12_PCB", "/college-predictor?exam=EXM_JEE_MAIN&rank=12000&seat=OPEN", "/login", "/register", "/no-such-page"];
 const PRIVATE_PAGES = ["/dashboard", "/for-you", "/next-steps", "/skill-gap?career=CAR_DATA_SCIENTIST", "/roadmap?career=CAR_ML_ENGINEER",
-  "/assessments", "/assessments/interest", "/assessments/aptitude", "/mentor", "/compare?ids=CAR_SOFTWARE_ENGINEER,CAR_LAWYER,CAR_NURSE", "/report", "/profile", "/profile/edit"];
+  "/assessments", "/assessments/interest", "/assessments/aptitude", "/mentor", "/compare?ids=CAR_SOFTWARE_ENGINEER,CAR_LAWYER,CAR_NURSE", "/report", "/profile", "/profile/edit", "/profile/resume"];
 
 async function scan(page, path) {
   await page.goto(path);

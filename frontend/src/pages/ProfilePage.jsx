@@ -123,6 +123,9 @@ export default function ProfilePage() {
             <Link to="/profile/edit" className="btn btn--secondary">
               {t("profile.editButton")}
             </Link>
+            <Link to="/profile/resume" className="btn btn--secondary">
+              {t("resume.cta")}
+            </Link>
             <button type="button" className="btn btn--secondary" onClick={() => {
               navigate("/", { replace: true }); // leave the protected page first
               logout();

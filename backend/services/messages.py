@@ -25,6 +25,12 @@ MESSAGE_CODES = {
     # Catalog and guidance
     "Career not found.": "career.not_found",
     "Exam not found.": "exam.not_found",
+    "Please upload a PDF file.": "resume.not_pdf_type",
+    "The file is larger than 2 MB.": "resume.too_large",
+    "This is not a PDF file.": "resume.not_pdf",
+    "This PDF is password-protected.": "resume.encrypted",
+    "This PDF could not be read.": "resume.unreadable",
+    "No text was found in this PDF (it may be a scanned image).": "resume.no_text",
     "Unknown stage.": "stage.unknown",
     "Not found.": "not_found",
     "You have not chosen a target career yet.": "roadmap.no_target",

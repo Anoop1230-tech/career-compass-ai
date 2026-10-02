@@ -33,7 +33,7 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 25 | Salary ranges | Sourced ranges by experience and city tier, never guessed | ✅ (official government pay only) |
 | 26 | College predictor | Likely / borderline / unlikely colleges from published closing ranks | ✅ |
 | 27 | Exam reminders | Follow exams, email reminders, calendar file, "coming up" on the dashboard | ✅ |
-| 28 | Résumé upload | Read skills from a PDF résumé; user confirms before saving | ⬜ |
+| 28 | Résumé upload | Read skills from a PDF résumé; user confirms before saving | ✅ |
 | 29 | Hindi content | Careers, exams, skills and the mentor in Hindi (fallback to English) | ⬜ |
 | 30 | Feedback-tuned weights | Propose scoring-weight changes from real "does this fit you?" answers | ⬜ |
 
@@ -446,3 +446,14 @@ Known limits: one year and one round only; only three programmes; no state couns
 Result: validator 0 errors; 402 backend tests, 145 frontend unit tests, 138 browser tests passing; lint 0 warnings; build OK.
 
 Known limits: exact dates exist for GATE only; other exams show the usual month. The email job needs a scheduler (cron or Task Scheduler) in production.
+
+## Phase 28 - Résumé upload - ✅ done
+- 28.1 New runtime dependency: `pypdf==6.19.0` (pure Python, pinned in `backend/requirements.txt`). The file is sent as a raw `application/pdf` body, so no multipart library is needed
+- 28.2 `POST /api/resume/skills` (login required): at most 2 MB (checked from Content-Length and again while reading; the global 256 KB request limit allows 2 MB for this path only), at most 10 pages, must start with `%PDF-`. Password-protected, broken and scanned (no text) PDFs return clear coded errors (`resume.*`). The file and its text are kept in memory for the request only, and nothing is saved
+- 28.3 Matching (`engine/resume.py`): whole-word match of every catalog skill name and alias. Aliases of 1–2 characters (R, C) only match as an exact-case token. Catalog categories are mapped to the profile form's categories, and skills already in the profile are flagged
+- 28.4 Page `/profile/resume` (button "Read skills from a résumé" on My Profile): choose a PDF, review the skills found, untick wrong ones, pick a level for each, then "Add N skills to my profile". Only then is the profile saved, through the normal `PUT /api/profile`. English and Hindi
+- 28.5 Tests: 8 backend (with a hand-built text PDF), 2 unit, 1 browser (real PDF upload, then the profile is checked before and after confirming). The page is in the accessibility and Hindi scans
+
+Result: 409 backend tests, 147 frontend unit tests, 140 browser tests passing; lint 0 warnings; build OK.
+
+Known limits: only skills already in the catalog are found; scanned résumés need OCR, which is not included; levels default to Beginner for the user to adjust.
