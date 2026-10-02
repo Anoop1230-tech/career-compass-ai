@@ -17,7 +17,7 @@ from services.frontend import mount_frontend
 from services.messages import message_code, validation_code
 from services.security import SecurityHeadersMiddleware
 from routes import (
-    assessments, auth, catalog, compare, explore, health, mentor, next_steps, profile, recommendations, resources, roadmap,
+    assessments, auth, catalog, compare, explore, health, mentor, next_steps, profile, recommendations, report, resources, roadmap,
     skill_gap, transitions,
 )
 
@@ -122,6 +122,7 @@ app.include_router(explore.router, prefix="/api")
 app.include_router(resources.router, prefix="/api")
 app.include_router(mentor.router, prefix="/api")
 app.include_router(compare.router, prefix="/api")
+app.include_router(report.router, prefix="/api")
 
 
 

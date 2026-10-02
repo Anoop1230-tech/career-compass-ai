@@ -1620,3 +1620,32 @@ label.roadmap-item__title { cursor: pointer; }
 .project-step input { margin-top: 0.3em; flex: none; width: 1.1rem; height: 1.1rem; }
 .project-step > span::before { content: "•"; margin-right: var(--space-2); color: var(--color-muted); }
 .project-step--done label { color: var(--color-muted); text-decoration: line-through; }
+
+/* Career report: readable on screen, one clean document when printed */
+.report { max-width: 52rem; }
+.report__brand { font-weight: 700; color: var(--color-primary); margin: 0 0 var(--space-1); }
+.report-section { border-top: 1px solid var(--color-border); padding: var(--space-4) 0; break-inside: avoid; }
+.report-section h2 { font-size: var(--text-xl); margin-bottom: var(--space-2); }
+.report-section h3 { font-size: var(--text-base); margin-bottom: var(--space-1); }
+.report-grid { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+.report-scores { list-style: none; margin: 0; padding: 0; font-size: var(--text-sm); }
+.report-scores li { display: flex; justify-content: space-between; gap: var(--space-3); padding: 2px 0; }
+.report-matches, .report-roadmap { margin: 0; padding-left: 1.25rem; display: grid; gap: var(--space-2); }
+.report-dl dd { overflow-wrap: anywhere; }
+.report__foot { margin-top: var(--space-5); }
+
+@media print {
+  @page { margin: 14mm; }
+  .header, .footer, .skip-link, .no-print, .menu-toggle { display: none !important; }
+  html, body, .app, .app__body, .main { background: #fff !important; color: #000 !important; }
+  .app__body { margin: 0 !important; padding: 0 !important; }
+  .page, .container { padding: 0 !important; margin: 0 !important; max-width: none !important; }
+  .page-enter, .reveal { animation: none !important; opacity: 1 !important; transform: none !important; }
+  .report a { color: #000; text-decoration: none; }
+  .report .badge { border: 1px solid #000; background: none; color: #000; }
+  .report .muted { color: #333 !important; }
+  .report-section { padding: 8px 0; }
+  .report h1 { font-size: 22pt; }
+  .report-section h2 { font-size: 13pt; }
+  .report, .report p, .report li, .report dd, .report dt { font-size: 10pt; line-height: 1.4; }
+}

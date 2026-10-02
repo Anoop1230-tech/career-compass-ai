@@ -9,7 +9,7 @@ const PUBLIC_PAGES = ["/", "/careers", "/careers/CAR_DATA_SCIENTIST", "/next-ste
   "/dream-check?to=CAR_DATA_SCIENTIST&from_stage=EDU_12_PCM", "/roadmap?career=CAR_DATA_ANALYST", "/resources",
   "/resources?tab=colleges", "/compare?ids=CAR_DATA_SCIENTIST,CAR_DOCTOR_MBBS&stage=EDU_12_PCB", "/login", "/register", "/forgot-password", "/no-such-page"];
 const PRIVATE_PAGES = ["/dashboard", "/for-you", "/next-steps", "/skill-gap?career=CAR_DATA_SCIENTIST",
-  "/roadmap?career=CAR_ML_ENGINEER", "/assessments", "/assessments/interest", "/mentor", "/profile", "/profile/edit"];
+  "/roadmap?career=CAR_ML_ENGINEER", "/assessments", "/assessments/interest", "/mentor", "/profile", "/profile/edit", "/report"];
 
 async function signUp(page) {
   const email = `hi_${Date.now()}_${Math.random().toString(36).slice(2, 7)}@example.com`;

@@ -254,3 +254,19 @@ test("roadmap projects: tick a checklist step and it is remembered", async ({ pa
   await expect(page.getByRole("list", { name: "Checklist for Task manager with a REST API" })
     .getByRole("checkbox", { name: "Design the tables for users and tasks" })).toBeChecked();
 });
+
+test("report: one page with the profile and matches, printed without menus", async ({ page, browserName, isMobile }) => {
+  await loginWithProfile(page);
+  await page.goto("/report");
+  await expect(page.getByRole("heading", { level: 1, name: "My career report" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "Top career matches" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: /Roadmap to my top match/ })).toBeVisible();
+  await page.emulateMedia({ media: "print" });
+  await expect(page.locator(".header")).toBeHidden();
+  await expect(page.getByRole("button", { name: "Print or save as PDF" })).toBeHidden();
+  await expect(page.getByRole("heading", { level: 2, name: "Top career matches" })).toBeVisible();
+  if (browserName === "chromium" && !isMobile) {
+    const pdf = await page.pdf({ format: "A4" });
+    expect(pdf.subarray(0, 4).toString()).toBe("%PDF");
+  }
+});

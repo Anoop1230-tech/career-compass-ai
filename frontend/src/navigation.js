@@ -14,6 +14,7 @@ export const NAV_GROUPS = [
       { key: "nextSteps", path: "/next-steps", label: "Next Steps", icon: "steps", text: "Realistic paths from your current stage." },
       { key: "forYou", path: "/for-you", label: "For You", icon: "star", text: "Careers ranked for you, with the reasons." },
       { key: "roadmap", path: "/roadmap", label: "Roadmap", icon: "map", text: "A stage-by-stage plan to your target career." },
+      { key: "report", path: "/report", label: "My Report", icon: "print", text: "One page to print or save as PDF." },
     ],
   },
   {

@@ -29,7 +29,7 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 21 | More careers | Healthcare, law, armed forces, agriculture and skilled trades (ITI) with stages, exams and routes | ✅ |
 | 22 | Career comparison | Compare 2–3 careers: skills, education, years, exams, fit | ✅ |
 | 23 | Project ideas | 2–3 project briefs per career with checklists in the roadmap | ✅ |
-| 24 | Printable report | One-page summary (profile, matches, roadmap) saved as PDF from the browser | ⬜ |
+| 24 | Printable report | One-page summary (profile, matches, roadmap) saved as PDF from the browser | ✅ |
 | 25 | Salary ranges | Sourced ranges by experience and city tier, never guessed | ⬜ |
 | 26 | College predictor | Likely / borderline / unlikely colleges from published closing ranks | ⬜ |
 | 27 | Exam reminders | Follow exams, email reminders, calendar file, "coming up" on the dashboard | ⬜ |
@@ -405,3 +405,12 @@ Known limits: study years add up recorded course lengths only (no exam preparati
 Result: 378 backend tests, 138 frontend unit tests, 130 browser tests passing; validator 0 errors, 0 warnings; lint 0 warnings; build OK.
 
 Known limits: project texts are English only until Phase 29. Ticking project steps does not change skill levels; skills are still updated in the profile or ticked separately.
+
+## Phase 24 - Printable report - ✅ done
+- 24.1 `GET /api/report` (login required) bundles the profile summary, latest test results, top 5 matches with the confidence level, the 3 most relevant next steps and the roadmap to the target career (or to the top match if no target is set) with skill and project progress. It reuses the existing engines; nothing new is estimated
+- 24.2 "My Report" page (`/report`, in the Your journey menu): a print button opens the browser's print dialog, where "Save as PDF" keeps a copy – no PDF library or server rendering. Print styles hide the menu, footer and buttons, switch to black on white, avoid splitting sections and use A4-friendly margins; the page title becomes the suggested file name. English and Hindi
+- 24.3 Tests: 4 backend, 3 unit, 1 browser (print media hides the app chrome; Chromium produces a real PDF); the page is in the accessibility and Hindi scans
+
+Result: 382 backend tests, 141 frontend unit tests, 132 browser tests passing; lint 0 warnings; build OK.
+
+Known limits: "one page" depends on how much the user has filled in; long reports flow onto a second page. Roadmap stage names and career texts from the server stay English until Phase 29.
