@@ -1649,3 +1649,7 @@ label.roadmap-item__title { cursor: pointer; }
   .report-section h2 { font-size: 13pt; }
   .report, .report p, .report li, .report dd, .report dt { font-size: 10pt; line-height: 1.4; }
 }
+
+/* Official pay on career pages */
+.pay-list { display: grid; gap: var(--space-3); }
+.pay-list li { overflow-wrap: anywhere; }

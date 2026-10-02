@@ -36,6 +36,7 @@ from catalog.models import (
     InterestQuestion,
     PersonalityQuestion,
     ProjectIdea,
+    SalaryRange,
     Scholarship,
     Skill,
     Stage,
@@ -48,7 +49,7 @@ logger = logging.getLogger("career_compass.seed")
 
 # Delete children before parents (foreign keys)
 DELETE_ORDER = [
-    CareerSkill, EducationPath, CareerPath, CareerTransition, Exam, Career, Skill, Stage,
+    SalaryRange, CareerSkill, EducationPath, CareerPath, CareerTransition, Exam, Career, Skill, Stage,
     InterestQuestion, PersonalityQuestion, AptitudeQuestion, College, Scholarship, University,
     Course, Certification, ProjectIdea,
 ]
@@ -214,6 +215,14 @@ def build_objects(tables: dict[str, list[dict[str, str]]]) -> list:
             url=r["url"], related_career_ids=split_ids(r["related_career_ids"]), skill_ids=split_ids(r["skill_ids"]),
             level=r["level"], prerequisites=text(r["prerequisites"]), cost_note=r["cost_note"],
             validity_years=integer(r["validity_years"]), last_verified=day(r["last_verified"]),
+        ))
+    for r in tables["salary_ranges.csv"]:
+        objects.append(SalaryRange(
+            salary_id=r["salary_id"], career_id=r["career_id"], role_label=r["role_label"], sector=r["sector"],
+            pay_basis=r["pay_basis"], level=text(r["level"]), monthly_min=integer(r["monthly_min"]),
+            monthly_max=integer(r["monthly_max"]), range_note=r["range_note"], includes_note=r["includes_note"],
+            source_name=r["source_name"], source_url=r["source_url"], as_of=day(r["as_of"]),
+            last_verified=day(r["last_verified"]),
         ))
     for r in tables["project_ideas.csv"]:
         objects.append(ProjectIdea(

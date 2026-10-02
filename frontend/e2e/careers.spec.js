@@ -118,3 +118,12 @@ test("compare careers from a career page", async ({ page }) => {
   await page.reload();
   await expect(page.getByRole("table", { name: /Comparison of/ })).toBeVisible();
 });
+
+test("official pay with its source on government careers, none elsewhere", async ({ page }) => {
+  await page.goto("/careers/CAR_SCHOOL_TEACHER");
+  await expect(page.getByRole("heading", { level: 2, name: "Official pay" })).toBeVisible();
+  await expect(page.getByText("₹44,900 – ₹1,42,400 a month")).toBeVisible();
+  await expect(page.getByRole("link", { name: /Source: Kendriya Vidyalaya salary structure/ }).first()).toHaveAttribute("href", /\.gov\.in\//);
+  await page.goto("/careers/CAR_DATA_SCIENTIST");
+  await expect(page.getByText(/No official pay figures are recorded for this career/)).toBeVisible();
+});

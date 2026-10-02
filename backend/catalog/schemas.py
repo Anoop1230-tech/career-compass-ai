@@ -96,6 +96,22 @@ class TransitionOut(BaseModel):
     notes: str | None
 
 
+class SalaryOut(ORM):
+    salary_id: str
+    role_label: str
+    sector: str
+    pay_basis: str
+    level: str | None
+    monthly_min: int
+    monthly_max: int | None
+    range_note: str
+    includes_note: str
+    source_name: str
+    source_url: str
+    as_of: date
+    last_verified: date
+
+
 class CareerDetail(ORM):
     career_id: str
     name: str
@@ -117,6 +133,7 @@ class CareerDetail(ORM):
     next_careers: list[CareerLink]
     previous_careers: list[CareerLink]
     transitions_in: list[TransitionOut]
+    salaries: list[SalaryOut] = []
 
 
 class ExamOut(ORM):

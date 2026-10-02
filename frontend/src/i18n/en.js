@@ -940,4 +940,16 @@ export default {
   "report.projectsProgress": "{done} of {total} projects finished",
   "report.weeksLeft": "about {n} weeks left at {h} hours a week",
   "report.disclaimer": "Made by Career Compass AI from your own profile, tests and our datasets. This is guidance, not a prediction of success. Exam dates, eligibility and fees change every year; always confirm on official websites.",
+
+  // Official pay (Phase 25)
+  "pay.title": "Official pay",
+  "pay.lead": "Government pay published in official documents. Private-sector pay varies widely and is not shown, because we have no verified source for it.",
+  "pay.none": "No official pay figures are recorded for this career. Pay depends on the employer, city and experience; check job listings and official notices.",
+  "pay.from": "From ₹{min} a month",
+  "pay.range": "₹{min} – ₹{max} a month",
+  "pay.basicLevel": "Basic pay, {level}",
+  "pay.package": "{level}",
+  "pay.source": "Source: {name}",
+  "pay.asOf": "figures as of {date}, checked {checked}",
+  "pay.disclaimer": "A new Central Pay Commission can revise these figures. Always confirm in the latest official notification.",
 };

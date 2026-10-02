@@ -4,6 +4,8 @@ import { useI18n } from "../i18n";
 import * as api from "../services/api";
 
 // Labels: detail.level.*, detail.riasec.*, detail.type.* in i18n/*.js
+// Indian digit grouping (1,42,400) in both languages
+const inr = (n) => n.toLocaleString("en-IN");
 const pretty = (value) => value.replaceAll("_", " ").replace(/^./, (c) => c.toUpperCase());
 
 function Section({ title, children }) {
@@ -177,6 +179,33 @@ export default function CareerDetailPage() {
                 </li>
               ))}
             </ul>
+          </Section>
+
+          <Section title={t("pay.title")}>
+            {c.salaries?.length > 0 ? (
+              <>
+                <p className="muted small">{t("pay.lead")}</p>
+                <ul className="plain-list pay-list">
+                  {c.salaries.map((s) => (
+                    <li key={s.salary_id}>
+                      <strong>{s.role_label}</strong>
+                      <div>
+                        {s.monthly_max ? t("pay.range", { min: inr(s.monthly_min), max: inr(s.monthly_max) })
+                          : t("pay.from", { min: inr(s.monthly_min) })}
+                        {s.level && <span className="muted small"> · {s.pay_basis === "pay_level" ? t("pay.basicLevel", { level: s.level }) : t("pay.package", { level: s.level })}</span>}
+                      </div>
+                      <div className="small">{s.range_note}. {s.includes_note}.</div>
+                      <div className="small muted">
+                        <a href={s.source_url} target="_blank" rel="noopener noreferrer">
+                          {t("pay.source", { name: s.source_name })}<span className="visually-hidden"> {t("common.officialNewTab")}</span>
+                        </a>{" "}· {t("pay.asOf", { date: s.as_of, checked: s.last_verified })}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+                <p className="small muted">{t("pay.disclaimer")}</p>
+              </>
+            ) : <p className="muted">{t("pay.none")}</p>}
           </Section>
 
           <Section title={t("detail.leadsTo")}>

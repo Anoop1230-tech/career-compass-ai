@@ -287,6 +287,27 @@ class Certification(Base):
     last_verified: Mapped[date] = mapped_column(Date)
 
 
+class SalaryRange(Base):
+    """Official pay for one role in a career (government pay level or scheme), with its source."""
+
+    __tablename__ = "salary_ranges"
+
+    salary_id: Mapped[str] = mapped_column(String(40), primary_key=True)
+    career_id: Mapped[str] = mapped_column(ForeignKey("careers.career_id", ondelete="CASCADE"), index=True)
+    role_label: Mapped[str] = mapped_column(String(200))
+    sector: Mapped[str] = mapped_column(String(30))
+    pay_basis: Mapped[str] = mapped_column(String(20))
+    level: Mapped[str | None] = mapped_column(String(60))
+    monthly_min: Mapped[int] = mapped_column(Integer)
+    monthly_max: Mapped[int | None] = mapped_column(Integer)
+    range_note: Mapped[str] = mapped_column(Text)
+    includes_note: Mapped[str] = mapped_column(Text)
+    source_name: Mapped[str] = mapped_column(String(200))
+    source_url: Mapped[str] = mapped_column(String(300))
+    as_of: Mapped[date] = mapped_column(Date)
+    last_verified: Mapped[date] = mapped_column(Date)
+
+
 class ProjectIdea(Base):
     """A portfolio project brief with a step checklist, linked to one or more careers."""
 

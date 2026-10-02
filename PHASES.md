@@ -30,7 +30,7 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 22 | Career comparison | Compare 2–3 careers: skills, education, years, exams, fit | ✅ |
 | 23 | Project ideas | 2–3 project briefs per career with checklists in the roadmap | ✅ |
 | 24 | Printable report | One-page summary (profile, matches, roadmap) saved as PDF from the browser | ✅ |
-| 25 | Salary ranges | Sourced ranges by experience and city tier, never guessed | ⬜ |
+| 25 | Salary ranges | Sourced ranges by experience and city tier, never guessed | ✅ (official government pay only) |
 | 26 | College predictor | Likely / borderline / unlikely colleges from published closing ranks | ⬜ |
 | 27 | Exam reminders | Follow exams, email reminders, calendar file, "coming up" on the dashboard | ⬜ |
 | 28 | Résumé upload | Read skills from a PDF résumé; user confirms before saving | ⬜ |
@@ -414,3 +414,14 @@ Known limits: project texts are English only until Phase 29. Ticking project ste
 Result: 382 backend tests, 141 frontend unit tests, 132 browser tests passing; lint 0 warnings; build OK.
 
 Known limits: "one page" depends on how much the user has filled in; long reports flow onto a second page. Roadmap stage names and career texts from the server stay English until Phase 29.
+
+## Phase 25 - Salary ranges - ✅ done (official government pay only)
+- 25.1 Decision: only figures read from the text of an official government source are stored. `datasets/salary_ranges.csv` has 6 rows: IAS/IPS entry (Level 10, Rs 56,100 – Union Cabinet decision on the 7th CPC), Agniveer (Rs 30,000–40,000 a month, 70% in hand – PIB release on Agnipath) and Kendriya Vidyalaya PRT, TGT, PGT and Principal (Levels 6, 7, 8 and 12 with their full ranges – KV salary structure table). Each row says what is included (basic pay only; allowances extra), when the figures date from and when they were checked
+- 25.2 Left out on purpose: armed forces officers, pilots and nurses (only coaching sites state their pay levels; the official PDFs could not be read without a PDF library) and all private-sector pay (no verified source). The "experience and city tier" split from the plan is not possible from official sources; city effects appear only as "House Rent Allowance depends on the city class"
+- 25.3 Validator: `salary_ranges.csv` rows must link to a `.gov.in` or `.nic.in` site and have max ≥ min; a test proves an unofficial link is rejected. Table `salary_ranges` (migration `0006`); career detail API returns `salaries`
+- 25.4 Career page "Official pay" section with the role, range in Indian digit grouping, what is included, the source link and dates; every other career says no official figures are recorded and why. English and Hindi
+- 25.5 Tests: 5 backend, 1 browser
+
+Result: validator 0 errors, 0 warnings; 387 backend tests, 141 frontend unit tests, 134 browser tests passing (one browser test failed once in the full run and passed on rerun; one unit test timed out once under load and passed on rerun); lint 0 warnings; build OK.
+
+Known limits: the 8th Central Pay Commission has been set up with 1 January 2026 as the reference date but no new matrix is notified, so 7th CPC figures are shown with a note to check the latest notification. Adding more roles needs an official source per row.

@@ -8,8 +8,11 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 
-from catalog.models import Career, CareerPath, CareerSkill, CareerTransition, EducationPath, Exam, Skill, Stage
+from catalog.models import (
+    Career, CareerPath, CareerSkill, CareerTransition, EducationPath, Exam, SalaryRange, Skill, Stage,
+)
 from catalog.schemas import (
+    SalaryOut,
     CareerDetail,
     CareerLink,
     CareerList,
@@ -185,6 +188,8 @@ def career_detail(career_id: str, db: Session = Depends(get_db)):
         next_careers=next_careers,
         previous_careers=previous_careers,
         transitions_in=transitions_in,
+        salaries=[SalaryOut.model_validate(s) for s in db.scalars(
+            select(SalaryRange).where(SalaryRange.career_id == career_id).order_by(SalaryRange.monthly_min))],
     )
 
 

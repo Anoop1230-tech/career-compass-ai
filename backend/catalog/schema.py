@@ -276,6 +276,22 @@ SPECS: dict[str, FileSpec] = {
             foreign_keys={"career_ids": "careers.csv", "skill_ids": "skills.csv"},
             int_ranges={"estimated_hours": (1, 200)},
         ),
+        # Official pay only (government pay matrices and schemes), each row with its source; never estimated
+        FileSpec(
+            "salary_ranges.csv",
+            ("salary_id", "career_id", "role_label", "sector", "pay_basis", "level", "monthly_min", "monthly_max",
+             "range_note", "includes_note", "source_name", "source_url", "as_of", "last_verified"),
+            id_column="salary_id",
+            id_prefix="SAL_",
+            required=("salary_id", "career_id", "role_label", "sector", "pay_basis", "monthly_min", "range_note",
+                      "includes_note", "source_name", "source_url", "as_of", "last_verified"),
+            enums={"sector": {"central_government", "state_government", "public_sector"},
+                   "pay_basis": {"pay_level", "fixed_package"}},
+            foreign_keys={"career_id": "careers.csv"},
+            int_ranges={"monthly_min": (1000, 1000000), "monthly_max": (1000, 1000000)},
+            dates=("as_of", "last_verified"),
+            urls=("source_url",),
+        ),
     ]
 }
 # Header-only files kept for a possible later use. Only their header is checked.

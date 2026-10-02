@@ -235,6 +235,15 @@ def check_logic(tables: dict[str, list[dict[str, str]]], report: Report) -> None
             if projects[row.get("career_id", "")] < 2:
                 report.error("project_ideas.csv", None, f"career '{row.get('career_id')}' has fewer than 2 projects")
 
+    # Salary rows: max is not below min, and only government (official) sources are allowed
+    for line, row in enumerate(tables.get("salary_ranges.csv", []), start=2):
+        lo, hi = row.get("monthly_min", ""), row.get("monthly_max", "")
+        if lo.isdigit() and hi.isdigit() and int(hi) < int(lo):
+            report.error("salary_ranges.csv", line, "monthly_max is below monthly_min")
+        host = re.sub(r"^https?://", "", row.get("source_url", "")).split("/")[0].lower()
+        if host and not (host.endswith(".gov.in") or host.endswith(".nic.in")):
+            report.error("salary_ranges.csv", line, f"source must be an official .gov.in or .nic.in site (got {host})")
+
     # Reliability: unverified exam info must link to the official source
     for line, row in enumerate(tables.get("entrance_exams.csv", []), start=2):
         if row.get("verified") == "false" and not row.get("official_url"):
