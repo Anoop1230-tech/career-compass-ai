@@ -7,7 +7,7 @@ const hindi = async (page) => page.addInitScript(() => localStorage.setItem("cc-
 
 const PUBLIC_PAGES = ["/", "/careers", "/careers/CAR_DATA_SCIENTIST", "/next-steps?stage=EDU_12_PCM", "/explore",
   "/dream-check?to=CAR_DATA_SCIENTIST&from_stage=EDU_12_PCM", "/roadmap?career=CAR_DATA_ANALYST", "/resources",
-  "/resources?tab=colleges", "/login", "/register", "/forgot-password", "/no-such-page"];
+  "/resources?tab=colleges", "/compare?ids=CAR_DATA_SCIENTIST,CAR_DOCTOR_MBBS&stage=EDU_12_PCB", "/login", "/register", "/forgot-password", "/no-such-page"];
 const PRIVATE_PAGES = ["/dashboard", "/for-you", "/next-steps", "/skill-gap?career=CAR_DATA_SCIENTIST",
   "/roadmap?career=CAR_ML_ENGINEER", "/assessments", "/assessments/interest", "/mentor", "/profile", "/profile/edit"];
 
@@ -80,7 +80,7 @@ test("Hindi pages fit narrow phones and Devanagari has room to breathe", async (
   for (const width of [320, 360, 412]) {
     await page.setViewportSize({ width, height: 800 });
     for (const path of ["/", "/careers", "/next-steps", "/for-you", "/skill-gap?career=CAR_DATA_SCIENTIST",
-      "/roadmap?career=CAR_ML_ENGINEER", "/resources", "/assessments", "/profile/edit", "/mentor"]) {
+      "/roadmap?career=CAR_ML_ENGINEER", "/resources", "/assessments", "/profile/edit", "/mentor", "/compare?ids=CAR_SOFTWARE_ENGINEER,CAR_LAWYER,CAR_NURSE"]) {
       problems.push(...(await layoutProblems(page, path)).map((p) => `${width}px ${p}`));
     }
   }

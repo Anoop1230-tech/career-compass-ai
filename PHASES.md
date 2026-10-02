@@ -27,7 +27,7 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 19 | Security, learning links and feedback | Proxy-aware and per-account login limits, logout everywhere, change/reset password, course and certification links on roadmaps, "does this fit you?" feedback, smaller production image | ✅ |
 | 20 | Language system | English and Hindi for every screen, language switcher, saved preference | ✅ |
 | 21 | More careers | Healthcare, law, armed forces, agriculture and skilled trades (ITI) with stages, exams and routes | ✅ |
-| 22 | Career comparison | Compare 2–3 careers: skills, education, years, exams, fit | ⬜ |
+| 22 | Career comparison | Compare 2–3 careers: skills, education, years, exams, fit | ✅ |
 | 23 | Project ideas | 2–3 project briefs per career with checklists in the roadmap | ⬜ |
 | 24 | Printable report | One-page summary (profile, matches, roadmap) saved as PDF from the browser | ⬜ |
 | 25 | Salary ranges | Sourced ranges by experience and city tier, never guessed | ⬜ |
@@ -387,3 +387,12 @@ Known limits: the Hindi text is a first draft and needs review by a native speak
 Result: validator 0 errors, 0 warnings; 366 backend tests, 134 frontend unit tests, 126 browser tests passing; lint 0 warnings; build OK.
 
 Known limits: eligibility for nursing, pharmacy and agriculture admission varies by state and college, so it is summarised, not exact. Judicial service rules (practice years, age) differ by state. ITI-to-diploma lateral entry is left out because the only diploma stage is Computer Engineering.
+
+## Phase 22 - Career comparison - ✅ done
+- 22.1 `GET /api/compare?ids=A,B[,C]&stage=` (visitors too): per career the field, usual minimum education, shortest study route and its recorded years from the chosen stage (or the profile's stage), common starting stages, exams on the way in (including the step before, e.g. NEET UG for MBBS), core and helpful skills, work setting and next moves; with a profile also the match score and skill readiness. Skills all compared careers share are listed. 2–3 different careers required (code `compare.count`), unknown ids give 404
+- 22.2 Compare page (`/compare`, in the Explore menu and as "Compare with others" on every career page): three pickers (a career can't be chosen twice), optional starting stage, a table with one column per career that turns into cards on phones, official exam links, skill-gap and roadmap buttons per career; everything is in the URL, so comparisons can be shared and survive reloads. English and Hindi
+- 22.3 Tests: 7 backend, 3 unit, 1 browser flow; the page is in the accessibility scans (logged out and in) and the Hindi phone-width sweep
+
+Result: 373 backend tests, 137 frontend unit tests, 128 browser tests passing; lint 0 warnings; build OK.
+
+Known limits: study years add up recorded course lengths only (no exam preparation or job search time); careers reached only through work experience show "no direct route" from a study stage.

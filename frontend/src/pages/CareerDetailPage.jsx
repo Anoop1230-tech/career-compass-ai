@@ -118,6 +118,7 @@ export default function CareerDetailPage() {
           <div className="btn-row" style={{ marginTop: "var(--space-4)" }}>
             <Link to={`/skill-gap?career=${c.career_id}`} className="btn btn--secondary btn--small">{t("detail.checkGap")}</Link>
             <Link to={`/roadmap?career=${c.career_id}`} className="btn btn--secondary btn--small">{t("detail.getRoadmap")}</Link>
+            <Link to={`/compare?ids=${c.career_id}`} className="btn btn--secondary btn--small">{t("detail.compare")}</Link>
           </div>
         </header>
 

@@ -1598,3 +1598,17 @@ label.roadmap-item__title { cursor: pointer; }
   }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* Career comparison: attribute rows, one column per career */
+.compare-pickers { flex-wrap: wrap; }
+.compare-pickers .field { min-width: 0; flex: 1 1 12rem; }
+.compare-table { table-layout: fixed; }
+.compare-table tbody th { width: 11rem; color: var(--color-muted); font-weight: 600; vertical-align: top; }
+.compare-table td { vertical-align: top; overflow-wrap: anywhere; }
+.compare-table .meter { margin-top: var(--space-1); }
+@media (max-width: 640px) {
+  .compare-table { table-layout: auto; }
+  .compare-table tbody th { width: 100%; color: var(--color-text); }
+  .compare-table td[data-label] { display: block; }
+  .compare-table td[data-label]::before { display: block; font-size: var(--text-sm); }
+}

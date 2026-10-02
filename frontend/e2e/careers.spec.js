@@ -104,3 +104,17 @@ test("new fields: a PCB student sees MBBS and the doctor page shows the NEET rou
   await page.goto("/careers?domain=Skilled%20Trades");
   await expect(page.getByText("5 careers found")).toBeVisible();
 });
+test("compare careers from a career page", async ({ page }) => {
+  await page.goto("/careers/CAR_DATA_SCIENTIST");
+  await page.getByRole("link", { name: "Compare with others" }).click();
+  await expect(page).toHaveURL(/\/compare\?ids=CAR_DATA_SCIENTIST$/);
+  await page.getByLabel("Career 2").selectOption("CAR_DOCTOR_MBBS");
+  await page.getByLabel("Starting from").selectOption("EDU_12_PCB");
+  const table = page.getByRole("table", { name: /Comparison of Data Scientist, Doctor \(MBBS\)/ });
+  await expect(table).toBeVisible();
+  await expect(table.getByRole("link", { name: /NEET UG/ }).first()).toBeVisible();
+  await expect(page).toHaveURL(/stage=EDU_12_PCB/);
+  // Reload keeps the comparison (it lives in the URL)
+  await page.reload();
+  await expect(page.getByRole("table", { name: /Comparison of/ })).toBeVisible();
+});

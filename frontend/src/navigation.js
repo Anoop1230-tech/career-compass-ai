@@ -24,6 +24,7 @@ export const NAV_GROUPS = [
       { key: "careers", path: "/careers", label: "Careers", icon: "briefcase", text: "Search careers: skills, exams and paths." },
       { key: "explore", path: "/explore", label: "Career Tree", icon: "tree", text: "Open the path step by step, school to promotion." },
       { key: "dreamCheck", path: "/dream-check", label: "Can I become…?", icon: "target", text: "Check a dream career: route, time, blockers." },
+      { key: "compare", path: "/compare", label: "Compare", icon: "compare", text: "Put 2–3 careers side by side." },
     ],
   },
   {
