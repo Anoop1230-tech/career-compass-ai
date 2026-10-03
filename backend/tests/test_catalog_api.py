@@ -88,7 +88,7 @@ def test_entry_path_lists_required_exams_with_links(api):
     exams = [e for p in d["entry_paths"] for e in p["required_exams"]]
     assert exams and exams[0]["name"] == "GATE"
     assert exams[0]["official_url"].startswith("https://")
-    assert exams[0]["verified"] is False
+    assert exams[0]["verified"] is True  # GATE 2027 eligibility checked on the official site
 
 
 def test_every_career_detail_loads(api):

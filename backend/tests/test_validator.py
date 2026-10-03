@@ -78,7 +78,7 @@ def test_validator_catches_mistakes(data_copy, file, old, new, expected):
 
 
 def test_missing_required_value(data_copy):
-    replace_in(data_copy / "entrance_exams.csv", "https://jeemain.nta.nic.in/,false", ",false")
+    replace_in(data_copy / "entrance_exams.csv", "https://jeemain.nta.nic.in/,true", ",true")
     errors = errors_for(data_copy)
     assert "'official_url' is required" in errors
 

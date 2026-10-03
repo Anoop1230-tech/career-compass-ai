@@ -488,3 +488,9 @@ Known limits: signals are recomputed from today's profile, which may differ from
 Result: 426 backend, 149 unit, 144 browser tests passing; lint 0 warnings; build OK.
 
 Known limits: syllabus links change every exam cycle and need re-checking; topic-level syllabus text is not copied into the site, only section names and the official link. Missing links can be added when the organisers publish them (UPSC's syllabus is inside each exam notice; SSC's and the armed forces' sites block automated reading).
+
+## Extra - Clearer verification labels and first verified exams - ✅ done
+- The badge "Not yet verified" was easy to misread as "this website is not official". It now reads "Details not re-checked this year" (hover: the link is the official website; confirm eligibility and dates there). Verified badges show their date on screen ("Verified on 2026-10-04")
+- Checked against current official documents on 2026-10-04 and marked verified: JEE Main (2026 information bulletin: no age limit; Class 12 passed in 2024/2025 or appearing in 2026; two sessions), NEET UG (2026 bulletin: at least 17 by 31 December, no upper age limit; exam held 3 May 2026), GATE (2027 eligibility page: 3rd year or higher of any UG degree, or a completed approved degree)
+- Exam dates confirmed on the official site, eligibility not re-checked (still unverified): CLAT 2027 on 6 December 2026, CUET UG 2026 from 11 May 2026
+- Not yet checked: CAT (its site needs JavaScript), UPSC CSE and NDA (their notices are not reachable from upsconline/upsc.gov.in pages by script; news sites were not used as sources), and the remaining exams

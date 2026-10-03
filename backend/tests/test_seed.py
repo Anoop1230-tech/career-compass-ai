@@ -50,7 +50,8 @@ def test_values_are_converted_to_proper_types(db):
     link = db.get(CareerSkill, ("CAR_DATA_SCIENTIST", "SKL_PYTHON"))
     assert link.is_mandatory is True
     exam = db.get(Exam, "EXM_GATE")
-    assert exam.verified is False
+    assert exam.verified is True  # booleans arrive as real bools (GATE checked on the official site)
+    assert db.get(Exam, "EXM_CAT").verified is False
     assert exam.official_url.startswith("https://")
     assert db.get(Skill, "SKL_PYTHON").aliases == ["py", "python3"]
     assert db.get(EducationPath, "EP_023").required_exam_ids == ["EXM_GATE"]
