@@ -37,7 +37,7 @@ describe("Exams, colleges and scholarships", () => {
     expect(await screen.findByRole("heading", { name: "GATE" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Official website/ })).toHaveAttribute("href", "https://gate2027.iitm.ac.in/");
     expect(screen.getByText("Last checked 2026-09-28")).toBeInTheDocument();
-    expect(screen.getByText("Not yet verified")).toBeInTheDocument();
+    expect(screen.getByText("Details not re-checked this year")).toBeInTheDocument();
     expect(screen.getByText("1 result")).toBeInTheDocument();
   });
 

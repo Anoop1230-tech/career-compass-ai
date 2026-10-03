@@ -36,11 +36,11 @@ export function OfficialLink({ href, children }) {
   );
 }
 
-/** Small "not yet verified" marker for data taken from official sites but not re-checked. */
+/** Small "details not re-checked this year" marker for data taken from official sites but not re-checked. */
 export function VerifiedBadge({ verified, date }) {
   const { t } = useI18n();
   return verified ? (
-    <span className="badge badge--ok" title={date ? t("common.verifiedOn", { date }) : undefined}>{t("common.verified")}</span>
+    <span className="badge badge--ok">{date ? t("common.verifiedOn", { date }) : t("common.verified")}</span>
   ) : (
     <span className="badge badge--warn" title={t("common.notVerified.title")}>
       {t("common.notVerified")}

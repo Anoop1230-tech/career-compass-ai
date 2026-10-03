@@ -134,8 +134,8 @@ export default {
   "common.officialNewTab": "(official site, opens in new tab)",
   "common.verified": "Verified",
   "common.verifiedOn": "Verified on {date}",
-  "common.notVerified": "Not yet verified",
-  "common.notVerified.title": "Confirm on the official website before acting",
+  "common.notVerified": "Details not re-checked this year",
+  "common.notVerified.title": "The link is the official website. Eligibility, dates and limits change every year: confirm them there before applying.",
   "common.source": "Source",
   "common.all": "All",
 
@@ -182,7 +182,7 @@ export default {
   "next.none": "No next steps are recorded for this stage yet.",
   "next.filter": "Filter options",
   "next.otherExams": "Other exams open at this stage",
-  "next.disclaimer": "Eligibility, exam dates and rules change every year. Entries marked “Not yet verified” come from official sources but have not been re-checked for the current year. Always confirm on the official website before applying.",
+  "next.disclaimer": "Eligibility, exam dates and rules change every year. Entries marked “Details not re-checked this year” come from official sources but have not been re-checked against this year's notice. Entries marked “Verified on” were checked on that date. Always confirm on the official website before applying.",
 
   "rec.title": "Careers for you",
   "rec.lead": "Ranked by how well each career matches your profile, skills and test results.",

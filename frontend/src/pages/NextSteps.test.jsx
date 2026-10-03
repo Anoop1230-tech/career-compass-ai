@@ -60,7 +60,7 @@ describe("Next steps page", () => {
     expect(screen.getByRole("link", { name: /GATE/ })).toHaveAttribute("href", "https://gate2027.iitm.ac.in/");
     expect(screen.getByText("Check this year's GATE dates.")).toBeInTheDocument();
     expect(screen.getByRole("img", { name: "Skills you have for Data Scientist: 45 out of 100" })).toBeInTheDocument();
-    expect(screen.getAllByText("Not yet verified").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Details not re-checked this year").length).toBeGreaterThan(0);
     expect(screen.getByRole("heading", { level: 2, name: "Switch paths" })).toBeInTheDocument();
   });
 
