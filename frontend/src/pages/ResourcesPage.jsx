@@ -52,7 +52,10 @@ function Syllabus({ e }) {
               <p className="muted">{t("syl.checked", { date: s.last_verified })}</p>
             </>
           ) : (
-            <p>{t("syl.inNotice")} <OfficialLink href={e.official_url}>{t("res.official")}</OfficialLink></p>
+            <>
+              <p>{t("syl.visitOfficial", { name: e.name })}</p>
+              <p><OfficialLink href={e.official_url}>{e.official_url.replace(/^https?:\/\//, "").replace(/\/$/, "")}</OfficialLink></p>
+            </>
           )}
         </div>
       )}

@@ -152,3 +152,11 @@ test("exam cards have a Syllabus button with the official syllabus", async ({ pa
   await btn.click();
   await expect(panel).toBeHidden();
 });
+
+test("exams without a syllabus link point to their official website", async ({ page }) => {
+  await page.goto("/resources?tab=exams&q=CAT");
+  await page.getByRole("button", { name: "Syllabus CAT" }).click();
+  const panel = page.getByRole("region", { name: "Syllabus for CAT" });
+  await expect(panel.getByText("For the CAT syllabus, please visit the official website of this exam:")).toBeVisible();
+  await expect(panel.getByRole("link", { name: /iimcat\.ac\.in/ })).toHaveAttribute("href", "https://iimcat.ac.in/");
+});

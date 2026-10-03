@@ -32,7 +32,7 @@ describe("Exam syllabus button", () => {
 
     await userEvent.click(screen.getByRole("button", { name: "Syllabus CAT" }));
     const cat = screen.getByRole("region", { name: "Syllabus for CAT" });
-    expect(within(cat).getByText(/official notification/)).toBeInTheDocument();
-    expect(within(cat).getByRole("link")).toHaveAttribute("href", "https://iimcat.ac.in/");
+    expect(within(cat).getByText("For the CAT syllabus, please visit the official website of this exam:")).toBeInTheDocument();
+    expect(within(cat).getByRole("link", { name: /iimcat\.ac\.in/ })).toHaveAttribute("href", "https://iimcat.ac.in/");
   });
 });

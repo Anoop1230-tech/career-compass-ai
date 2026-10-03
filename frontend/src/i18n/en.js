@@ -1036,11 +1036,11 @@ export default {
   "resume.cta": "Read skills from a résumé",
 
   // Exam syllabus
+  "syl.visitOfficial": "For the {name} syllabus, please visit the official website of this exam:",
   "syl.button": "Syllabus",
   "syl.region": "Syllabus for {name}",
   "syl.sections": "Sections",
   "syl.openPdf": "Full official syllabus (PDF)",
   "syl.openPage": "Full official syllabus",
   "syl.checked": "Link checked on {date}. The organiser may update the syllabus each year.",
-  "syl.inNotice": "The syllabus is published in the official notification or information bulletin.",
 };
