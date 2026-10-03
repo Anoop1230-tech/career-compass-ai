@@ -9,7 +9,7 @@ import re
 import sys
 from collections import defaultdict
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -119,7 +119,8 @@ def check_rows(spec: FileSpec, rows: list[dict[str, str]], report: Report) -> No
                 try:
                     if not DATE_RE.match(value):
                         raise ValueError
-                    if date.fromisoformat(value) > date.today():
+                    # One day of slack: servers often run on UTC while dates are written in local (IST) time
+                    if date.fromisoformat(value) > date.today() + timedelta(days=1):
                         report.error(name, line, f"'{column}' is in the future")
                 except ValueError:
                     report.error(name, line, f"'{column}' must be a real date in YYYY-MM-DD format")
