@@ -35,7 +35,7 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 27 | Exam reminders | Follow exams, email reminders, calendar file, "coming up" on the dashboard | ✅ |
 | 28 | Résumé upload | Read skills from a PDF résumé; user confirms before saving | ✅ |
 | 29 | Hindi content | Careers, exams, skills and the mentor in Hindi (fallback to English) | ✅ (draft Hindi, needs native review) |
-| 30 | Feedback-tuned weights | Propose scoring-weight changes from real "does this fit you?" answers | ⬜ |
+| 30 | Feedback-tuned weights | Propose scoring-weight changes from real "does this fit you?" answers | ✅ |
 
 ---
 
@@ -469,3 +469,13 @@ Result: validator 0 errors; 420 backend tests, 148 frontend unit tests, 142 brow
 Review needed: all Hindi catalog and mentor wording is a machine-written draft and must be checked by a native Hindi speaker before it is shown as final. Mark reviewed rows `status=reviewed`.
 
 Known limits: skill names stay English (most are technical terms); eligibility text, roadmaps, project briefs, colleges and scholarships stay English; data-heavy mentor replies (next steps, roadmaps, exams, colleges, comparisons) still use English templates around Hindi or English names.
+
+## Phase 30 - Feedback-tuned weights - ✅ done (report only)
+- 30.1 `python -m ml.tune_weights [--json]`: for every "does this fit you?" answer, the six signal scores are recomputed from that user's current profile and tests (users without a profile are skipped). It measures how well the current `WEIGHTS` separate "fits" from "not for me" answers (pairwise AUC)
+- 30.2 Bounded search: weight moves 2 points at a time between signals; the sum stays 100, each weight stays within ±50% of today's value and at least 4. A move is kept when AUC improves, or AUC is equal and the score gap between "fits" and "not for me" widens
+- 30.3 Safeguards: no proposal below 30 answers, when all answers are of one kind, or when the AUC gain is under 0.02. The tool only prints a report; `engine/recommend.py` is never changed automatically. Adopting a proposal means editing `WEIGHTS` by hand, running the tests and `ml.evaluate`, and reviewing the change. No names or emails are read or printed
+- 30.4 Tests: 5 backend (AUC, missing signals, search direction and bounds, not-enough-data, a 32-answer end-to-end run that leaves `WEIGHTS` unchanged)
+
+Result: 425 backend tests passing. No frontend changes (148 unit and 142 browser tests from Phase 29 still apply).
+
+Known limits: signals are recomputed from today's profile, which may differ from what the user saw when answering; AUC on a few dozen answers is noisy, which is why there is a minimum sample and a minimum gain. The dev database has 0 answers today, so no proposal exists yet.
