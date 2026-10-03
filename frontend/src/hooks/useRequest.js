@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useI18n } from "../i18n";
 import { getErrorMessage } from "../services/api";
 
 /**
@@ -10,7 +11,9 @@ import { getErrorMessage } from "../services/api";
  * - `reload()` retries after an error.
  */
 export default function useRequest(loader, deps) {
-  const key = JSON.stringify(deps);
+  // The language is part of the key: switching it reloads data that contains catalog text
+  const { lang } = useI18n();
+  const key = JSON.stringify([deps, lang]);
   const [state, setState] = useState({ key: null, status: "loading", data: null, error: null });
   const [attempt, setAttempt] = useState(0);
   const loaderRef = useRef(loader);

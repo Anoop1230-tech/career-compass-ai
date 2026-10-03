@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from catalog.models import College, Exam, Scholarship, Stage, University
 from database import get_db
+from services.lang import Localizer, request_lang
 from engine.catalog_data import get_catalog
 from engine.context import build_context
 from models import User
@@ -64,12 +65,14 @@ def exams(
     for_me: bool = False,
     user: User | None = Depends(get_optional_user),
     db: Session = Depends(get_db),
+    lang: str = Depends(request_lang),
 ):
+    tr = Localizer(db, lang)
     stage, note = _stage(stage, for_me, user, db)
-    stages = {s.stage_id: s.name for s in db.scalars(select(Stage))}
+    stages = {s.stage_id: tr("stage", s.stage_id, "name", s.name) for s in db.scalars(select(Stage))}
     items = [
         {"exam_id": e.exam_id, "name": e.name, "full_name": e.full_name, "conducting_body": e.conducting_body,
-         "exam_level": e.exam_level, "purpose": e.purpose, "eligibility_summary": e.eligibility_summary,
+         "exam_level": e.exam_level, "purpose": tr("exam", e.exam_id, "purpose", e.purpose), "eligibility_summary": e.eligibility_summary,
          "eligible_stages": [stages.get(s, s) for s in e.eligible_stage_ids], "age_limit_note": e.age_limit_note,
          "frequency": e.frequency, "typical_month": e.typical_month, "official_url": e.official_url,
          "verified": e.verified, "last_verified": e.last_verified.isoformat()}

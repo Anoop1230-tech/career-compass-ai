@@ -1,6 +1,7 @@
 // Tiny translation system (no library). Components call useI18n().t("key", { name: "Asha" }).
 // Texts live in en.js and hi.js; the chosen language is saved per browser and set on <html lang>.
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { setContentLanguage } from "../services/api";
 import { DICTIONARIES, STORAGE_KEY, getStoredLanguage, translate, translateOptions, translateOr } from "./core";
 
 const I18nContext = createContext({
@@ -9,6 +10,8 @@ const I18nContext = createContext({
 
 export function LanguageProvider({ children, initial }) {
   const [lang, setLangState] = useState(() => initial || getStoredLanguage());
+  // Set during render (not in an effect) so requests made by children's effects already use it
+  setContentLanguage(lang);
 
   const setLang = useCallback((value) => {
     if (!(value in DICTIONARIES)) return;

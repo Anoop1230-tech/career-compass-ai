@@ -109,3 +109,13 @@ test("server messages are shown in Hindi", async ({ page }) => {
   await page.locator("form").getByRole("button", { name: /लॉग इन/ }).click();
   await expect(page.getByRole("alert").filter({ hasText: "ईमेल या पासवर्ड गलत है।" })).toBeVisible();
 });
+
+test("catalog content in Hindi: career names and descriptions, English fallback for skills", async ({ page }) => {
+  await hindi(page);
+  await page.goto("/careers/CAR_DATA_SCIENTIST");
+  await expect(page.getByRole("heading", { level: 1, name: "डेटा साइंटिस्ट" })).toBeVisible();
+  await expect(page.getByText(/मशीन लर्निंग से सवालों के जवाब/)).toBeVisible();
+  await expect(page.getByText("Python").first()).toBeVisible();
+  await page.goto("/careers?q=वकील");
+  await expect(page.getByRole("link", { name: /अधिवक्ता \(वकील\)/ }).first()).toBeVisible();
+});

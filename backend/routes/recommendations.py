@@ -9,6 +9,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from database import get_db
+from services.lang import Localizer, request_lang
 from engine.catalog_data import get_catalog
 from engine.context import build_context
 from engine.recommend import confidence, reachable_careers, recommend, score_career
@@ -57,14 +58,18 @@ def list_recommendations(
     limit: int = Query(default=10, ge=1, le=50),
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
+    lang: str = Depends(request_lang),
 ):
     catalog, ctx = _load(db, user)
+    tr = Localizer(db, lang)
     result = recommend(catalog, ctx, domain=domain, limit=limit)
     feedback = _feedback_by_career(db, user.id)
     for item in result["items"]:
         item["feedback"] = _feedback_out(feedback.get(item["career_id"]))
-    result["stage"] = {"stage_id": ctx.stage.stage_id, "note": ctx.stage.note,
-                       "name": catalog.stage_name(ctx.stage.stage_id) if ctx.stage.stage_id else None}
+        tr.career(item)
+    stage_id = ctx.stage.stage_id
+    result["stage"] = {"stage_id": stage_id, "note": ctx.stage.note,
+                       "name": tr("stage", stage_id, "name", catalog.stage_name(stage_id)) if stage_id else None}
     result["unmatched_skills"] = ctx.unmatched_skills
     return result
 

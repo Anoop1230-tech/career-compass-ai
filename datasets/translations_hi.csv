@@ -1,0 +1,214 @@
+entity_type,entity_id,field,text_hi,status
+career,CAR_SOFTWARE_ENGINEER,name,सॉफ़्टवेयर इंजीनियर,draft
+career,CAR_SOFTWARE_ENGINEER,description,"सॉफ़्टवेयर ऐप्लिकेशन और सेवाओं को डिज़ाइन करता है, बनाता है, टेस्ट करता है और संभालता है",draft
+career,CAR_BACKEND_DEVELOPER,name,बैकएंड डेवलपर,draft
+career,CAR_BACKEND_DEVELOPER,description,"सर्वर की ओर का लॉजिक, API और डेटाबेस बनाता है जिन पर ऐप्लिकेशन चलते हैं",draft
+career,CAR_FRONTEND_DEVELOPER,name,फ़्रंटएंड डेवलपर,draft
+career,CAR_FRONTEND_DEVELOPER,description,वेबसाइट और ऐप के वे हिस्से बनाता है जिन्हें उपयोगकर्ता देखते और इस्तेमाल करते हैं,draft
+career,CAR_FULLSTACK_DEVELOPER,name,फ़ुल स्टैक डेवलपर,draft
+career,CAR_FULLSTACK_DEVELOPER,description,"वेब ऐप्लिकेशन के यूज़र इंटरफ़ेस और सर्वर, दोनों हिस्सों पर काम करता है",draft
+career,CAR_MOBILE_DEVELOPER,name,मोबाइल ऐप डेवलपर,draft
+career,CAR_MOBILE_DEVELOPER,description,Android और iOS फ़ोन व टैबलेट के लिए ऐप बनाता है,draft
+career,CAR_GAME_DEVELOPER,name,गेम डेवलपर,draft
+career,CAR_GAME_DEVELOPER,description,"वीडियो गेम डिज़ाइन और प्रोग्राम करता है, जिसमें गेमप्ले, ग्राफ़िक्स और फ़िज़िक्स शामिल हैं",draft
+career,CAR_QA_ENGINEER,name,QA / टेस्ट इंजीनियर,draft
+career,CAR_QA_ENGINEER,description,गड़बड़ियाँ ढूँढता है और ऑटोमेटेड टेस्ट बनाता है ताकि सॉफ़्टवेयर भरोसेमंद ढंग से चले,draft
+career,CAR_DEVOPS_ENGINEER,name,DevOps इंजीनियर,draft
+career,CAR_DEVOPS_ENGINEER,description,"सॉफ़्टवेयर को बनाने, डिप्लॉय करने और चलाने का काम ऑटोमेट करता है",draft
+career,CAR_CLOUD_ENGINEER,name,क्लाउड इंजीनियर,draft
+career,CAR_CLOUD_ENGINEER,description,क्लाउड प्लेटफ़ॉर्म पर ऐप्लिकेशन और इन्फ़्रास्ट्रक्चर डिज़ाइन और मैनेज करता है,draft
+career,CAR_SOLUTIONS_ARCHITECT,name,सॉल्यूशंस आर्किटेक्ट,draft
+career,CAR_SOLUTIONS_ARCHITECT,description,बड़े सिस्टम का पूरा तकनीकी ढाँचा डिज़ाइन करता है और टीमों को दिशा देता है,draft
+career,CAR_DATA_ANALYST,name,डेटा एनालिस्ट,draft
+career,CAR_DATA_ANALYST,description,"बिज़नेस डेटा को रिपोर्ट, डैशबोर्ड और फ़ैसलों के लिए जानकारी में बदलता है",draft
+career,CAR_DATA_SCIENTIST,name,डेटा साइंटिस्ट,draft
+career,CAR_DATA_SCIENTIST,description,सांख्यिकी और मशीन लर्निंग से सवालों के जवाब ढूँढता है और डेटा से नतीजों का अनुमान लगाता है,draft
+career,CAR_DATA_ENGINEER,name,डेटा इंजीनियर,draft
+career,CAR_DATA_ENGINEER,description,बड़े पैमाने पर डेटा को ले जाने और तैयार करने वाली पाइपलाइन और स्टोरेज बनाता है,draft
+career,CAR_ML_ENGINEER,name,मशीन लर्निंग इंजीनियर,draft
+career,CAR_ML_ENGINEER,description,"मशीन लर्निंग मॉडल बनाता, ट्रेन करता, लागू करता और प्रोडक्शन में संभालता है",draft
+career,CAR_AI_ENGINEER,name,AI इंजीनियर,draft
+career,CAR_AI_ENGINEER,description,"लार्ज लैंग्वेज मॉडल, कंप्यूटर विज़न और दूसरे AI सिस्टम से प्रोडक्ट बनाता है",draft
+career,CAR_AI_RESEARCH_SCIENTIST,name,AI रिसर्च साइंटिस्ट,draft
+career,CAR_AI_RESEARCH_SCIENTIST,description,इंडस्ट्री लैब या विश्वविद्यालयों में नए AI तरीके खोजता और प्रकाशित करता है,draft
+career,CAR_CYBERSECURITY_ANALYST,name,साइबर सुरक्षा एनालिस्ट,draft
+career,CAR_CYBERSECURITY_ANALYST,description,"सिस्टम पर नज़र रखता है, हमलों का पता लगाता है और संस्था के डेटा की रक्षा करता है",draft
+career,CAR_PENETRATION_TESTER,name,पेनिट्रेशन टेस्टर,draft
+career,CAR_PENETRATION_TESTER,description,अनुमति लेकर कानूनी रूप से सिस्टम पर हमला करता है ताकि अपराधियों से पहले कमज़ोरियाँ मिल जाएँ,draft
+career,CAR_UI_UX_DESIGNER,name,UI/UX डिज़ाइनर,draft
+career,CAR_UI_UX_DESIGNER,description,"उपयोगकर्ताओं की ज़रूरतें समझता है और साफ़, आसान डिजिटल प्रोडक्ट डिज़ाइन करता है",draft
+career,CAR_EMBEDDED_ENGINEER,name,एम्बेडेड सिस्टम्स इंजीनियर,draft
+career,CAR_EMBEDDED_ENGINEER,description,"गाड़ियों, घरेलू उपकरणों और मेडिकल मशीनों जैसे उपकरणों के अंदर का सॉफ़्टवेयर प्रोग्राम करता है",draft
+career,CAR_VLSI_ENGINEER,name,VLSI डिज़ाइन इंजीनियर,draft
+career,CAR_VLSI_ENGINEER,description,कंप्यूटर चिप और इंटीग्रेटेड सर्किट डिज़ाइन और जाँचता है,draft
+career,CAR_TECH_SUPPORT,name,टेक्निकल सपोर्ट इंजीनियर,draft
+career,CAR_TECH_SUPPORT,description,"उपयोगकर्ताओं और ग्राहकों की सॉफ़्टवेयर, हार्डवेयर और नेटवर्क से जुड़ी समस्याएँ सुलझाता है",draft
+career,CAR_TECH_CONSULTANT,name,टेक्नोलॉजी कंसल्टेंट,draft
+career,CAR_TECH_CONSULTANT,description,संस्थाओं को बिज़नेस समस्याएँ सुलझाने के लिए सही तकनीक चुनने और लागू करने की सलाह देता है,draft
+career,CAR_BUSINESS_ANALYST,name,बिज़नेस एनालिस्ट,draft
+career,CAR_BUSINESS_ANALYST,description,बिज़नेस प्रक्रियाओं और डेटा का अध्ययन करके सुधार सुझाता है और ज़रूरतें तय करता है,draft
+career,CAR_PRODUCT_MANAGER,name,प्रोडक्ट मैनेजर,draft
+career,CAR_PRODUCT_MANAGER,description,तय करता है कि प्रोडक्ट क्या करेगा और उसे बनाने वाली टीमों का नेतृत्व करता है,draft
+career,CAR_ENGINEERING_MANAGER,name,इंजीनियरिंग मैनेजर,draft
+career,CAR_ENGINEERING_MANAGER,description,"सॉफ़्टवेयर टीमों का नेतृत्व करता है और लोगों, डिलीवरी व तकनीकी गुणवत्ता का ज़िम्मेदार होता है",draft
+career,CAR_TECH_ENTREPRENEUR,name,टेक उद्यमी,draft
+career,CAR_TECH_ENTREPRENEUR,description,टेक्नोलॉजी बिज़नेस शुरू करता है और उसे बढ़ाता है,draft
+career,CAR_FINANCIAL_ANALYST,name,फ़ाइनेंशियल एनालिस्ट,draft
+career,CAR_FINANCIAL_ANALYST,description,निवेश और बिज़नेस फ़ैसलों के लिए वित्तीय डेटा का विश्लेषण करता है,draft
+career,CAR_ACCOUNTANT,name,अकाउंटेंट,draft
+career,CAR_ACCOUNTANT,description,"वित्तीय रिकॉर्ड, टैक्स और रिपोर्ट तैयार करता और जाँचता है",draft
+career,CAR_ASSISTANT_PROFESSOR,name,असिस्टेंट प्रोफ़ेसर (कंप्यूटर साइंस),draft
+career,CAR_ASSISTANT_PROFESSOR,description,विश्वविद्यालय में कोर्स पढ़ाता है और रिसर्च करता है,draft
+career,CAR_SCHOOL_TEACHER,name,स्कूल शिक्षक,draft
+career,CAR_SCHOOL_TEACHER,description,स्कूल के छात्रों को कोई विषय पढ़ाता है और उनकी पढ़ाई में मदद करता है,draft
+career,CAR_PSU_ENGINEER,name,PSU इंजीनियर (सरकारी),draft
+career,CAR_PSU_ENGINEER,description,सार्वजनिक क्षेत्र के उपक्रम में इंजीनियरिंग की नौकरी; कई PSU GATE स्कोर से इंजीनियर भर्ती करते हैं,draft
+career,CAR_CIVIL_SERVICES,name,सिविल सेवा अधिकारी (IAS/IPS/IFS),draft
+career,CAR_CIVIL_SERVICES,description,UPSC सिविल सेवा परीक्षा से चुने जाने वाले केंद्र और राज्य सरकार के प्रशासनिक और नीति पद,draft
+career,CAR_BANK_PO,name,बैंक प्रोबेशनरी ऑफ़िसर,draft
+career,CAR_BANK_PO,description,प्रतियोगी परीक्षाओं से चुने जाने वाला सरकारी बैंकों का अधिकारी पद,draft
+career,CAR_SINGER,name,गायक,draft
+career,CAR_SINGER,description,"कॉन्सर्ट, कार्यक्रमों, फ़िल्मों, विज्ञापनों और ऑनलाइन दर्शकों के लिए लाइव और रिकॉर्डिंग में गाता है",draft
+career,CAR_MUSIC_PRODUCER,name,संगीतकार और म्यूज़िक प्रोड्यूसर,draft
+career,CAR_MUSIC_PRODUCER,description,"कलाकारों, फ़िल्मों, विज्ञापनों, गेम और ऑनलाइन प्लेटफ़ॉर्म के लिए धुनें बनाता और गाने तैयार करता है",draft
+career,CAR_SOUND_ENGINEER,name,साउंड इंजीनियर,draft
+career,CAR_SOUND_ENGINEER,description,"संगीत, फ़िल्मों, पॉडकास्ट और लाइव शो के लिए ऑडियो रिकॉर्ड, मिक्स और मास्टर करता है",draft
+career,CAR_DANCER,name,डांसर,draft
+career,CAR_DANCER,description,"मंच, फ़िल्मों, म्यूज़िक वीडियो, कार्यक्रमों और ऑनलाइन नृत्य प्रस्तुत करता है",draft
+career,CAR_CHOREOGRAPHER,name,कोरियोग्राफ़र,draft
+career,CAR_CHOREOGRAPHER,description,"कलाकारों, फ़िल्मों, शो और कार्यक्रमों के लिए नृत्य रचता और सिखाता है",draft
+career,CAR_GRAPHIC_DESIGNER,name,ग्राफ़िक डिज़ाइनर,draft
+career,CAR_GRAPHIC_DESIGNER,description,"लोगो, पोस्टर, सोशल मीडिया विज़ुअल, पैकेजिंग और ब्रांड डिज़ाइन बनाता है",draft
+career,CAR_FASHION_DESIGNER,name,फ़ैशन डिज़ाइनर,draft
+career,CAR_FASHION_DESIGNER,description,पहले स्केच से तैयार परिधान तक कपड़े और एक्सेसरीज़ डिज़ाइन करता है,draft
+career,CAR_INTERIOR_DESIGNER,name,इंटीरियर डिज़ाइनर,draft
+career,CAR_INTERIOR_DESIGNER,description,"घर, दफ़्तर और दुकानों की ऐसी योजना बनाता है कि जगह सुंदर दिखे और काम की हो",draft
+career,CAR_ANIMATOR,name,एनिमेटर और VFX आर्टिस्ट,draft
+career,CAR_ANIMATOR,description,"फ़िल्मों, गेम, विज्ञापनों और ऑनलाइन वीडियो के लिए 2D और 3D एनिमेशन और विज़ुअल इफ़ेक्ट बनाता है",draft
+career,CAR_POET_LYRICIST,name,कवि और गीतकार,draft
+career,CAR_POET_LYRICIST,description,"कविताएँ और गीत लिखता है और उन्हें कार्यक्रमों, किताबों, फ़िल्मों और ऑनलाइन प्रस्तुत या प्रकाशित करता है",draft
+career,CAR_CONTENT_WRITER,name,कंटेंट और स्क्रिप्ट राइटर,draft
+career,CAR_CONTENT_WRITER,description,"वेबसाइट, वीडियो, विज्ञापन, फ़िल्मों और ब्रांड के लिए लेख, स्क्रिप्ट, कहानियाँ और कॉपी लिखता है",draft
+career,CAR_ACTOR,name,अभिनेता,draft
+career,CAR_ACTOR,description,"थिएटर, फ़िल्मों, टीवी, वेब सीरीज़ और विज्ञापनों में भूमिकाएँ निभाता है",draft
+career,CAR_STANDUP_COMEDIAN,name,स्टैंड-अप कॉमेडियन,draft
+career,CAR_STANDUP_COMEDIAN,description,"ओपन माइक, शो, कॉर्पोरेट कार्यक्रमों और ऑनलाइन कॉमेडी लिखता और प्रस्तुत करता है",draft
+career,CAR_ANCHOR_RJ,name,एंकर और रेडियो जॉकी,draft
+career,CAR_ANCHOR_RJ,description,"रेडियो शो, कार्यक्रम, टीवी प्रोग्राम और पॉडकास्ट होस्ट करता है",draft
+career,CAR_PHOTOGRAPHER,name,फ़ोटोग्राफ़र,draft
+career,CAR_PHOTOGRAPHER,description,"शादियों, कार्यक्रमों, प्रोडक्ट, फ़ैशन, समाचार और ब्रांड के लिए फ़ोटो खींचता है",draft
+career,CAR_VIDEO_EDITOR,name,वीडियो एडिटर,draft
+career,CAR_VIDEO_EDITOR,description,"फ़ुटेज को एडिट करके फ़िल्में, विज्ञापन, YouTube वीडियो और रील तैयार करता है",draft
+career,CAR_FILMMAKER,name,फ़िल्मकार और निर्देशक,draft
+career,CAR_FILMMAKER,description,"शूट की योजना बनाता है और फ़िल्में, शॉर्ट फ़िल्में, विज्ञापन और डॉक्यूमेंट्री बनाने वाली टीम का नेतृत्व करता है",draft
+career,CAR_CONTENT_CREATOR,name,कंटेंट क्रिएटर,draft
+career,CAR_CONTENT_CREATOR,description,"वीडियो, रील, पॉडकास्ट या पोस्ट बनाता है और ऑनलाइन दर्शक व ब्रांड डील बनाता है",draft
+career,CAR_CHEF,name,शेफ़,draft
+career,CAR_CHEF,description,"रेस्टोरेंट, होटल, कैफ़े और कैटरिंग में मेन्यू बनाता और खाना पकाता है या फ़ूड बिज़नेस चलाता है",draft
+career,CAR_FITNESS_TRAINER,name,फ़िटनेस ट्रेनर और योग प्रशिक्षक,draft
+career,CAR_FITNESS_TRAINER,description,"जिम, स्टूडियो, स्कूल और ऑनलाइन लोगों के लिए वर्कआउट बनाता और सिखाता है",draft
+career,CAR_MAKEUP_ARTIST,name,मेकअप आर्टिस्ट,draft
+career,CAR_MAKEUP_ARTIST,description,"शादियों, फ़िल्मों, फ़ैशन शूट और कार्यक्रमों के लिए मेकअप और स्टाइलिंग करता है",draft
+career,CAR_SCHOOL_PRINCIPAL,name,स्कूल प्रिंसिपल,draft
+career,CAR_SCHOOL_PRINCIPAL,description,"स्कूल का नेतृत्व करता है: शिक्षक, समय-सारणी, दाखिले, बजट और परिणाम",draft
+career,CAR_SPECIAL_EDUCATOR,name,विशेष शिक्षक,draft
+career,CAR_SPECIAL_EDUCATOR,description,दिव्यांग या अलग तरह से सीखने वाले बच्चों को व्यक्तिगत योजना से पढ़ाता है,draft
+career,CAR_SCHOOL_COUNSELLOR,name,स्कूल काउंसलर,draft
+career,CAR_SCHOOL_COUNSELLOR,description,"छात्रों को पढ़ाई के तनाव, सेहत और विषय व करियर के चुनाव में मदद करता है",draft
+career,CAR_INSTRUCTIONAL_DESIGNER,name,इंस्ट्रक्शनल डिज़ाइनर,draft
+career,CAR_INSTRUCTIONAL_DESIGNER,description,"स्कूलों, एडटेक कंपनियों और संस्थाओं के लिए ऑनलाइन कोर्स, ट्रेनिंग और पढ़ाई की सामग्री डिज़ाइन करता है",draft
+career,CAR_DOCTOR_MBBS,name,डॉक्टर (MBBS),draft
+career,CAR_DOCTOR_MBBS,description,"क्लिनिक, अस्पताल और सामुदायिक स्वास्थ्य केंद्रों में मरीज़ों की जाँच, निदान और इलाज करता है",draft
+career,CAR_SPECIALIST_DOCTOR,name,विशेषज्ञ डॉक्टर (MD / MS),draft
+career,CAR_SPECIALIST_DOCTOR,description,"सर्जरी, बाल रोग या हृदय रोग जैसे किसी एक क्षेत्र में जटिल बीमारियों का इलाज करता है",draft
+career,CAR_NURSE,name,रजिस्टर्ड नर्स,draft
+career,CAR_NURSE,description,"मरीज़ों की देखभाल करता है, दवा और इलाज देता है और अस्पतालों व समुदाय में डॉक्टरों की मदद करता है",draft
+career,CAR_PHARMACIST,name,फ़ार्मासिस्ट,draft
+career,CAR_PHARMACIST,description,"दवाएँ देता है, मरीज़ों को सुरक्षित उपयोग की सलाह देता है और अस्पताल, फ़ार्मेसी या दवा उद्योग में काम करता है",draft
+career,CAR_MEDICAL_LAB_TECH,name,मेडिकल लैब टेक्नोलॉजिस्ट,draft
+career,CAR_MEDICAL_LAB_TECH,description,"सैंपल लेता है और खून, पेशाब व दूसरी जाँचें करता है जिनसे डॉक्टर बीमारी पहचानते हैं",draft
+career,CAR_LAWYER,name,अधिवक्ता (वकील),draft
+career,CAR_LAWYER,description,"मुवक्किलों को सलाह देता है, दस्तावेज़ बनाता है और अदालतों व ट्रिब्यूनल में मुक़दमे लड़ता है",draft
+career,CAR_CORPORATE_LAWYER,name,कॉर्पोरेट वकील,draft
+career,CAR_CORPORATE_LAWYER,description,"लॉ फ़र्म या कंपनी की लीगल टीम में कंपनियों के अनुबंध, विलय, अनुपालन और विवाद संभालता है",draft
+career,CAR_JUDGE,name,न्यायिक अधिकारी (सिविल जज),draft
+career,CAR_JUDGE,description,राज्य न्यायिक सेवा परीक्षा के बाद दीवानी और फ़ौजदारी अदालतों में मुक़दमे सुनता और फ़ैसले देता है,draft
+career,CAR_LEGAL_ANALYST,name,लीगल एनालिस्ट / पैरालीगल,draft
+career,CAR_LEGAL_ANALYST,description,"वकीलों, लॉ फ़र्म और लीगल-टेक कंपनियों के लिए क़ानून की रिसर्च करता है और केस फ़ाइल व ड्राफ़्ट तैयार करता है",draft
+career,CAR_ARMED_FORCES_OFFICER,name,"सशस्त्र सेना अधिकारी (थल सेना, नौसेना, वायु सेना)",draft
+career,CAR_ARMED_FORCES_OFFICER,description,"कमीशन प्राप्त अधिकारी के रूप में प्रशिक्षण, अभियानों और प्रशासन में सैनिकों, नाविकों या वायुसैनिकों का नेतृत्व करता है",draft
+career,CAR_AIR_FORCE_PILOT,name,वायु सेना पायलट (फ़्लाइंग ब्रांच),draft
+career,CAR_AIR_FORCE_PILOT,description,"भारतीय वायु सेना अधिकारी के रूप में लड़ाकू, परिवहन या हेलीकॉप्टर विमान उड़ाता है",draft
+career,CAR_SOLDIER,name,सैनिक / नाविक / वायुसैनिक (अग्निवीर),draft
+career,CAR_SOLDIER,description,"अग्निपथ योजना के तहत थल सेना, नौसेना या वायु सेना में जनरल ड्यूटी या तकनीकी ट्रेड में सेवा करता है",draft
+career,CAR_AGRI_OFFICER,name,कृषि अधिकारी / एग्रोनॉमिस्ट,draft
+career,CAR_AGRI_OFFICER,description,"राज्य कृषि विभाग, बैंक या कृषि कंपनियों के लिए किसानों को फ़सल, मिट्टी और कीटों पर सलाह देता है",draft
+career,CAR_AGRI_SCIENTIST,name,कृषि वैज्ञानिक,draft
+career,CAR_AGRI_SCIENTIST,description,"ICAR संस्थानों और कृषि विश्वविद्यालयों में बेहतर फ़सलों, मिट्टी और खेती के तरीकों पर रिसर्च करता है",draft
+career,CAR_AGRI_ENTREPRENEUR,name,कृषि-व्यवसाय उद्यमी,draft
+career,CAR_AGRI_ENTREPRENEUR,description,"जैविक उपज, डेयरी, नर्सरी या फ़ूड प्रोसेसिंग जैसा खेती का बिज़नेस चलाता है और बाज़ार में बेचता है",draft
+career,CAR_ELECTRICIAN,name,इलेक्ट्रीशियन,draft
+career,CAR_ELECTRICIAN,description,"घरों, कारख़ानों और इमारतों में वायरिंग, पैनल और बिजली के उपकरण लगाता और ठीक करता है",draft
+career,CAR_FITTER_MACHINIST,name,फ़िटर / मशीनिस्ट,draft
+career,CAR_FITTER_MACHINIST,description,"हाथ के औज़ारों, लेथ और मिलिंग मशीन से मशीन के पुर्ज़े बनाता, फ़िट करता और रखरखाव करता है",draft
+career,CAR_WELDER,name,वेल्डर,draft
+career,CAR_WELDER,description,"निर्माण, जहाज़ निर्माण, पाइपलाइन और मैन्युफ़ैक्चरिंग के लिए धातु जोड़ता और काटता है",draft
+career,CAR_AUTO_MECHANIC,name,मोटर वाहन मैकेनिक,draft
+career,CAR_AUTO_MECHANIC,description,"वर्कशॉप और सर्विस सेंटर में कार, बाइक और व्यावसायिक वाहनों की ख़राबी पहचानता और ठीक करता है",draft
+career,CAR_PLUMBER,name,प्लंबर,draft
+career,CAR_PLUMBER,description,"इमारतों में पानी की सप्लाई, ड्रेनेज और सैनिटेशन सिस्टम लगाता और ठीक करता है",draft
+exam,EXM_JEE_MAIN,purpose,"NIT, IIIT और कई दूसरे संस्थानों में B.Tech/B.E. में दाखिला; JEE Advanced के लिए क्वालिफ़ायर भी",draft
+exam,EXM_JEE_ADVANCED,purpose,IIT के अंडरग्रेजुएट कोर्स में दाखिला,draft
+exam,EXM_NEET_UG,purpose,"MBBS, BDS और दूसरे मेडिकल कोर्स में दाखिला",draft
+exam,EXM_CUET_UG,purpose,केंद्रीय और कई दूसरे विश्वविद्यालयों के अंडरग्रेजुएट कोर्स में दाखिला,draft
+exam,EXM_CUET_PG,purpose,भाग लेने वाले विश्वविद्यालयों के पोस्टग्रेजुएट कोर्स में दाखिला,draft
+exam,EXM_NIMCET,purpose,भाग लेने वाले NIT के MCA कोर्स में दाखिला,draft
+exam,EXM_GATE,purpose,M.Tech/ME और कुछ PhD कोर्स में दाखिला; कई PSU भर्ती में भी इसका स्कोर इस्तेमाल करते हैं,draft
+exam,EXM_CAT,purpose,IIM और कई दूसरे बिज़नेस स्कूलों के MBA/PGP कोर्स में दाखिला,draft
+exam,EXM_UGC_NET,purpose,भारतीय विश्वविद्यालयों में असिस्टेंट प्रोफ़ेसर और जूनियर रिसर्च फ़ेलोशिप की पात्रता,draft
+exam,EXM_UPSC_CSE,purpose,"IAS, IPS, IFS और दूसरी केंद्रीय सेवाओं में भर्ती",draft
+exam,EXM_SSC_CGL,purpose,केंद्र सरकार के विभागों में ग्रुप B और ग्रुप C पदों पर भर्ती,draft
+exam,EXM_IBPS_PO,purpose,भाग लेने वाले सरकारी बैंकों में प्रोबेशनरी ऑफ़िसर की भर्ती,draft
+exam,EXM_GRE,purpose,विदेश के कई ग्रेजुएट कोर्स (MS और PhD) में ज़रूरी या मान्य,draft
+exam,EXM_IELTS,purpose,विदेश में पढ़ाई और काम के लिए अंग्रेज़ी दक्षता का प्रमाण,draft
+exam,EXM_TOEFL,purpose,विदेश के कई विश्वविद्यालयों में मान्य अंग्रेज़ी दक्षता का प्रमाण,draft
+exam,EXM_CLAT,purpose,राष्ट्रीय विधि विश्वविद्यालयों के UG और PG क़ानून कोर्स में दाखिला,draft
+exam,EXM_NEET_PG,purpose,"MD, MS और PG डिप्लोमा मेडिकल कोर्स में दाखिला",draft
+exam,EXM_GPAT,purpose,M.Pharm कोर्स और छात्रवृत्ति में दाखिला,draft
+exam,EXM_AILET,purpose,राष्ट्रीय विधि विश्वविद्यालय दिल्ली के पाँच साल के BA LLB में दाखिला,draft
+exam,EXM_AIBE,purpose,राज्य बार काउंसिल में नामांकित अधिवक्ताओं के लिए प्रैक्टिस का प्रमाणपत्र,draft
+exam,EXM_NDA,purpose,"कक्षा 12 के तुरंत बाद थल सेना, नौसेना और वायु सेना में अधिकारी प्रशिक्षण",draft
+exam,EXM_CDS,purpose,"स्नातकों के लिए भारतीय सैन्य अकादमी, नौसेना अकादमी, वायु सेना अकादमी और ऑफ़िसर्स ट्रेनिंग अकादमी में अधिकारी प्रवेश",draft
+exam,EXM_AFCAT,purpose,"फ़्लाइंग, ग्राउंड ड्यूटी तकनीकी और ग्राउंड ड्यूटी गैर-तकनीकी शाखाओं में अधिकारी प्रवेश",draft
+exam,EXM_AGNIVEER,purpose,"चार साल के लिए सैनिकों, नाविकों और वायुसैनिकों की भर्ती; कुछ को नियमित सेवा में रखा जाता है",draft
+stage,EDU_CLASS_10,name,कक्षा 10,draft
+stage,EDU_12_PCM,name,कक्षा 12 – विज्ञान (PCM),draft
+stage,EDU_12_PCB,name,कक्षा 12 – विज्ञान (PCB),draft
+stage,EDU_12_COMMERCE,name,कक्षा 12 – कॉमर्स,draft
+stage,EDU_12_HUMANITIES,name,कक्षा 12 – मानविकी (आर्ट्स),draft
+stage,EDU_DIPLOMA_CS,name,डिप्लोमा – कंप्यूटर इंजीनियरिंग,draft
+stage,EDU_BTECH_CSE,name,B.Tech – कंप्यूटर साइंस,draft
+stage,EDU_BTECH_ECE,name,B.Tech – इलेक्ट्रॉनिक्स और कम्युनिकेशन,draft
+stage,EDU_BTECH_MECH,name,B.Tech – मैकेनिकल,draft
+stage,EDU_BSC_CS,name,B.Sc – कंप्यूटर साइंस,draft
+stage,EDU_BSC_MATH_STATS,name,B.Sc – गणित / सांख्यिकी,draft
+stage,EDU_MTECH_CSE,name,M.Tech – कंप्यूटर साइंस,draft
+stage,EDU_MS_CS_ABROAD,name,MS – कंप्यूटर साइंस (विदेश में),draft
+stage,EDU_MSC_DS,name,M.Sc – डेटा साइंस,draft
+stage,EDU_PHD_CS,name,PhD – कंप्यूटर साइंस,draft
+stage,EDU_WORKING_TECH,name,कामकाजी पेशेवर – टेक्नोलॉजी,draft
+stage,EDU_WORKING_NONTECH,name,कामकाजी पेशेवर – गैर-टेक्नोलॉजी,draft
+stage,EDU_COURSE_MUSIC,name,"प्रोफ़ेशनल कोर्स – संगीत (गायन, वाद्य, प्रोडक्शन)",draft
+stage,EDU_COURSE_DANCE,name,प्रोफ़ेशनल कोर्स – नृत्य और कोरियोग्राफ़ी,draft
+stage,EDU_COURSE_DESIGN,name,"प्रोफ़ेशनल कोर्स – डिज़ाइन (ग्राफ़िक, फ़ैशन, इंटीरियर, एनिमेशन)",draft
+stage,EDU_COURSE_WRITING,name,"प्रोफ़ेशनल कोर्स – लेखन (कविता, गीत, स्क्रिप्ट, कंटेंट)",draft
+stage,EDU_COURSE_PERFORMING,name,"प्रोफ़ेशनल कोर्स – अभिनय, स्टैंड-अप कॉमेडी और एंकरिंग",draft
+stage,EDU_COURSE_MEDIA,name,"प्रोफ़ेशनल कोर्स – फ़ोटोग्राफ़ी, फ़िल्म और वीडियो",draft
+stage,EDU_COURSE_VOCATIONAL,name,"प्रोफ़ेशनल कोर्स – पाक कला, फ़िटनेस और ब्यूटी",draft
+stage,EDU_MBBS,name,MBBS (चिकित्सा),draft
+stage,EDU_MD_MS,name,MD / MS (चिकित्सा विशेषज्ञता),draft
+stage,EDU_BSC_NURSING,name,B.Sc नर्सिंग,draft
+stage,EDU_LLB_5YR,name,इंटीग्रेटेड क़ानून डिग्री (BA LLB / BBA LLB),draft
+stage,EDU_LLB_3YR,name,"LLB (3 साल, स्नातक के बाद)",draft
+stage,EDU_BSC_AGRI,name,B.Sc कृषि,draft
+stage,EDU_ITI,name,"ITI – ट्रेड सर्टिफ़िकेट (इलेक्ट्रीशियन, फ़िटर, वेल्डर, मैकेनिक…)",draft

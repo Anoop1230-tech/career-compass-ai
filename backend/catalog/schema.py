@@ -292,6 +292,15 @@ SPECS: dict[str, FileSpec] = {
             dates=("as_of", "last_verified"),
             urls=("source_url",),
         ),
+        # Hindi text for catalog entries (draft until reviewed by a native speaker); English is the fallback
+        FileSpec(
+            "translations_hi.csv",
+            ("entity_type", "entity_id", "field", "text_hi", "status"),
+            unique_together=("entity_type", "entity_id", "field"),
+            required=("entity_type", "entity_id", "field", "text_hi", "status"),
+            enums={"entity_type": {"career", "exam", "stage", "skill"}, "status": {"draft", "reviewed"},
+                   "field": {"name", "description", "purpose"}},
+        ),
         # Exact dates published by the exam organiser (only where officially announced)
         FileSpec(
             "exam_dates.csv",

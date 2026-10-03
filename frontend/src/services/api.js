@@ -13,6 +13,14 @@ const api = axios.create({
   headers: { Accept: "application/json" },
 });
 
+// Catalog text (career names, descriptions, exam purposes, mentor replies) comes back in this language
+let contentLanguage = getStoredLanguage();
+export const setContentLanguage = (lang) => { contentLanguage = lang; };
+api.interceptors.request.use((config) => {
+  config.headers["Accept-Language"] = contentLanguage;
+  return config;
+});
+
 // The server sends English text plus a stable code (see backend/services/messages.py);
 // known codes are shown in the chosen language, anything else falls back to the server's text.
 const tr = (key, vars) => translate(getStoredLanguage(), key, vars);

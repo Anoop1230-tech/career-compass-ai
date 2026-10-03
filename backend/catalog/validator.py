@@ -250,6 +250,21 @@ def check_logic(tables: dict[str, list[dict[str, str]]], report: Report) -> None
         if o.isdigit() and c.isdigit() and int(c) < int(o):
             report.error("closing_ranks.csv", line, "closing_rank is below opening_rank")
 
+    # Hindi translations point at real entries and fields that exist for that type
+    targets = {"career": ("careers.csv", "career_id", {"name", "description"}),
+               "exam": ("entrance_exams.csv", "exam_id", {"name", "purpose"}),
+               "stage": ("education_stages.csv", "stage_id", {"name"}),
+               "skill": ("skills.csv", "skill_id", {"name", "description"})}
+    for line, row in enumerate(tables.get("translations_hi.csv", []), start=2):
+        target = targets.get(row.get("entity_type", ""))
+        if target is None:
+            continue
+        file, column, fields = target
+        if row.get("entity_id") not in {r.get(column) for r in tables.get(file, [])}:
+            report.error("translations_hi.csv", line, f"unknown {row['entity_type']} '{row.get('entity_id')}'")
+        if row.get("field") not in fields:
+            report.error("translations_hi.csv", line, f"field '{row.get('field')}' cannot be translated for {row['entity_type']}")
+
     # Exact exam dates: end on/after start, and only from the exam's own official site
     exam_hosts = {r["exam_id"]: urlparse(r.get("official_url", "")).hostname or "" for r in tables.get("entrance_exams.csv", [])}
     for line, row in enumerate(tables.get("exam_dates.csv", []), start=2):

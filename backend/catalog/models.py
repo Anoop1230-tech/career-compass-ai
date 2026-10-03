@@ -308,6 +308,19 @@ class SalaryRange(Base):
     last_verified: Mapped[date] = mapped_column(Date)
 
 
+class Translation(Base):
+    """Hindi text for one field of a catalog entry (status "draft" until a native speaker reviews it)."""
+
+    __tablename__ = "translations"
+
+    entity_type: Mapped[str] = mapped_column(String(20), primary_key=True)
+    entity_id: Mapped[str] = mapped_column(String(40), primary_key=True)
+    field: Mapped[str] = mapped_column(String(20), primary_key=True)
+    lang: Mapped[str] = mapped_column(String(5), primary_key=True, default="hi")
+    text: Mapped[str] = mapped_column(Text)
+    status: Mapped[str] = mapped_column(String(10), default="draft")
+
+
 class ExamDate(Base):
     """An exact date published by the exam organiser (registration, admit card, exam, result)."""
 

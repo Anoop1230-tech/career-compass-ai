@@ -34,7 +34,7 @@ Status key: ✅ done · 🔨 in progress · ⬜ not started
 | 26 | College predictor | Likely / borderline / unlikely colleges from published closing ranks | ✅ |
 | 27 | Exam reminders | Follow exams, email reminders, calendar file, "coming up" on the dashboard | ✅ |
 | 28 | Résumé upload | Read skills from a PDF résumé; user confirms before saving | ✅ |
-| 29 | Hindi content | Careers, exams, skills and the mentor in Hindi (fallback to English) | ⬜ |
+| 29 | Hindi content | Careers, exams, skills and the mentor in Hindi (fallback to English) | ✅ (draft Hindi, needs native review) |
 | 30 | Feedback-tuned weights | Propose scoring-weight changes from real "does this fit you?" answers | ⬜ |
 
 ---
@@ -457,3 +457,15 @@ Known limits: exact dates exist for GATE only; other exams show the usual month.
 Result: 409 backend tests, 147 frontend unit tests, 140 browser tests passing; lint 0 warnings; build OK.
 
 Known limits: only skills already in the catalog are found; scanned résumés need OCR, which is not included; levels default to Beginner for the user to adjust.
+
+## Phase 29 - Hindi content - ✅ done (draft, needs native-speaker review)
+- 29.1 Data: `datasets/translations_hi.csv` (213 rows, every row `status=draft`): Hindi names and descriptions for all 79 careers, the purpose of all 24 exams and the names of 31 education stages. The validator checks that each row points to a real entry and to a field that exists for its type. Table `translations` (migration `0009`), cached with the catalog
+- 29.2 Language: the frontend sends `Accept-Language` with the chosen language (axios interceptor), and `useRequest` reloads when the language changes. `services/lang.py` picks `hi` or `en`; `Localizer` falls back to English field by field. Localised endpoints: catalog careers (list, search matches Hindi names too, detail), stages, exams, Resources exams, and recommendations
+- 29.3 Mentor (`engine/mentor_hi.py`): Hindi questions are mapped onto the intents the router already understands (Hindi keywords, Hindi career names, a few everyday words such as वकील, डॉक्टर, नर्स; short words such as या only as whole words). Greeting, need-profile, fallback and career-info replies, career links and follow-up suggestions are in Hindi. The optional language-model rewrite is skipped for Hindi
+- 29.4 Tests: 11 backend (language header, Hindi plus fallback in catalog, search, exams, stages, recommendations, mentor), 1 unit (request header), 1 browser (career page and search in Hindi)
+
+Result: validator 0 errors; 420 backend tests, 148 frontend unit tests, 142 browser tests passing; lint 0 warnings; build OK.
+
+Review needed: all Hindi catalog and mentor wording is a machine-written draft and must be checked by a native Hindi speaker before it is shown as final. Mark reviewed rows `status=reviewed`.
+
+Known limits: skill names stay English (most are technical terms); eligibility text, roadmaps, project briefs, colleges and scholarships stay English; data-heavy mentor replies (next steps, roadmaps, exams, colleges, comparisons) still use English templates around Hindi or English names.

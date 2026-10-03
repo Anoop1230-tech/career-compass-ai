@@ -27,3 +27,15 @@ describe("getErrorMessage", () => {
     expect(getErrorMessage(undefined)).toMatch(/Cannot reach the server/);
   });
 });
+
+describe("content language header", () => {
+  it("sends Accept-Language with the chosen language", async () => {
+    const { default: client, setContentLanguage } = await import("./api");
+    const run = (config) => client.interceptors.request.handlers.filter(Boolean)
+      .reduce((c, h) => h.fulfilled(c), config);
+    setContentLanguage("hi");
+    expect(run({ headers: {} }).headers["Accept-Language"]).toBe("hi");
+    setContentLanguage("en");
+    expect(run({ headers: {} }).headers["Accept-Language"]).toBe("en");
+  });
+});

@@ -26,6 +26,7 @@ from catalog.schemas import (
     TransitionOut,
 )
 from database import get_db
+from services.lang import Localizer, request_lang
 
 router = APIRouter(prefix="/catalog", tags=["catalog"])
 
@@ -41,10 +42,21 @@ def _matches(query: str | None, *fields) -> bool:
 
 
 @router.get("/stages", response_model=list[StageOut])
-def list_stages(level: str | None = Query(default=None, max_length=20), db: Session = Depends(get_db)):
+def list_stages(level: str | None = Query(default=None, max_length=20), db: Session = Depends(get_db),
+                lang: str = Depends(request_lang)):
     stages = db.scalars(select(Stage)).all()
     stages = [s for s in stages if level is None or s.level == level]
-    return sorted(stages, key=lambda s: (LEVEL_ORDER.index(s.level) if s.level in LEVEL_ORDER else 99, s.name))
+    stages = sorted(stages, key=lambda s: (LEVEL_ORDER.index(s.level) if s.level in LEVEL_ORDER else 99, s.name))
+    return _stages_out(stages, Localizer(db, lang))
+
+
+def _stages_out(stages, tr: Localizer) -> list[StageOut]:
+    out = []
+    for s in stages:
+        item = StageOut.model_validate(s)
+        item.name = tr("stage", s.stage_id, "name", item.name)
+        out.append(item)
+    return out
 
 
 @router.get("/skills", response_model=list[SkillOut])
@@ -79,21 +91,26 @@ def list_careers(
     limit: int = Query(default=50, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
     db: Session = Depends(get_db),
+    lang: str = Depends(request_lang),
 ):
+    tr = Localizer(db, lang)
     careers = db.scalars(select(Career).order_by(Career.name)).all()
     domains = sorted({c.domain for c in careers})
     filtered = [
         c for c in careers
         if (domain is None or c.domain == domain)
         and (stage is None or stage in c.typical_stage_ids)
-        and _matches(q, c.name, c.domain, c.sub_domain, c.description)
+        and _matches(q, c.name, c.domain, c.sub_domain, c.description,
+                     tr("career", c.career_id, "name", None), tr("career", c.career_id, "description", None))
     ]
-    items = [CareerSummary.model_validate(c) for c in filtered[offset : offset + limit]]
+    items = [CareerSummary.model_validate(tr.career(CareerSummary.model_validate(c).model_dump()))
+             for c in filtered[offset : offset + limit]]
     return CareerList(total=len(filtered), items=items, domains=domains)
 
 
 @router.get("/careers/{career_id}", response_model=CareerDetail)
-def career_detail(career_id: str, db: Session = Depends(get_db)):
+def career_detail(career_id: str, db: Session = Depends(get_db), lang: str = Depends(request_lang)):
+    tr = Localizer(db, lang)
     career = db.scalar(
         select(Career)
         .where(Career.career_id == career_id)
@@ -112,7 +129,7 @@ def career_detail(career_id: str, db: Session = Depends(get_db)):
         EntryPath(
             path_id=p.path_id,
             from_stage_id=p.from_stage_id,
-            from_stage_name=stages[p.from_stage_id].name,
+            from_stage_name=tr("stage", p.from_stage_id, "name", stages[p.from_stage_id].name),
             required_exams=[ExamSummary.model_validate(exams[e]) for e in p.required_exam_ids if e in exams],
             eligibility_summary=p.eligibility_summary,
             advantages=p.advantages,
@@ -130,7 +147,7 @@ def career_detail(career_id: str, db: Session = Depends(get_db)):
     def link(path: CareerPath, other_id: str) -> CareerLink:
         return CareerLink(
             career_id=other_id,
-            name=names.get(other_id, other_id),
+            name=tr("career", other_id, "name", names.get(other_id, other_id)),
             transition_type=path.transition_type,
             typical_years_experience=path.typical_years_experience,
             notes=path.notes,
@@ -173,8 +190,8 @@ def career_detail(career_id: str, db: Session = Depends(get_db)):
     ]
 
     return CareerDetail(
-        **CareerSummary.model_validate(career).model_dump(),
-        typical_stages=[StageOut.model_validate(stages[s]) for s in career.typical_stage_ids if s in stages],
+        **tr.career(CareerSummary.model_validate(career).model_dump()),
+        typical_stages=_stages_out([stages[s] for s in career.typical_stage_ids if s in stages], tr),
         riasec_codes=career.riasec_codes,
         key_aptitudes=career.key_aptitudes,
         personality_fit=career.personality_fit,
@@ -199,19 +216,27 @@ def list_exams(
     level: str | None = Query(default=None, max_length=30),
     stage: str | None = Query(default=None, max_length=40, description="Exams open to this stage"),
     db: Session = Depends(get_db),
+    lang: str = Depends(request_lang),
 ):
+    tr = Localizer(db, lang)
     exams = db.scalars(select(Exam).order_by(Exam.name)).all()
     return [
-        e for e in exams
+        _exam_out(e, tr) for e in exams
         if (level is None or e.exam_level == level)
         and (stage is None or stage in e.eligible_stage_ids)
-        and _matches(q, e.name, e.full_name, e.purpose, e.conducting_body)
+        and _matches(q, e.name, e.full_name, e.purpose, e.conducting_body, tr("exam", e.exam_id, "purpose", None))
     ]
 
 
+def _exam_out(e: Exam, tr: Localizer) -> ExamOut:
+    item = ExamOut.model_validate(e)
+    item.purpose = tr("exam", e.exam_id, "purpose", item.purpose)
+    return item
+
+
 @router.get("/exams/{exam_id}", response_model=ExamOut)
-def exam_detail(exam_id: str, db: Session = Depends(get_db)):
+def exam_detail(exam_id: str, db: Session = Depends(get_db), lang: str = Depends(request_lang)):
     exam = db.get(Exam, exam_id)
     if exam is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Exam not found.")
-    return exam
+    return _exam_out(exam, Localizer(db, lang))
