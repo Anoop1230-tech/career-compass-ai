@@ -39,6 +39,7 @@ from catalog.models import (
     SalaryRange,
     ExamDate,
     Translation,
+    ExamSyllabus,
     ClosingRank,
     Scholarship,
     Skill,
@@ -52,7 +53,7 @@ logger = logging.getLogger("career_compass.seed")
 
 # Delete children before parents (foreign keys)
 DELETE_ORDER = [
-    SalaryRange, ClosingRank, ExamDate, Translation, CareerSkill, EducationPath, CareerPath, CareerTransition, Exam, Career, Skill, Stage,
+    SalaryRange, ClosingRank, ExamDate, Translation, ExamSyllabus, CareerSkill, EducationPath, CareerPath, CareerTransition, Exam, Career, Skill, Stage,
     InterestQuestion, PersonalityQuestion, AptitudeQuestion, College, Scholarship, University,
     Course, Certification, ProjectIdea,
 ]
@@ -227,6 +228,9 @@ def build_objects(tables: dict[str, list[dict[str, str]]]) -> list:
             source_name=r["source_name"], source_url=r["source_url"], as_of=day(r["as_of"]),
             last_verified=day(r["last_verified"]),
         ))
+    for r in tables["exam_syllabus.csv"]:
+        objects.append(ExamSyllabus(exam_id=r["exam_id"], syllabus_url=r["syllabus_url"], format=r["format"],
+                                    sections=split_ids(r["sections"]), last_verified=day(r["last_verified"])))
     for r in tables["translations_hi.csv"]:
         objects.append(Translation(entity_type=r["entity_type"], entity_id=r["entity_id"], field=r["field"], lang="hi",
                                    text=r["text_hi"], status=r["status"]))

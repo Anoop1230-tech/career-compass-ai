@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from catalog.models import College, Exam, Scholarship, Stage, University
+from catalog.models import College, Exam, Scholarship, Stage, University, ExamSyllabus
 from database import get_db
 from services.lang import Localizer, request_lang
 from engine.catalog_data import get_catalog
@@ -70,12 +70,15 @@ def exams(
     tr = Localizer(db, lang)
     stage, note = _stage(stage, for_me, user, db)
     stages = {s.stage_id: tr("stage", s.stage_id, "name", s.name) for s in db.scalars(select(Stage))}
+    syllabi = {s.exam_id: {"url": s.syllabus_url, "format": s.format, "sections": s.sections,
+                           "last_verified": s.last_verified.isoformat()} for s in db.scalars(select(ExamSyllabus))}
     items = [
         {"exam_id": e.exam_id, "name": e.name, "full_name": e.full_name, "conducting_body": e.conducting_body,
          "exam_level": e.exam_level, "purpose": tr("exam", e.exam_id, "purpose", e.purpose), "eligibility_summary": e.eligibility_summary,
          "eligible_stages": [stages.get(s, s) for s in e.eligible_stage_ids], "age_limit_note": e.age_limit_note,
          "frequency": e.frequency, "typical_month": e.typical_month, "official_url": e.official_url,
-         "verified": e.verified, "last_verified": e.last_verified.isoformat()}
+         "verified": e.verified, "last_verified": e.last_verified.isoformat(),
+         "syllabus": syllabi.get(e.exam_id)}
         for e in db.scalars(select(Exam).order_by(Exam.name))
         if (level is None or e.exam_level == level) and (stage is None or stage in e.eligible_stage_ids)
         and _text(q, e.name, e.full_name, e.purpose, e.conducting_body)

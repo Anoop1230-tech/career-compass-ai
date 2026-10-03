@@ -301,6 +301,17 @@ SPECS: dict[str, FileSpec] = {
             enums={"entity_type": {"career", "exam", "stage", "skill"}, "status": {"draft", "reviewed"},
                    "field": {"name", "description", "purpose"}},
         ),
+        # Link to the official syllabus of an exam (page or PDF), with the section names read from it
+        FileSpec(
+            "exam_syllabus.csv",
+            ("exam_id", "syllabus_url", "format", "sections", "last_verified"),
+            id_column="exam_id",
+            required=("exam_id", "syllabus_url", "format", "last_verified"),
+            enums={"format": {"page", "pdf"}},
+            foreign_keys={"exam_id": "entrance_exams.csv"},
+            dates=("last_verified",),
+            urls=("syllabus_url",),
+        ),
         # Exact dates published by the exam organiser (only where officially announced)
         FileSpec(
             "exam_dates.csv",

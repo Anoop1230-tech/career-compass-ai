@@ -1653,3 +1653,9 @@ label.roadmap-item__title { cursor: pointer; }
 /* Official pay on career pages */
 .pay-list { display: grid; gap: var(--space-3); }
 .pay-list li { overflow-wrap: anywhere; }
+
+/* Exam syllabus (Resources > Exams) */
+.syllabus { margin: var(--space-3) 0; }
+.syllabus__panel { margin-top: var(--space-3); padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
+.syllabus__panel p + p, .syllabus__panel ul + p { margin-top: var(--space-2); }

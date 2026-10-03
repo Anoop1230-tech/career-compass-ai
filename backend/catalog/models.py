@@ -308,6 +308,18 @@ class SalaryRange(Base):
     last_verified: Mapped[date] = mapped_column(Date)
 
 
+class ExamSyllabus(Base):
+    """Official syllabus link for one exam; `sections` are the paper/section names read from that source."""
+
+    __tablename__ = "exam_syllabus"
+
+    exam_id: Mapped[str] = mapped_column(ForeignKey("exams.exam_id"), primary_key=True)
+    syllabus_url: Mapped[str] = mapped_column(String(400))
+    format: Mapped[str] = mapped_column(String(10))
+    sections: Mapped[list] = mapped_column(JSON, default=list)
+    last_verified: Mapped[date] = mapped_column(Date)
+
+
 class Translation(Base):
     """Hindi text for one field of a catalog entry (status "draft" until a native speaker reviews it)."""
 

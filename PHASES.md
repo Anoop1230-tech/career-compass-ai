@@ -479,3 +479,12 @@ Known limits: skill names stay English (most are technical terms); eligibility t
 Result: 425 backend tests passing. No frontend changes (148 unit and 142 browser tests from Phase 29 still apply).
 
 Known limits: signals are recomputed from today's profile, which may differ from what the user saw when answering; AUC on a few dozen answers is noisy, which is why there is a minimum sample and a minimum gain. The dev database has 0 answers today, so no proposal exists yet.
+
+## Extra - Exam syllabus button - ✅ done
+- `datasets/exam_syllabus.csv` (migration `0010`): official syllabus link for 11 of the 24 exams, each fetched and checked on 2026-10-04 (JEE Main 2026 PDF, NEET UG 2026, CUET UG 2026, CUET PG 2026, NIMCET 2026, GATE 2027, UGC NET, GRE, TOEFL iBT, IELTS Academic, AIBE XXI). Section names are stored only where they were confirmed in that official text (JEE Main, GATE, UGC NET, GRE, TOEFL, IELTS)
+- Every exam card on Exams & Colleges has a "Syllabus" button (`aria-expanded`) that opens the sections and the full official syllabus (page or PDF). For the 13 exams without a verified syllabus link (CAT, JEE Advanced, UPSC CSE, NDA, CDS, SSC CGL, IBPS PO, CLAT, AILET, NEET PG, GPAT, AFCAT, Agniveer) it says the syllabus is in the official notification and links to the official site. English and Hindi
+- Tests: 1 backend, 1 unit, 1 browser. The Report unit test now waits for the page title (it failed twice under full-suite load)
+
+Result: 426 backend, 149 unit, 144 browser tests passing; lint 0 warnings; build OK.
+
+Known limits: syllabus links change every exam cycle and need re-checking; topic-level syllabus text is not copied into the site, only section names and the official link. Missing links can be added when the organisers publish them (UPSC's syllabus is inside each exam notice; SSC's and the armed forces' sites block automated reading).

@@ -24,6 +24,42 @@ function Checked({ date }) {
   return <span className="muted small">{t("res.lastChecked", { date })}</span>;
 }
 
+/** "Syllabus" button: shows the sections read from the official syllabus and links to the full one. */
+function Syllabus({ e }) {
+  const { t } = useI18n();
+  const [open, setOpen] = useState(false);
+  const s = e.syllabus;
+  const id = `syl-${e.exam_id}`;
+  return (
+    <div className="syllabus">
+      <button type="button" className="btn btn--secondary btn--small" aria-expanded={open} aria-controls={id}
+        onClick={() => setOpen((v) => !v)}>
+        {t("syl.button")}<span className="visually-hidden"> {e.name}</span>
+      </button>
+      {open && (
+        <div id={id} className="syllabus__panel small" role="region" aria-label={t("syl.region", { name: e.name })}>
+          {s ? (
+            <>
+              {s.sections.length > 0 && (
+                <>
+                  <p><strong>{t("syl.sections")}</strong></p>
+                  <ul className="plain-list">{s.sections.map((x) => <li key={x}>{x}</li>)}</ul>
+                </>
+              )}
+              <p>
+                <OfficialLink href={s.url}>{s.format === "pdf" ? t("syl.openPdf") : t("syl.openPage")}</OfficialLink>
+              </p>
+              <p className="muted">{t("syl.checked", { date: s.last_verified })}</p>
+            </>
+          ) : (
+            <p>{t("syl.inNotice")} <OfficialLink href={e.official_url}>{t("res.official")}</OfficialLink></p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ExamCard({ e, follow }) {
   const { t, tOr } = useI18n();
   const following = follow?.ids.has(e.exam_id);
@@ -40,6 +76,7 @@ function ExamCard({ e, follow }) {
         {e.typical_month && (<><dt>{t("res.when")}</dt><dd>{e.typical_month}{e.frequency ? ` · ${e.frequency}` : ""}</dd></>)}
         {e.age_limit_note && (<><dt>{t("res.ageLimit")}</dt><dd>{e.age_limit_note}</dd></>)}
       </dl>
+      <Syllabus e={e} />
       <div className="option-card__foot small">
         <VerifiedBadge verified={e.verified} date={e.last_verified} />
         <OfficialLink href={e.official_url}>{t("res.official")}</OfficialLink>

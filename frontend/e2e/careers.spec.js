@@ -141,3 +141,14 @@ test("college predictor: a top JEE Advanced rank lists IIT Bombay CSE as likely"
   await page.reload();
   await expect(page.getByRole("row", { name: /Indian Institute of Technology Bombay/ })).toBeVisible();
 });
+
+test("exam cards have a Syllabus button with the official syllabus", async ({ page }) => {
+  await page.goto("/resources?tab=exams&q=JEE Main");
+  const btn = page.getByRole("button", { name: "Syllabus JEE Main" });
+  await btn.click();
+  const panel = page.getByRole("region", { name: "Syllabus for JEE Main" });
+  await expect(panel.getByText("Paper 1 (B.E./B.Tech.): Physics")).toBeVisible();
+  await expect(panel.getByRole("link", { name: /Full official syllabus \(PDF\)/ })).toHaveAttribute("href", /s3waas\.gov\.in\/.*\.pdf$/);
+  await btn.click();
+  await expect(panel).toBeHidden();
+});

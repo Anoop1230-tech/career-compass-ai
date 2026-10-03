@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import * as api from "../services/api";
@@ -33,7 +33,8 @@ describe("Report page", () => {
     expect(screen.getByText("78/100")).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 2, name: "Roadmap to my target: Data Scientist" })).toBeInTheDocument();
     expect(screen.getByText(/2 of 6 skills learned · 0 of 2 projects finished/)).toBeInTheDocument();
-    expect(document.title).toContain("Asha Verma");
+    // The title is set in an effect, which can land just after the first render under load
+    await waitFor(() => expect(document.title).toContain("Asha Verma"));
 
     await userEvent.click(screen.getByRole("button", { name: "Print or save as PDF" }));
     expect(print).toHaveBeenCalled();
