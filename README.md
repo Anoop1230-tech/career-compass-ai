@@ -2,6 +2,10 @@
 
 Personalized career guidance and roadmap platform: "Given my current education, skills, interests, experience and goals, what can I do next?"
 
+Live: https://career-compass-fpgo.onrender.com (Render free plan: the first visit after 15 idle minutes takes about a minute to wake up). Privacy policy: [/privacy](https://career-compass-fpgo.onrender.com/privacy).
+
+Features: profile and three self-assessments, explained career recommendations, skill gap, roadmaps with official course links, dream-career check, career tree, compare careers, printable report, career mentor chat, JoSAA college predictor, exam reminders (calendar file and email), résumé skill import, English and Hindi, sign in with Google.
+
 - [WORKFLOW.md](WORKFLOW.md): architecture and user/data workflow
 - [PHASES.md](PHASES.md): build plan and progress
 - [docs/DATA_REQUIREMENTS.md](docs/DATA_REQUIREMENTS.md): dataset design
@@ -77,6 +81,7 @@ Loading is safe: invalid data changes nothing, the load is all-or-nothing, and u
 - `backend/.env` must contain a long random `SECRET_KEY` (see `.env.example`). The app refuses to start in production without one.
 - Login/register are rate limited (10 attempts per minute per IP by default; behind a proxy set `TRUSTED_PROXY_HOPS` so the real visitor IP is used). After 5 failed logins in 15 minutes an account is paused, from any IP.
 - Logging out, changing or resetting the password signs the account out on every device (old tokens stop working at once).
+- Sign in with Google (optional): server-side OpenID Connect code flow with PKCE, no Google script in the page. Shown only when `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are set; register `{APP_BASE_URL}/api/auth/google/callback` as the redirect URI of a "Web application" OAuth client in Google Cloud. Signing in with the email of an existing password account links it, signs out its other sessions and retires the old password.
 - "Forgot password?" emails a one-time link valid for 30 minutes (only a hash is stored). Without `SMTP_HOST`, development prints the link in the server log.
 - Tests use their own temporary databases; browser tests use ports 8001/5174, so your dev data and running servers are never touched.
 
@@ -89,6 +94,9 @@ Loading is safe: invalid data changes nothing, the load is all-or-nothing, and u
 | POST | /api/auth/login | no | Log in |
 | POST | /api/auth/logout | no | Log out (on every device) |
 | GET | /api/auth/me | yes | Current user |
+| GET | /api/auth/google/status | no | Whether "Continue with Google" is available |
+| GET | /api/auth/google/login?next= | no | Redirect to Google's account chooser |
+| GET | /api/auth/google/callback | no | Google returns here; logs in and redirects into the app |
 | POST | /api/auth/change-password | yes | Change password (other devices are signed out) |
 | POST | /api/auth/password-reset/request | no | Email a reset link (same answer for any email) |
 | POST | /api/auth/password-reset/confirm | no | Set a new password with the emailed token |
@@ -122,7 +130,22 @@ Loading is safe: invalid data changes nothing, the load is all-or-nothing, and u
 | POST | /api/mentor/chat | yes | Ask the career mentor (30 per minute) |
 | DELETE | /api/mentor/history | yes | Delete your conversation |
 | GET | /api/next-steps?stage= | optional | Next steps from a stage (profile stage when logged in) |
+| GET | /api/compare?ids=&stage= | optional | Compare 2 or 3 careers side by side |
+| GET | /api/report | yes | Your full guidance report (printable) |
+| GET | /api/predictor?exam=&rank=&seat_type=&female=&program= | no | College chances from last year's official JoSAA closing ranks |
+| GET | /api/reminders | yes | Followed exams and upcoming official dates |
+| GET | /api/reminders/calendar.ics | yes | The same dates as a calendar file |
+| PUT / DELETE | /api/reminders/{exam_id} | yes | Follow or unfollow an exam |
+| POST | /api/resume/skills | yes | Find skills in a résumé PDF (max 2 MB, not stored) |
 
 `kind` is `interest`, `personality` or `aptitude`. Assessment results are for self-reflection and career guidance, not clinical or professional psychological assessments.
 
+Send `Accept-Language: hi` to get catalog text, recommendations and mentor replies in Hindi (draft translations, falling back to English).
+
 Full interactive docs: http://localhost:8000/docs
+
+## Deployment
+
+Production runs on Render from `main` (every push redeploys): one Docker web service (`Dockerfile`: builds the frontend, then serves it and the API from FastAPI) and a Render PostgreSQL database. On start the container runs migrations and loads the datasets. Environment variables: `ENVIRONMENT=production`, `SECRET_KEY`, `DATABASE_URL`, `APP_BASE_URL`, `TRUSTED_PROXY_HOPS=1`, optionally `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` and `SMTP_*` for emails. Details: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+
+Free-plan limits: the database expires on 2 November 2026 unless upgraded (or moved, e.g. to Neon), and the exam reminder email job (`python -m services.reminders`) needs a paid cron job.
