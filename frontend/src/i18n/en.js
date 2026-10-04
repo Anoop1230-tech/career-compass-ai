@@ -1055,7 +1055,7 @@ export default {
   "privacy.updated": "Last updated: 5 October 2026",
   "privacy.intro": "Career Compass AI gives career guidance to students and working people in India. This page explains, in plain words, what we keep about you, why, and what you can do about it.",
   "privacy.collect.title": "What we collect",
-  "privacy.collect.body": "Account: your email address. If you use a password, only a secure hash of it is stored, never the password itself.\nSign in with Google: we receive only your email address and Google's account ID for you. We never see your Google password, contacts, files or anything else.\nProfile: what you type in, such as your name, age, city, education, skills, interests, goals and preferences.\nActivity: your test answers and results, roadmap progress, mentor chat messages, \"did this fit you?\" answers and the exams you follow.",
+  "privacy.collect.body": "Account: your email address. If you use a password, only a secure hash of it is stored, never the password itself.\nSign in with Google: we receive only your email address, the name on your Google account (used to fill in your profile) and Google's account ID for you. We never see your Google password, contacts, files or anything else.\nProfile: what you type in, such as your name, age, city, education, skills, interests, goals and preferences.\nActivity: your test answers and results, roadmap progress, mentor chat messages, \"did this fit you?\" answers and the exams you follow.",
   "privacy.resume.title": "Résumé uploads",
   "privacy.resume.body": "When you upload a résumé, the PDF is read once to find skills and is then thrown away. It is not stored. Only the skills you confirm are added to your profile.",
   "privacy.use.title": "How we use it",
@@ -1073,4 +1073,8 @@ export default {
   "privacy.changes.title": "Changes to this policy",
   "privacy.changes.body": "If we change what we collect or how we use it, we will update this page and the date at the top.",
   "privacy.contact": "Questions or requests:",
+  "profile.prefill.lead": "We filled in a few details for you. Please check them and change anything that's wrong:",
+  "profile.prefill.name.google": "Your name, from your Google account",
+  "profile.prefill.name.email": "Your name, from your email address",
+  "profile.prefill.institution": "Your college or university, from your email address (Education step)",
 };

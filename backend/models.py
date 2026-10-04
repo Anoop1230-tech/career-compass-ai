@@ -21,6 +21,8 @@ class User(Base):
     password_hash: Mapped[str] = mapped_column(String(255))
     # Google account id ("sub") once the user has signed in with Google
     google_sub: Mapped[str | None] = mapped_column(String(255), unique=True, index=True, nullable=True)
+    # Name on the Google account (refreshed at each Google sign-in); only used to pre-fill the profile
+    display_name: Mapped[str | None] = mapped_column(String(100), nullable=True)
     # Part of every login token. Increased on logout, password change and reset,
     # which makes every token issued before that moment invalid.
     token_version: Mapped[int] = mapped_column(Integer, default=0, server_default="0")

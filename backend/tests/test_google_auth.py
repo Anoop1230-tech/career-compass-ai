@@ -27,7 +27,7 @@ def google(monkeypatch):
     def post(url, data, timeout):
         fake["calls"].append({"url": url, **data})
         claims = {"iss": "https://accounts.google.com", "aud": CLIENT_ID, "sub": "g-123",
-                  "email": "Asha@Gmail.com", "email_verified": True, "exp": int(time.time()) + 3600,
+                  "email": "Asha@Gmail.com", "email_verified": True, "name": "Asha  Verma", "exp": int(time.time()) + 3600,
                   **fake["claims"]}
         token = jwt.encode(claims, "google-signs-this", algorithm="HS256")
         return httpx.Response(fake["status"], json={"id_token": token, "access_token": "x"})
@@ -61,7 +61,7 @@ def test_login_redirects_to_google_with_pkce_and_state_cookie(client, google):
     query = parse_qs(location.query)
     assert query["client_id"] == [CLIENT_ID]
     assert query["redirect_uri"] == [f"{settings.APP_BASE_URL}/api/auth/google/callback"]
-    assert query["scope"] == ["openid email"]
+    assert query["scope"] == ["openid email profile"]
     assert query["code_challenge_method"] == ["S256"]
     cookie = response.headers["set-cookie"].lower()
     assert "cc_google_oauth" in cookie and "httponly" in cookie and "path=/api/auth/google" in cookie
@@ -145,3 +145,8 @@ def test_bad_id_tokens_are_refused(client, google, claims, error):
 def test_token_endpoint_error_is_handled(client, google):
     google["status"] = 400
     assert finish(client, start(client)["state"][0]).headers["location"] == "/login?error=google_failed"
+
+
+def test_google_name_prefills_the_profile_hints(client, google):
+    finish(client, start(client)["state"][0])
+    assert client.get("/api/profile/hints").json()["full_name"] == {"value": "Asha Verma", "source": "google"}

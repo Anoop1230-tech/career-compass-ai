@@ -157,3 +157,34 @@ describe("Profile summary", () => {
     expect(screen.getByLabelText(/Full name/)).toHaveValue("Asha Verma");
   });
 });
+
+describe("Profile form pre-fill", () => {
+  beforeEach(() => mockApi({ loggedIn: true }));
+
+  it("fills the name from Google for a new profile and says so", async () => {
+    vi.spyOn(api, "getProfileHints").mockResolvedValue({
+      full_name: { value: "Asha Verma", source: "google" },
+      institution: { value: "Indian Institute of Technology Bombay", source: "email" },
+    });
+    renderApp("/profile/edit");
+    expect(await screen.findByLabelText(/Full name/)).toHaveValue("Asha Verma");
+    const note = screen.getByText(/We filled in a few details/).closest(".notice");
+    expect(note).toHaveTextContent("Your name, from your Google account");
+    expect(note).toHaveTextContent("Your college or university, from your email address");
+  });
+
+  it("never overwrites an existing profile", async () => {
+    vi.spyOn(api, "getProfile").mockResolvedValue({ ...SAVED, full_name: "Asha V" });
+    const hints = vi.spyOn(api, "getProfileHints").mockResolvedValue({ full_name: { value: "Someone Else", source: "google" } });
+    renderApp("/profile/edit");
+    expect(await screen.findByLabelText(/Full name/)).toHaveValue("Asha V");
+    expect(hints).not.toHaveBeenCalled();
+    expect(screen.queryByText(/We filled in a few details/)).not.toBeInTheDocument();
+  });
+
+  it("still opens the form if hints fail", async () => {
+    vi.spyOn(api, "getProfileHints").mockRejectedValue(httpError(500, {}));
+    renderApp("/profile/edit");
+    expect(await screen.findByLabelText(/Full name/)).toHaveValue("");
+  });
+});

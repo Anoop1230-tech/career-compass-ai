@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 import profile_options as opt
 from database import get_db
+from engine.profile_hints import profile_hints
 from models import Profile, User
 from schemas import ProfileIn, ProfileOut
 from services.auth import get_current_user
@@ -28,6 +29,13 @@ def profile_options():
         "goals": opt.as_json(opt.GOALS),
         "work_modes": opt.as_json(opt.WORK_MODES),
     }
+
+
+@router.get("/profile/hints")
+def get_profile_hints(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    """Values to pre-fill a new profile: name (Google account or a clear first.last email)
+    and institution (email domain = an official college/university website)."""
+    return profile_hints(db, user)
 
 
 @router.get("/profile", response_model=ProfileOut)

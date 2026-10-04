@@ -42,6 +42,7 @@ export function mockApi({ loggedIn = false, user = USER, profile = null } = {}) 
     profile ? Promise.resolve(profile) : Promise.reject(httpError(404, { detail: "No profile" })),
   );
   vi.spyOn(api, "logoutUser").mockResolvedValue();
+  vi.spyOn(api, "getProfileHints").mockResolvedValue({});
   vi.spyOn(api, "getGoogleStatus").mockResolvedValue({ enabled: false }); // tests turn it on when needed
   // Dashboard data: no tests taken, no target career yet (tests can override)
   vi.spyOn(api, "getAssessments").mockResolvedValue([]);

@@ -521,3 +521,15 @@ Known limits: syllabus links change every exam cycle and need re-checking; topic
   LLM provider or SMTP is turned on.
 - Contact: the owner's email. Account deletion is on request (there is no delete-account button yet).
 - English and draft Hindi text; 3 unit tests.
+
+## Extra - Profile pre-fill from email / Google
+
+- New profiles start with what can be told for sure (`engine/profile_hints.py`, `GET /api/profile/hints`):
+  - Name: from the Google account (scope now `openid email profile`; stored in `users.display_name`,
+    migration `0012`, refreshed at each Google sign-in), else from a clear `first.last` email
+    (2-3 alphabetic parts; `kumaranoop849250@` gives nothing).
+  - College / university: only when the email domain is the same site as an official website in
+    `colleges.csv` / `universities.csv` (e.g. `@cse.iitb.ac.in` gives IIT Bombay); ambiguous = nothing.
+- The form shows a note listing what was filled and from where; existing profiles are never changed;
+  if hints fail the form opens empty. Privacy page updated (Google name).
+- Tests: `test_profile_hints.py` (19), 1 Google test, 3 form tests.

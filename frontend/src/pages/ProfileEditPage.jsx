@@ -45,6 +45,7 @@ export default function ProfileEditPage() {
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [attempt, setAttempt] = useState(0);
+  const [prefilled, setPrefilled] = useState([]); // translation keys of what was filled in for the user
 
   // Load choice lists and the existing profile (404 = new profile)
   useEffect(() => {
@@ -56,10 +57,25 @@ export default function ProfileEditPage() {
         throw err;
       }),
     ])
-      .then(([opts, profile]) => {
+      .then(async ([opts, profile]) => {
+        let state = toFormState(profile);
+        const filled = [];
+        if (!profile) {
+          // New profile: fill what we can tell from the email / Google account (never blocks the form)
+          const hints = await api.getProfileHints().catch(() => ({}));
+          if (hints?.full_name?.value && !state.full_name) {
+            state = setIn(state, "full_name", hints.full_name.value);
+            filled.push(`profile.prefill.name.${hints.full_name.source === "google" ? "google" : "email"}`);
+          }
+          if (hints?.institution?.value && !state.education.institution) {
+            state = setIn(state, "education.institution", hints.institution.value);
+            filled.push("profile.prefill.institution");
+          }
+        }
         if (!active) return;
         setOptions(opts);
-        setForm(toFormState(profile));
+        setForm(state);
+        setPrefilled(filled);
         setIsNew(!profile);
         setLoadState({ status: "ready", error: "" });
       })
@@ -203,6 +219,15 @@ export default function ProfileEditPage() {
             ))}
           </ol>
         </nav>
+
+        {prefilled.length > 0 && step === 0 && (
+          <div className="notice" role="status" style={{ marginBottom: "var(--space-5)" }}>
+            <p style={{ margin: 0 }}>{t("profile.prefill.lead")}</p>
+            <ul style={{ margin: "var(--space-2) 0 0" }}>
+              {prefilled.map((key) => <li key={key}>{t(key)}</li>)}
+            </ul>
+          </div>
+        )}
 
         {formError && (
           <div className="notice notice--danger" role="alert" style={{ marginBottom: "var(--space-5)" }}>

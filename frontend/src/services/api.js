@@ -88,6 +88,8 @@ export const confirmPasswordReset = async (token, newPassword) => {
 // ---- profile
 export const getProfileOptions = async () => (await api.get("/profile/options")).data;
 export const getProfile = async () => (await api.get("/profile")).data;
+// Pre-fill for a new profile: { full_name?: {value, source}, institution?: {value, source} }
+export const getProfileHints = async () => (await api.get("/profile/hints")).data;
 export const saveProfile = async (profile) => (await api.put("/profile", profile)).data;
 export const deleteProfile = async () => {
   await api.delete("/profile");

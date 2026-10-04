@@ -98,7 +98,7 @@ def google_login(next_path: str = Query("", alias="next", max_length=300)):
         "client_id": settings.GOOGLE_CLIENT_ID,
         "redirect_uri": redirect_uri(),
         "response_type": "code",
-        "scope": "openid email",
+        "scope": "openid email profile",  # profile = name, used to pre-fill the profile form
         "state": state,
         "code_challenge": _pkce_challenge(verifier),
         "code_challenge_method": "S256",
@@ -164,6 +164,8 @@ def find_or_create_user(db: Session, claims: dict) -> User:
     if len(email) > 254:
         raise GoogleSignInError("failed", "email too long")
 
+    name = " ".join(str(claims.get("name") or "").split())[:100] or None
+
     user = db.scalar(select(User).where(User.google_sub == sub))
     if user is None:
         user = db.scalar(select(User).where(User.email == email))
@@ -182,6 +184,8 @@ def find_or_create_user(db: Session, claims: dict) -> User:
             revoke_sessions(user)
         else:
             raise GoogleSignInError("conflict", "email already linked to another Google account")
+    if name and len(name) >= 2:
+        user.display_name = name
     try:
         db.commit()
     except IntegrityError as exc:  # the same Google account signing in twice at the same moment
