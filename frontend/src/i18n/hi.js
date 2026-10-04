@@ -1043,4 +1043,11 @@ export default {
   "syl.openPdf": "पूरा आधिकारिक सिलेबस (PDF)",
   "syl.openPage": "पूरा आधिकारिक सिलेबस",
   "syl.checked": "लिंक {date} को जाँचा गया। आयोजक हर साल सिलेबस बदल सकते हैं।",
+  "auth.google.continue": "Google से जारी रखें",
+  "auth.google.or": "या अपना ईमेल इस्तेमाल करें",
+  "auth.google.error.cancelled": "Google से साइन-इन रद्द कर दिया गया। फिर से कोशिश करें या अपना ईमेल इस्तेमाल करें।",
+  "auth.google.error.expired": "Google साइन-इन में बहुत समय लगा या वह बीच में रुक गया। कृपया फिर से कोशिश करें।",
+  "auth.google.error.unverified": "Google ने उस खाते का ईमेल सत्यापित नहीं किया है, इसलिए हम उससे साइन-इन नहीं कर सकते।",
+  "auth.google.error.conflict": "यह ईमेल पहले से किसी दूसरे Google खाते से जुड़ा है।",
+  "auth.google.error.failed": "हम आपको Google से साइन-इन नहीं कर पाए। कृपया फिर से कोशिश करें या अपना ईमेल इस्तेमाल करें।",
 };

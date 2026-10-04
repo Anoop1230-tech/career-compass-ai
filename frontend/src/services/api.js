@@ -73,6 +73,10 @@ export const logoutUser = async () => {
   await api.post("/auth/logout");
 };
 export const getCurrentUser = async () => (await api.get("/auth/me")).data;
+// Sign in with Google is a full-page redirect (server-side OAuth), not an XHR call
+export const getGoogleStatus = async () => (await api.get("/auth/google/status")).data;
+export const googleLoginUrl = (next) =>
+  `${api.defaults.baseURL}/auth/google/login${next ? `?next=${encodeURIComponent(next)}` : ""}`;
 export const changePassword = async (currentPassword, newPassword) =>
   (await api.post("/auth/change-password", { current_password: currentPassword, new_password: newPassword })).data;
 export const requestPasswordReset = async (email) =>

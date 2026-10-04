@@ -494,3 +494,18 @@ Known limits: syllabus links change every exam cycle and need re-checking; topic
 - Checked against current official documents on 2026-10-04 and marked verified: JEE Main (2026 information bulletin: no age limit; Class 12 passed in 2024/2025 or appearing in 2026; two sessions), NEET UG (2026 bulletin: at least 17 by 31 December, no upper age limit; exam held 3 May 2026), GATE (2027 eligibility page: 3rd year or higher of any UG degree, or a completed approved degree)
 - Exam dates confirmed on the official site, eligibility not re-checked (still unverified): CLAT 2027 on 6 December 2026, CUET UG 2026 from 11 May 2026
 - Not yet checked: CAT (its site needs JavaScript), UPSC CSE and NDA (their notices are not reachable from upsconline/upsc.gov.in pages by script; news sites were not used as sources), and the remaining exams
+
+## Extra - Sign in with Google
+
+- "Continue with Google" on the Log in and Create account pages. Server-side OpenID Connect
+  authorization-code flow with PKCE (`routes/google_auth.py`): `/api/auth/google/login` redirects to
+  Google, `/api/auth/google/callback` swaps the code for the ID token directly with Google, checks
+  audience, issuer, expiry and `email_verified`, then sets the normal session cookie.
+- State and PKCE verifier live in a signed, httpOnly, 10-minute cookie limited to `/api/auth/google`.
+  `next` only accepts paths on this site. No Google script in the browser, so the CSP is unchanged.
+- New column `users.google_sub` (migration `0011`). A Google sign-in with the email of an existing
+  password account links it, signs out its other sessions and retires the old password (sign-up never
+  proved email ownership, so this blocks pre-registered account takeover).
+- Off unless `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are set; `/api/auth/google/status` tells the
+  page whether to show the button. Redirect URI to register: `{APP_BASE_URL}/api/auth/google/callback`.
+- Tests: `tests/test_google_auth.py` (13), 3 AuthPage unit tests. Hindi strings are drafts.

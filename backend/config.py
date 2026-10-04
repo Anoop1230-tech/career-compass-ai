@@ -45,6 +45,11 @@ class Settings:
     # Reset emails per address per hour (stops using the form to spam someone)
     PASSWORD_RESET_RATE_LIMIT: int = int(os.getenv("PASSWORD_RESET_RATE_LIMIT", "3"))
 
+    # Sign in with Google (OAuth client of type "Web application" in Google Cloud).
+    # Redirect URI to register there: {APP_BASE_URL}/api/auth/google/callback. Both empty = button hidden.
+    GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID", "").strip()
+    GOOGLE_CLIENT_SECRET: str = os.getenv("GOOGLE_CLIENT_SECRET", "").strip()
+
     # Outgoing email (password reset). Without SMTP_HOST, development logs the link instead.
     SMTP_HOST: str = os.getenv("SMTP_HOST", "")
     SMTP_PORT: int = int(os.getenv("SMTP_PORT", "587"))

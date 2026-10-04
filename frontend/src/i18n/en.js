@@ -1043,4 +1043,11 @@ export default {
   "syl.openPdf": "Full official syllabus (PDF)",
   "syl.openPage": "Full official syllabus",
   "syl.checked": "Link checked on {date}. The organiser may update the syllabus each year.",
+  "auth.google.continue": "Continue with Google",
+  "auth.google.or": "or use your email",
+  "auth.google.error.cancelled": "Google sign-in was cancelled. You can try again or use your email.",
+  "auth.google.error.expired": "That Google sign-in took too long or was interrupted. Please try again.",
+  "auth.google.error.unverified": "Google hasn't verified the email on that account, so we can't use it to sign you in.",
+  "auth.google.error.conflict": "This email is already linked to a different Google account.",
+  "auth.google.error.failed": "We couldn't sign you in with Google. Please try again or use your email.",
 };

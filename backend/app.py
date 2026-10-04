@@ -17,7 +17,7 @@ from services.frontend import mount_frontend
 from services.messages import message_code, validation_code
 from services.security import SecurityHeadersMiddleware
 from routes import (
-    assessments, auth, catalog, compare, explore, health, mentor, next_steps, predictor, profile, recommendations, reminders, report, resume, resources, roadmap,
+    assessments, auth, catalog, compare, explore, google_auth, health, mentor, next_steps, predictor, profile, recommendations, reminders, report, resume, resources, roadmap,
     skill_gap, transitions,
 )
 
@@ -110,6 +110,7 @@ async def unhandled_error_handler(request: Request, exc: Exception):
 # All routes live under /api so the frontend and API paths never collide
 app.include_router(health.router, prefix="/api")
 app.include_router(auth.router, prefix="/api")
+app.include_router(google_auth.router, prefix="/api")
 app.include_router(profile.router, prefix="/api")
 app.include_router(catalog.router, prefix="/api")
 app.include_router(assessments.router, prefix="/api")

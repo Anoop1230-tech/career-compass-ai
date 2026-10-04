@@ -114,3 +114,27 @@ describe("Logged in", () => {
     expect(await screen.findByRole("heading", { name: "Log in" })).toBeInTheDocument();
   });
 });
+
+describe("Continue with Google", () => {
+  beforeEach(() => mockApi());
+
+  it("hides Continue with Google when the server has no Google client", async () => {
+    renderApp("/login");
+    await screen.findByRole("button", { name: "Log in" });
+    await waitFor(() => expect(api.getGoogleStatus).toHaveBeenCalled());
+    expect(screen.queryByRole("link", { name: "Continue with Google" })).not.toBeInTheDocument();
+  });
+
+  it("shows Continue with Google on login and register, linking to the server redirect", async () => {
+    vi.spyOn(api, "getGoogleStatus").mockResolvedValue({ enabled: true });
+    renderApp("/login");
+    expect(await screen.findByRole("link", { name: "Continue with Google" })).toHaveAttribute("href", "/api/auth/google/login");
+  });
+
+  it("explains a failed Google sign-in sent back by the server", async () => {
+    vi.spyOn(api, "getGoogleStatus").mockResolvedValue({ enabled: true });
+    renderApp("/login?error=google_cancelled");
+    expect(await screen.findByRole("alert")).toHaveTextContent("Google sign-in was cancelled");
+    expect(await screen.findByRole("link", { name: "Continue with Google" })).toBeInTheDocument();
+  });
+});

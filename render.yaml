@@ -37,6 +37,11 @@ services:
         sync: false
       - key: SMTP_HOST
         sync: false
+      # Sign in with Google (redirect URI: <APP_BASE_URL>/api/auth/google/callback)
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
       - key: SMTP_USER
         sync: false
       - key: SMTP_PASSWORD
