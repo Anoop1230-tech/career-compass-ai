@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage";
 // Lazy loading: other pages download only when first opened,
 // so the first visit stays small and fast.
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
+const PrivacyPage = lazy(() => import("./pages/PrivacyPage"));
 const AuthPage = lazy(() => import("./pages/AuthPage"));
 const DashboardPage = lazy(() => import("./pages/DashboardPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
@@ -61,7 +62,8 @@ export default function AppRoutes() {
         <Route path="/report" element={<ProtectedRoute><ReportPage /></ProtectedRoute>} />
         <Route path="/skill-gap" element={<ProtectedRoute><SkillGapPage /></ProtectedRoute>} />
         <Route path="/for-you" element={<ProtectedRoute><RecommendationsPage /></ProtectedRoute>} />
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
   );

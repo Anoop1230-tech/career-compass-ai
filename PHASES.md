@@ -509,3 +509,15 @@ Known limits: syllabus links change every exam cycle and need re-checking; topic
 - Off unless `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are set; `/api/auth/google/status` tells the
   page whether to show the button. Redirect URI to register: `{APP_BASE_URL}/api/auth/google/callback`.
 - Tests: `tests/test_google_auth.py` (13), 3 AuthPage unit tests. Hindi strings are drafts.
+
+## Extra - Privacy policy page
+
+- Public page `/privacy` (`PrivacyPage.jsx`), linked from the footer on every page; needed so the
+  Google OAuth consent screen can be published for all users.
+- States only what the code does: email (+ Argon2 hash or Google account id), profile fields, test results,
+  roadmap progress, mentor messages, feedback, followed exams; résumé PDFs are read once and not stored;
+  one httpOnly login cookie plus the 10-minute Google state cookie; no analytics or ad cookies; hosted on
+  Render (Singapore); mentor replies are made on our server (no LLM configured). Update the page if an
+  LLM provider or SMTP is turned on.
+- Contact: the owner's email. Account deletion is on request (there is no delete-account button yet).
+- English and draft Hindi text; 3 unit tests.

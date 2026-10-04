@@ -992,6 +992,10 @@ img, svg { display: block; max-width: 100%; }
   font-size: var(--text-sm);
   color: var(--color-muted);
 }
+.legal { max-width: 760px; padding-block: var(--space-6) var(--space-8); }
+.legal h2 { margin-top: var(--space-6); font-size: 1.2rem; }
+.legal ul { padding-left: var(--space-5); }
+.legal li { margin-bottom: var(--space-2); }
 .footer__inner {
   display: flex;
   flex-wrap: wrap;
