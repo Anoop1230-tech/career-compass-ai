@@ -117,16 +117,16 @@
 
 /* ---------- Dark theme: deep blue night, same warm accents ---------- */
 :root[data-theme="dark"] {
-  --color-bg: #0f131c;
-  --color-surface: #151b28;
-  --color-card: #1a2130;
-  --color-sidebar: #121824;
+  --color-bg: #19202e;
+  --color-surface: #212a3b;
+  --color-card: #263042;
+  --color-sidebar: #1c2433;
   --color-link-blue: #6ab0ff;
   --color-link-blue-hover: #8ec4ff;
-  --color-border: #2a3345;
-  --color-border-strong: #44506a;
-  --color-text: #e7eaf2;
-  --color-muted: #9ea7bb;
+  --color-border: #38435a;
+  --color-border-strong: #52607d;
+  --color-text: #e9ecf4;
+  --color-muted: #a8b1c5;
   --color-accent: #7cc4a4;
   --color-accent-hover: #9ad6ba;
   --color-accent-soft: #1f3a30;
@@ -139,7 +139,7 @@
   --color-danger: #f59a90;
   --color-warning: #e8bf66;
   --color-on-accent: #0e211a;
-  --color-card-hover: #202a3c;
+  --color-card-hover: #2d3850;
   --color-overlay: rgba(0, 0, 0, 0.55);
   --color-success-soft: #173326;
   --color-success-line: #2f5e45;
