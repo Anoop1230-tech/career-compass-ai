@@ -36,7 +36,7 @@ function EventCard({ e }) {
   return (
     <article className="card resource-card" aria-labelledby={`u-${e.key}`}>
       <div className="option-card__head">
-        <h3 id={`u-${e.key}`} className="option-card__title">
+        <h3 id={`u-${e.key}`} className="option-card__title exam-link">
           <OfficialLink href={e.source_url || e.official_url}>{e.exam_name}</OfficialLink>
         </h3>
         <span className="badge">{e.label}</span>

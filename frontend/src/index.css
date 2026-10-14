@@ -17,6 +17,8 @@
   --color-muted: #5d574e;
   --color-accent: #1f5c4a;        /* ink green: primary actions, links, active */
   --color-accent-hover: #174a3b;
+  --color-link-blue: #1a66c9;     /* blue used for linked exam names */
+  --color-link-blue-hover: #0f4ea3;
   --color-accent-soft: #e4ede7;
   --color-accent-line: #bcd3c6;
   --color-highlight: #a94c22;     /* terracotta: small emphasis */
@@ -119,6 +121,8 @@
   --color-surface: #182019;
   --color-card: #1c2521;
   --color-sidebar: #151c19;
+  --color-link-blue: #6ab0ff;
+  --color-link-blue-hover: #8ec4ff;
   --color-border: #2c3833;
   --color-border-strong: #45534c;
   --color-text: #ece7de;
@@ -280,6 +284,10 @@ a {
   transition: color var(--transition);
 }
 a:hover { color: var(--color-accent-hover); }
+
+/* Linked exam names on the Upcoming Exams page: blue, so they read as clickable */
+.exam-link a { color: var(--color-link-blue); }
+.exam-link a:hover { color: var(--color-link-blue-hover); }
 
 ::selection { background: var(--color-accent-soft); color: var(--color-text); }
 
