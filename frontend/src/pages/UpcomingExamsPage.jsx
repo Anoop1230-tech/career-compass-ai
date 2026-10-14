@@ -36,7 +36,9 @@ function EventCard({ e }) {
   return (
     <article className="card resource-card" aria-labelledby={`u-${e.key}`}>
       <div className="option-card__head">
-        <h3 id={`u-${e.key}`} className="option-card__title">{e.exam_name}</h3>
+        <h3 id={`u-${e.key}`} className="option-card__title">
+          <OfficialLink href={e.source_url || e.official_url}>{e.exam_name}</OfficialLink>
+        </h3>
         <span className="badge">{e.label}</span>
       </div>
       <p className="muted small">{e.conducting_body} · {tOr(`res.level.${e.exam_level}`, e.exam_level)}{e.exam_scope ? ` · ${tOr(`scope.${e.exam_scope}`, e.exam_scope)}` : ""}</p>
@@ -50,11 +52,11 @@ function EventCard({ e }) {
         </dd>
         {e.purpose && (<><dt>{t("upcoming.about")}</dt><dd>{e.purpose}</dd></>)}
       </dl>
-      <div className="option-card__foot small">
-        <OfficialLink href={e.source_url || e.official_url}>
-          {e.can_apply ? t("upcoming.apply") : t("res.official")}
-        </OfficialLink>
-      </div>
+      {e.can_apply && (
+        <div className="option-card__foot small">
+          <OfficialLink href={e.source_url || e.official_url}>{t("upcoming.apply")}</OfficialLink>
+        </div>
+      )}
     </article>
   );
 }
