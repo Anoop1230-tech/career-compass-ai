@@ -57,6 +57,9 @@ class Settings:
     SMTP_PASSWORD: str = os.getenv("SMTP_PASSWORD", "")
     SMTP_FROM: str = os.getenv("SMTP_FROM", "Career Compass AI <no-reply@localhost>")
     SMTP_STARTTLS: bool = os.getenv("SMTP_STARTTLS", "true").lower() == "true"
+    # Built-in daily exam-reminder email job (runs inside the web server; no separate cron needed).
+    # It only sends when SMTP_HOST is set. Off in tests.
+    REMINDER_JOB: bool = os.getenv("REMINDER_JOB", "true").lower() == "true"
 
     # Serve the built frontend (frontend/dist) from this server. On by default in production.
     SERVE_FRONTEND: bool = os.getenv("SERVE_FRONTEND", "").lower() == "true" or (

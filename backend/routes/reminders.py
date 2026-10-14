@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from database import get_db
 from engine.catalog_data import get_catalog
-from engine.reminders import exam_events, ics, serialize
+from engine.reminders import REMIND_DAYS, due, exam_events, ics, serialize
 from models import ExamFollow, User
 from services.auth import get_current_user
 
@@ -43,6 +43,16 @@ def _events(db: Session, user: User, today: date) -> tuple[list[dict], list[dict
 def list_reminders(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     exams, events = _events(db, user, date.today())
     return {"exams": exams, "events": [serialize(e) for e in events]}
+
+
+@router.get("/alerts")
+def alerts(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    """In-app alerts: events of followed exams starting within REMIND_DAYS (works without email)."""
+    today = date.today()
+    _, events = _events(db, user, today)
+    soon = due(events, today, set())
+    return {"days": REMIND_DAYS, "count": len(soon),
+            "events": [{**serialize(e), "days_left": max((e["start"] - today).days, 0)} for e in soon]}
 
 
 @router.get("/calendar.ics")

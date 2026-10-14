@@ -142,6 +142,7 @@ export const checkTransition = async (params, signal) =>
   (await api.get("/transitions/check", { params, signal })).data;
 export const predictColleges = async (params, signal) => (await api.get("/predictor", { params, signal })).data;
 export const getReminders = async () => (await api.get("/reminders")).data;
+export const getAlerts = async (signal) => (await api.get("/reminders/alerts", { signal })).data;
 export const followExam = async (examId, email = true) =>
   (await api.put(`/reminders/${encodeURIComponent(examId)}`, { email })).data;
 export const unfollowExam = async (examId) => { await api.delete(`/reminders/${encodeURIComponent(examId)}`); };

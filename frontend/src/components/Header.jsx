@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useI18n } from "../i18n";
 import { NAV_GROUPS, navLabel } from "../navigation";
+import * as api from "../services/api";
 import Icon from "./Icon";
 import LanguagePicker from "./LanguagePicker";
 import ThemePicker from "./ThemePicker";
@@ -47,6 +48,15 @@ export default function Header() {
   }, [open]);
 
   const initial = (user?.email || "?").charAt(0).toUpperCase();
+
+  // In-app exam alerts: followed exams with an event in the next 14 days
+  const [alerts, setAlerts] = useState(null);
+  useEffect(() => {
+    if (status !== "authenticated") return undefined;
+    const controller = new AbortController();
+    api.getAlerts(controller.signal).then(setAlerts).catch(() => setAlerts(null));
+    return () => controller.abort();
+  }, [status, user?.id]);
 
   return (
     <header className="header">
@@ -115,6 +125,12 @@ export default function Header() {
                   {user.email}
                 </span>
               </div>
+              {alerts?.count > 0 && (
+                <NavLink to="/dashboard#coming-up-title" className="alert-link small">
+                  <span className="alert-link__count" aria-hidden="true">{alerts.count}</span>
+                  {t("rem.alerts", { n: alerts.count, days: alerts.days })}
+                </NavLink>
+              )}
               <div className="user-menu__buttons">
                 <NavLink to="/profile" className="btn btn--secondary btn--small">
                   <Icon name="user" size={16} />

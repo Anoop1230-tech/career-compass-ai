@@ -47,6 +47,7 @@ export function mockApi({ loggedIn = false, user = USER, profile = null } = {}) 
   // Dashboard data: no tests taken, no target career yet (tests can override)
   vi.spyOn(api, "getAssessments").mockResolvedValue([]);
   vi.spyOn(api, "getReminders").mockResolvedValue({ exams: [], events: [] });
+  vi.spyOn(api, "getAlerts").mockResolvedValue({ days: 14, count: 0, events: [] });
   vi.spyOn(api, "getMyRoadmap").mockRejectedValue(httpError(404, { detail: "No target" }));
 }
 

@@ -56,6 +56,38 @@ def run(db: Session, today: date | None = None, dry_run: bool = False) -> dict:
     return {"users": len(by_user), "sent": sent, "failed": failed}
 
 
+_last_run: date | None = None
+
+
+def run_if_due(today: date | None = None) -> dict | None:
+    """Run the job at most once per calendar day in this process. Sent events are remembered per follow,
+    so a restart (or two instances) never emails the same event twice."""
+    global _last_run
+    today = today or date.today()
+    if _last_run == today:
+        return None
+    _last_run = today
+    if not mailer.configured():
+        logger.info("Reminder job skipped: email is not configured (SMTP_HOST).")
+        return None
+    from database import SessionLocal
+    with SessionLocal() as db:
+        result = run(db, today)
+    logger.info("Reminder job: %s", result)
+    return result
+
+
+async def daily_loop(check_every_seconds: int = 3 * 3600) -> None:
+    """Background task started by the app: checks every few hours, sends once a day."""
+    import asyncio
+    while True:
+        try:
+            await asyncio.to_thread(run_if_due)
+        except Exception:  # never let the job crash the web server
+            logger.exception("Reminder job failed")
+        await asyncio.sleep(check_every_seconds)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--dry-run", action="store_true")

@@ -1,4 +1,5 @@
 """FastAPI application entry point."""
+import asyncio
 import logging
 from contextlib import asynccontextmanager
 
@@ -14,6 +15,7 @@ from config import settings
 from catalog.seed import auto_seed
 from database import SessionLocal, init_db, migrate
 from services.frontend import mount_frontend
+from services import reminders as reminder_job
 from services.messages import message_code, validation_code
 from services.security import SecurityHeadersMiddleware
 from routes import (
@@ -33,7 +35,12 @@ async def lifespan(_app: FastAPI):
     if settings.AUTO_SEED:
         with SessionLocal() as db:
             auto_seed(db)  # load reference data from datasets/ if it changed
+    job = None
+    if settings.REMINDER_JOB and settings.ENVIRONMENT != "test":
+        job = asyncio.create_task(reminder_job.daily_loop())  # exam reminder emails, once a day
     yield
+    if job:
+        job.cancel()
 
 
 app = FastAPI(

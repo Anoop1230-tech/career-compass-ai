@@ -1,5 +1,7 @@
-import { useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { ErrorNotice, Loading, OfficialLink } from "../components/Status";
+import { useAuth } from "../context/AuthContext";
 import useRequest from "../hooks/useRequest";
 import { useI18n } from "../i18n";
 import * as api from "../services/api";
@@ -28,8 +30,9 @@ function formatMonth(key, lang) {
 }
 
 /** One exam event: what it is, when, and where to apply. */
-function EventCard({ e }) {
+function EventCard({ e, follow }) {
   const { t, lang, tOr } = useI18n();
+  const following = follow?.ids.has(e.exam_id);
   const when = e.exact
     ? (e.start === e.end ? formatDay(e.start, lang) : `${formatDay(e.start, lang)} – ${formatDay(e.end, lang)}`)
     : t("upcoming.usuallyIn", { month: formatMonth(monthKey(e.start), lang) });
@@ -52,11 +55,17 @@ function EventCard({ e }) {
         </dd>
         {e.purpose && (<><dt>{t("upcoming.about")}</dt><dd>{e.purpose}</dd></>)}
       </dl>
-      {e.can_apply && (
-        <div className="option-card__foot small">
-          <OfficialLink href={e.source_url || e.official_url}>{t("upcoming.apply")}</OfficialLink>
-        </div>
-      )}
+      <div className="option-card__foot small btn-row" style={{ alignItems: "center" }}>
+        {e.can_apply && <OfficialLink href={e.source_url || e.official_url}>{t("upcoming.apply")}</OfficialLink>}
+        {follow ? (
+          <button type="button" className={following ? "btn btn--secondary btn--small" : "btn btn--primary btn--small"}
+            aria-pressed={following} disabled={follow.busy === e.exam_id} onClick={() => follow.toggle(e.exam_id, following)}>
+            {following ? t("rem.followingBtn") : t("upcoming.remindMe")}<span className="visually-hidden"> {e.exam_name}</span>
+          </button>
+        ) : (
+          <Link to="/login" className="small">{t("upcoming.loginToFollow")}</Link>
+        )}
+      </div>
     </article>
   );
 }
@@ -81,6 +90,42 @@ export default function UpcomingExamsPage() {
     (signal) => api.getUpcomingExams({ level, scope, days: days || undefined }, signal),
     [level, scope, days],
   );
+
+  // Followed exams (logged-in users): "Remind me" adds the exam to the dashboard and to alerts/emails
+  const { status: authStatus } = useAuth();
+  const [followed, setFollowed] = useState(new Set());
+  const [busy, setBusy] = useState(null);
+  const [followError, setFollowError] = useState(null);
+  useEffect(() => {
+    if (authStatus !== "authenticated") return undefined;
+    let active = true;
+    api.getReminders()
+      .then((r) => active && setFollowed(new Set(r.exams.map((x) => x.exam_id))))
+      .catch(() => {});
+    return () => { active = false; };
+  }, [authStatus]);
+  const follow = authStatus === "authenticated" ? {
+    ids: followed,
+    busy,
+    toggle: async (examId, isFollowing) => {
+      setBusy(examId);
+      setFollowError(null);
+      try {
+        if (isFollowing) await api.unfollowExam(examId);
+        else await api.followExam(examId, true);
+        setFollowed((prev) => {
+          const next = new Set(prev);
+          if (isFollowing) next.delete(examId);
+          else next.add(examId);
+          return next;
+        });
+      } catch (err) {
+        setFollowError(api.getErrorMessage(err));
+      } finally {
+        setBusy(null);
+      }
+    },
+  } : null;
 
   // Group the sorted events by calendar month for a Sarkari-Result-style timeline.
   const groups = [];
@@ -137,7 +182,9 @@ export default function UpcomingExamsPage() {
           <>
             <p className="small muted" role="status" style={{ margin: "var(--space-4) 0" }}>
               {list.data.total === 1 ? t("upcoming.oneResult") : t("upcoming.results", { n: list.data.total })}
+              {follow && <> · {t("upcoming.followHint")} <Link to="/dashboard">{t("upcoming.seeDashboard")}</Link></>}
             </p>
+            {followError && <p className="text-danger small" role="alert">{followError}</p>}
             {list.data.total === 0 ? (
               <p className="notice">{t("upcoming.none")}</p>
             ) : (
@@ -145,7 +192,7 @@ export default function UpcomingExamsPage() {
                 <div key={g.key} style={{ marginBottom: "var(--space-6)" }}>
                   <h2 className="h3" style={{ marginBottom: "var(--space-3)" }}>{formatMonth(g.key, lang)}</h2>
                   <div className="option-grid">
-                    {g.items.map((e) => <EventCard key={e.key} e={e} />)}
+                    {g.items.map((e) => <EventCard key={e.key} e={e} follow={follow} />)}
                   </div>
                 </div>
               ))

@@ -100,3 +100,35 @@ def test_reminder_job_sends_once_and_respects_opt_out(user, outbox):
         assert run(db, today=date(2026, 12, 26))["sent"] == 0  # already reminded
         assert run(db, today=date(2027, 1, 30))["sent"] == 1  # the exam itself
     assert len(outbox) == 2
+
+
+
+def test_alerts_show_followed_events_due_soon(user, monkeypatch):
+    import routes.reminders as r
+    monkeypatch.setattr(r, "date", SimpleNamespace(today=lambda: date(2027, 1, 25)))  # 12 days before GATE window
+    assert user.get("/api/reminders/alerts").json()["count"] == 0  # nothing followed yet
+    user.put("/api/reminders/EXM_GATE", json={"email": False})  # in-app alerts work without email
+    body = user.get("/api/reminders/alerts").json()
+    assert body["days"] == 14
+    gate = next(e for e in body["events"] if e["event"] == "exam")
+    assert gate["exam_id"] == "EXM_GATE" and gate["days_left"] == 12
+    assert all(0 <= e["days_left"] <= 14 for e in body["events"])
+    assert body["count"] == len(body["events"])
+
+
+def test_alerts_need_login(client):
+    assert client.get("/api/reminders/alerts").status_code == 401
+
+
+def test_daily_job_runs_once_per_day(monkeypatch):
+    import services.reminders as job
+    calls = []
+    monkeypatch.setattr(job, "_last_run", None)
+    monkeypatch.setattr(job.mailer, "configured", lambda: True)
+    monkeypatch.setattr(job, "run", lambda db, today: calls.append(today) or {"users": 0, "sent": 0, "failed": 0})
+    job.run_if_due(date(2026, 10, 15))
+    job.run_if_due(date(2026, 10, 15))
+    job.run_if_due(date(2026, 10, 16))
+    assert calls == [date(2026, 10, 15), date(2026, 10, 16)]
+    monkeypatch.setattr(job.mailer, "configured", lambda: False)
+    assert job.run_if_due(date(2026, 10, 17)) is None and len(calls) == 2  # no email set up: skipped
