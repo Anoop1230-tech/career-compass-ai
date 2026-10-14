@@ -2,10 +2,7 @@
 
 Security rules:
 - Everything requires login; users only see their own attempts and results.
-- Aptitude answers and explanations are never sent before submission.
-- Aptitude options are shuffled per attempt; the server keeps the mapping.
 """
-import random
 from dataclasses import asdict, is_dataclass
 from datetime import datetime, timedelta, timezone
 from typing import Literal
@@ -15,38 +12,27 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from catalog.models import AptitudeQuestion, InterestQuestion, PersonalityQuestion
+from catalog.models import InterestQuestion
 from database import get_db
 from models import AssessmentAttempt, AssessmentResult, User
 from services.auth import get_current_user
-from services.scoring import ScoringError, score_aptitude, score_interest, score_personality
+from services.scoring import ScoringError, score_interest
 
 router = APIRouter(prefix="/assessments", tags=["assessments"])
 
-Kind = Literal["interest", "personality", "aptitude"]
+Kind = Literal["interest"]
 ATTEMPT_TTL = timedelta(hours=24)  # an unfinished test can be resumed for a day
+
+# How many questions the interest test shows (a short, single test).
+INTEREST_QUESTION_COUNT = 10
 
 KINDS = {
     "interest": {
         "title": "Interest profile",
-        "description": "Which kinds of work you enjoy, using the RIASEC model.",
-        "minutes": 5,
+        "description": "A short test of which kinds of work you enjoy, using the RIASEC model.",
+        "minutes": 3,
         "model": InterestQuestion,
         "scale": "like",
-    },
-    "personality": {
-        "title": "Personality and work style",
-        "description": "How you usually think, feel and work with others.",
-        "minutes": 5,
-        "model": PersonalityQuestion,
-        "scale": "agree",
-    },
-    "aptitude": {
-        "title": "Aptitude quiz",
-        "description": "Numerical, logical, verbal, spatial and problem-solving questions.",
-        "minutes": 25,
-        "model": AptitudeQuestion,
-        "scale": "choice",
     },
 }
 
@@ -66,7 +52,35 @@ def _load_questions(db: Session, kind: str) -> list:
     questions = db.scalars(select(model).order_by(model.question_id)).all()
     if not questions:
         raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, "Questions are not loaded yet. Please try again shortly.")
+    if kind == "interest":
+        return _balanced_interest(list(questions), INTEREST_QUESTION_COUNT)
     return list(questions)
+
+
+def _balanced_interest(questions: list, limit: int) -> list:
+    """Pick `limit` interest questions spread evenly across the RIASEC types,
+    so a short test still measures every type. Deterministic (sorted by id)."""
+    if len(questions) <= limit:
+        return questions
+    by_type: dict[str, list] = {}
+    for q in questions:
+        by_type.setdefault(q.riasec_type, []).append(q)
+    chosen: list = []
+    round_index = 0
+    while len(chosen) < limit:
+        added = False
+        for riasec_type in sorted(by_type):
+            bucket = by_type[riasec_type]
+            if round_index < len(bucket):
+                chosen.append(bucket[round_index])
+                added = True
+                if len(chosen) == limit:
+                    break
+        if not added:
+            break
+        round_index += 1
+    # Stable order by question id for a predictable test
+    return sorted(chosen, key=lambda q: q.question_id)
 
 
 def _latest_result(db: Session, user_id: int, kind: str) -> AssessmentResult | None:
@@ -107,14 +121,13 @@ def _to_plain(value):
 def list_assessments(user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     items = []
     for kind, meta in KINDS.items():
-        model = meta["model"]
         latest = _latest_result(db, user.id, kind)
         items.append({
             "kind": kind,
             "title": meta["title"],
             "description": meta["description"],
             "minutes": meta["minutes"],
-            "question_count": db.query(model).count(),
+            "question_count": len(_load_questions(db, kind)),
             "completed_at": latest.created_at if latest else None,
             "in_progress": _open_attempt(db, user.id, kind) is not None,
         })
@@ -138,29 +151,12 @@ def start(kind: Kind, restart: bool = False, user: User = Depends(get_current_us
                 AssessmentAttempt.user_id == user.id, AssessmentAttempt.kind == kind,
                 AssessmentAttempt.submitted_at.is_(None))):
             db.delete(old)
-        order = list(questions)
-        option_map: dict = {}
-        if kind == "aptitude":
-            rng = random.SystemRandom()
-            rng.shuffle(order)
-            for qid in order:
-                originals = ["a", "b", "c", "d"]
-                rng.shuffle(originals)
-                option_map[qid] = dict(zip("abcd", originals))  # shown letter -> original letter
-        attempt = AssessmentAttempt(user_id=user.id, kind=kind, question_order=order, option_map=option_map)
+        attempt = AssessmentAttempt(user_id=user.id, kind=kind, question_order=list(questions), option_map={})
         db.add(attempt)
         db.commit()
         db.refresh(attempt)
 
-    items = []
-    for qid in attempt.question_order:
-        q = questions[qid]
-        item = {"question_id": qid, "text": q.text}
-        if kind == "aptitude":
-            mapping = attempt.option_map[qid]
-            item["category"] = q.category
-            item["options"] = [{"key": shown, "text": q.options[mapping[shown]]} for shown in "abcd"]
-        items.append(item)
+    items = [{"question_id": qid, "text": questions[qid].text} for qid in attempt.question_order]
 
     return {
         "attempt_id": attempt.id,
@@ -182,22 +178,11 @@ def submit(kind: Kind, data: SubmitRequest, user: User = Depends(get_current_use
     if datetime.now(timezone.utc) - _utc(attempt.created_at) >= ATTEMPT_TTL:
         raise HTTPException(status.HTTP_410_GONE, "This test session has expired. Please start again.")
 
-    questions = _load_questions(db, kind)
+    # Score only the questions this attempt actually showed (the short set)
+    by_id = {q.question_id: q for q in _load_questions(db, kind)}
+    questions = [by_id[qid] for qid in attempt.question_order if qid in by_id]
     try:
-        if kind == "aptitude":
-            answers = {}
-            for qid, shown in data.answers.items():
-                mapping = attempt.option_map.get(qid)
-                if mapping is None:
-                    raise ScoringError(f"Unknown question ids: ['{qid}']")
-                if shown is not None and shown not in mapping:
-                    raise ScoringError(f"Answer for {qid} must be a, b, c, d or empty")
-                answers[qid] = mapping[shown] if shown is not None else None  # back to original letters
-            result = score_aptitude(questions, answers)
-        elif kind == "interest":
-            result = score_interest(questions, data.answers)
-        else:
-            result = score_personality(questions, data.answers)
+        result = score_interest(questions, data.answers)
     except ScoringError as exc:
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, str(exc)) from exc
 
@@ -211,24 +196,7 @@ def submit(kind: Kind, data: SubmitRequest, user: User = Depends(get_current_use
 
 
 def _result_out(db: Session, record: AssessmentResult) -> dict:
-    out = {"kind": record.kind, "created_at": record.created_at, "result": dict(record.result)}
-    if record.kind == "aptitude":
-        # After submission it's safe to show the correct answers and explanations
-        by_id = {q.question_id: q for q in _load_questions(db, "aptitude")}
-        review = []
-        for d in record.result.get("details", []):
-            q = by_id.get(d["question_id"])
-            if q is None:
-                continue
-            review.append({
-                **d,
-                "text": q.text,
-                "category": q.category,
-                "options": [{"key": k, "text": q.options[k]} for k in "abcd"],
-                "explanation": q.explanation,
-            })
-        out["result"]["details"] = review
-    return out
+    return {"kind": record.kind, "created_at": record.created_at, "result": dict(record.result)}
 
 
 @router.get("/results")

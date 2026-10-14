@@ -183,9 +183,9 @@ def test_api_uses_assessment_results(api, make_user):
     before = client.get("/api/recommendations").json()["confidence"]["percent"]
     start = client.post("/api/assessments/interest/start").json()
     answers = {q["question_id"]: 5 for q in start["questions"]}
-    # Differentiated answers so the result is usable
+    # Differentiated answers so the result is usable (half high, half low)
     for i, q in enumerate(start["questions"]):
-        answers[q["question_id"]] = 5 if i < 12 else 1
+        answers[q["question_id"]] = 5 if i < len(start["questions"]) // 2 else 1
     assert client.post("/api/assessments/interest/submit",
                        json={"attempt_id": start["attempt_id"], "answers": answers}).status_code == 200
     after = client.get("/api/recommendations").json()
