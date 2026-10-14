@@ -226,10 +226,6 @@ def confidence(ctx: UserContext) -> dict:
     tips = []
     if ctx.riasec is None:
         tips.append({"key": "interest", "text": "Take the interest test", "link": "/assessments/interest"})
-    if ctx.aptitude is None:
-        tips.append({"key": "aptitude", "text": "Take the aptitude quiz", "link": "/assessments/aptitude"})
-    if ctx.personality is None:
-        tips.append({"key": "personality", "text": "Take the work-style test", "link": "/assessments/personality"})
     if not ctx.skills:
         tips.append({"key": "skills", "text": "Add your skills to your profile", "link": "/profile/edit"})
     if not ctx.stage.stage_id:

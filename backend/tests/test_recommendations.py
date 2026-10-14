@@ -142,7 +142,7 @@ def test_confidence_and_empty_profile(catalog):
                personality={"team_orientation": 50}, interests=["technology"])
     assert confidence(full) == {"percent": 100, "level": "high", "signals": {k: True for k in WEIGHTS}, "improve": []}
     tips = {t["key"] for t in confidence(ctx("EDU_BCA"))["improve"]}
-    assert tips == {"interest", "aptitude", "personality", "skills"}
+    assert tips == {"interest", "skills"}
 
 
 def test_domain_filter(catalog):
@@ -167,7 +167,8 @@ def test_api_returns_ranked_explained_list(api, make_user):
     assert scores == sorted(scores, reverse=True)
     assert body["stage"]["stage_id"] == "EDU_BTECH_CSE"
     assert body["confidence"]["level"] in {"low", "medium", "high"}
-    assert {t["key"] for t in body["confidence"]["improve"]} >= {"interest", "aptitude"}
+    tip_keys = {t["key"] for t in body["confidence"]["improve"]}
+    assert "interest" in tip_keys and not tip_keys & {"aptitude", "personality"}
     first = body["items"][0]
     assert len(first["components"]) == 6 and first["strengths"]
 
