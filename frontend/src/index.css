@@ -120,8 +120,8 @@
   --color-bg: #19202e;
   --color-surface: #212a3b;
   --color-card: #f5f7fb;
-  --color-card-text: #1a2130;
-  --color-card-muted: #5a6273;
+  --color-card-text: #10131a;
+  --color-card-muted: #4b5363;
   --color-card-border: #d4dae6;
   --color-sidebar: #1c2433;
   --color-link-blue: #6ab0ff;
@@ -207,6 +207,20 @@
 /* Links inside a light card: keep the blue so they read as clickable. */
 :root[data-theme="dark"] .card a:not(.btn) {
   color: var(--color-link-blue);
+}
+/* Everything else inside a light card reads as dark text. */
+:root[data-theme="dark"] .card p,
+:root[data-theme="dark"] .card li,
+:root[data-theme="dark"] .card span,
+:root[data-theme="dark"] .card strong,
+:root[data-theme="dark"] .card label {
+  color: var(--color-card-text);
+}
+/* A plain badge on a light card: light grey pill with dark text. */
+:root[data-theme="dark"] .card .badge {
+  background: #eef1f6;
+  border-color: var(--color-card-border);
+  color: var(--color-card-muted);
 }
 
 /* ---------- High contrast: black on white, strong borders, underlined links ---------- */
