@@ -17,7 +17,7 @@ from services.frontend import mount_frontend
 from services.messages import message_code, validation_code
 from services.security import SecurityHeadersMiddleware
 from routes import (
-    assessments, auth, catalog, compare, explore, google_auth, health, mentor, next_steps, predictor, profile, recommendations, reminders, report, resume, resources, roadmap,
+    assessments, auth, catalog, compare, exams, explore, google_auth, health, mentor, next_steps, predictor, profile, recommendations, reminders, report, resume, resources, roadmap,
     skill_gap, transitions,
 )
 
@@ -113,6 +113,7 @@ app.include_router(auth.router, prefix="/api")
 app.include_router(google_auth.router, prefix="/api")
 app.include_router(profile.router, prefix="/api")
 app.include_router(catalog.router, prefix="/api")
+app.include_router(exams.router, prefix="/api")
 app.include_router(assessments.router, prefix="/api")
 app.include_router(next_steps.router, prefix="/api")
 app.include_router(recommendations.router, prefix="/api")

@@ -29,6 +29,7 @@ const PredictorPage = lazy(() => import("./pages/PredictorPage"));
 const RoadmapPage = lazy(() => import("./pages/RoadmapPage"));
 const ExplorePage = lazy(() => import("./pages/ExplorePage"));
 const ResourcesPage = lazy(() => import("./pages/ResourcesPage"));
+const UpcomingExamsPage = lazy(() => import("./pages/UpcomingExamsPage"));
 const MentorPage = lazy(() => import("./pages/MentorPage"));
 const ForgotPasswordPage = lazy(() => import("./pages/PasswordResetPages").then((m) => ({ default: m.ForgotPasswordPage })));
 const ResetPasswordPage = lazy(() => import("./pages/PasswordResetPages").then((m) => ({ default: m.ResetPasswordPage })));
@@ -55,6 +56,7 @@ export default function AppRoutes() {
         <Route path="/roadmap" element={<RoadmapPage />} />
         <Route path="/explore" element={<ExplorePage />} />
         <Route path="/resources" element={<ResourcesPage />} />
+        <Route path="/upcoming-exams" element={<UpcomingExamsPage />} />
         <Route path="/mentor" element={<ProtectedRoute><MentorPage /></ProtectedRoute>} />
         <Route path="/dream-check" element={<DreamCheckPage />} />
         <Route path="/compare" element={<ComparePage />} />

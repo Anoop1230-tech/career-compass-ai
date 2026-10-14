@@ -107,6 +107,15 @@ export const getCareer = async (careerId) =>
   (await api.get(`/catalog/careers/${encodeURIComponent(careerId)}`)).data;
 export const getStages = async () => (await api.get("/catalog/stages")).data;
 
+// ---- upcoming exams (public: what's coming up next, with official apply links)
+export const getUpcomingExams = async ({ level, days, limit } = {}, signal) =>
+  (
+    await api.get("/exams/upcoming", {
+      params: { level: level || undefined, days: days || undefined, limit: limit || undefined },
+      signal,
+    })
+  ).data;
+
 // ---- assessments (login required)
 export const getAssessments = async () => (await api.get("/assessments")).data;
 export const startAssessment = async (kind, restart = false) =>
