@@ -192,3 +192,14 @@ def test_api_uses_assessment_results(api, make_user):
     after = client.get("/api/recommendations").json()
     assert after["confidence"]["percent"] > before
     assert after["items"][0]["components"][0]["available"] is True  # interest signal now used
+
+
+def test_quick_profile_minimal_fields_give_branch_results(api, make_user):
+    """The 60-second profile sends only name, stage, degree, branch and interests."""
+    client = make_user()
+    body = {"full_name": "Asha Verma", "current_stage": "ug_student",
+            "education": {"degree": "B.Tech", "branch": "Civil"}, "interests": ["engineering"]}
+    assert client.put("/api/profile", json=body).status_code in (200, 201)
+    rec = client.get("/api/recommendations?limit=10").json()
+    assert rec["stage"]["stage_id"] == "EDU_BTECH_CIVIL"
+    assert "CAR_CIVIL_ENGINEER" in {i["career_id"] for i in rec["items"]}

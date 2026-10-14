@@ -276,7 +276,7 @@ export default function NextStepsPage() {
                 <p><Link to="/login">{t("header.login")}</Link> {t("next.loginHint")}</p>
               )}
               {ctx.logged_in && !ctx.has_profile && (
-                <p><Link to="/profile/edit">{t("profile.create")}</Link> {t("next.profileHint")}</p>
+                <p><Link to="/profile/quick">{t("profile.create")}</Link> {t("next.profileHint")}</p>
               )}
               {ctx.has_profile && !ctx.stage_exact && ctx.source === "profile" && (
                 <p><Link to="/profile/edit">{t("next.updateEducation")}</Link> {t("next.closerMatch")}</p>

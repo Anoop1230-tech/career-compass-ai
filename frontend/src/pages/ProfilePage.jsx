@@ -62,7 +62,7 @@ export default function ProfilePage() {
       </div>
     );
   }
-  if (state.status === "empty") return <Navigate to="/profile/edit" replace />;
+  if (state.status === "empty") return <Navigate to="/profile/quick" replace />;
   if (state.status === "unauthorized") return <Navigate to="/login" replace state={{ from: "/profile" }} />;
   if (state.status === "error") {
     return (

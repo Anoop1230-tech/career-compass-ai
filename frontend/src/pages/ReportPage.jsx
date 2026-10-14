@@ -66,7 +66,7 @@ export default function ReportPage() {
         <p className="notice small no-print">{t("report.printHint")}</p>
 
         {!r.profile && (
-          <p className="notice">{t("report.noProfile")} <Link to="/profile/edit">{t("profile.create")}</Link></p>
+          <p className="notice">{t("report.noProfile")} <Link to="/profile/quick">{t("profile.create")}</Link></p>
         )}
 
         {r.profile && (

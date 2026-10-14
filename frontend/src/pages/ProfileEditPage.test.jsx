@@ -143,10 +143,10 @@ describe("Profile summary", () => {
     expect(screen.getByRole("link", { name: "Edit profile" })).toHaveAttribute("href", "/profile/edit");
   });
 
-  it("sends users without a profile to the form", async () => {
+  it("sends users without a profile to the quick form", async () => {
     mockApi({ loggedIn: true });
     renderApp("/profile");
-    expect(await screen.findByRole("heading", { name: "Create your profile" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Your profile in 60 seconds" })).toBeInTheDocument();
   });
 
   it("editing loads existing values", async () => {

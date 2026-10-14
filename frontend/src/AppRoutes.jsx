@@ -12,6 +12,7 @@ const PrivacyPage = lazy(() => import("./pages/PrivacyPage"));
 const AuthPage = lazy(() => import("./pages/AuthPage"));
 const DashboardPage = lazy(() => import("./pages/DashboardPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+const QuickProfilePage = lazy(() => import("./pages/QuickProfilePage"));
 const ProfileEditPage = lazy(() => import("./pages/ProfileEditPage"));
 const ResumePage = lazy(() => import("./pages/ResumePage"));
 const CareersPage = lazy(() => import("./pages/CareersPage"));
@@ -46,6 +47,7 @@ export default function AppRoutes() {
         <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
         <Route path="/profile/edit" element={<ProtectedRoute><ProfileEditPage /></ProtectedRoute>} />
+        <Route path="/profile/quick" element={<ProtectedRoute><QuickProfilePage /></ProtectedRoute>} />
         <Route path="/profile/resume" element={<ProtectedRoute><ResumePage /></ProtectedRoute>} />
         <Route path="/careers" element={<CareersPage />} />
         <Route path="/careers/:careerId" element={<CareerDetailPage />} />

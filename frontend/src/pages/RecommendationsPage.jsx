@@ -149,7 +149,7 @@ export default function RecommendationsPage() {
         <div className="page-center__box">
           <h1>{t("rec.profileFirst")}</h1>
           <p className="muted">{t("rec.profileFirst.text")}</p>
-          <Link to="/profile/edit" className="btn btn--primary">{t("profile.create")}</Link>
+          <Link to="/profile/quick" className="btn btn--primary">{t("profile.create")}</Link>
         </div>
       </section>
     );

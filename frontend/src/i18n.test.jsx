@@ -112,7 +112,7 @@ describe("Profile and dashboard in Hindi", () => {
     renderApp("/dashboard", { lang: "hi" });
     expect(await screen.findByText("अब यह करें")).toBeInTheDocument();
     expect(screen.getByText("4 में से 0 कदम पूरे")).toBeInTheDocument();
-    expect(screen.getAllByRole("link", { name: /प्रोफ़ाइल पूरी करें/ })[0]).toHaveAttribute("href", "/profile/edit");
+    expect(screen.getAllByRole("link", { name: /प्रोफ़ाइल पूरी करें/ })[0]).toHaveAttribute("href", "/profile/quick");
   });
 });
 

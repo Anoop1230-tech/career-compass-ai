@@ -11,7 +11,7 @@ import * as api from "../services/api";
 // loaded data. The FIRST unfinished step becomes "Do this next".
 // Texts: dash.step.<id>.title / .blurb / .cta in i18n/*.js
 const JOURNEY = [
-  { id: "profile", icon: "user", to: "/profile/edit", done: (d) => d.hasProfile },
+  { id: "profile", icon: "user", to: "/profile/quick", done: (d) => d.hasProfile },
   { id: "assessments", icon: "clipboard", to: "/assessments", done: (d) => d.assessmentsDone > 0 },
   { id: "recommendations", icon: "star", to: "/for-you", done: (d) => d.hasTarget },
   {

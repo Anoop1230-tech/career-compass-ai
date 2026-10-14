@@ -71,7 +71,7 @@ export default function AuthPage({ mode }) {
 
   // Already logged in: skip this page
   if (status === "authenticated" && !submitting) {
-    return <Navigate to={user?.has_profile ? "/dashboard" : "/profile/edit"} replace />;
+    return <Navigate to={user?.has_profile ? "/dashboard" : "/profile/quick"} replace />;
   }
 
   const fieldError = (name) => (errors[name] ? (local ? t(errors[name]) : errors[name]) : undefined);
@@ -88,7 +88,7 @@ export default function AuthPage({ mode }) {
     setSubmitting(true);
     try {
       const me = isRegister ? await register(email.trim(), password) : await login(email.trim(), password);
-      navigate(from && from !== "/login" ? from : me.has_profile ? "/dashboard" : "/profile/edit", { replace: true });
+      navigate(from && from !== "/login" ? from : me.has_profile ? "/dashboard" : "/profile/quick", { replace: true });
     } catch (error) {
       setErrors(getFieldErrors(error));
       setLocal(false);

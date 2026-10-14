@@ -27,7 +27,7 @@ describe("Dashboard", () => {
     expect(await screen.findByRole("heading", { level: 1, name: "Welcome" })).toBeInTheDocument();
     const next = await nextStep();
     expect(next).toHaveTextContent("Build your profile");
-    expect(within(next).getByRole("link", { name: /Complete profile/ })).toHaveAttribute("href", "/profile/edit");
+    expect(within(next).getByRole("link", { name: /Complete profile/ })).toHaveAttribute("href", "/profile/quick");
     expect(screen.getByText("0 of 4 steps done")).toBeInTheDocument();
   });
 

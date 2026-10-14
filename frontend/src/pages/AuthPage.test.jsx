@@ -38,7 +38,7 @@ describe("Login and register", () => {
     await user.click(screen.getByRole("button", { name: "Create account" }));
 
     expect(api.registerUser).toHaveBeenCalledWith("asha@example.com", "secret123");
-    expect(await screen.findByRole("heading", { name: "Create your profile" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Your profile in 60 seconds" })).toBeInTheDocument();
     expect(screen.getByText("asha@example.com")).toBeInTheDocument(); // header shows the user
   });
 
@@ -89,7 +89,7 @@ describe("Logged in", () => {
   it("logged-in users visiting /login are redirected", async () => {
     mockApi({ loggedIn: true });
     renderApp("/login");
-    expect(await screen.findByRole("heading", { name: "Create your profile" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Your profile in 60 seconds" })).toBeInTheDocument();
   });
 
   it("log out returns to home and shows Log in again", async () => {
