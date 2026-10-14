@@ -119,7 +119,10 @@
 :root[data-theme="dark"] {
   --color-bg: #19202e;
   --color-surface: #212a3b;
-  --color-card: #263042;
+  --color-card: #f5f7fb;
+  --color-card-text: #1a2130;
+  --color-card-muted: #5a6273;
+  --color-card-border: #d4dae6;
   --color-sidebar: #1c2433;
   --color-link-blue: #6ab0ff;
   --color-link-blue-hover: #8ec4ff;
@@ -139,7 +142,7 @@
   --color-danger: #f59a90;
   --color-warning: #e8bf66;
   --color-on-accent: #0e211a;
-  --color-card-hover: #2d3850;
+  --color-card-hover: #ffffff;
   --color-overlay: rgba(0, 0, 0, 0.55);
   --color-success-soft: #173326;
   --color-success-line: #2f5e45;
@@ -180,6 +183,30 @@
   --art-stars: 1;
 
   color-scheme: dark;
+}
+
+/* Dark theme: cards are light panels, so text inside them must be dark to stay readable. */
+:root[data-theme="dark"] .card {
+  color: var(--color-card-text);
+  border-color: var(--color-card-border);
+}
+:root[data-theme="dark"] .card .muted,
+:root[data-theme="dark"] .card .small.muted,
+:root[data-theme="dark"] .card dt,
+:root[data-theme="dark"] .card .career-card__title,
+:root[data-theme="dark"] .card .option-card__title {
+  color: var(--color-card-muted);
+}
+:root[data-theme="dark"] .card h1,
+:root[data-theme="dark"] .card h2,
+:root[data-theme="dark"] .card h3,
+:root[data-theme="dark"] .card h4,
+:root[data-theme="dark"] .card dd {
+  color: var(--color-card-text);
+}
+/* Links inside a light card: keep the blue so they read as clickable. */
+:root[data-theme="dark"] .card a:not(.btn) {
+  color: var(--color-link-blue);
 }
 
 /* ---------- High contrast: black on white, strong borders, underlined links ---------- */
