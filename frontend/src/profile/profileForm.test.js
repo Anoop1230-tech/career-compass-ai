@@ -107,6 +107,7 @@ it("maps server error fields to the right step", () => {
   expect(stepForField("skills.0.name")).toBe(2);
   expect(stepForField("experience.projects.1.link")).toBe(3);
   expect(stepForField("goals")).toBe(4);
-  expect(stepForField("preferences.leadership")).toBe(5);
+  // Preferences is no longer a wizard step, so its fields fall back to the first step
+  expect(stepForField("preferences.leadership")).toBe(0);
   expect(stepForField("something_else")).toBe(0);
 });

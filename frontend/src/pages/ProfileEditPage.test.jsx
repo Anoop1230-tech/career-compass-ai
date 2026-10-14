@@ -74,7 +74,6 @@ describe("Profile form", () => {
 
     await user.click(screen.getByLabelText("Technology"));
     await user.click(screen.getByLabelText("Get a job"));
-    await user.click(screen.getByRole("button", { name: "Continue" }));
 
     await user.click(screen.getByRole("button", { name: "Save profile" }));
 

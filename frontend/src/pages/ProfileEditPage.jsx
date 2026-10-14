@@ -8,7 +8,6 @@ import {
   EducationStep,
   ExperienceStep,
   InterestsStep,
-  PreferencesStep,
   SkillsStep,
 } from "../profile/ProfileSteps";
 import * as api from "../services/api";
@@ -19,7 +18,6 @@ const STEP_COMPONENTS = {
   skills: SkillsStep,
   experience: ExperienceStep,
   interests: InterestsStep,
-  preferences: PreferencesStep,
 };
 
 /** Immutable update of a nested value: setIn(obj, "education.degree", "B.Tech") */

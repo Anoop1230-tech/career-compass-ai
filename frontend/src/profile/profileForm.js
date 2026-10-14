@@ -9,7 +9,6 @@ export const STEPS = [
   { id: "skills", fields: ["skills", "certifications"] },
   { id: "experience", fields: ["experience"] },
   { id: "interests", fields: ["interests", "goals"] },
-  { id: "preferences", fields: ["preferences"] },
 ];
 
 // Rating labels: profile.rating.<key>, profile.rating.<key>.low, profile.rating.<key>.high
