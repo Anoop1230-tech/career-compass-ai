@@ -122,4 +122,31 @@ describe("Next steps page", () => {
     await userEvent.click(screen.getByRole("button", { name: "Try again" }));
     expect(await screen.findByRole("heading", { level: 2, name: "B.Tech – Computer Science" })).toBeInTheDocument();
   });
+
+  it("shows one B.Tech card with every branch under it", async () => {
+    mockApi({ loggedIn: true });
+    const branches = ["Computer Science", "Civil", "Electrical / Electrical and Electronics", "Mechanical", "Chemical",
+      "Mining", "Marine", "Textile"];
+    const btech = branches.map((b, i) => option({
+      path_id: `EP_9${i}`, target_id: `EDU_BTECH_B${i}`, title: `B.Tech – ${b}`, duration_years: 4,
+      eligibility: "Class 12 with PCM", advantages: `Good for ${b}`,
+      exams: [{ exam_id: "EXM_JEE_MAIN", name: "JEE Main", official_url: "https://jeemain.nta.nic.in/" }],
+    }));
+    const mba = option({ path_id: "EP_77", target_id: "EDU_MBA", title: "MBA", exams: [] });
+    vi.spyOn(api, "getNextSteps").mockResolvedValue({
+      ...RESULT, result: { ...RESULT.result, stage: { stage_id: "EDU_12_PCM", name: "Class 12 – Science (PCM)", level: "school" },
+        groups: { ...RESULT.result.groups, education: [...btech, mba] } },
+    });
+    renderApp("/next-steps?stage=EDU_12_PCM");
+    const card = (await screen.findByRole("heading", { level: 3, name: "B.Tech / B.E." })).closest("article");
+    expect(within(card).getByText(/^8 branches\./)).toBeInTheDocument();
+    expect(within(card).getByRole("link", { name: /JEE Main/ })).toBeInTheDocument();
+    expect(within(card).getByRole("link", { name: "Civil" })).toHaveAttribute("href", "/next-steps?stage=EDU_BTECH_B1");
+    expect(within(card).queryByRole("link", { name: "Marine" })).not.toBeInTheDocument(); // first 6 only
+    await userEvent.click(within(card).getByRole("button", { name: "Show all 8 branches" }));
+    expect(within(card).getByRole("link", { name: "Textile" })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { level: 3, name: "B.Tech – Civil" })).not.toBeInTheDocument(); // no separate rows
+    expect(screen.getByRole("heading", { level: 3, name: "MBA" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Study further/ })).toHaveTextContent("2");
+  });
 });

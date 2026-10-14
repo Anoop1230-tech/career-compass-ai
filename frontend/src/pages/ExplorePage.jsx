@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ErrorNotice, Loading, OfficialLink } from "../components/Status";
 import { useAuth } from "../context/AuthContext";
+import { branchName, foldFamilies, groupStages } from "../degreeFamilies";
 import useRequest from "../hooks/useRequest";
 import { useI18n } from "../i18n";
 import * as api from "../services/api";
@@ -23,19 +24,55 @@ function edgeText(t, edge) {
 
 const COURSE_PREFIX = "Professional course – ";
 
-/** Renders a list of tree nodes, with all professional courses folded under one "Professional courses" row. */
+/** Renders a list of tree nodes: professional courses fold under one "Professional courses" row,
+ * and the branches of a degree (B.Tech, diploma, M.Tech) fold under one row for that degree. */
 function TreeList({ nodes, depth, label, keyPrefix }) {
   const courses = nodes.filter((n) => n.type === "stage" && n.level === "course");
   const rest = nodes.filter((n) => !courses.includes(n));
-  const firstCareer = rest.findIndex((n) => n.type !== "stage");
-  const at = firstCareer === -1 ? rest.length : firstCareer;
-  const item = (n) => <TreeNode key={`${keyPrefix}-${n.type}-${n.id}`} node={n} depth={depth} />;
+  const folded = foldFamilies(rest, (n) => (n.type === "stage" ? n.id : null));
+  const firstCareer = folded.findIndex((e) => e.item && e.item.type !== "stage");
+  const at = firstCareer === -1 ? folded.length : firstCareer;
+  const item = (e) => (e.family
+    ? <BranchGroup key={`${keyPrefix}-family-${e.family.key}`} family={e.family} nodes={e.items} depth={depth} />
+    : <TreeNode key={`${keyPrefix}-${e.item.type}-${e.item.id}`} node={e.item} depth={depth} />);
   return (
     <ul className="tree" aria-label={label}>
-      {rest.slice(0, at).map(item)}
+      {folded.slice(0, at).map(item)}
       {courses.length > 0 && <CourseGroup courses={courses} depth={depth} />}
-      {rest.slice(at).map(item)}
+      {folded.slice(at).map(item)}
     </ul>
+  );
+}
+
+function BranchGroup({ family, nodes, depth }) {
+  const { t } = useI18n();
+  const [open, setOpen] = useState(false);
+  const name = t(`family.${family.key}`);
+  const extra = edgeText(t, nodes[0].edge);
+  const short = nodes.map((n) => ({ ...n, title: branchName(n.title), edge: { ...n.edge, label: t("tree.branch") } }));
+  return (
+    <li className="tree-node tree-node--group">
+      <div className="tree-node__row">
+        <button type="button" className="tree-toggle" aria-expanded={open}
+          aria-label={t(open ? "tree.collapse" : "tree.expand", { name })} onClick={() => setOpen(!open)}>
+          <span aria-hidden="true">{open ? "−" : "+"}</span>
+        </button>
+        <div className="tree-node__body">
+          <span className="badge tree-badge tree-badge--stage">{nodes[0].edge?.label || t("tree.type.stage")}</span>{" "}
+          <span className="tree-node__title">{name}</span>
+          <span className="tree-node__meta muted small">
+            {t("tree.branchesMeta", { n: nodes.length })}{extra ? ` · ${extra}` : ""}
+          </span>
+        </div>
+      </div>
+      {open && (
+        <div className="tree-node__children">
+          <ul className="tree" aria-label={name}>
+            {short.map((n) => <TreeNode key={`branch-${n.id}`} node={n} depth={depth + 1} />)}
+          </ul>
+        </div>
+      )}
+    </li>
   );
 }
 
@@ -146,7 +183,11 @@ export default function ExplorePage() {
               <label className="field__label" htmlFor="explore-stage">{t("tree.startFrom")}</label>
               <select id="explore-stage" className="input" value={root.data.root.id}
                 onChange={(e) => setParams({ stage: e.target.value })}>
-                {stages.data.map((s) => <option key={s.stage_id} value={s.stage_id}>{s.name}</option>)}
+                {groupStages(stages.data, t).map(([label, items]) => (
+                  <optgroup key={label} label={label}>
+                    {items.map((s) => <option key={s.stage_id} value={s.stage_id}>{s.label}</option>)}
+                  </optgroup>
+                ))}
               </select>
             </div>
             <p className="small muted" style={{ margin: 0 }}>

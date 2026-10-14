@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ErrorNotice, Loading, Meter, OfficialLink, VerifiedBadge } from "../components/Status";
 import { useAuth } from "../context/AuthContext";
+import { branchName, foldFamilies, groupStages } from "../degreeFamilies";
 import { useI18n } from "../i18n";
 import useRequest from "../hooks/useRequest";
 import * as api from "../services/api";
@@ -116,6 +117,57 @@ function OptionCard({ option }) {
   );
 }
 
+const BRANCHES_SHOWN = 6;
+
+/** One card for a degree (e.g. B.Tech) with every branch under it; each branch opens its own next steps. */
+function BranchGroupCard({ family, options }) {
+  const { t } = useI18n();
+  const [all, setAll] = useState(false);
+  const titleId = `family-${family.key}`;
+  const first = options[0];
+  const exams = [...new Map(options.flatMap((o) => o.exams).map((e) => [e.exam_id, e])).values()];
+  const shown = all ? options : options.slice(0, BRANCHES_SHOWN);
+  return (
+    <article className="card option-card option-card--family" aria-labelledby={titleId}>
+      <div className="option-card__head">
+        <h3 id={titleId} className="option-card__title">{t(`family.${family.key}`)}</h3>
+        {first.duration_years != null && <span className="badge">{years(t, first.duration_years)}</span>}
+      </div>
+      <p className="muted small">{t("next.branchesLead", { n: options.length })}</p>
+      <dl className="dl small">
+        <dt>{t("next.eligibility")}</dt>
+        <dd>{first.eligibility}</dd>
+        {exams.length > 0 && (
+          <>
+            <dt>{t("next.group.exam")}</dt>
+            <dd>
+              {exams.map((e, i) => (
+                <span key={e.exam_id}>
+                  {i > 0 && ", "}
+                  <OfficialLink href={e.official_url}>{e.name}</OfficialLink>
+                </span>
+              ))}
+            </dd>
+          </>
+        )}
+      </dl>
+      <ul className="branch-list">
+        {shown.map((o) => (
+          <li key={o.path_id}>
+            <Link to={`/next-steps?stage=${o.target_id}`} className="branch-list__name">{branchName(o.title)}</Link>
+            {o.advantages && <span className="muted small"> – {o.advantages}</span>}
+          </li>
+        ))}
+      </ul>
+      {options.length > BRANCHES_SHOWN && (
+        <button type="button" className="link-button small" aria-expanded={all} onClick={() => setAll(!all)}>
+          {all ? t("next.fewerBranches") : t("next.allBranches", { n: options.length })}
+        </button>
+      )}
+    </article>
+  );
+}
+
 function SwitchCard({ item }) {
   const { t } = useI18n();
   return (
@@ -142,15 +194,7 @@ function SwitchCard({ item }) {
 
 function StagePicker({ stages, value, onChange }) {
   const { t } = useI18n();
-  const grouped = useMemo(() => {
-    const map = new Map();
-    for (const s of stages) {
-      const key = t(`next.level.${s.level}`);
-      if (!map.has(key)) map.set(key, []);
-      map.get(key).push(s);
-    }
-    return [...map.entries()];
-  }, [stages, t]);
+  const grouped = useMemo(() => groupStages(stages, t), [stages, t]);
   return (
     <div className="field" style={{ marginBottom: 0 }}>
       <label className="field__label" htmlFor="stage-select">{t("profile.f.stage")}</label>
@@ -158,7 +202,7 @@ function StagePicker({ stages, value, onChange }) {
         <option value="" disabled>{t("profile.f.stage.placeholder")}</option>
         {grouped.map(([label, items]) => (
           <optgroup key={label} label={label}>
-            {items.map((s) => <option key={s.stage_id} value={s.stage_id}>{s.name}</option>)}
+            {items.map((s) => <option key={s.stage_id} value={s.stage_id}>{s.label}</option>)}
           </optgroup>
         ))}
       </select>
@@ -186,7 +230,9 @@ export default function NextStepsPage() {
   const selected = chosen || result?.stage.stage_id;
 
   const counts = result
-    ? Object.fromEntries(GROUPS.map((g) => [g.key, (g.key === "switches" ? result.switches : result.groups[g.key] || []).length]))
+    ? Object.fromEntries(GROUPS.map((g) => [g.key, g.key === "switches" ? result.switches.length
+      : g.key === "education" ? foldFamilies(result.groups.education || [], (o) => o.target_id).length
+        : (result.groups[g.key] || []).length]))
     : {};
   const visible = GROUPS.filter((g) => counts[g.key] > 0 && (tab === "all" || tab === g.key));
 
@@ -280,7 +326,11 @@ export default function NextStepsPage() {
                 <div className="option-grid">
                   {g.key === "switches"
                     ? result.switches.map((s) => <SwitchCard key={s.transition_id} item={s} />)
-                    : result.groups[g.key].map((o) => <OptionCard key={o.path_id} option={o} />)}
+                    : g.key === "education"
+                      ? foldFamilies(result.groups.education, (o) => o.target_id).map((e) => (e.family
+                        ? <BranchGroupCard key={e.family.key} family={e.family} options={e.items} />
+                        : <OptionCard key={e.item.path_id} option={e.item} />))
+                      : result.groups[g.key].map((o) => <OptionCard key={o.path_id} option={o} />)}
                 </div>
               </section>
             ))}
