@@ -36,3 +36,31 @@ EDU_LLB_5YR,Integrated law degree (BA LLB / BBA LLB),ug,Law,5,Five-year law degr
 EDU_LLB_3YR,"LLB (3 years, after graduation)",ug,Law,3,Three-year law degree for graduates of any subject
 EDU_BSC_AGRI,B.Sc Agriculture,ug,Agriculture,4,"Four-year degree in crops, soil, plant protection and farm management"
 EDU_ITI,"ITI – Trade certificate (electrician, fitter, welder, mechanic…)",diploma,Skilled trades,2,"Industrial Training Institute courses of 1–2 years after Class 10, leading to a National Trade Certificate"
+EDU_BTECH_IT,B.Tech – Information Technology,ug,Information Technology,4,"Undergraduate engineering degree in software, networks and information systems"
+EDU_BTECH_AIDS,B.Tech – Artificial Intelligence and Data Science,ug,Artificial Intelligence and Data Science,4,"Undergraduate engineering degree in AI, machine learning and data science"
+EDU_BTECH_EEE,B.Tech – Electrical / Electrical and Electronics,ug,Electrical and Electronics Engineering,4,"Undergraduate engineering degree in power, machines and electrical systems"
+EDU_BTECH_CIVIL,B.Tech – Civil,ug,Civil Engineering,4,"Undergraduate engineering degree in buildings, roads, bridges and water systems"
+EDU_BTECH_CHEM,B.Tech – Chemical,ug,Chemical Engineering,4,"Undergraduate engineering degree in chemical, fuel and process industries"
+EDU_BTECH_AERO,B.Tech – Aerospace / Aeronautical,ug,Aerospace and Aeronautical Engineering,4,"Undergraduate engineering degree in aircraft, rockets and satellites"
+EDU_BTECH_AUTO,B.Tech – Automobile,ug,Automobile Engineering,4,"Undergraduate engineering degree in vehicles, engines and electric vehicles"
+EDU_BTECH_PROD,B.Tech – Production and Industrial,ug,Production and Industrial Engineering,4,"Undergraduate engineering degree in manufacturing, factory planning and quality"
+EDU_BTECH_MECHATRONICS,B.Tech – Mechatronics / Robotics and Automation,ug,Mechatronics and Robotics,4,"Undergraduate engineering degree combining mechanical, electronics and programming for robots and automation"
+EDU_BTECH_INSTRU,B.Tech – Instrumentation and Control,ug,Instrumentation and Control Engineering,4,"Undergraduate engineering degree in sensors, measurement and plant automation"
+EDU_BTECH_BIOTECH,B.Tech – Biotechnology,ug,Biotechnology,4,"Undergraduate engineering degree applying biology to medicines, food and agriculture"
+EDU_BTECH_BIOMED,B.Tech – Biomedical,ug,Biomedical Engineering,4,Undergraduate engineering degree in medical devices and healthcare technology
+EDU_BTECH_META,B.Tech – Metallurgical and Materials,ug,Metallurgical and Materials Engineering,4,"Undergraduate engineering degree in metals, alloys and new materials"
+EDU_BTECH_MINING,B.Tech – Mining,ug,Mining Engineering,4,"Undergraduate engineering degree in mine planning, safety and mineral extraction"
+EDU_BTECH_PETRO,B.Tech – Petroleum,ug,Petroleum Engineering,4,Undergraduate engineering degree in oil and gas drilling and production
+EDU_BTECH_MARINE,B.Tech – Marine,ug,Marine Engineering,4,"Undergraduate engineering degree for ship engines and machinery, leading to merchant navy careers"
+EDU_BTECH_TEXTILE,B.Tech – Textile,ug,Textile Engineering and Technology,4,"Undergraduate engineering degree in fibres, yarn, fabric and garment technology"
+EDU_BTECH_ENV,B.Tech – Environmental,ug,Environmental Engineering,4,"Undergraduate engineering degree in clean water, air, waste and pollution control"
+EDU_BTECH_AGRI_ENGG,B.Tech – Agricultural Engineering,ug,Agricultural Engineering,4,"Undergraduate engineering degree in farm machines, irrigation and food processing"
+EDU_DIPLOMA_MECH,Diploma – Mechanical Engineering,diploma,Mechanical Engineering,3,Polytechnic diploma after Class 10; allows lateral entry to B.Tech or jobs in factories and workshops
+EDU_DIPLOMA_CIVIL,Diploma – Civil Engineering,diploma,Civil Engineering,3,Polytechnic diploma after Class 10; allows lateral entry to B.Tech or jobs on construction sites
+EDU_DIPLOMA_ELECTRICAL,Diploma – Electrical Engineering,diploma,Electrical Engineering,3,Polytechnic diploma after Class 10; allows lateral entry to B.Tech or jobs in power and maintenance
+EDU_DIPLOMA_ECE,Diploma – Electronics and Communication,diploma,Electronics and Communication Engineering,3,Polytechnic diploma after Class 10; allows lateral entry to B.Tech or jobs in electronics and telecom
+EDU_MTECH_MECH,"M.Tech – Mechanical (design, thermal, manufacturing)",pg,Mechanical Engineering,2,"Postgraduate engineering degree in machine design, thermal or manufacturing engineering"
+EDU_MTECH_CIVIL,"M.Tech – Civil (structural, geotechnical, transport)",pg,Civil Engineering,2,"Postgraduate engineering degree in structural, geotechnical, water or transport engineering"
+EDU_MTECH_ELECTRICAL,"M.Tech – Electrical (power systems, power electronics)",pg,Electrical Engineering,2,"Postgraduate engineering degree in power systems, drives and power electronics"
+EDU_MTECH_VLSI,"M.Tech – Electronics (VLSI, communication, embedded)",pg,Electronics and Communication Engineering,2,"Postgraduate engineering degree in VLSI design, communication or embedded systems"
+EDU_MTECH_CHEM,M.Tech – Chemical / Process Engineering,pg,Chemical Engineering,2,"Postgraduate engineering degree in process design, petroleum refining or materials"

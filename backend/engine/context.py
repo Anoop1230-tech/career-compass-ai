@@ -61,6 +61,50 @@ _TECH_ROLE_WORDS = (
 )
 
 
+# (stage, words in the branch text, label). Order matters: more specific branches come first,
+# e.g. "electrical and electronics" must match EEE before "electronics" matches ECE.
+_BTECH_BRANCHES = (
+    ("EDU_BTECH_AIDS", ("artificial intelligence", "ai", "aiml", "ai ml", "ai ds", "aids", "data science", "machine learning"),
+     "artificial intelligence and data science"),
+    ("EDU_BTECH_IT", ("information technology", "it"), "information technology"),
+    ("EDU_BTECH_MECHATRONICS", ("mechatronics", "robotics", "automation and robotics"), "mechatronics / robotics"),
+    ("EDU_BTECH_INSTRU", ("instrumentation", "eie", "ice", "control"), "instrumentation and control"),
+    ("EDU_BTECH_EEE", ("electrical", "eee", "ee", "power"), "electrical engineering"),
+    ("EDU_BTECH_ECE", ("electronics", "ece", "etc", "communication", "telecommunication", "entc"),
+     "electronics and communication"),
+    ("EDU_BTECH_BIOMED", ("biomedical", "medical electronics"), "biomedical engineering"),
+    ("EDU_BTECH_BIOTECH", ("biotechnology", "biotech", "bio technology", "biochemical"), "biotechnology"),
+    ("EDU_BTECH_PETRO", ("petroleum", "petrochemical", "oil and gas"), "petroleum engineering"),
+    ("EDU_BTECH_CHEM", ("chemical",), "chemical engineering"),
+    ("EDU_BTECH_ENV", ("environmental", "environment"), "environmental engineering"),
+    ("EDU_BTECH_CIVIL", ("civil", "structural", "construction"), "civil engineering"),
+    ("EDU_BTECH_AERO", ("aerospace", "aeronautical", "aeronautics", "aero", "avionics"), "aerospace engineering"),
+    ("EDU_BTECH_AUTO", ("automobile", "automotive", "auto"), "automobile engineering"),
+    ("EDU_BTECH_MARINE", ("marine", "naval architecture", "ocean"), "marine engineering"),
+    ("EDU_BTECH_PROD", ("production", "industrial", "manufacturing"), "production and industrial engineering"),
+    ("EDU_BTECH_META", ("metallurgy", "metallurgical", "materials", "material science"), "metallurgical and materials engineering"),
+    ("EDU_BTECH_MINING", ("mining", "mineral"), "mining engineering"),
+    ("EDU_BTECH_TEXTILE", ("textile", "fashion technology"), "textile engineering"),
+    ("EDU_BTECH_AGRI_ENGG", ("agricultural", "agriculture", "food technology", "dairy"), "agricultural engineering"),
+    ("EDU_BTECH_MECH", ("mechanical", "mech", "thermal"), "mechanical engineering"),
+)
+_DIPLOMA_BRANCHES = (
+    ("EDU_DIPLOMA_ELECTRICAL", ("electrical", "eee", "ee"), "electrical engineering"),
+    ("EDU_DIPLOMA_ECE", ("electronics", "ece", "communication", "etc", "instrumentation"), "electronics and communication"),
+    ("EDU_DIPLOMA_CIVIL", ("civil", "construction", "architecture"), "civil engineering"),
+    ("EDU_DIPLOMA_MECH", ("mechanical", "mech", "automobile", "production", "auto"), "mechanical engineering"),
+)
+_MTECH_BRANCHES = (
+    ("EDU_MTECH_ELECTRICAL", ("electrical", "power", "eee", "power electronics"), "electrical engineering"),
+    ("EDU_MTECH_VLSI", ("vlsi", "electronics", "ece", "communication", "embedded", "signal"), "electronics / VLSI"),
+    ("EDU_MTECH_CIVIL", ("civil", "structural", "geotechnical", "transportation", "environmental"), "civil engineering"),
+    ("EDU_MTECH_CHEM", ("chemical", "process", "petroleum", "biotechnology", "materials", "metallurgy"),
+     "chemical / process engineering"),
+    ("EDU_MTECH_MECH", ("mechanical", "thermal", "design", "manufacturing", "production", "aerospace", "automobile",
+                        "robotics"), "mechanical engineering"),
+)
+
+
 def guess_stage(profile_stage: str | None, education: dict | None, current_role: str | None = None) -> StageGuess:
     """Best catalog stage for a profile. exact=False means 'closest match'."""
     edu = education or {}
@@ -89,7 +133,10 @@ def guess_stage(profile_stage: str | None, education: dict | None, current_role:
         if computing or not both.strip():
             return StageGuess("EDU_DIPLOMA_CS", computing, "Diploma in computer engineering"
                               + ("." if computing else " (closest match; add your branch)."))
-        return StageGuess("EDU_DIPLOMA_CS", False, "Closest match: computer diploma. Other diplomas are not covered yet.")
+        for stage_id, words, label in _DIPLOMA_BRANCHES:
+            if _has(both, *words):
+                return StageGuess(stage_id, True, f"From your profile: diploma in {label}.")
+        return StageGuess("EDU_DIPLOMA_MECH", False, "Closest match: mechanical diploma. Add your branch for a better match.")
 
     if profile_stage in {"phd_student", "phd_graduate"}:
         return StageGuess("EDU_PHD_CS", computing, "PhD" + ("" if computing else " (closest match: computer science)") + ".")
@@ -104,6 +151,10 @@ def guess_stage(profile_stage: str | None, education: dict | None, current_role:
         if _has(degree, "ms") and not _has(degree, "msc"):
             return StageGuess("EDU_MS_CS_ABROAD", computing, "From your profile: MS in computer science.")
         if _has(degree, "mtech", "m tech", "me", "m e") or computing:
+            if not computing:
+                for stage_id, words, label in _MTECH_BRANCHES:
+                    if _has(branch, *words):
+                        return StageGuess(stage_id, True, f"From your profile: M.Tech in {label}.")
             return StageGuess("EDU_MTECH_CSE", computing, "M.Tech in computer science" + ("." if computing else " (closest match)."))
         return StageGuess(None, False, "Add your master's degree and branch to see options.")
 
@@ -127,13 +178,11 @@ def guess_stage(profile_stage: str | None, education: dict | None, current_role:
 
     # Undergraduate student, graduate, fresh graduate, job seeker, other
     if _has(degree, "btech", "b tech", "be", "b e", "bachelor of technology", "bachelor of engineering"):
+        for stage_id, words, label in _BTECH_BRANCHES:  # specific branches first (AI & DS, IT, EEE...)
+            if _has(branch, *words):
+                return StageGuess(stage_id, True, f"From your profile: B.Tech in {label}.")
         if computing:
             return StageGuess("EDU_BTECH_CSE", True, "From your profile: B.Tech in computer science.")
-        if _has(branch, "electronics", "ece", "communication", "eee", "electrical"):
-            exact = not _has(branch, "electrical", "eee")
-            return StageGuess("EDU_BTECH_ECE", exact, "B.Tech in electronics" + ("." if exact else " (closest match)."))
-        if _has(branch, "mechanical", "mech", "automobile", "production"):
-            return StageGuess("EDU_BTECH_MECH", True, "From your profile: B.Tech in mechanical engineering.")
         if not branch:
             return StageGuess("EDU_BTECH_CSE", False, "B.Tech (branch not given; showing computer science).")
         return StageGuess("EDU_BTECH_MECH", False, "Closest match: core engineering (B.Tech mechanical). "

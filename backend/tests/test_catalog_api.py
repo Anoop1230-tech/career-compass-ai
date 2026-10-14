@@ -14,7 +14,7 @@ def api(client):
 
 def test_stages_sorted_by_level(api):
     stages = api.get("/api/catalog/stages").json()
-    assert len(stages) == 37
+    assert len(stages) == 65
     assert stages[0]["level"] == "school"
     assert stages[-1]["level"] == "professional"
     ug = api.get("/api/catalog/stages?level=ug").json()
@@ -40,7 +40,7 @@ def test_skill_category_filter_and_limit(api):
 
 def test_career_list_search_filter_and_paging(api):
     all_careers = api.get("/api/catalog/careers").json()
-    assert all_careers["total"] == 79
+    assert all_careers["total"] == 100
     assert {"Technology", "Creative Arts", "Vocational"} <= set(all_careers["domains"])
     creative = api.get("/api/catalog/careers?domain=Creative+Arts&limit=50").json()
     assert creative["total"] == 18
@@ -53,13 +53,16 @@ def test_career_list_search_filter_and_paging(api):
     assert {"Data Analyst", "Data Scientist", "Data Engineer"} <= {c["name"] for c in data["items"]}
 
     gov = api.get("/api/catalog/careers?domain=Government").json()
-    assert gov["total"] == 3 and all(c["domain"] == "Government" for c in gov["items"])
+    assert gov["total"] == 4 and all(c["domain"] == "Government" for c in gov["items"])
+    engg = api.get("/api/catalog/careers?domain=Engineering&limit=50").json()
+    assert engg["total"] == 20 and {"Civil Engineer", "Electrical Engineer", "Mechanical Engineer",
+                                     "Chemical Engineer", "Aerospace Engineer"} <= {c["name"] for c in engg["items"]}
 
     commerce = api.get("/api/catalog/careers?stage=EDU_BCOM").json()
     assert "Accountant" in {c["name"] for c in commerce["items"]}
 
-    page = api.get("/api/catalog/careers?limit=10&offset=70").json()
-    assert page["total"] == 79 and len(page["items"]) == 9
+    page = api.get("/api/catalog/careers?limit=10&offset=91").json()
+    assert page["total"] == 100 and len(page["items"]) == 9
 
 
 def test_no_results_is_empty_not_error(api):
@@ -99,7 +102,7 @@ def test_every_career_detail_loads(api):
 
 
 def test_exams_filters_and_detail(api):
-    assert len(api.get("/api/catalog/exams").json()) == 33
+    assert len(api.get("/api/catalog/exams").json()) == 35
     pg = api.get("/api/catalog/exams?level=pg_admission").json()
     assert "GATE" in {e["name"] for e in pg}
     for_12 = {e["name"] for e in api.get("/api/catalog/exams?stage=EDU_12_PCM").json()}

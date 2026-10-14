@@ -32,11 +32,11 @@ def test_first_load_fills_every_table(db):
     result = seed(db)
     assert result["status"] == "loaded"
     counts = result["counts"]
-    assert counts["stages"] == 37
-    assert counts["careers"] == 79
+    assert counts["stages"] == 65
+    assert counts["careers"] == 100
     assert counts["skills"] >= 150
     assert counts["career_skills"] >= 290
-    assert counts["exams"] == 33
+    assert counts["exams"] == 35
     assert counts["education_paths"] >= 60
 
 
@@ -62,7 +62,7 @@ def test_second_run_is_skipped_and_force_reloads(db):
     assert seed(db)["status"] == "loaded"
     assert seed(db)["status"] == "unchanged"
     assert seed(db, force=True)["status"] == "loaded"
-    assert db.query(Career).count() == 79  # no duplicates after reloading
+    assert db.query(Career).count() == 100  # no duplicates after reloading
 
 
 def test_changed_csv_is_picked_up(db, data_copy):
@@ -82,7 +82,7 @@ def test_invalid_data_changes_nothing(db, data_copy):
     with pytest.raises(SeedError, match="nothing was loaded"):
         seed(db, data_copy)
     # The previous, valid data is still fully there
-    assert db.query(Career).count() == 79
+    assert db.query(Career).count() == 100
     assert db.get(CareerSkill, ("CAR_SOFTWARE_ENGINEER", "SKL_DSA")) is not None
 
 

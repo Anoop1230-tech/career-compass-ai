@@ -27,7 +27,7 @@ def test_request_lang(header, lang):
 def test_career_list_and_detail_in_hindi_with_english_fallback(api):
     en = api.get("/api/catalog/careers", params={"limit": 100}).json()["items"]
     hi = api.get("/api/catalog/careers", params={"limit": 100}, headers=HI).json()["items"]
-    assert len(en) == len(hi) == 79
+    assert len(en) == len(hi) == 100
     by_id = {c["career_id"]: c for c in hi}
     assert by_id["CAR_DOCTOR_MBBS"]["name"] == "डॉक्टर (MBBS)"
     assert next(c for c in en if c["career_id"] == "CAR_DOCTOR_MBBS")["name"] == "Doctor (MBBS)"

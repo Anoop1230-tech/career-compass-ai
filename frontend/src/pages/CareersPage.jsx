@@ -8,8 +8,8 @@ const LIMIT = 100;
 
 // Field order and a one-line explanation for each section; unknown fields are added at the end
 // One-line texts: careers.cat.<name> in i18n/*.js
-const CATEGORIES = ["Technology", "Healthcare", "Law", "Business", "Finance", "Government", "Defence", "Education",
-  "Agriculture", "Creative Arts", "Vocational", "Skilled Trades"]
+const CATEGORIES = ["Technology", "Engineering", "Healthcare", "Law", "Business", "Finance", "Government", "Defence",
+  "Education", "Agriculture", "Creative Arts", "Vocational", "Skilled Trades"]
   .map((name) => ({ name, text: true }));
 
 const slug = (name) => `field-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;

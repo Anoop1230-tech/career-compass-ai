@@ -44,7 +44,7 @@ def test_validator_rejects_bad_college_references(tmp_path):
 
 def test_colleges_filters(api):
     all_items = api.get("/api/resources/colleges").json()
-    assert all_items["total"] == 20
+    assert all_items["total"] == 22
     gate = api.get("/api/resources/colleges?exam=EXM_GATE").json()["items"]
     assert gate and all("GATE" in [e["name"] for e in c["exams"]] for c in gate)
     mba = api.get("/api/resources/colleges?stage=EDU_MBA").json()["items"]
@@ -80,4 +80,4 @@ def test_scholarships_and_exams_for_my_stage(api, make_user):
     assert client.get("/api/resources/exams?for_me=true&stage=EDU_12_PCM").json()["stage"] == "EDU_12_PCM"
     private = api.get("/api/resources/scholarships?provider_type=private").json()["items"]
     assert [s["scholarship_id"] for s in private] == ["SCH_RELIANCE_UG"]
-    assert api.get("/api/resources/exams?level=government_job").json()["total"] == 16
+    assert api.get("/api/resources/exams?level=government_job").json()["total"] == 18

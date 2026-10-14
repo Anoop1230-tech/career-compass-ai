@@ -618,6 +618,7 @@ export default {
   "home.hero.board.3": "Business",
 
   "domain.Technology": "Technology",
+  "domain.Engineering": "Engineering",
   "domain.Business": "Business",
   "domain.Finance": "Finance",
   "domain.Government": "Government",
@@ -645,6 +646,7 @@ export default {
   "careers.jump": "Jump to a category",
   "careers.viewDetails": "View details →",
   "careers.cat.Technology": "Software, data, AI, cloud, security and electronics.",
+  "careers.cat.Engineering": "Civil, electrical, mechanical, chemical, aerospace, mining, marine and every other core branch.",
   "careers.cat.Business": "Product, analysis, management and starting your own business.",
   "careers.cat.Finance": "Accounts, audit and financial analysis.",
   "careers.cat.Government": "Civil services, public sector and banking jobs through exams.",

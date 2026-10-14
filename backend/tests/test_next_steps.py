@@ -36,10 +36,28 @@ def api(client):
     ("class_11_12", {"stream": "undecided"}, None, None, False),
     ("ug_student", {"degree": "B.Tech", "branch": "Computer Science"}, None, "EDU_BTECH_CSE", True),
     ("ug_student", {"degree": "B.E.", "branch": "CSE"}, None, "EDU_BTECH_CSE", True),
-    ("ug_student", {"degree": "BTech", "branch": "Information Technology"}, None, "EDU_BTECH_CSE", True),
+    ("ug_student", {"degree": "BTech", "branch": "Information Technology"}, None, "EDU_BTECH_IT", True),
     ("ug_student", {"degree": "B.Tech", "branch": "ECE"}, None, "EDU_BTECH_ECE", True),
     ("ug_student", {"degree": "B.Tech", "branch": "Mechanical"}, None, "EDU_BTECH_MECH", True),
-    ("ug_student", {"degree": "B.Tech", "branch": "Civil"}, None, "EDU_BTECH_MECH", False),
+    ("ug_student", {"degree": "B.Tech", "branch": "Civil"}, None, "EDU_BTECH_CIVIL", True),
+    ("ug_student", {"degree": "B.E.", "branch": "Electrical and Electronics"}, None, "EDU_BTECH_EEE", True),
+    ("ug_student", {"degree": "B.Tech", "branch": "Electronics and Instrumentation"}, None, "EDU_BTECH_INSTRU", True),
+    ("ug_student", {"degree": "B.Tech", "branch": "CSE (AI & ML)"}, None, "EDU_BTECH_AIDS", True),
+    ("ug_student", {"degree": "B.Tech", "branch": "Chemical"}, None, "EDU_BTECH_CHEM", True),
+    ("ug_student", {"degree": "B.Tech", "branch": "Aeronautical"}, None, "EDU_BTECH_AERO", True),
+    ("ug_student", {"degree": "B.Tech", "branch": "Automobile"}, None, "EDU_BTECH_AUTO", True),
+    ("ug_student", {"degree": "B.E.", "branch": "Production"}, None, "EDU_BTECH_PROD", True),
+    ("ug_student", {"degree": "B.Tech", "branch": "Mechatronics"}, None, "EDU_BTECH_MECHATRONICS", True),
+    ("ug_student", {"degree": "B.Tech", "branch": "Biotechnology"}, None, "EDU_BTECH_BIOTECH", True),
+    ("ug_student", {"degree": "B.Tech", "branch": "Biomedical"}, None, "EDU_BTECH_BIOMED", True),
+    ("ug_student", {"degree": "B.Tech", "branch": "Metallurgical and Materials"}, None, "EDU_BTECH_META", True),
+    ("ug_student", {"degree": "B.Tech", "branch": "Mining"}, None, "EDU_BTECH_MINING", True),
+    ("ug_student", {"degree": "B.Tech", "branch": "Petroleum"}, None, "EDU_BTECH_PETRO", True),
+    ("ug_student", {"degree": "B.Tech", "branch": "Marine"}, None, "EDU_BTECH_MARINE", True),
+    ("ug_student", {"degree": "B.Tech", "branch": "Textile"}, None, "EDU_BTECH_TEXTILE", True),
+    ("ug_student", {"degree": "B.Tech", "branch": "Environmental"}, None, "EDU_BTECH_ENV", True),
+    ("ug_student", {"degree": "B.Tech", "branch": "Agricultural Engineering"}, None, "EDU_BTECH_AGRI_ENGG", True),
+    ("ug_student", {"degree": "B.Tech", "branch": "Ceramic"}, None, "EDU_BTECH_MECH", False),
     ("ug_student", {"degree": "BCA"}, None, "EDU_BCA", True),
     ("bachelors_graduate", {"degree": "B.Com"}, None, "EDU_BCOM", True),
     ("ug_student", {"degree": "B.Sc", "branch": "Statistics"}, None, "EDU_BSC_MATH_STATS", True),
@@ -55,6 +73,15 @@ def api(client):
     ("working_professional", {}, "Senior Software Engineer", "EDU_WORKING_TECH", True),
     ("career_changer", {}, "School teacher", "EDU_WORKING_NONTECH", True),
     ("diploma", {"branch": "Computer Engineering"}, None, "EDU_DIPLOMA_CS", True),
+    ("diploma", {"branch": "Civil Engineering"}, None, "EDU_DIPLOMA_CIVIL", True),
+    ("diploma", {"branch": "Mechanical"}, None, "EDU_DIPLOMA_MECH", True),
+    ("diploma", {"branch": "Electrical"}, None, "EDU_DIPLOMA_ELECTRICAL", True),
+    ("diploma", {"branch": "Electronics"}, None, "EDU_DIPLOMA_ECE", True),
+    ("masters_student", {"degree": "M.Tech", "branch": "Structural Engineering"}, None, "EDU_MTECH_CIVIL", True),
+    ("masters_student", {"degree": "M.Tech", "branch": "Power Systems"}, None, "EDU_MTECH_ELECTRICAL", True),
+    ("masters_student", {"degree": "M.Tech", "branch": "VLSI Design"}, None, "EDU_MTECH_VLSI", True),
+    ("masters_student", {"degree": "M.Tech", "branch": "Thermal Engineering"}, None, "EDU_MTECH_MECH", True),
+    ("masters_student", {"degree": "M.Tech", "branch": "Chemical"}, None, "EDU_MTECH_CHEM", True),
 ])
 def test_guess_stage(stage, education, role, expected, exact):
     guess = guess_stage(stage, education, role)
@@ -107,6 +134,43 @@ def test_btech_cse_options_are_complete(catalog):
 
 COURSE_STAGES = {"EDU_COURSE_MUSIC", "EDU_COURSE_DANCE", "EDU_COURSE_DESIGN", "EDU_COURSE_WRITING",
                  "EDU_COURSE_PERFORMING", "EDU_COURSE_MEDIA", "EDU_COURSE_VOCATIONAL"}
+
+
+ENGG_BRANCHES = {  # stage -> a career that only makes sense for that branch
+    "EDU_BTECH_CIVIL": "CAR_CIVIL_ENGINEER", "EDU_BTECH_EEE": "CAR_ELECTRICAL_ENGINEER",
+    "EDU_BTECH_CHEM": "CAR_CHEMICAL_ENGINEER", "EDU_BTECH_AERO": "CAR_AEROSPACE_ENGINEER",
+    "EDU_BTECH_AUTO": "CAR_AUTOMOBILE_ENGINEER", "EDU_BTECH_PROD": "CAR_INDUSTRIAL_ENGINEER",
+    "EDU_BTECH_MECHATRONICS": "CAR_ROBOTICS_ENGINEER", "EDU_BTECH_INSTRU": "CAR_INSTRUMENTATION_ENGINEER",
+    "EDU_BTECH_BIOTECH": "CAR_BIOTECH_ENGINEER", "EDU_BTECH_BIOMED": "CAR_BIOMEDICAL_ENGINEER",
+    "EDU_BTECH_META": "CAR_MATERIALS_ENGINEER", "EDU_BTECH_MINING": "CAR_MINING_ENGINEER",
+    "EDU_BTECH_PETRO": "CAR_PETROLEUM_ENGINEER", "EDU_BTECH_MARINE": "CAR_MARINE_ENGINEER",
+    "EDU_BTECH_TEXTILE": "CAR_TEXTILE_ENGINEER", "EDU_BTECH_ENV": "CAR_ENVIRONMENTAL_ENGINEER",
+    "EDU_BTECH_AGRI_ENGG": "CAR_AGRICULTURAL_ENGINEER", "EDU_BTECH_MECH": "CAR_MECHANICAL_ENGINEER",
+    "EDU_BTECH_IT": "CAR_SOFTWARE_ENGINEER", "EDU_BTECH_AIDS": "CAR_DATA_SCIENTIST",
+    "EDU_DIPLOMA_CIVIL": "CAR_JUNIOR_ENGINEER", "EDU_DIPLOMA_MECH": "CAR_MECHANICAL_ENGINEER",
+    "EDU_DIPLOMA_ELECTRICAL": "CAR_ELECTRICAL_ENGINEER", "EDU_DIPLOMA_ECE": "CAR_EMBEDDED_ENGINEER",
+    "EDU_MTECH_CIVIL": "CAR_STRUCTURAL_ENGINEER", "EDU_MTECH_MECH": "CAR_MECHANICAL_ENGINEER",
+    "EDU_MTECH_ELECTRICAL": "CAR_ELECTRICAL_ENGINEER", "EDU_MTECH_VLSI": "CAR_VLSI_ENGINEER",
+    "EDU_MTECH_CHEM": "CAR_CHEMICAL_ENGINEER",
+}
+
+
+@pytest.mark.parametrize("stage, career", ENGG_BRANCHES.items())
+def test_every_engineering_branch_has_its_own_options(catalog, stage, career):
+    groups = next_steps(catalog, stage, UserContext())["groups"]
+    assert career in {o["target_id"] for o in groups["career"]}
+    assert {o["target_id"] for o in groups["course"]} == COURSE_STAGES  # music, dance... open to all
+
+
+def test_engineering_branches_lead_on_to_study_and_exams(catalog):
+    civil = next_steps(catalog, "EDU_BTECH_CIVIL", UserContext())["groups"]
+    assert {"EDU_MTECH_CIVIL", "EDU_MBA"} <= {o["target_id"] for o in civil["education"]}
+    assert {"EXM_UPSC_ESE", "EXM_CDS"} <= {o["target_id"] for o in civil["exam"]}
+    pcm = next_steps(catalog, "EDU_12_PCM", UserContext())["groups"]["education"]
+    assert set(ENGG_BRANCHES) - {s for s in ENGG_BRANCHES if not s.startswith("EDU_BTECH")} <= {
+        o["target_id"] for o in pcm}  # every B.Tech branch is offered after PCM
+    diploma = next_steps(catalog, "EDU_DIPLOMA_CIVIL", UserContext())["groups"]["education"]
+    assert "EDU_BTECH_CIVIL" in {o["target_id"] for o in diploma}  # lateral entry
 
 
 def test_professional_courses_are_their_own_group(catalog):

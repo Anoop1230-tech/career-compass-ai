@@ -220,3 +220,44 @@ SKL_MACHINING,Machining and fitting,technical,Skilled trades,lathe|fitting,"Cutt
 SKL_WELDING,Welding,technical,Skilled trades,arc welding|gas welding,"Joining metal using arc, gas and other welding methods"
 SKL_VEHICLE_REPAIR,Motor vehicle repair,technical,Skilled trades,auto repair|car mechanic,"Diagnosing and repairing engines, brakes and vehicle electrics"
 SKL_PLUMBING,Plumbing,technical,Skilled trades,pipe fitting,Installing and repairing water supply and drainage pipes
+SKL_ENGG_MECHANICS,Engineering mechanics,technical,Core engineering,statics|dynamics,"Forces, moments and motion of bodies and structures"
+SKL_STRENGTH_MATERIALS,Strength of materials,technical,Core engineering,som|mechanics of solids,"Stress, strain and how beams, shafts and columns carry loads"
+SKL_STRUCTURAL_ANALYSIS,Structural analysis and design,technical,Civil,rcc design|steel design|staad,Analysing and designing concrete and steel structures to code
+SKL_SURVEYING,Surveying,technical,Civil,total station|levelling|gps survey,"Measuring land, levels and setting out works on site"
+SKL_CONCRETE_TECH,Concrete and construction materials,technical,Civil,concrete technology|building materials,"Cement, concrete mixes, steel and other building materials"
+SKL_GEOTECH,Soil mechanics and foundations,technical,Civil,geotechnical engineering,Soil testing and the design of foundations and retaining walls
+SKL_ESTIMATION,Quantity estimation and costing,technical,Civil,boq|estimating|costing,"Bills of quantities, rate analysis and project cost estimates"
+SKL_CONSTRUCTION_MGMT,Construction site management,management,Civil,site execution|project planning,"Planning, scheduling and supervising work on a construction site"
+SKL_THERMODYNAMICS,Thermodynamics,technical,Mechanical,thermal engineering,"Energy, heat, engines, turbines and refrigeration cycles"
+SKL_FLUID_MECHANICS,Fluid mechanics,technical,Core engineering,hydraulics|fluid dynamics,"Flow of liquids and gases in pipes, channels and machines"
+SKL_HEAT_MASS_TRANSFER,Heat and mass transfer,technical,Core engineering,heat transfer,"How heat and matter move in exchangers, reactors and dryers"
+SKL_MANUFACTURING,Manufacturing processes,technical,Mechanical,casting|machining processes|cnc,"Casting, forming, machining, welding and CNC production"
+SKL_MACHINE_DESIGN,Machine design,technical,Mechanical,design of machine elements,"Designing gears, shafts, bearings and other machine parts"
+SKL_SIMULATION,FEA and CFD simulation,technical,Core engineering,ansys|fea|cfd|abaqus,"Computer simulation of stresses, heat and fluid flow"
+SKL_MATLAB,MATLAB,programming,Scientific computing,simulink,Numerical computing and simulation used across engineering
+SKL_CIRCUIT_ANALYSIS,Electrical circuit analysis,technical,Electrical,network theory|circuit theory,Solving AC and DC circuits and networks
+SKL_POWER_SYSTEMS,Power systems,technical,Electrical,transmission|distribution|grid,"Generation, transmission, distribution and protection of electric power"
+SKL_ELECTRICAL_MACHINES,Electrical machines,technical,Electrical,motors|transformers|generators,"Transformers, motors and generators: working and testing"
+SKL_POWER_ELECTRONICS,Power electronics,technical,Electrical,converters|inverters|drives,"Converters, inverters and motor drives, including for EVs and solar"
+SKL_CONTROL_SYSTEMS,Control systems,technical,Core engineering,control theory|pid,"Feedback control, stability and PID tuning"
+SKL_PLC_SCADA,PLC and SCADA,technical,Automation,plc|scada|dcs|industrial automation,Programming and running factory and plant automation
+SKL_SENSORS,Sensors and measurement,technical,Instrumentation,transducers|measurements|calibration,"Choosing, wiring and calibrating sensors and instruments"
+SKL_PROCESS_DESIGN,Chemical process design,technical,Chemical,process engineering|aspen|unit operations,"Designing reactors, distillation and other unit operations"
+SKL_AERODYNAMICS,Aerodynamics,technical,Aerospace,flight mechanics,"Air flow over wings and bodies; lift, drag and stability"
+SKL_AIRCRAFT_SYSTEMS,Aircraft structures and propulsion,technical,Aerospace,propulsion|jet engines|aircraft structures,"Airframes, jet and rocket engines and their maintenance"
+SKL_VEHICLE_SYSTEMS,Vehicle dynamics and EV systems,technical,Automotive,automotive engineering|ev|electric vehicles,"Engines, transmissions, suspension, batteries and electric drives"
+SKL_MOLECULAR_BIOLOGY,Molecular biology,domain,Biotechnology,genetic engineering|pcr|dna,"DNA, genes and lab methods such as PCR and cloning"
+SKL_BIOPROCESS,Bioprocess engineering,technical,Biotechnology,fermentation|downstream processing,Scaling up fermentation and purification of biological products
+SKL_MEDICAL_DEVICES,Medical devices and standards,technical,Biomedical,biomedical instrumentation|medical equipment,How medical equipment works and the safety standards it must meet
+SKL_MATERIALS_SCIENCE,Materials science and metallurgy,technical,Materials,metallurgy|heat treatment|alloys,"Structure and properties of metals, ceramics and polymers"
+SKL_MINING_METHODS,Mining methods and mine planning,technical,Mining,mine planning|blasting|mine ventilation,"Opencast and underground mining, blasting, ventilation and planning"
+SKL_RESERVOIR_ENG,Reservoir and drilling engineering,technical,Petroleum,drilling|reservoir|oil and gas,Drilling wells and producing oil and gas from reservoirs
+SKL_MARINE_MACHINERY,Marine engines and ship machinery,technical,Marine,marine engineering|ship machinery,"Ship engines, boilers, pumps and engine-room operations"
+SKL_TEXTILE_TECH,Textile technology,technical,Textile,spinning|weaving|textile processing,"Spinning, weaving, knitting, dyeing and fabric testing"
+SKL_WATER_TREATMENT,Water and wastewater treatment,technical,Environmental,stp|etp|water supply,Design and running of water and sewage treatment plants
+SKL_ENV_IMPACT,Environmental impact assessment,domain,Environmental,eia|pollution control,Measuring and reducing the environmental effects of projects
+SKL_FARM_MACHINERY,Farm machinery and irrigation,technical,Agricultural engineering,tractors|drip irrigation|food processing,"Tractors, harvesters, irrigation systems and crop storage"
+SKL_ROBOTICS,Robotics,technical,Automation,ros|robot programming|automation,"Robot kinematics, programming and sensors; tools such as ROS"
+SKL_QUALITY_CONTROL,Quality control and Six Sigma,management,Manufacturing,six sigma|spc|qa qc,"Inspection, statistical process control and Six Sigma methods"
+SKL_LEAN_MFG,Lean manufacturing,management,Manufacturing,lean|kaizen|5s|operations management,Cutting waste and delays in factories with lean tools
+SKL_INDUSTRIAL_SAFETY,Industrial safety (HSE),technical,Core engineering,hse|ehs|safety engineering,"Hazard checks, permits and safety rules in plants, sites and mines"

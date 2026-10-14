@@ -618,6 +618,7 @@ export default {
   "home.hero.board.3": "बिज़नेस",
 
   "domain.Technology": "टेक्नोलॉजी",
+  "domain.Engineering": "इंजीनियरिंग",
   "domain.Business": "बिज़नेस",
   "domain.Finance": "फ़ाइनेंस",
   "domain.Government": "सरकारी",
@@ -645,6 +646,7 @@ export default {
   "careers.jump": "किसी श्रेणी पर जाएँ",
   "careers.viewDetails": "विवरण देखें →",
   "careers.cat.Technology": "सॉफ़्टवेयर, डेटा, AI, क्लाउड, सुरक्षा और इलेक्ट्रॉनिक्स।",
+  "careers.cat.Engineering": "सिविल, इलेक्ट्रिकल, मैकेनिकल, केमिकल, एयरोस्पेस, माइनिंग, मरीन और हर कोर ब्रांच।",
   "careers.cat.Business": "प्रोडक्ट, विश्लेषण, मैनेजमेंट और अपना बिज़नेस शुरू करना।",
   "careers.cat.Finance": "अकाउंट्स, ऑडिट और वित्तीय विश्लेषण।",
   "careers.cat.Government": "परीक्षाओं से सिविल सेवा, सरकारी क्षेत्र और बैंक की नौकरियाँ।",

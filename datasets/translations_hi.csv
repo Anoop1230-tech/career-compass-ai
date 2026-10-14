@@ -212,3 +212,75 @@ stage,EDU_LLB_5YR,name,इंटीग्रेटेड क़ानून ड�
 stage,EDU_LLB_3YR,name,"LLB (3 साल, स्नातक के बाद)",draft
 stage,EDU_BSC_AGRI,name,B.Sc कृषि,draft
 stage,EDU_ITI,name,"ITI – ट्रेड सर्टिफ़िकेट (इलेक्ट्रीशियन, फ़िटर, वेल्डर, मैकेनिक…)",draft
+stage,EDU_BTECH_IT,name,बी.टेक - इंफ़ॉर्मेशन टेक्नोलॉजी,draft
+stage,EDU_BTECH_AIDS,name,बी.टेक - आर्टिफ़िशियल इंटेलिजेंस और डेटा साइंस,draft
+stage,EDU_BTECH_EEE,name,बी.टेक - इलेक्ट्रिकल / इलेक्ट्रिकल और इलेक्ट्रॉनिक्स,draft
+stage,EDU_BTECH_CIVIL,name,बी.टेक - सिविल,draft
+stage,EDU_BTECH_CHEM,name,बी.टेक - केमिकल,draft
+stage,EDU_BTECH_AERO,name,बी.टेक - एयरोस्पेस / एयरोनॉटिकल,draft
+stage,EDU_BTECH_AUTO,name,बी.टेक - ऑटोमोबाइल,draft
+stage,EDU_BTECH_PROD,name,बी.टेक - प्रोडक्शन और इंडस्ट्रियल,draft
+stage,EDU_BTECH_MECHATRONICS,name,बी.टेक - मेकाट्रॉनिक्स / रोबोटिक्स और ऑटोमेशन,draft
+stage,EDU_BTECH_INSTRU,name,बी.टेक - इंस्ट्रूमेंटेशन और कंट्रोल,draft
+stage,EDU_BTECH_BIOTECH,name,बी.टेक - बायोटेक्नोलॉजी,draft
+stage,EDU_BTECH_BIOMED,name,बी.टेक - बायोमेडिकल,draft
+stage,EDU_BTECH_META,name,बी.टेक - मेटलर्जिकल और मटेरियल्स,draft
+stage,EDU_BTECH_MINING,name,बी.टेक - माइनिंग,draft
+stage,EDU_BTECH_PETRO,name,बी.टेक - पेट्रोलियम,draft
+stage,EDU_BTECH_MARINE,name,बी.टेक - मरीन,draft
+stage,EDU_BTECH_TEXTILE,name,बी.टेक - टेक्सटाइल,draft
+stage,EDU_BTECH_ENV,name,बी.टेक - एनवायरनमेंटल,draft
+stage,EDU_BTECH_AGRI_ENGG,name,बी.टेक - एग्रीकल्चरल इंजीनियरिंग,draft
+stage,EDU_DIPLOMA_MECH,name,डिप्लोमा - मैकेनिकल इंजीनियरिंग,draft
+stage,EDU_DIPLOMA_CIVIL,name,डिप्लोमा - सिविल इंजीनियरिंग,draft
+stage,EDU_DIPLOMA_ELECTRICAL,name,डिप्लोमा - इलेक्ट्रिकल इंजीनियरिंग,draft
+stage,EDU_DIPLOMA_ECE,name,डिप्लोमा - इलेक्ट्रॉनिक्स और कम्युनिकेशन,draft
+stage,EDU_MTECH_MECH,name,"एम.टेक - मैकेनिकल (डिज़ाइन, थर्मल, मैन्युफ़ैक्चरिंग)",draft
+stage,EDU_MTECH_CIVIL,name,"एम.टेक - सिविल (स्ट्रक्चरल, जियोटेक्निकल, ट्रांसपोर्ट)",draft
+stage,EDU_MTECH_ELECTRICAL,name,"एम.टेक - इलेक्ट्रिकल (पावर सिस्टम्स, पावर इलेक्ट्रॉनिक्स)",draft
+stage,EDU_MTECH_VLSI,name,"एम.टेक - इलेक्ट्रॉनिक्स (VLSI, कम्युनिकेशन, एम्बेडेड)",draft
+stage,EDU_MTECH_CHEM,name,एम.टेक - केमिकल / प्रोसेस इंजीनियरिंग,draft
+career,CAR_CIVIL_ENGINEER,name,सिविल इंजीनियर,draft
+career,CAR_CIVIL_ENGINEER,description,"इमारतों, सड़कों, पुलों, पानी की सप्लाई और दूसरे इंफ्रास्ट्रक्चर की योजना, डिज़ाइन और निगरानी करता है",draft
+career,CAR_STRUCTURAL_ENGINEER,name,स्ट्रक्चरल इंजीनियर,draft
+career,CAR_STRUCTURAL_ENGINEER,description,"इमारतों, पुलों और टावरों पर पड़ने वाले भार की गणना करके उनका ढांचा सुरक्षित बनाने के लिए डिज़ाइन करता है",draft
+career,CAR_ELECTRICAL_ENGINEER,name,इलेक्ट्रिकल इंजीनियर,draft
+career,CAR_ELECTRICAL_ENGINEER,description,"बिजलीघर, ट्रांसमिशन लाइनें, मोटर और बिजली के सिस्टम डिज़ाइन करता है, चलाता है और उनका रखरखाव करता है",draft
+career,CAR_MECHANICAL_ENGINEER,name,मैकेनिकल इंजीनियर,draft
+career,CAR_MECHANICAL_ENGINEER,description,"मशीनें, इंजन और फ़ैक्टरी के उपकरण डिज़ाइन करता है, बनाता है और उनकी जांच करता है",draft
+career,CAR_CAD_DESIGNER,name,CAD डिज़ाइन इंजीनियर,draft
+career,CAR_CAD_DESIGNER,description,"CAD सॉफ़्टवेयर से पुर्ज़ों, इमारतों और मशीनों की विस्तृत 2D ड्रॉइंग और 3D मॉडल बनाता है",draft
+career,CAR_JUNIOR_ENGINEER,name,जूनियर इंजीनियर (सरकारी),draft
+career,CAR_JUNIOR_ENGINEER,description,"PWD, CPWD, रेलवे और बिजली बोर्ड जैसे सरकारी विभागों में निर्माण, रखरखाव और बिजली के काम की निगरानी करता है",draft
+career,CAR_CHEMICAL_ENGINEER,name,केमिकल इंजीनियर,draft
+career,CAR_CHEMICAL_ENGINEER,description,"कच्चे माल को ईंधन, दवाओं, खाद, प्लास्टिक और खाने की चीज़ों में बदलने वाली प्रक्रियाएं डिज़ाइन करता है और चलाता है",draft
+career,CAR_AEROSPACE_ENGINEER,name,एयरोस्पेस इंजीनियर,draft
+career,CAR_AEROSPACE_ENGINEER,description,"हवाई जहाज़, सैटेलाइट, रॉकेट और ड्रोन डिज़ाइन करता है, टेस्ट करता है और उनका रखरखाव करता है",draft
+career,CAR_AUTOMOBILE_ENGINEER,name,ऑटोमोबाइल इंजीनियर,draft
+career,CAR_AUTOMOBILE_ENGINEER,description,"कार, बाइक, ट्रक और इलेक्ट्रिक गाड़ियां डिज़ाइन करता है, टेस्ट करता है और बेहतर बनाता है",draft
+career,CAR_INDUSTRIAL_ENGINEER,name,प्रोडक्शन और इंडस्ट्रियल इंजीनियर,draft
+career,CAR_INDUSTRIAL_ENGINEER,description,"फ़ैक्टरी की प्रक्रियाओं की योजना बनाता है ताकि सामान तेज़, सस्ता, सुरक्षित और बेहतर क्वालिटी का बने",draft
+career,CAR_ROBOTICS_ENGINEER,name,रोबोटिक्स और ऑटोमेशन इंजीनियर,draft
+career,CAR_ROBOTICS_ENGINEER,description,"फ़ैक्टरियों, गोदामों और अस्पतालों में इस्तेमाल होने वाले रोबोट और ऑटोमेटिक मशीनें बनाता और प्रोग्राम करता है",draft
+career,CAR_INSTRUMENTATION_ENGINEER,name,इंस्ट्रूमेंटेशन और कंट्रोल इंजीनियर,draft
+career,CAR_INSTRUMENTATION_ENGINEER,description,"बिजलीघरों, रिफ़ाइनरियों और फ़ैक्टरियों में सेंसर, कंट्रोलर और ऑटोमेशन सिस्टम लगाता और सेट करता है",draft
+career,CAR_BIOTECH_ENGINEER,name,बायोटेक्नोलॉजी इंजीनियर,draft
+career,CAR_BIOTECH_ENGINEER,description,"जीवित कोशिकाओं और एंज़ाइम की मदद से दवाएं, टीके, खाने की चीज़ें और बेहतर फ़सलें बनाता है",draft
+career,CAR_BIOMEDICAL_ENGINEER,name,बायोमेडिकल इंजीनियर,draft
+career,CAR_BIOMEDICAL_ENGINEER,description,"स्कैनर, मॉनिटर, इम्प्लांट और कृत्रिम अंगों जैसे मेडिकल उपकरण डिज़ाइन करता है, लगाता है और उनका रखरखाव करता है",draft
+career,CAR_MATERIALS_ENGINEER,name,मेटलर्जिकल और मटेरियल्स इंजीनियर,draft
+career,CAR_MATERIALS_ENGINEER,description,"स्टील प्लांट, फ़ैक्टरियों और रिसर्च लैब के लिए धातुएं, मिश्रधातुएं, सिरेमिक और पॉलिमर विकसित करता और टेस्ट करता है",draft
+career,CAR_MINING_ENGINEER,name,माइनिंग इंजीनियर,draft
+career,CAR_MINING_ENGINEER,description,खुली और भूमिगत खदानों से कोयला और खनिज सुरक्षित और कुशल तरीके से निकालने की योजना बनाता है,draft
+career,CAR_PETROLEUM_ENGINEER,name,पेट्रोलियम इंजीनियर,draft
+career,CAR_PETROLEUM_ENGINEER,description,ज़मीन के नीचे के भंडारों से तेल और गैस सुरक्षित और कुशल तरीके से खोजता और निकालता है,draft
+career,CAR_MARINE_ENGINEER,name,मरीन इंजीनियर,draft
+career,CAR_MARINE_ENGINEER,description,मर्चेंट नेवी में इंजीनियरिंग ऑफ़िसर के रूप में जहाज़ के इंजन और मशीनें चलाता है और उनका रखरखाव करता है,draft
+career,CAR_TEXTILE_ENGINEER,name,टेक्सटाइल इंजीनियर,draft
+career,CAR_TEXTILE_ENGINEER,description,"टेक्सटाइल और गारमेंट मिलों में रेशे, धागे और कपड़े बनाने, जांचने और फ़िनिश करने के तरीके बेहतर बनाता है",draft
+career,CAR_ENVIRONMENTAL_ENGINEER,name,एनवायरनमेंटल इंजीनियर,draft
+career,CAR_ENVIRONMENTAL_ENGINEER,description,"पानी और हवा साफ़ करने, कचरे का प्रबंधन करने और प्रदूषण घटाने के सिस्टम डिज़ाइन करता है",draft
+career,CAR_AGRICULTURAL_ENGINEER,name,एग्रीकल्चरल इंजीनियर,draft
+career,CAR_AGRICULTURAL_ENGINEER,description,"खेती की मशीनें, सिंचाई के सिस्टम और फ़सलों के भंडारण व प्रोसेसिंग की व्यवस्था डिज़ाइन करता है",draft
+exam,EXM_SSC_JE,purpose,CPWD और केंद्रीय जल आयोग जैसे केंद्र सरकार के विभागों में जूनियर इंजीनियर की भर्ती,draft
+exam,EXM_UPSC_ESE,purpose,"भारतीय रेलवे, CPWD, रक्षा, टेलीकॉम और केंद्रीय पावर सेवाओं जैसी ग्रुप A इंजीनियरिंग सेवाओं में भर्ती",draft
