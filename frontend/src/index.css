@@ -222,6 +222,19 @@
   border-color: var(--color-card-border);
   color: var(--color-card-muted);
 }
+/* Stage cards (home "Start from where you are") sit on light panels in dark mode,
+   so their text must be dark; the title is bold for clear reading. */
+:root[data-theme="dark"] .stage-card {
+  color: var(--color-card-text);
+  border-color: var(--color-card-border);
+}
+:root[data-theme="dark"] .stage-card strong {
+  color: #10131a;
+  font-weight: 700;
+}
+:root[data-theme="dark"] .stage-card span.muted {
+  color: var(--color-card-muted);
+}
 
 /* ---------- High contrast: black on white, strong borders, underlined links ---------- */
 :root[data-theme="contrast"] {
