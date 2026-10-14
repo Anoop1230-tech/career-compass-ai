@@ -115,18 +115,18 @@
   color-scheme: light;
 }
 
-/* ---------- Dark theme: deep forest night, same warm accents ---------- */
+/* ---------- Dark theme: deep blue night, same warm accents ---------- */
 :root[data-theme="dark"] {
-  --color-bg: #121715;
-  --color-surface: #182019;
-  --color-card: #1c2521;
-  --color-sidebar: #151c19;
+  --color-bg: #0f131c;
+  --color-surface: #151b28;
+  --color-card: #1a2130;
+  --color-sidebar: #121824;
   --color-link-blue: #6ab0ff;
   --color-link-blue-hover: #8ec4ff;
-  --color-border: #2c3833;
-  --color-border-strong: #45534c;
-  --color-text: #ece7de;
-  --color-muted: #aaa397;
+  --color-border: #2a3345;
+  --color-border-strong: #44506a;
+  --color-text: #e7eaf2;
+  --color-muted: #9ea7bb;
   --color-accent: #7cc4a4;
   --color-accent-hover: #9ad6ba;
   --color-accent-soft: #1f3a30;
@@ -139,7 +139,7 @@
   --color-danger: #f59a90;
   --color-warning: #e8bf66;
   --color-on-accent: #0e211a;
-  --color-card-hover: #212c27;
+  --color-card-hover: #202a3c;
   --color-overlay: rgba(0, 0, 0, 0.55);
   --color-success-soft: #173326;
   --color-success-line: #2f5e45;
