@@ -35,6 +35,22 @@ def test_level_filter_returns_only_government_jobs(seeded):
     assert {e["exam_id"] for e in events} & {"EXM_SSC_CGL", "EXM_IBPS_PO", "EXM_RRB_NTPC"}
 
 
+def test_scope_filter_returns_only_state_exams(seeded):
+    r = seeded.get("/api/exams/upcoming", params={"scope": "state"})
+    assert r.status_code == 200
+    events = r.json()["events"]
+    assert events and all(e["exam_scope"] == "state" for e in events)
+    # The regional/state exams we added (e.g. state police, state PSC) should show up
+    assert {e["exam_id"] for e in events} & {
+        "EXM_UP_POLICE_CONSTABLE", "EXM_BIHAR_POLICE_CONSTABLE", "EXM_UPPSC_PCS", "EXM_BPSC_PCS",
+    }
+
+
+def test_scope_is_reported_on_every_row(seeded):
+    events = seeded.get("/api/exams/upcoming").json()["events"]
+    assert all("exam_scope" in e for e in events)
+
+
 def test_days_horizon_limits_how_far_ahead(seeded):
     near = seeded.get("/api/exams/upcoming", params={"days": 30}).json()
     far = seeded.get("/api/exams/upcoming", params={"days": 400}).json()

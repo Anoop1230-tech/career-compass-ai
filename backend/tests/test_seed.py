@@ -36,7 +36,7 @@ def test_first_load_fills_every_table(db):
     assert counts["careers"] == 79
     assert counts["skills"] >= 150
     assert counts["career_skills"] >= 290
-    assert counts["exams"] == 26
+    assert counts["exams"] == 33
     assert counts["education_paths"] >= 60
 
 

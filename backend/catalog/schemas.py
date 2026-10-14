@@ -142,6 +142,7 @@ class ExamOut(ORM):
     full_name: str
     conducting_body: str
     exam_level: str
+    exam_scope: str | None = None
     purpose: str
     eligible_stage_ids: list[str]
     eligibility_summary: str

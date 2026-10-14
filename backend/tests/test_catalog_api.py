@@ -99,7 +99,7 @@ def test_every_career_detail_loads(api):
 
 
 def test_exams_filters_and_detail(api):
-    assert len(api.get("/api/catalog/exams").json()) == 26
+    assert len(api.get("/api/catalog/exams").json()) == 33
     pg = api.get("/api/catalog/exams?level=pg_admission").json()
     assert "GATE" in {e["name"] for e in pg}
     for_12 = {e["name"] for e in api.get("/api/catalog/exams?stage=EDU_12_PCM").json()}

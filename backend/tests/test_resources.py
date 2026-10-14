@@ -80,4 +80,4 @@ def test_scholarships_and_exams_for_my_stage(api, make_user):
     assert client.get("/api/resources/exams?for_me=true&stage=EDU_12_PCM").json()["stage"] == "EDU_12_PCM"
     private = api.get("/api/resources/scholarships?provider_type=private").json()["items"]
     assert [s["scholarship_id"] for s in private] == ["SCH_RELIANCE_UG"]
-    assert api.get("/api/resources/exams?level=government_job").json()["total"] == 9
+    assert api.get("/api/resources/exams?level=government_job").json()["total"] == 16

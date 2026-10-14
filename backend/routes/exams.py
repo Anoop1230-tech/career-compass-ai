@@ -28,6 +28,7 @@ ACTION_EVENTS = {"registration_opens", "registration_closes", "late_registration
 @router.get("/upcoming")
 def upcoming_exams(
     level: str | None = Query(default=None, max_length=30, description="Filter by exam_level, e.g. government_job"),
+    scope: str | None = Query(default=None, max_length=20, description="Filter by administrative scope, e.g. state"),
     days: int | None = Query(default=None, ge=1, le=730, description="Only events within this many days from today"),
     limit: int = Query(default=100, ge=1, le=300),
     db: Session = Depends(get_db),
@@ -46,6 +47,8 @@ def upcoming_exams(
     for exam in catalog.exams.values():
         if level is not None and exam.exam_level != level:
             continue
+        if scope is not None and exam.exam_scope != scope:
+            continue
         events = exam_events(exam, catalog.exam_dates.get(exam.exam_id, []), today)
         for ev in events:
             if cutoff is not None and ev["start"] > cutoff:
@@ -54,6 +57,7 @@ def upcoming_exams(
                 **serialize(ev),
                 "label": EVENT_LABELS.get(ev["event"], ev["event"]),
                 "exam_level": exam.exam_level,
+                "exam_scope": exam.exam_scope,
                 "conducting_body": exam.conducting_body,
                 "official_url": exam.official_url,
                 "purpose": tr("exam", exam.exam_id, "purpose", exam.purpose),

@@ -80,6 +80,7 @@ class Exam(Base):
     full_name: Mapped[str] = mapped_column(String(200))
     conducting_body: Mapped[str] = mapped_column(String(200))
     exam_level: Mapped[str] = mapped_column(String(30), index=True)
+    exam_scope: Mapped[str | None] = mapped_column(String(20), index=True)
     purpose: Mapped[str] = mapped_column(Text)
     eligible_stage_ids: Mapped[list] = mapped_column(JSON, default=list)
     eligibility_summary: Mapped[str] = mapped_column(Text)

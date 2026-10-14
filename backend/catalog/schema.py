@@ -96,15 +96,19 @@ SPECS: dict[str, FileSpec] = {
         FileSpec(
             "entrance_exams.csv",
             (
-                "exam_id", "exam_name", "full_name", "conducting_body", "exam_level", "purpose",
+                "exam_id", "exam_name", "full_name", "conducting_body", "exam_level", "exam_scope", "purpose",
                 "eligible_stage_ids", "eligibility_summary", "age_limit_note", "frequency", "typical_month",
                 "official_url", "verified", "last_verified",
             ),
             id_column="exam_id",
             id_prefix="EXM_",
-            required=("exam_id", "exam_name", "full_name", "conducting_body", "exam_level", "purpose",
+            required=("exam_id", "exam_name", "full_name", "conducting_body", "exam_level", "exam_scope", "purpose",
                       "eligible_stage_ids", "eligibility_summary", "official_url", "verified", "last_verified"),
-            enums={"exam_level": {"ug_admission", "pg_admission", "doctoral", "government_job", "other"}},
+            enums={
+                "exam_level": {"ug_admission", "pg_admission", "doctoral", "government_job", "other"},
+                # Administrative reach of the exam / the post it recruits for
+                "exam_scope": {"international", "national", "state", "district", "local"},
+            },
             foreign_keys={"eligible_stage_ids": "education_stages.csv"},
             booleans=("verified",),
             dates=("last_verified",),

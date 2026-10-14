@@ -132,6 +132,7 @@ def build_objects(tables: dict[str, list[dict[str, str]]]) -> list:
         objects.append(Exam(
             exam_id=r["exam_id"], name=r["exam_name"], full_name=r["full_name"],
             conducting_body=r["conducting_body"], exam_level=r["exam_level"], purpose=r["purpose"],
+            exam_scope=text(r.get("exam_scope")),
             eligible_stage_ids=split_ids(r["eligible_stage_ids"]), eligibility_summary=r["eligibility_summary"],
             age_limit_note=text(r["age_limit_note"]), frequency=text(r["frequency"]),
             typical_month=text(r["typical_month"]), official_url=r["official_url"],

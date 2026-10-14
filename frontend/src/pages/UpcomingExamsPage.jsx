@@ -6,6 +6,8 @@ import * as api from "../services/api";
 
 // Same set the Resources page uses, so the two filters stay consistent.
 const LEVELS = ["government_job", "ug_admission", "pg_admission", "doctoral", "other"];
+// Administrative reach of the exam / the post it recruits for.
+const SCOPES = ["national", "state", "district", "local", "international"];
 // How far ahead to look. "" means no limit (everything we know about).
 const HORIZONS = ["30", "90", "180", "365", ""];
 
@@ -37,7 +39,7 @@ function EventCard({ e }) {
         <h3 id={`u-${e.key}`} className="option-card__title">{e.exam_name}</h3>
         <span className="badge">{e.label}</span>
       </div>
-      <p className="muted small">{e.conducting_body} · {tOr(`res.level.${e.exam_level}`, e.exam_level)}</p>
+      <p className="muted small">{e.conducting_body} · {tOr(`res.level.${e.exam_level}`, e.exam_level)}{e.exam_scope ? ` · ${tOr(`scope.${e.exam_scope}`, e.exam_scope)}` : ""}</p>
       <dl className="dl small">
         <dt>{t("upcoming.date")}</dt>
         <dd>
@@ -61,6 +63,7 @@ export default function UpcomingExamsPage() {
   const { t, lang } = useI18n();
   const [params, setParams] = useSearchParams();
   const level = LEVELS.includes(params.get("level")) ? params.get("level") : "";
+  const scope = SCOPES.includes(params.get("scope")) ? params.get("scope") : "";
   const days = HORIZONS.includes(params.get("days")) ? params.get("days") : "180";
 
   const set = (updates) => {
@@ -73,8 +76,8 @@ export default function UpcomingExamsPage() {
   };
 
   const list = useRequest(
-    (signal) => api.getUpcomingExams({ level, days: days || undefined }, signal),
-    [level, days],
+    (signal) => api.getUpcomingExams({ level, scope, days: days || undefined }, signal),
+    [level, scope, days],
   );
 
   // Group the sorted events by calendar month for a Sarkari-Result-style timeline.
@@ -107,6 +110,13 @@ export default function UpcomingExamsPage() {
             <select id="up-level" className="input" value={level} onChange={(e) => set({ level: e.target.value })}>
               <option value="">{t("upcoming.allCategories")}</option>
               {LEVELS.map((k) => <option key={k} value={k}>{t(`res.level.${k}`)}</option>)}
+            </select>
+          </div>
+          <div className="field" style={{ marginBottom: 0 }}>
+            <label className="field__label" htmlFor="up-scope">{t("upcoming.scope")}</label>
+            <select id="up-scope" className="input" value={scope} onChange={(e) => set({ scope: e.target.value })}>
+              <option value="">{t("upcoming.allScopes")}</option>
+              {SCOPES.map((k) => <option key={k} value={k}>{t(`scope.${k}`)}</option>)}
             </select>
           </div>
           <div className="field" style={{ marginBottom: 0 }}>

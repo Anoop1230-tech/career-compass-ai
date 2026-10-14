@@ -214,6 +214,7 @@ def career_detail(career_id: str, db: Session = Depends(get_db), lang: str = Dep
 def list_exams(
     q: str | None = SearchText,
     level: str | None = Query(default=None, max_length=30),
+    scope: str | None = Query(default=None, max_length=20, description="Administrative scope: national, state, district, local, international"),
     stage: str | None = Query(default=None, max_length=40, description="Exams open to this stage"),
     db: Session = Depends(get_db),
     lang: str = Depends(request_lang),
@@ -223,6 +224,7 @@ def list_exams(
     return [
         _exam_out(e, tr) for e in exams
         if (level is None or e.exam_level == level)
+        and (scope is None or e.exam_scope == scope)
         and (stage is None or stage in e.eligible_stage_ids)
         and _matches(q, e.name, e.full_name, e.purpose, e.conducting_body, tr("exam", e.exam_id, "purpose", None))
     ]
