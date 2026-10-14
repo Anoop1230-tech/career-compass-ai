@@ -119,10 +119,8 @@
 :root[data-theme="dark"] {
   --color-bg: #19202e;
   --color-surface: #212a3b;
-  --color-card: #f5f7fb;
-  --color-card-text: #3a4252;
-  --color-card-muted: #6b7384;
-  --color-card-border: #d4dae6;
+  --color-card: #263046;          /* controls: inputs, chips, tabs, menus */
+  --color-panel: #f5f7fb;         /* light panels: .card and .stage-card */
   --color-sidebar: #1c2433;
   --color-link-blue: #6ab0ff;
   --color-link-blue-hover: #8ec4ff;
@@ -142,7 +140,7 @@
   --color-danger: #f59a90;
   --color-warning: #e8bf66;
   --color-on-accent: #0e211a;
-  --color-card-hover: #ffffff;
+  --color-card-hover: #2d3851;
   --color-overlay: rgba(0, 0, 0, 0.55);
   --color-success-soft: #173326;
   --color-success-line: #2f5e45;
@@ -185,55 +183,48 @@
   color-scheme: dark;
 }
 
-/* Dark theme: cards are light panels, so text inside them must be dark to stay readable. */
-:root[data-theme="dark"] .card {
-  color: var(--color-card-text);
-  border-color: var(--color-card-border);
-}
-:root[data-theme="dark"] .card .muted,
-:root[data-theme="dark"] .card .small.muted,
-:root[data-theme="dark"] .card dt,
-:root[data-theme="dark"] .card .career-card__title,
-:root[data-theme="dark"] .card .option-card__title {
-  color: var(--color-card-muted);
-}
-:root[data-theme="dark"] .card h1,
-:root[data-theme="dark"] .card h2,
-:root[data-theme="dark"] .card h3,
-:root[data-theme="dark"] .card h4,
-:root[data-theme="dark"] .card dd {
-  color: var(--color-card-text);
-}
-/* Links inside a light card: keep the blue so they read as clickable. */
-:root[data-theme="dark"] .card a:not(.btn) {
-  color: var(--color-link-blue);
-}
-/* Everything else inside a light card reads as dark text. */
-:root[data-theme="dark"] .card p,
-:root[data-theme="dark"] .card li,
-:root[data-theme="dark"] .card span,
-:root[data-theme="dark"] .card strong,
-:root[data-theme="dark"] .card label {
-  color: var(--color-card-text);
-}
-/* A plain badge on a light card: light grey pill with dark text. */
-:root[data-theme="dark"] .card .badge {
-  background: #eef1f6;
-  border-color: var(--color-card-border);
-  color: var(--color-card-muted);
-}
-/* Stage cards (home "Start from where you are") sit on light panels in dark mode,
-   so their text must be dark; the title is bold for clear reading. */
+/* Dark theme: cards and stage cards are light panels. Inside them we switch back to
+   the light palette, so all text, inputs, chips, badges and links read dark and clear. */
+:root[data-theme="dark"] .card,
 :root[data-theme="dark"] .stage-card {
-  color: var(--color-card-text);
-  border-color: var(--color-card-border);
+  --color-text: #141924;
+  --color-muted: #3f4757;
+  --color-card: #ffffff;
+  --color-card-hover: #fbfcfe;
+  --color-surface: #eef1f6;
+  --color-border: #d4dae6;
+  --color-border-strong: #b3bdd0;
+  --color-accent: #1f5c4a;
+  --color-accent-hover: #174a3b;
+  --color-accent-soft: #e4ede7;
+  --color-accent-line: #bcd3c6;
+  --color-link-blue: #1a66c9;
+  --color-link-blue-hover: #0f4ea3;
+  --color-highlight: #a94c22;
+  --color-highlight-soft: #f7e8df;
+  --color-highlight-line: #ecc9b6;
+  --color-success: #2b7449;
+  --color-success-soft: #eff8f2;
+  --color-success-line: #b9dcc6;
+  --color-warning: #8a5a00;
+  --color-warning-soft: #fdf7e9;
+  --color-warning-line: #ead7a6;
+  --color-danger: #b42318;
+  --color-danger-soft: #fdf3f2;
+  --color-danger-line: #f0c4c0;
+  --color-on-accent: #ffffff;
+  --color-meter-mid: #7fa493;
+  background: var(--color-panel);
+  border-color: var(--color-border);
+  color: var(--color-text);
+  color-scheme: light;
+  font-weight: 500;
 }
+/* Titles inside light panels: thick and dark. */
+:root[data-theme="dark"] .card :is(h1, h2, h3, h4, strong, dt),
 :root[data-theme="dark"] .stage-card strong {
-  color: #10131a;
+  color: var(--color-text);
   font-weight: 700;
-}
-:root[data-theme="dark"] .stage-card span.muted {
-  color: var(--color-card-muted);
 }
 
 /* ---------- High contrast: black on white, strong borders, underlined links ---------- */
