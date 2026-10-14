@@ -123,6 +123,59 @@ def test_api_chat_history_and_privacy(api, make_user):
     assert bob.delete("/api/mentor/history").status_code == 204
 
 
+@pytest.mark.parametrize("question, needle", [
+    ("how do I prepare to study abroad?", "abroad"),
+    ("any tips for my interview", "interview"),
+    ("how do I make a good resume", "resume"),
+    ("I feel very stressed and anxious about my career", "alone"),
+    ("how do I manage my time and stop procrastinating", "routine"),
+    ("I can't afford the fees, what about loans", "Scholarships"),
+])
+def test_topical_guidance_for_open_questions(catalog, question, needle):
+    reply = ask(catalog, question)
+    assert reply.intent == "guidance"
+    assert needle.lower() in reply.text.lower()
+    assert reply.text and len(reply.text) < 2500
+    for a in reply.actions:
+        assert a["link"].startswith(("/", "https://"))
+
+
+def test_pure_gibberish_still_falls_back(catalog):
+    assert ask(catalog, "asdfgh qwerty zxcvb").intent == "fallback"
+
+
+def test_llm_answers_open_questions_when_configured(api, make_user, monkeypatch):
+    client = make_user()
+    client.put("/api/profile", json=valid_profile())
+    for k in ("LLM_API_URL", "LLM_API_KEY", "LLM_MODEL"):
+        monkeypatch.setenv(k, "https://llm.invalid/v1/chat/completions" if k == "LLM_API_URL" else "x")
+    sent = {}
+
+    class Ok:
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            return {"choices": [{"message": {"content": "Here is a thoughtful answer."}}]}
+
+    async def fake_post(url, headers, json, timeout):
+        sent.update(json)
+        return Ok()
+
+    monkeypatch.setattr(llm, "_post", fake_post)
+    # A question the engine cannot ground -> the model answers it directly
+    reply = client.post("/api/mentor/chat", json={"message": "what do you think about the stock market today"}).json()["reply"]
+    assert reply["content"] == "Here is a thoughtful answer." and reply["source"] == "llm"
+    prompt = sent["messages"][1]["content"]
+    assert "user@example.com" not in prompt and "DRAFT" not in prompt  # answer path, not rephrase, no email
+
+    # Without a provider, the same question gives the helpful local fallback
+    for k in ("LLM_API_URL", "LLM_API_KEY", "LLM_MODEL"):
+        monkeypatch.delenv(k, raising=False)
+    local = client.post("/api/mentor/chat", json={"message": "what do you think about the stock market today"}).json()["reply"]
+    assert local["source"] == "local" and local["content"]
+
+
 def test_rate_limit(api, make_user, monkeypatch):
     client = make_user()
     monkeypatch.setattr(mentor_limiter, "limit", 2)

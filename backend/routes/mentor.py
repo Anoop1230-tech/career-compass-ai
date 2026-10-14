@@ -53,9 +53,16 @@ async def chat(body: ChatIn, user: User = Depends(get_current_user), db: Session
     reply, summary = await run_in_threadpool(_draft, body, user, db, lang)
     text, source = reply.text, "local"
     if summary is not None:
-        rewritten = await llm.rephrase(body.message, reply.text, summary)
-        if rewritten:
-            text, source = rewritten, "llm"
+        # For a question the engine could not ground, let the model answer it directly;
+        # otherwise it only rephrases the grounded draft. Either falls back to local text.
+        if reply.intent == "fallback":
+            answered = await llm.answer(body.message, summary)
+            if answered:
+                text, source = answered, "llm"
+        else:
+            rewritten = await llm.rephrase(body.message, reply.text, summary)
+            if rewritten:
+                text, source = rewritten, "llm"
     return await run_in_threadpool(_save, body, user, db, reply, text, source)
 
 

@@ -395,6 +395,91 @@ def _fallback() -> Reply:
                  [], SUGGESTIONS_DEFAULT)
 
 
+# Topical guidance for common questions that aren't tied to one catalog entry.
+# Each entry: (regex patterns, answer text, actions). Grounded in general good
+# practice, not invented facts; always nudges back to the app's data where useful.
+TOPIC_GUIDES: list[tuple[tuple[str, ...], str, list[dict]]] = [
+    (
+        (r" study abroad ", r" abroad ", r" foreign (university|universities|college) ", r" ms in ", r" gre ", r" ielts ",
+         r" toefl ", r" scholarship abroad ", r" visa "),
+        "Studying abroad usually comes down to five things:\n"
+        "- Shortlist countries and universities that fit your field and budget.\n"
+        "- Take the tests they ask for: usually an English test (IELTS or TOEFL) and sometimes GRE/GMAT.\n"
+        "- Build your profile: good grades, projects, internships and clear reasons for the course.\n"
+        "- Prepare documents early: statement of purpose, letters of recommendation and transcripts.\n"
+        "- Plan the money: tuition, living costs, scholarships and education loans.\n\n"
+        "Start 12–18 months before the intake. Always confirm each university's exact requirements on its official site.",
+        [{"label": "Exams (IELTS, GRE, TOEFL)", "link": "/upcoming-exams"}, {"label": "Scholarships", "link": "/resources?tab=scholarships"}],
+    ),
+    (
+        (r" interview ", r" hr round ", r" technical round ", r" group discussion ", r" gd "),
+        "A simple way to prepare for interviews:\n"
+        "- Know the basics of the role cold, and be ready to explain your own projects in depth.\n"
+        "- Practise out loud: common questions, and 'tell me about yourself' in under a minute.\n"
+        "- Use real examples (what you did, how, and the result) instead of general claims.\n"
+        "- Prepare a few thoughtful questions to ask them.\n"
+        "- Mock interviews with a friend or mentor help more than silent reading.\n\n"
+        "Tell me the career you're interviewing for and I'll show the skills it needs.",
+        [{"label": "Which careers suit me?", "link": "/for-you"}],
+    ),
+    (
+        (r" resume ", r" cv ", r" curriculum vitae ", r" portfolio "),
+        "A strong student resume stays to one page and leads with evidence:\n"
+        "- Put your best projects and internships near the top, each with what you built and the impact.\n"
+        "- List real skills (and your level), not a long wish-list.\n"
+        "- Keep formatting clean and consistent; export as PDF.\n"
+        "- Tailor it to each role by matching the words in the job description.\n\n"
+        "You can upload a resume in your profile and I'll read the skills from it.",
+        [{"label": "Add skills from your resume", "link": "/profile/resume"}],
+    ),
+    (
+        (r" stress", r" anxious", r" anxiety ", r" pressure ", r" burn ?out ", r" depress", r" demotivat", r" give up ",
+         r" hopeless ", r" scared ", r" afraid ", r" overwhelm"),
+        "It's normal to feel the pressure sometimes — you're not alone in that.\n"
+        "- Break big goals into one small next step you can do today.\n"
+        "- Protect sleep, breaks and some time away from screens; they make studying work.\n"
+        "- Talk to someone you trust — a friend, family member, teacher or counsellor.\n"
+        "- Progress, not perfection: a little every day adds up.\n\n"
+        "If you ever feel unsafe or like you might harm yourself, please reach out to someone now or call a helpline "
+        "such as iCall (9152987821) or Tele-MANAS (14416) in India. If you tell me your stage, I'll suggest one "
+        "concrete next step to make things feel manageable.",
+        [{"label": "One next step for you", "link": "/next-steps"}],
+    ),
+    (
+        (r" time management ", r" manage time ", r" study plan ", r" how (do|can|to) i study ", r" study schedule ",
+         r" procrastinat", r" focus ", r" concentrat"),
+        "A study routine that actually sticks:\n"
+        "- Pick 2–3 priorities for the week and block fixed time for them.\n"
+        "- Study in focused chunks (for example 25–50 minutes) with short breaks.\n"
+        "- Do the hardest thing first, when your mind is freshest.\n"
+        "- Review regularly instead of cramming once; test yourself, don't just reread.\n"
+        "- Track what you finish — small wins keep momentum.\n\n"
+        "If you share your target career or exam, I'll turn this into a concrete plan.",
+        [{"label": "Build a roadmap", "link": "/roadmap"}],
+    ),
+    (
+        (r" loan ", r" fees ", r" fee ", r" afford ", r" expensive ", r" money for ", r" financ", r" cost of "),
+        "Paying for studies usually combines a few sources:\n"
+        "- Scholarships and government schemes (merit- and need-based).\n"
+        "- Education loans from banks, often with easier terms for recognised courses.\n"
+        "- Choosing a course and institute whose cost matches the likely return.\n\n"
+        "I can show scholarships that may fit you. For fees and loan terms, always check the official institute and "
+        "bank pages, since they change often.",
+        [{"label": "Scholarships", "link": "/resources?tab=scholarships"}, {"label": "Colleges", "link": "/resources?tab=colleges"}],
+    ),
+]
+
+
+def _topic_answer(message: str) -> Reply | None:
+    """A helpful, honest answer for common questions that aren't about one specific
+    catalog entry (study abroad, interviews, resumes, stress, time management, money)."""
+    for patterns, text, actions in TOPIC_GUIDES:
+        if _has(message, *patterns):
+            return Reply("guidance", text, actions,
+                         ["What should I do next?", "Which careers suit me?", "What skills should I learn first?"])
+    return None
+
+
 # ---------------------------------------------------------------- router
 def answer(catalog: Catalog, ctx: UserContext, message: str, db, remembered_career: str | None = None,
            target_career: str | None = None, done_skills: set[str] | None = None) -> Reply:
@@ -442,4 +527,7 @@ def answer(catalog: Catalog, ctx: UserContext, message: str, db, remembered_care
         return _next_steps(catalog, ctx, stage_id)
     if career:
         return _career_info(catalog, ctx, career)
+    topical = _topic_answer(msg)
+    if topical is not None:
+        return topical
     return _fallback()

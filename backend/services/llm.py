@@ -61,3 +61,42 @@ async def rephrase(question: str, draft: str, profile_summary: str, timeout: flo
     except Exception:  # network, auth, quota, unexpected JSON: keep the grounded draft
         logger.warning("LLM rephrase failed; using the local answer.", exc_info=True)
         return None
+
+
+ANSWER_PROMPT = (
+    "You are a warm, practical career mentor for students and professionals in India. The user asked a question the "
+    "app's own data could not answer directly. Give a helpful, honest, encouraging reply in plain language. "
+    "Give general career, study and skills guidance only. Do NOT invent specific salaries, exam dates, cut-offs, "
+    "eligibility rules, fees or named institutions; if those are needed, tell the user to check official websites. "
+    "Do not give medical, legal or financial advice. If the question is not about careers or study, gently steer back "
+    "to how you can help with careers. Plain text, at most 180 words, bullet points allowed."
+)
+
+
+async def answer(question: str, profile_summary: str, timeout: float = 15.0) -> str | None:
+    """A free-form answer for an open question the engine could not ground.
+    Returns None (keep the local fallback) when no provider is configured or on any error.
+    Only the question and a short, non-identifying profile summary are sent."""
+    if not configured():
+        return None
+    try:
+        response = await _post(
+            os.environ["LLM_API_URL"],
+            headers={"Authorization": f"Bearer {os.environ['LLM_API_KEY']}"},
+            json={
+                "model": os.environ["LLM_MODEL"],
+                "temperature": 0.4,
+                "max_tokens": 400,
+                "messages": [
+                    {"role": "system", "content": ANSWER_PROMPT},
+                    {"role": "user", "content": f"QUESTION: {question}\n\nPROFILE: {profile_summary}"},
+                ],
+            },
+            timeout=timeout,
+        )
+        response.raise_for_status()
+        text = response.json()["choices"][0]["message"]["content"].strip()
+        return text or None
+    except Exception:  # network, auth, quota, unexpected JSON: keep the local fallback
+        logger.warning("LLM answer failed; using the local fallback.", exc_info=True)
+        return None

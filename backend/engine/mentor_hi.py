@@ -80,6 +80,9 @@ def localize(reply: Reply, catalog: Catalog, ctx) -> Reply:
     elif reply.intent == "fallback":
         reply.text = ("मैं ठीक से समझ नहीं पाया। मैं आगे के कदम, आपके लिए सही करियर, सपनों के करियर तक पहुँचने, सीखने की "
                       "स्किल, रोडमैप, परीक्षाओं, कॉलेजों और छात्रवृत्तियों में मदद कर सकता हूँ।")
+    elif reply.intent == "guidance":
+        # Topical guidance text is in English for now; add a short Hindi lead-in.
+        reply.text = ("यह रहा कुछ मार्गदर्शन (अभी अंग्रेज़ी में):\n\n" + reply.text)
     elif reply.intent == "career" and reply.career_id in catalog.careers:
         cid = reply.career_id
         c = catalog.careers[cid]
