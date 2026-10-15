@@ -112,6 +112,7 @@ function OptionCard({ option }) {
       <div className="option-card__foot small muted">
         <VerifiedBadge verified={option.verified} date={option.last_verified} />
         {option.source_url && <OfficialLink href={option.source_url}>{t("common.source")}</OfficialLink>}
+        {option.kind === "education" && <Link to={`/fees?stage=${option.target_id}`}>{t("next.seeFees")}</Link>}
       </div>
     </article>
   );
@@ -164,6 +165,9 @@ function BranchGroupCard({ family, options }) {
           {all ? t("next.fewerBranches") : t("next.allBranches", { n: options.length })}
         </button>
       )}
+      <p className="small" style={{ marginTop: "var(--space-3)" }}>
+        <Link to={`/fees?stage=${first.target_id}`}>{t("next.seeFees")}</Link>
+      </p>
     </article>
   );
 }

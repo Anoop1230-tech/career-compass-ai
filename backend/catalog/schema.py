@@ -298,6 +298,23 @@ SPECS: dict[str, FileSpec] = {
         ),
         # Hindi text for catalog entries (draft until reviewed by a native speaker); English is the fallback
         FileSpec(
+            "fee_examples.csv",
+            ("fee_id", "stage_ids", "institution", "institute_type", "band", "period", "amount", "includes_note",
+             "excludes_note", "waiver_note", "source_name", "source_url", "as_of", "last_verified"),
+            id_column="fee_id",
+            id_prefix="FEE_",
+            required=("fee_id", "stage_ids", "institution", "institute_type", "band", "period", "amount",
+                      "includes_note", "source_name", "source_url", "as_of", "last_verified"),
+            # Official fee figures only, copied from the institute's own fee notice (never estimated)
+            enums={"institute_type": {"iit", "nit", "iiit", "gfti", "central", "state", "private"},
+                   "band": {"income_above_5l", "income_1_to_5l", "income_below_1l", "sc_st_pwd", "all"},
+                   "period": {"first_semester", "first_year", "per_year", "programme_total"}},
+            foreign_keys={"stage_ids": "education_stages.csv"},
+            int_ranges={"amount": (0, 10000000)},
+            dates=("as_of", "last_verified"),
+            urls=("source_url",),
+        ),
+        FileSpec(
             "translations_hi.csv",
             ("entity_type", "entity_id", "field", "text_hi", "status"),
             unique_together=("entity_type", "entity_id", "field"),

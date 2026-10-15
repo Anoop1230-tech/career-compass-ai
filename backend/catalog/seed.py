@@ -37,6 +37,7 @@ from catalog.models import (
     PersonalityQuestion,
     ProjectIdea,
     SalaryRange,
+    FeeExample,
     ExamDate,
     Translation,
     ExamSyllabus,
@@ -53,7 +54,7 @@ logger = logging.getLogger("career_compass.seed")
 
 # Delete children before parents (foreign keys)
 DELETE_ORDER = [
-    SalaryRange, ClosingRank, ExamDate, Translation, ExamSyllabus, CareerSkill, EducationPath, CareerPath, CareerTransition, Exam, Career, Skill, Stage,
+    SalaryRange, FeeExample, ClosingRank, ExamDate, Translation, ExamSyllabus, CareerSkill, EducationPath, CareerPath, CareerTransition, Exam, Career, Skill, Stage,
     InterestQuestion, PersonalityQuestion, AptitudeQuestion, College, Scholarship, University,
     Course, Certification, ProjectIdea,
 ]
@@ -226,6 +227,14 @@ def build_objects(tables: dict[str, list[dict[str, str]]]) -> list:
             salary_id=r["salary_id"], career_id=r["career_id"], role_label=r["role_label"], sector=r["sector"],
             pay_basis=r["pay_basis"], level=text(r["level"]), monthly_min=integer(r["monthly_min"]),
             monthly_max=integer(r["monthly_max"]), range_note=r["range_note"], includes_note=r["includes_note"],
+            source_name=r["source_name"], source_url=r["source_url"], as_of=day(r["as_of"]),
+            last_verified=day(r["last_verified"]),
+        ))
+    for r in tables["fee_examples.csv"]:
+        objects.append(FeeExample(
+            fee_id=r["fee_id"], stage_ids=split_ids(r["stage_ids"]), institution=r["institution"],
+            institute_type=r["institute_type"], band=r["band"], period=r["period"], amount=int(r["amount"]),
+            includes_note=r["includes_note"], excludes_note=text(r["excludes_note"]), waiver_note=text(r["waiver_note"]),
             source_name=r["source_name"], source_url=r["source_url"], as_of=day(r["as_of"]),
             last_verified=day(r["last_verified"]),
         ))

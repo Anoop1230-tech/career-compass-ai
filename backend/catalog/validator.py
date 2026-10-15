@@ -246,6 +246,12 @@ def check_logic(tables: dict[str, list[dict[str, str]]], report: Report) -> None
         if host and not (host.endswith(".gov.in") or host.endswith(".nic.in")):
             report.error("salary_ranges.csv", line, f"source must be an official .gov.in or .nic.in site (got {host})")
 
+    # Fees: copied from the institute's own notice, so the source must be an institute or government site
+    for line, row in enumerate(tables.get("fee_examples.csv", []), start=2):
+        host = re.sub(r"^https?://", "", row.get("source_url", "")).split("/")[0].lower()
+        if host and not host.endswith((".ac.in", ".edu.in", ".edu", ".gov.in", ".nic.in", "nitt.edu")):
+            report.error("fee_examples.csv", line, f"source must be the institute's or government's own site (got {host})")
+
     for line, row in enumerate(tables.get("closing_ranks.csv", []), start=2):
         o, c = row.get("opening_rank", ""), row.get("closing_rank", "")
         if o.isdigit() and c.isdigit() and int(c) < int(o):

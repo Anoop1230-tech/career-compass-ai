@@ -309,6 +309,27 @@ class SalaryRange(Base):
     last_verified: Mapped[date] = mapped_column(Date)
 
 
+class FeeExample(Base):
+    """One official fee figure (institute, income band, period), copied from the institute's own notice."""
+
+    __tablename__ = "fee_examples"
+
+    fee_id: Mapped[str] = mapped_column(String(40), primary_key=True)
+    stage_ids: Mapped[list] = mapped_column(JSON, default=list)
+    institution: Mapped[str] = mapped_column(String(200))
+    institute_type: Mapped[str] = mapped_column(String(20))
+    band: Mapped[str] = mapped_column(String(30))
+    period: Mapped[str] = mapped_column(String(30))
+    amount: Mapped[int] = mapped_column(Integer)
+    includes_note: Mapped[str] = mapped_column(Text)
+    excludes_note: Mapped[str | None] = mapped_column(Text)
+    waiver_note: Mapped[str | None] = mapped_column(Text)
+    source_name: Mapped[str] = mapped_column(String(200))
+    source_url: Mapped[str] = mapped_column(String(300))
+    as_of: Mapped[date] = mapped_column(Date)
+    last_verified: Mapped[date] = mapped_column(Date)
+
+
 class ExamSyllabus(Base):
     """Official syllabus link for one exam; `sections` are the paper/section names read from that source."""
 

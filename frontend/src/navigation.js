@@ -36,6 +36,7 @@ export const NAV_GROUPS = [
       { key: "assessments", path: "/assessments", label: "Assessments", icon: "clipboard", text: "Short interest, aptitude and personality tests." },
       { key: "resources", path: "/resources", label: "Exams & Colleges", icon: "school", text: "Exams, colleges and scholarships, official links." },
       { key: "upcomingExams", path: "/upcoming-exams", label: "Upcoming Exams", icon: "calendar", text: "Government and entrance exams coming up, with apply links." },
+      { key: "fees", path: "/fees", label: "Fees & Scholarships", icon: "school", text: "Official fees for a course and the scholarships that help pay." },
       { key: "predictor", path: "/college-predictor", label: "College Predictor", icon: "target", text: "Colleges within reach from last year's closing ranks." },
       { key: "mentor", path: "/mentor", label: "Mentor", icon: "chat", text: "Ask questions answered from your own profile." },
     ],

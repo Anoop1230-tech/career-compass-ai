@@ -19,7 +19,7 @@ from services import reminders as reminder_job
 from services.messages import message_code, validation_code
 from services.security import SecurityHeadersMiddleware
 from routes import (
-    assessments, auth, catalog, compare, exams, explore, google_auth, health, mentor, next_steps, predictor, profile, recommendations, reminders, report, resume, resources, roadmap,
+    assessments, auth, catalog, compare, exams, explore, fees, google_auth, health, mentor, next_steps, predictor, profile, recommendations, reminders, report, resume, resources, roadmap,
     skill_gap, transitions,
 )
 
@@ -134,6 +134,7 @@ app.include_router(compare.router, prefix="/api")
 app.include_router(report.router, prefix="/api")
 app.include_router(predictor.router, prefix="/api")
 app.include_router(reminders.router, prefix="/api")
+app.include_router(fees.router, prefix="/api")
 app.include_router(resume.router, prefix="/api")
 
 
