@@ -50,3 +50,39 @@ def test_report_uses_target_and_its_progress(api, make_user):
     assert body["roadmap"]["progress"]["done"] == 1
     core = next(s for s in body["roadmap"]["stages"] if s["key"] == "core")
     assert skill["name"] not in core["items"]  # learned skills are left out
+
+
+
+def test_report_has_summary_skill_gap_and_plan(api, make_user):
+    client = make_user()
+    client.put("/api/profile", json=valid_profile())
+    body = client.get("/api/report").json()
+    gap, plan, summary = body["skill_gap"], body["action_plan"], body["summary"]
+    assert gap["career"]["career_id"] == body["roadmap"]["career"]["career_id"]
+    assert 0 <= gap["have"] <= gap["total"] and gap["total"] > 0
+    assert len(gap["missing"]) <= 5
+    assert set(plan) == {"month", "quarter", "year"} and any(plan.values())
+    kinds = {i["kind"] for items in plan.values() for i in items}
+    assert kinds <= {"action", "learn", "continue", "project", "exam", "study", "apply"}
+    assert summary["best_match"]["name"] == body["matches"][0]["name"]
+    assert summary["skills_ready"] == {"have": gap["have"], "total": gap["total"]}
+    if gap["missing"]:
+        assert summary["main_gap"] == gap["missing"][0]["name"]
+    assert all("reasons" in s for s in body["next_steps"])
+
+
+def test_report_skill_gap_counts_roadmap_ticks(api, make_user):
+    client = make_user()
+    client.put("/api/profile", json=valid_profile())
+    client.put("/api/roadmap/CAR_LAWYER/target")
+    before = client.get("/api/report").json()["skill_gap"]
+    first = before["missing"][0]
+    client.put(f"/api/roadmap/CAR_LAWYER/skills/{first['skill_id']}", json={"done": True})
+    after = client.get("/api/report").json()["skill_gap"]
+    assert after["have"] == before["have"] + 1
+    assert first["skill_id"] not in {i["skill_id"] for i in after["missing"]}
+
+
+def test_report_without_profile_has_no_plan(api, make_user):
+    body = make_user().get("/api/report").json()
+    assert body["skill_gap"] is None and body["action_plan"] is None and body["summary"] is None
